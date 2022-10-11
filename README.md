@@ -21,28 +21,34 @@
 
 ![](penpotexporter.gif)
 
-This is a **very early stage** figma plugin to export figma files to Penpot format. For now is little more than a proof of concept, or a first scaffolding, not a fully functional exporter.
+This is a **very early-stage** Figma plugin to export Figma files to Penpot format. For now is little more than a proof of concept, or a first scaffolding, not a fully functional exporter.
 
 ## Table of contents ##
 
-- [Why a figma exporter](#why-a-figma-exporter)
-- [Getting Started](#getting-started)
+- [Table of contents](#table-of-contents)
+- [Why a Figma exporter](#why-a-figma-exporter)
+- [Getting started](#getting-started)
+  - [Prerequisites](#prerequisites)
+  - [Install dependencies](#install-dependencies)
+  - [Build the plugin](#build-the-plugin)
+  - [Add the plugin to Figma](#add-the-plugin-to-figma)
+  - [Launch the plugin and exporting a penpot file](#launch-the-plugin-and-exporting-a-penpot-file)
 - [Call to the community](#call-to-the-community)
 - [What can this plugin currently import?](#what-can-this-plugin-currently-import)
-- [Contributing](#contributing)
 - [Limitations](#limitations)
+- [Contributing](#contributing)
 - [License](#license)
 
-## Why a figma exporter ##
+## Why a Figma exporter ##
 
-The aim of this plugin is to help people migrate their files from Figma to [Penpot](https://penpot.app/). Migrating work from a design tool to another was never an easy task due to the abundance of closed and non-standard formats, and this is not a different case. Our approach to better solve this situation is to release a code skeleton for the minimum version of a Figma plugin that can convert a Figma file into a Penpot annotated svg file.
+The aim of this plugin is to help people migrate their files from Figma to [Penpot](https://penpot.app/). Migrating work from one design tool to another was never an easy task due to the abundance of closed and non-standard formats, and this is not a different case. Our approach to better solve this situation is to release a code skeleton for the minimum version of a Figma plugin that can convert a Figma file into a Penpot annotated SVG file.
 
 There is a sense of urgency for this capability because there is a feeling that Adobe might force Figma to limit exports and interoperability via plugins very soon.
 
 
 ## Getting started ##
 
-This plugin makes use of npm, webpack and react, and is written on TypeScript. It halso includes a penpot file builder library.
+This plugin makes use of npm, webpack and react, and is written on TypeScript. It also includes a Penpot file builder library.
 
 ### Prerequisites
 * node / npm
@@ -97,7 +103,7 @@ The obvious limitations are the features that are in Figma but not in Penpot or 
 
 ## Contributing ##
 
-If you want to make many people very happy and help us build this code skeleton for the minimum version of the Figma plugin, further effort will be needed to have a satisfactory import experience.
+If you want to make many people very happy and help us build this code skeleton for the minimum version of the Figma plugin, a further effort will be needed to have a satisfactory import experience.
 
 For instance, it will be interesting to add:
 - Strokes
