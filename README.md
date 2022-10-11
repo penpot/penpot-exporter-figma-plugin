@@ -82,6 +82,7 @@ As mentioned above, this plugin gets you to a starting point. Things that are cu
 - **Groups**.
 - **Fills** (solid colors and linear gradients).
 - **Fonts** (only if they are available on Google fonts).
+- **Images** (basic support)
 
 ## Limitations ##
 The obvious limitations are the features that are in Figma but not in Penpot or work differently in both tools so they can not be easily converted. We leave some comments below about the ones that are commonly considered more important:
@@ -100,8 +101,7 @@ For instance, it will be interesting to add:
 - Strokes
 - Fills with radial gradients
 - Paths
-- Images
-- Comments
+- Images (full support)
 - Rotations
 - Constraints
 - ...
