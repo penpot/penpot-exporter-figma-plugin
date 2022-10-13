@@ -68,17 +68,39 @@ function traverse(node): NodeData {
     }
   }
 
+
+  //TODO Fix text segments with https://www.figma.com/plugin-docs/api/properties/TextNode-getstyledtextsegments
+  const defaultFontName = {
+      "family": "Inter",
+      "style": "Regular"
+  }
+
+  const defaultFontSize = 12;
+
+  const defaultFontWeight = 400
+  const defaultLineHeight = {
+      "unit": "AUTO"
+  };
+
+  const defaultLetterSpacing = {
+    "unit": "PERCENT",
+    "value": 0
+  }
+
+  const defaultTextAlignHorizontal = "LEFT";
+  const defaultTextAlignVertical = "TOP";
+
   if (node.type == "TEXT") {
 
     let font = {
-      fontName: node.fontName,
-      fontSize: node.fontSize,
-      fontWeight: node.fontWeight,
-      characters: node.characters,
-      lineHeight: node.lineHeight,
-      letterSpacing: node.letterSpacing,
-      textAlignHorizontal: node.textAlignHorizontal,
-      textAlignVertical: node.textAlignVertical
+      fontName: typeof node.fontName === 'symbol'? defaultFontName: node.fontName, //TODO This means a text with several styles
+      fontSize: typeof node.fontSize === 'symbol'? defaultFontSize: node.fontSize, //TODO This means a text with several styles
+      fontWeight: typeof node.fontWeight === 'symbol'? defaultFontWeight: node.fontWeight, //TODO This means a text with several styles
+      characters: typeof node.characters === 'symbol'? '': node.characters, //TODO This means a text with several styles
+      lineHeight: typeof node.lineHeight === 'symbol'? defaultLineHeight: node.lineHeight, //TODO This means a text with several styles
+      letterSpacing: typeof node.letterSpacing === 'symbol'? defaultLetterSpacing: node.letterSpacing, //TODO This means a text with several styles
+      textAlignHorizontal: typeof node.textAlignHorizontal === 'symbol'? defaultTextAlignHorizontal: node.textAlignHorizontal, //TODO This means a text with several styles
+      textAlignVertical: typeof node.textAlignVertical === 'symbol'? defaultTextAlignVertical: node.textAlignVertical, //TODO This means a text with several styles
     };
 
     result = {...result, ...font};
