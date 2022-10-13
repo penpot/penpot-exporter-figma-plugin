@@ -15,7 +15,7 @@
 
 <p align="center">
     <a href="https://penpot.app/"><b>Penpot Website</b></a> •
-    <a href="https://community.penpot.app/t/figma-file-importer/1684"><b>Figma importer (penpot community)</b></a> •
+    <a href="https://community.penpot.app/t/figma-file-importer/1684"><b>Export Figma to Penpot (penpot community)</b></a> •
     <a href="https://community.penpot.app/"><b>Penpot Community</b></a> •
 </p>
 
