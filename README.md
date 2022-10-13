@@ -89,7 +89,7 @@ As mentioned above, this plugin gets you to a starting point. Things that are cu
 - **Frames** (Boards in Penpot).
 - **Groups**.
 - **Fills** (solid colors and linear gradients).
-- **Fonts** (only if they are available on Google fonts).
+- **Texts** (basic support. No segments. Only fonts available on Google fonts).
 - **Images** (basic support)
 
 ## Limitations ##
@@ -110,6 +110,7 @@ For instance, it will be interesting to add:
 - Fills with radial gradients
 - Paths
 - Images (full support)
+- Texts (full support)
 - Rotations
 - Constraints
 - ...
