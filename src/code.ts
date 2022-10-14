@@ -52,7 +52,7 @@ function traverse(node): NodeData {
     fills: node.fills
   }
 
-  if (node.fills){
+  if (node.fills && Array.isArray(node.fills)){
     for (const paint of node.fills) {
       if (paint.type === 'IMAGE') {
         // Get the (encoded) bytes for this image.
@@ -91,32 +91,29 @@ function traverse(node): NodeData {
   const defaultTextAlignVertical = "TOP";
 
   if (node.type == "TEXT") {
-
+    const styledTextSegments = node.getStyledTextSegments(["fontName", "fontSize", "fontWeight", "lineHeight", "letterSpacing", "fills"]);
     let font = {
-      fontName: typeof node.fontName === 'symbol'? defaultFontName: node.fontName, //TODO This means a text with several styles
-      fontSize: typeof node.fontSize === 'symbol'? defaultFontSize: node.fontSize, //TODO This means a text with several styles
-      fontWeight: typeof node.fontWeight === 'symbol'? defaultFontWeight: node.fontWeight, //TODO This means a text with several styles
-      characters: typeof node.characters === 'symbol'? '': node.characters, //TODO This means a text with several styles
-      lineHeight: typeof node.lineHeight === 'symbol'? defaultLineHeight: node.lineHeight, //TODO This means a text with several styles
-      letterSpacing: typeof node.letterSpacing === 'symbol'? defaultLetterSpacing: node.letterSpacing, //TODO This means a text with several styles
-      textAlignHorizontal: typeof node.textAlignHorizontal === 'symbol'? defaultTextAlignHorizontal: node.textAlignHorizontal, //TODO This means a text with several styles
-      textAlignVertical: typeof node.textAlignVertical === 'symbol'? defaultTextAlignVertical: node.textAlignVertical, //TODO This means a text with several styles
+      fontName: styledTextSegments[0].fontName,
+      fontSize: styledTextSegments[0].fontSize.toString(),
+      fontWeight: styledTextSegments[0].fontWeight.toString(),
+      characters: node.characters,
+      lineHeight: styledTextSegments[0].lineHeight,
+      letterSpacing: styledTextSegments[0].letterSpacing,
+      fills: styledTextSegments[0].fills,
+      textAlignHorizontal: node.textAlignHorizontal,
+      textAlignVertical: node.textAlignVertical,
+      children: styledTextSegments
     };
-
     result = {...result, ...font};
   }
 
   return result;
 }
 
-
-
 figma.showUI(__html__, { themeColors: true, height: 200, width: 300 });
 
 let root: NodeData = traverse(figma.root) // start the traversal at the root
 figma.ui.postMessage({type: "FIGMAFILE", data: root});
-
-
 
 figma.ui.onmessage = (msg) => {
   if (msg.type === "cancel") {

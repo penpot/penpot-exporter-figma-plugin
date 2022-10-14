@@ -89,7 +89,7 @@ As mentioned above, this plugin gets you to a starting point. Things that are cu
 - **Frames** (Boards in Penpot).
 - **Groups**.
 - **Fills** (solid colors and linear gradients).
-- **Texts** (basic support. No segments. Only fonts available on Google fonts).
+- **Texts** (basic support. Only fonts available on Google fonts).
 - **Images** (basic support)
 
 ## Limitations ##
