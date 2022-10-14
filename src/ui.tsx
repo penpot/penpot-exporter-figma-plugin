@@ -167,6 +167,23 @@ export default class PenpotExporter extends React.Component<PenpotExporterProps,
   }
 
   createPenpotText(file, node, baseX, baseY){
+    const children = node.children.map((val) => {
+      return {
+        lineHeight: val.lineHeight,
+        fontStyle: "normal",
+        textAlign: this.translateHorizontalAlign(node.textAlignHorizontal),
+        fontId: "gfont-" + slugify(val.fontName.family.toLowerCase()),
+        fontSize: val.fontSize.toString(),
+        fontWeight: val.fontWeight.toString(),
+        fontVariantId: this.translateFontStyle(val.fontName.style),
+        textDecoration: "none",
+        textTransform: "none",
+        letterSpacing: val.letterSpacing,
+        fills: this.translateFills(val.fills, node.width, node.height),
+        fontFamily: val.fontName.family,
+        text: val.characters }
+      });
+
     file.createText({
       name: node.name,
       x: node.x + baseX,
@@ -183,25 +200,12 @@ export default class PenpotExporter extends React.Component<PenpotExporterProps,
           children: [{
             lineHeight: node.lineHeight,
             fontStyle: "normal",
-            children: [{
-              lineHeight: node.lineHeight,
-              fontStyle: "normal",
-              textAlign: this.translateHorizontalAlign(node.textAlignHorizontal),
-              fontId: "gfont-" + slugify(node.fontName.family.toLowerCase()),
-              fontSize: node.fontSize,
-              fontWeight: node.fontWeight,
-              fontVariantId: this.translateFontStyle(node.fontName.style),
-              textDecoration: "none",
-              letterSpacing: node.letterSpacing,
-              fills: this.translateFills(node.fills, node.width, node.height),
-              fontFamily: node.fontName.family,
-              text: node.characters
-            }],
+            children: children,
             textTransform: "none",
             textAlign: this.translateHorizontalAlign(node.textAlignHorizontal),
             fontId: "gfont-" + slugify(node.fontName.family.toLowerCase()),
-            fontSize: node.fontSize,
-            fontWeight: node.fontWeight,
+            fontSize: node.fontSize.toString(),
+            fontWeight: node.fontWeight.toString(),
             type: "paragraph",
             textDecoration: "none",
             letterSpacing: node.letterSpacing,
