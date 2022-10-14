@@ -13,9 +13,11 @@ documents in Penpot annotated format, that you can import directly into Penpot.
 
 You can see the [source of the library at Penpot repo](https://github.com/penpot/penpot/tree/develop/frontend/src/app/libs).
 
-The data types used in the functions are documented in the [common types module](https://github.com/penpot/penpot/tree/develop/common/src/app/common/types).
+To see a general description of the data types used in the functions you can
+see [the data model](https://help.penpot.app/technical-guide/data-model/).
+Their full specifications are in the [common types module](https://github.com/penpot/penpot/tree/develop/common/src/app/common/types).
 
-Types are defined in [Clojure spec](https://clojure.org/guides/spec) format.
+Those types are defined in [Clojure spec](https://clojure.org/guides/spec) format.
 For those unfamiliar with the syntax, here is a small basic guide:
 
 ```clojure
