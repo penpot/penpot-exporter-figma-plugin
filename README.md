@@ -66,10 +66,18 @@ npm run build
 ### Add the plugin to Figma
 `Figma menu` > `Plugins` > `Development` > `Import plugin from manifest…`
 
+![Screenshot of the Plugins > Development menus open showing the, "Import plugin from manifest" option.](https://user-images.githubusercontent.com/10350960/197305901-1ff53ba7-615f-461b-80e3-ec2f59514aeb.png)
+
 And choose the manifest.json file
 
 ### Launch the plugin and exporting a penpot file
 `Figma menu` > `Plugins` > `Development` > `Penpot Exporter`
+
+![Screenshot of the Figma Plugins dialog with the Penpot exporter as an option](https://user-images.githubusercontent.com/10350960/197305935-b6f62ceb-eb0b-4853-8052-1438e49f0483.png)
+
+### Plugin running inside Figma
+
+![Screenshot of the exporter dialog showing export and cancel buttons.](https://user-images.githubusercontent.com/10350960/197305966-0573797d-7d04-44de-b429-55f5619e0a9b.png)
 
 This will generate a .zip file that you can import from penpot
 
