@@ -49,7 +49,7 @@ function traverse(node): NodeData {
     y: node.y,
     width: node.width,
     height: node.height,
-    fills: node.fills
+    fills: node.fills === figma.mixed ? [] : node.fills //TODO: Support mixed fills
   }
 
   if (node.fills && Array.isArray(node.fills)){
@@ -67,28 +67,6 @@ function traverse(node): NodeData {
       }
     }
   }
-
-
-  //TODO Fix text segments with https://www.figma.com/plugin-docs/api/properties/TextNode-getstyledtextsegments
-  const defaultFontName = {
-      "family": "Inter",
-      "style": "Regular"
-  }
-
-  const defaultFontSize = 12;
-
-  const defaultFontWeight = 400
-  const defaultLineHeight = {
-      "unit": "AUTO"
-  };
-
-  const defaultLetterSpacing = {
-    "unit": "PERCENT",
-    "value": 0
-  }
-
-  const defaultTextAlignHorizontal = "LEFT";
-  const defaultTextAlignVertical = "TOP";
 
   if (node.type == "TEXT") {
     const styledTextSegments = node.getStyledTextSegments(["fontName", "fontSize", "fontWeight", "lineHeight", "letterSpacing", "fills"]);
