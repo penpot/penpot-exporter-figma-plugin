@@ -286,9 +286,6 @@ export default class PenpotExporter extends React.Component<PenpotExporterProps,
   }
 
   toggleDebug = (event) => {
-    console.log(event);
-    console.log(event.currentTarget);
-    console.log(event.currentTarget.checked);
     const isDebug = event.currentTarget.checked;
     this.setState (state => ({isDebug: isDebug}))
     if (isDebug){
