@@ -19,8 +19,8 @@
     <a href="https://community.penpot.app/"><b>Penpot Community</b></a> •
 </p>
 
-![](penpotexporter.gif)
-![Readme_exporterfigma](https://user-images.githubusercontent.com/1045247/198583387-5c243c18-8ca9-4b66-9c91-6a30c8787bcc.jpg)
+<p align="center">![Readme_exporterfigma](https://user-images.githubusercontent.com/1045247/198583387-5c243c18-8ca9-4b66-9c91-6a30c8787bcc.jpg)
+![](penpotexporter.gif)</p>
 
 This is a **very early-stage** Figma plugin to export Figma files to Penpot format. For now is little more than a proof of concept, or a first scaffolding, not a fully functional exporter.
 
