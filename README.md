@@ -20,7 +20,7 @@
 </p>
 
 <p align="center">
-  <img src="https://penpot.app/images/open-source.png](https://user-images.githubusercontent.com/1045247/198583387-5c243c18-8ca9-4b66-9c91-6a30c8787bcc.jpg" alt="Help us">
+  <img src="https://user-images.githubusercontent.com/1045247/198583387-5c243c18-8ca9-4b66-9c91-6a30c8787bcc.jpg" alt="Help us">
 </p>
 
 ![](penpotexporter.gif)
