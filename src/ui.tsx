@@ -103,21 +103,14 @@ export default class PenpotExporter extends React.Component<PenpotExporterProps,
     file.addPage(node.name);
     for (var child of node.children){
       this.createPenpotItem(file, child, 0, 0);
-      if (child.fills) {
-        for (var fill of child.fills ){
-          if (fill.type === "IMAGE"){
-            this.createPenpotImage(file, child, 0, 0, this.state.images[fill.imageHash]);
-          }
-        }
-      }
     }
     file.closePage();
   }
 
   createPenpotBoard(file, node, baseX, baseY){
-    file.addArtboard({ name: node.name, x: node.x - baseX, y: node.y - baseY, width: node.width, height: node.height });
+    file.addArtboard({ name: node.name, x: node.x + baseX, y: node.y + baseY, width: node.width, height: node.height });
     for (var child of node.children){
-      this.createPenpotItem(file, child, node.x - baseX, node.y - baseY);
+      this.createPenpotItem(file, child, node.x + baseX, node.y + baseY);
     }
     file.closeArtboard();
   }
@@ -238,7 +231,13 @@ export default class PenpotExporter extends React.Component<PenpotExporterProps,
       this.createPenpotGroup(file, node,baseX, baseY);
     }
     else if (node.type == "RECTANGLE"){
-      this.createPenpotRectangle(file, node, baseX, baseY);
+      // Find a fill of type IMAGE (note, a Figma node can have only one IMAGE fill)
+      const imageFill = node.fills.find((fill) => fill.type === "IMAGE");
+      if (imageFill){
+        this.createPenpotImage(file, node, baseX, baseY, this.state.images[imageFill.imageHash]);
+      } else {
+        this.createPenpotRectangle(file, node, baseX, baseY);
+      }
     }
     else if (node.type == "ELLIPSE"){
       this.createPenpotCircle(file, node, baseX, baseY);
