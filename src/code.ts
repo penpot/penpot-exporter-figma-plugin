@@ -53,18 +53,20 @@ function traverse(node): NodeData {
   }
 
   if (node.fills && Array.isArray(node.fills)){
-    for (const paint of node.fills) {
-      if (paint.type === 'IMAGE') {
-        // Get the (encoded) bytes for this image.
-        const image = figma.getImageByHash(paint.imageHash);
-        image.getBytesAsync().then((value) => {
-          const b64 = figma.base64Encode(value);
-          figma.ui.postMessage({type: "IMAGE", data: {
-            imageHash: paint.imageHash,
-            value: "data:" + detectMimeType(b64) + ";base64," + b64
-          }});
-        });
-      }
+
+    // Find any fill of type image
+    const imageFill = node.fills.find(fill => fill.type === "IMAGE");
+    if (imageFill) {
+      // An "image" in Figma is a shape with one or more image fills, potentially blended with other fill
+      // types.  Given the complexity of mirroring this exactly in Penpot, which treats images as first-class
+      // objects, we're going to simplify this by exporting this shape as a PNG image.
+      node.exportAsync({format: "PNG"}).then((value) => {
+        const b64 = figma.base64Encode(value);
+        figma.ui.postMessage({type: "IMAGE", data: {
+          id: node.id,
+          value: "data:" + detectMimeType(b64) + ";base64," + b64
+        }});
+      });
     }
   }
 
