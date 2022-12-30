@@ -12,12 +12,18 @@ declare function require(path: string): any;
 type PenpotExporterProps = {
 }
 
+type FigmaImageData = {
+  value: string,
+  width: number,
+  height: number
+}
+
 type PenpotExporterState = {
   isDebug: boolean,
   penpotFileData: string
   figmaFileData: string
   figmaRootNode: NodeData
-  images: { [id: string] : string; };
+  images: { [id: string] : FigmaImageData; };
 }
 
 export default class PenpotExporter extends React.Component<PenpotExporterProps, PenpotExporterState> {
@@ -77,6 +83,7 @@ export default class PenpotExporter extends React.Component<PenpotExporterProps,
   }
 
   translateFill(fill, width, height){
+
     if (fill.type === "SOLID"){
       return this.translateSolidFill(fill);
     } else if (fill.type === "GRADIENT_LINEAR"){
@@ -103,21 +110,14 @@ export default class PenpotExporter extends React.Component<PenpotExporterProps,
     file.addPage(node.name);
     for (var child of node.children){
       this.createPenpotItem(file, child, 0, 0);
-      if (child.fills) {
-        for (var fill of child.fills ){
-          if (fill.type === "IMAGE"){
-            this.createPenpotImage(file, child, 0, 0, this.state.images[fill.imageHash]);
-          }
-        }
-      }
     }
     file.closePage();
   }
 
   createPenpotBoard(file, node, baseX, baseY){
-    file.addArtboard({ name: node.name, x: node.x - baseX, y: node.y - baseY, width: node.width, height: node.height });
+    file.addArtboard({ name: node.name, x: node.x + baseX, y: node.y + baseY, width: node.width, height: node.height });
     for (var child of node.children){
-      this.createPenpotItem(file, child, node.x - baseX, node.y - baseY);
+      this.createPenpotItem(file, child, node.x + baseX, node.y + baseY);
     }
     file.closeArtboard();
   }
@@ -218,17 +218,51 @@ export default class PenpotExporter extends React.Component<PenpotExporterProps,
   }
 
   createPenpotImage(file, node, baseX, baseY, image){
-    file.createImage({ name: node.name, x: node.x + baseX, y: node.y + baseY, width: node.width, height: node.height,
+    file.createImage({ name: node.name, x: node.x + baseX, y: node.y + baseY, width: image.width, height: image.height,
       metadata: {
-        width: node.width,
-        height: node.height
+        width: image.width,
+        height: image.height
       },
-      dataUri: image
+      dataUri: image.value
     });
   }
 
+  calculateAdjustment(node){
+    // For each child, check whether the X or Y position is less than 0 and less than the
+    // current adjustment.
+    let adjustedX = 0;
+    let adjustedY = 0;
+    for (var child of node.children){
+      if (child.x < adjustedX){
+        adjustedX = child.x;
+      }
+      if (child.y < adjustedY){
+        adjustedY = child.y;
+      }
+    }
+    return [adjustedX, adjustedY];
+  }
+
   createPenpotItem(file, node, baseX, baseY){
-    if (node.type == "PAGE"){
+
+    // We special-case images because an image in figma is a shape with one or many
+    // image fills.  Given that handling images in Penpot is a bit different, we
+    // rasterize a figma shape with any image fills to a PNG and then add it as a single
+    // Penpot image.  Implication is that any node that has an image fill will only be
+    // treated as an image, so we skip node type checks.
+    const hasImageFill = node.fills?.some(fill => fill.type === "IMAGE");
+    if (hasImageFill){
+
+      // If the nested frames extended the bounds of the rasterized image, we need to
+      // account for this both in position on the canvas and the calculated width and
+      // height of the image.
+      const [adjustedX, adjustedY] = this.calculateAdjustment(node);
+      const width = node.width + Math.abs(adjustedX);
+      const height = node.height + Math.abs(adjustedY);
+
+      this.createPenpotImage(file, node, baseX + adjustedX, baseY + adjustedY, this.state.images[node.id]);
+    }
+    else if (node.type == "PAGE"){
       this.createPenpotPage(file, node);
     }
     else if (node.type == "FRAME"){
@@ -275,13 +309,26 @@ export default class PenpotExporter extends React.Component<PenpotExporterProps,
         figmaRootNode: event.data.pluginMessage.data}));
     }
     else if (event.data.pluginMessage.type == "IMAGE") {
+
       const data = event.data.pluginMessage.data;
-      this.setState(state =>
-        {
-          state.images[data.imageHash] = data.value;
-          return state;
-        }
-      ) ;
+      const image = document.createElement('img');
+      const thisObj = this;
+
+      image.addEventListener('load', function() {
+        // Get byte array from response
+        thisObj.setState(state =>
+            {
+              state.images[data.id] = {
+                value: data.value,
+                width: image.naturalWidth,
+                height: image.naturalHeight
+              };
+              return state;
+            }
+        );
+      });
+      image.src = data.value;
+
     }
   }
 
