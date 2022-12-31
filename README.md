@@ -54,18 +54,39 @@ There is a sense of urgency for this capability because there is a feeling that 
 
 This plugin makes use of npm, webpack and react, and is written on TypeScript. It also includes a Penpot file builder library.
 
-### Prerequisites
-* node / npm
+### Pre-requisites
 
-### Install dependencies
-```
-npm install
-```
+To use this plugin, you will need to have `node` and `npm` installed on your computer. If you don't already have these, you can download and install them from the official website ([https://nodejs.org/en/](https://nodejs.org/en/)).
 
-### Build the plugin
-```
-npm run build
-```
+Once you have `node` and `npm` installed, you will need to download the source code for this plugin. You can do this by clicking the "Clone or download" button on the GitHub page for this project and then selecting "Download ZIP". Extract the ZIP file to a location on your computer.
+### Building
+
+#### For Windows users:
+
+1.  Open the terminal by searching for "Command Prompt" in the start menu.
+2.  Use the `cd` command to navigate to the folder where the repository has been extracted. For example, if the repository is located in the `Downloads` folder, you can use the following command: `cd Downloads/figma-exporter`.
+3.  Once you are in the correct folder, you can run the `npm install` command to install the dependencies, and then the `npm run build` command to build the plugin.
+
+#### For Mac users:
+
+1.  Open the terminal by searching for "Terminal" in the Launchpad or by using the `Command + Space` keyboard shortcut and searching for "Terminal".
+2.  Use the `cd` command to navigate to the folder where the repository has been extracted. For example, if the repository is located in the `Downloads` folder, you can use the following command: `cd Downloads/figma-exporter`.
+3.  Once you are in the correct folder, you can run the `npm install` command to install the dependencies, and then the `npm run build` command to build the plugin.
+
+#### For Linux users:
+
+1.  Open the terminal by using the `Ctrl + Alt + T` keyboard shortcut.
+2.  Use the `cd` command to navigate to the folder where the repository has been extracted. For example, if the repository is located in the `Downloads` folder, you can use the following command: `cd Downloads/figma-exporter`.
+3.  Once you are in the correct folder, you can run the `npm install` command to install the dependencies, and then the `npm run build` command to build the plugin.
+
+### Add to Figma
+To add the plugin to Figma, open Figma and go to the `Plugins` menu. Select `Development` and then choose `Import plugin from manifest…`. Select the `manifest.json` file that is located in the folder where you extracted the source code for the plugin.
+
+
+### To use the plugin
+
+1. Select what you want to export
+2. go to the `Plugins` menu in Figma and select `Development` followed by `Penpot Exporter`. This will generate a .zip file that you can import into Penpot.
 
 ### Add the plugin to Figma
 `Figma menu` > `Plugins` > `Development` > `Import plugin from manifest…`
