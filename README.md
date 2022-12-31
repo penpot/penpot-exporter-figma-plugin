@@ -80,23 +80,20 @@ Once you have `node` and `npm` installed, you will need to download the source c
 3.  Once you are in the correct folder, you can run the `npm install` command to install the dependencies, and then the `npm run build` command to build the plugin.
 
 ### Add to Figma
-To add the plugin to Figma, open Figma and go to the `Plugins` menu. Select `Development` and then choose `Import plugin from manifest…`. Select the `manifest.json` file that is located in the folder where you extracted the source code for the plugin.
+`Figma menu` > `Plugins` > `Development` > `Import plugin from manifest…`
+To add the plugin to Figma, open Figma and go to the `Plugins` menu. Select `Development` and then choose `Import plugin from manifest…`. 
+Select the `manifest.json` file that is located in the folder where you extracted the source code for the plugin.
 
 
 ### To use the plugin
 
 1. Select what you want to export
-2. go to the `Plugins` menu in Figma and select `Development` followed by `Penpot Exporter`. This will generate a .zip file that you can import into Penpot.
+2. `Figma menu` > `Plugins` > `Development` > `Penpot Exporter`
+go to the `Plugins` menu in Figma and select `Development` followed by `Penpot Exporter`. 
+3. This will generate a .zip file that you can import into Penpot.
 
-### Add the plugin to Figma
-`Figma menu` > `Plugins` > `Development` > `Import plugin from manifest…`
 
-And choose the manifest.json file
 
-### Launch the plugin and exporting a penpot file
-`Figma menu` > `Plugins` > `Development` > `Penpot Exporter`
-
-This will generate a .zip file that you can import from penpot
 
 ## Call to the community ##
 
