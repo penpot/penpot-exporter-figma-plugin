@@ -166,7 +166,33 @@ export default class PenpotExporter extends React.Component<PenpotExporterProps,
     return style.toLowerCase().replace(/\s/g, "")
   }
 
+  getTextDecoration(node){
+    const textDecoration = node.textDecoration;
+    if (textDecoration === "STRIKETHROUGH"){
+      return "line-through";
+    }
+    if (textDecoration === "UNDERLINE"){
+      return "underline";
+    }
+    return "none";
+  }
+
+  getTextTransform(node){
+    const textCase = node.textCase;
+    if (textCase === "UPPER"){
+      return "uppercase";
+    }
+    if (textCase === "LOWER"){
+      return "lowercase";
+    }
+    if (textCase === "TITLE"){
+      return "capitalize";
+    }
+    return "none";
+  }
+
   createPenpotText(file, node, baseX, baseY){
+
     const children = node.children.map((val) => {
       return {
         lineHeight: val.lineHeight,
@@ -176,8 +202,8 @@ export default class PenpotExporter extends React.Component<PenpotExporterProps,
         fontSize: val.fontSize.toString(),
         fontWeight: val.fontWeight.toString(),
         fontVariantId: this.translateFontStyle(val.fontName.style),
-        textDecoration: "none",
-        textTransform: "none",
+        textDecoration: this.getTextDecoration(val),
+        textTransform: this.getTextTransform(val),
         letterSpacing: val.letterSpacing,
         fills: this.translateFills(val.fills, node.width, node.height),
         fontFamily: val.fontName.family,
@@ -201,13 +227,13 @@ export default class PenpotExporter extends React.Component<PenpotExporterProps,
             lineHeight: node.lineHeight,
             fontStyle: "normal",
             children: children,
-            textTransform: "none",
+            textTransform: this.getTextTransform(node),
             textAlign: this.translateHorizontalAlign(node.textAlignHorizontal),
             fontId: "gfont-" + slugify(node.fontName.family.toLowerCase()),
             fontSize: node.fontSize.toString(),
             fontWeight: node.fontWeight.toString(),
             type: "paragraph",
-            textDecoration: "none",
+            textDecoration: this.getTextDecoration(node),
             letterSpacing: node.letterSpacing,
             fills: this.translateFills(node.fills, node.width, node.height),
             fontFamily: node.fontName.family
