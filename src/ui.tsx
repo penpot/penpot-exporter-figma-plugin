@@ -99,6 +99,13 @@ export default class PenpotExporter extends React.Component<PenpotExporterProps,
     let penpotFill = null;
     for (var fill of fills){
       penpotFill = this.translateFill(fill, width, height);
+
+      // Penpot does not track fill visibility, so if the Figma fill is invisible we
+      // force opacity to 0
+      if (fill.visible === false){
+        penpotFill.fillOpacity = 0;
+      }
+
       if (penpotFill !== null){
         penpotFills.unshift(penpotFill);
       }
@@ -115,7 +122,9 @@ export default class PenpotExporter extends React.Component<PenpotExporterProps,
   }
 
   createPenpotBoard(file, node, baseX, baseY){
-    file.addArtboard({ name: node.name, x: node.x + baseX, y: node.y + baseY, width: node.width, height: node.height });
+    file.addArtboard({ name: node.name, x: node.x + baseX, y: node.y + baseY, width: node.width, height: node.height,
+      fills: this.translateFills(node.fills, node.width, node.height)
+    });
     for (var child of node.children){
       this.createPenpotItem(file, child, node.x + baseX, node.y + baseY);
     }
