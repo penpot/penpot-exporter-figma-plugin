@@ -71,7 +71,7 @@ function traverse(node): NodeData {
   }
 
   if (node.type == "TEXT") {
-    const styledTextSegments = node.getStyledTextSegments(["fontName", "fontSize", "fontWeight", "lineHeight", "letterSpacing", "fills"]);
+    const styledTextSegments = node.getStyledTextSegments(["fontName", "fontSize", "fontWeight", "lineHeight", "letterSpacing", "textCase", "textDecoration", "fills"]);
     let font = {
       fontName: styledTextSegments[0].fontName,
       fontSize: styledTextSegments[0].fontSize.toString(),
@@ -80,6 +80,8 @@ function traverse(node): NodeData {
       lineHeight: styledTextSegments[0].lineHeight,
       letterSpacing: styledTextSegments[0].letterSpacing,
       fills: styledTextSegments[0].fills,
+      textCase: styledTextSegments[0].textCase,
+      textDecoration: styledTextSegments[0].textDecoration,
       textAlignHorizontal: node.textAlignHorizontal,
       textAlignVertical: node.textAlignVertical,
       children: styledTextSegments
