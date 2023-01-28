@@ -92,6 +92,7 @@ section {
   justify-content: center;
   margin-bottom: 1rem;
 }
+
 section > * + * {
   margin-top: 0.5rem;
 }
@@ -102,4 +103,15 @@ footer > * + * {
 img {
   height: auto;
   width: 2rem;
+}
+
+.missing-fonts small {
+  font-size: 0.5rem;
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+
+ul {
+  padding: 0;
+  list-style-type: none;
 }
