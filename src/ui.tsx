@@ -8,6 +8,9 @@ import slugify from "slugify";
 
 declare function require(path: string): any;
 
+// Open resources/gfonts.json and create a set of matched font names
+const gfonts = new Set();
+require("./gfonts.json").forEach((font) => gfonts.add(font));
 
 type PenpotExporterProps = {
 }
@@ -21,6 +24,7 @@ type FigmaImageData = {
 type PenpotExporterState = {
   isDebug: boolean,
   penpotFileData: string
+  missingFonts: Set<string>
   figmaFileData: string
   figmaRootNode: NodeData
   images: { [id: string] : FigmaImageData; };
@@ -31,6 +35,7 @@ export default class PenpotExporter extends React.Component<PenpotExporterProps,
     isDebug: false,
     penpotFileData: "",
     figmaFileData: "",
+    missingFonts: new Set(),
     figmaRootNode: null,
     images: {}
   };
@@ -38,6 +43,11 @@ export default class PenpotExporter extends React.Component<PenpotExporterProps,
   componentDidMount = () => {
     window.addEventListener("message", this.onMessage);
   }
+
+  componentDidUpdate = () => {
+    this.setDimensions();
+  }
+
   componentWillUnmount = () =>{
     window.removeEventListener('message', this.onMessage);
   }
@@ -111,6 +121,13 @@ export default class PenpotExporter extends React.Component<PenpotExporterProps,
       }
     }
     return penpotFills;
+  }
+
+  addFontWarning(font){
+    const newMissingFonts = this.state.missingFonts;
+    newMissingFonts.add(font);
+
+    this.setState(_ => ({missingFonts: newMissingFonts }));
   }
 
   createPenpotPage(file, node){
@@ -200,9 +217,19 @@ export default class PenpotExporter extends React.Component<PenpotExporterProps,
     return "none";
   }
 
+  validateFont(fontName) {
+    const name = slugify(fontName.family.toLowerCase());
+    if (!gfonts.has(name)) {
+      this.addFontWarning(name);
+    }
+  }
+
   createPenpotText(file, node, baseX, baseY){
 
     const children = node.children.map((val) => {
+
+      this.validateFont(val.fontName);
+
       return {
         lineHeight: val.lineHeight,
         fontStyle: "normal",
@@ -218,6 +245,8 @@ export default class PenpotExporter extends React.Component<PenpotExporterProps,
         fontFamily: val.fontName.family,
         text: val.characters }
       });
+
+    this.validateFont(node.fontName);
 
     file.createText({
       name: node.name,
@@ -367,18 +396,44 @@ export default class PenpotExporter extends React.Component<PenpotExporterProps,
     }
   }
 
+  setDimensions = () => {
+
+    const isMissingFonts = this.state.missingFonts.size > 0;
+
+    let width = 300;
+    let height = 280;
+
+    if (isMissingFonts) {
+      height += (this.state.missingFonts.size * 20);
+      width = 400;
+    }
+
+    if (this.state.isDebug){
+      height += 600;
+      width = 800;
+    }
+
+    parent.postMessage({ pluginMessage: { type: "resize", width: width, height: height } }, "*");
+  }
+
   toggleDebug = (event) => {
     const isDebug = event.currentTarget.checked;
-    this.setState (state => ({isDebug: isDebug}))
-    if (isDebug){
-      parent.postMessage({ pluginMessage: { type: "resize", width:800, height:800 } }, "*");
-    } else {
-      parent.postMessage({ pluginMessage: { type: "resize", width:300, height:200 } }, "*");
-    }
+    this.setState (state => ({isDebug: isDebug}));
+  }
+
+  renderFontWarnings = () => {
+    return (
+      <ul >
+        {Array.from(this.state.missingFonts).map((font) => (
+          <li key={font}>{font}</li>
+        ))}
+      </ul>
+    );
   }
 
   render() {
 
+    // Update the dimensions of the plugin window based on available data and selections
     return (
       <main>
         <header>
@@ -386,7 +441,14 @@ export default class PenpotExporter extends React.Component<PenpotExporterProps,
           <h2>Penpot Exporter</h2>
         </header>
         <section>
-          <div>
+          <div style={{display:this.state.missingFonts.size > 0 ? "inline" : "none"}}>
+            <div id="missing-fonts">{this.state.missingFonts.size} non-default font{this.state.missingFonts.size > 1 ? 's' : ''}: </div>
+            <small>Ensure fonts are installed in Penpot before importing.</small>
+            <div id="missing-fonts-list">
+              {this.renderFontWarnings()}
+            </div>
+          </div>
+          <div >
             <input type="checkbox" id="chkDebug" name="chkDebug" onChange={this.toggleDebug}/>
             <label htmlFor="chkDebug">Show debug data</label>
           </div>
