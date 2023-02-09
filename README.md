@@ -35,7 +35,7 @@ This is a **very early-stage** Figma plugin to export Figma files to Penpot form
   - [Pre-requisites](#pre-requisites)
   - [Building](#building)
   - [Add to Figma](#add-to-figma)
-  - [To use the plugin](#to-use-the-plugin
+  - [To use the plugin](#to-use-the-plugin)
 - [Call to the community](#call-to-the-community)
 - [What can this plugin currently import?](#what-can-this-plugin-currently-import)
 - [Limitations](#limitations)
