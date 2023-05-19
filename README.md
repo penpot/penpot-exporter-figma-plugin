@@ -30,7 +30,7 @@ This is a **very early-stage** Figma plugin to export Figma files to Penpot form
 ## Table of contents ##
 
 - [Table of contents](#table-of-contents)
-- [Why a Figma exporter](#why-a-figma-exporter)
+- [Why a Penpot exporter](#why-a-penpot-exporter)
 - [Getting started](#getting-started)
   - [Pre-requisites](#pre-requisites)
   - [Building](#building)
@@ -42,7 +42,7 @@ This is a **very early-stage** Figma plugin to export Figma files to Penpot form
 - [Contributing](#contributing)
 - [License](#license)
 
-## Why a Figma exporter ##
+## Why a Penpot exporter ##
 
 The aim of this plugin is to help people migrate their files from Figma to [Penpot](https://penpot.app/). Migrating work from one design tool to another was never an easy task due to the abundance of closed and non-standard formats, and this is not a different case. Our approach to better solve this situation is to release a code skeleton for the minimum version of a Figma plugin that can convert a Figma file into a Penpot annotated SVG file.
 
@@ -63,19 +63,19 @@ Once you have `node` and `npm` installed, you will need to download the source c
 #### For Windows users:
 
 1.  Open the terminal by searching for "Command Prompt" in the start menu.
-2.  Use the `cd` command to navigate to the folder where the repository has been extracted. For example, if the repository is located in the `Downloads` folder, you can use the following command: `cd Downloads/figma-exporter`.
+2.  Use the `cd` command to navigate to the folder where the repository has been extracted. For example, if the repository is located in the `Downloads` folder, you can use the following command: `cd Downloads/penpot-exporter-figma-plugin`.
 3.  Once you are in the correct folder, you can run the `npm install` command to install the dependencies, and then the `npm run build` command to build the plugin.
 
 #### For Mac users:
 
 1.  Open the terminal by searching for "Terminal" in the Launchpad or by using the `Command + Space` keyboard shortcut and searching for "Terminal".
-2.  Use the `cd` command to navigate to the folder where the repository has been extracted. For example, if the repository is located in the `Downloads` folder, you can use the following command: `cd Downloads/figma-exporter`.
+2.  Use the `cd` command to navigate to the folder where the repository has been extracted. For example, if the repository is located in the `Downloads` folder, you can use the following command: `cd Downloads/penpot-exporter-figma-plugin`.
 3.  Once you are in the correct folder, you can run the `npm install` command to install the dependencies, and then the `npm run build` command to build the plugin.
 
 #### For Linux users:
 
 1.  Open the terminal by using the `Ctrl + Alt + T` keyboard shortcut.
-2.  Use the `cd` command to navigate to the folder where the repository has been extracted. For example, if the repository is located in the `Downloads` folder, you can use the following command: `cd Downloads/figma-exporter`.
+2.  Use the `cd` command to navigate to the folder where the repository has been extracted. For example, if the repository is located in the `Downloads` folder, you can use the following command: `cd Downloads/penpot-exporter-figma-plugin`.
 3.  Once you are in the correct folder, you can run the `npm install` command to install the dependencies, and then the `npm run build` command to build the plugin.
 
 ### Add to Figma
