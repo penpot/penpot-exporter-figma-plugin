@@ -48,16 +48,23 @@ The aim of this plugin is to help people migrate their files from Figma to [Penp
 
 There is a sense of urgency for this capability because there is a feeling that Adobe might force Figma to limit exports and interoperability via plugins very soon.
 
+## Using the Plugin directly from Figma "Community"
 
-## Getting started ##
+1. Add this plugin to your Figma, searching for "Penpot exporter" OR 
+using (this link)[https://www.figma.com/community/plugin/1219369440655168734/Penpot-Exporter], save the plugin from the three dots
+2. Go to the file you want to export and select what you want to export
+3. Go to the `Plugins` menu in Figma and search `Penpot Exporter`. 
+4. This will generate a .zip file that you can import into Penpot.
+
+
+## Building and Using the plugin from this Repo
 
 This plugin makes use of npm, webpack and react, and is written on TypeScript. It also includes a Penpot file builder library.
 
-### Pre-requisites
-
-To use this plugin, you will need to have `node` and `npm` installed on your computer. If you don't already have these, you can download and install them from the official website ([https://nodejs.org/en/](https://nodejs.org/en/)).
+This is method is useful if the plugin in the figma community page is not updated, or you want to develop it. To use this plugin, you will need to have `node` and `npm` installed on your computer. If you don't already have these, you can download and install them from the official website ([https://nodejs.org/en/](https://nodejs.org/en/)).
 
 Once you have `node` and `npm` installed, you will need to download the source code for this plugin. You can do this by clicking the "Clone or download" button on the GitHub page for this project and then selecting "Download ZIP". Extract the ZIP file to a location on your computer.
+
 ### Building
 
 #### For Windows users:
