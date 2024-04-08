@@ -20,19 +20,13 @@ type FigmaImageData = {
 };
 
 type PenpotExporterState = {
-  isDebug: boolean;
-  penpotFileData: string;
   missingFonts: Set<string>;
-  figmaFileData: string;
   figmaRootNode: NodeData | null;
   images: { [id: string]: FigmaImageData };
 };
 
 export default class PenpotExporter extends React.Component<unknown, PenpotExporterState> {
   state: PenpotExporterState = {
-    isDebug: false,
-    penpotFileData: '',
-    figmaFileData: '',
     missingFonts: new Set(),
     figmaRootNode: null,
     images: {}
@@ -379,16 +373,7 @@ export default class PenpotExporter extends React.Component<unknown, PenpotExpor
   }
 
   onCreatePenpot = () => {
-    const file = this.createPenpotFile();
-    const penpotFileMap = file.asMap();
-    this.setState(() => ({
-      penpotFileData: JSON.stringify(
-        penpotFileMap,
-        (key, value) => (value instanceof Map ? [...value] : value),
-        4
-      )
-    }));
-    file.export();
+    this.createPenpotFile().export();
   };
 
   onCancel = () => {
@@ -399,11 +384,6 @@ export default class PenpotExporter extends React.Component<unknown, PenpotExpor
   onMessage = (event: any) => {
     if (event.data.pluginMessage.type == 'FIGMAFILE') {
       this.setState(() => ({
-        figmaFileData: JSON.stringify(
-          event.data.pluginMessage.data,
-          (key, value) => (value instanceof Map ? [...value] : value),
-          4
-        ),
         figmaRootNode: event.data.pluginMessage.data
       }));
     } else if (event.data.pluginMessage.type == 'IMAGE') {
@@ -436,17 +416,7 @@ export default class PenpotExporter extends React.Component<unknown, PenpotExpor
       width = 400;
     }
 
-    if (this.state.isDebug) {
-      height += 600;
-      width = 800;
-    }
-
     parent.postMessage({ pluginMessage: { type: 'resize', width: width, height: height } }, '*');
-  };
-
-  toggleDebug = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const isDebug = event.currentTarget.checked;
-    this.setState(() => ({ isDebug: isDebug }));
   };
 
   renderFontWarnings = () => {
@@ -476,31 +446,7 @@ export default class PenpotExporter extends React.Component<unknown, PenpotExpor
             <small>Ensure fonts are installed in Penpot before importing.</small>
             <div id="missing-fonts-list">{this.renderFontWarnings()}</div>
           </div>
-          <div>
-            <input type="checkbox" id="chkDebug" name="chkDebug" onChange={this.toggleDebug} />
-            <label htmlFor="chkDebug">Show debug data</label>
-          </div>
         </section>
-        <div style={{ display: this.state.isDebug ? '' : 'none' }}>
-          <section>
-            <textarea
-              style={{ width: '790px', height: '270px' }}
-              id="figma-file-data"
-              value={this.state.figmaFileData}
-              readOnly
-            />
-            <label htmlFor="figma-file-data">Figma file data</label>
-          </section>
-          <section>
-            <textarea
-              style={{ width: '790px', height: '270px' }}
-              id="penpot-file-data"
-              value={this.state.penpotFileData}
-              readOnly
-            />
-            <label htmlFor="penpot-file-data">Penpot file data</label>
-          </section>
-        </div>
         <footer>
           <button className="brand" onClick={this.onCreatePenpot}>
             Export
