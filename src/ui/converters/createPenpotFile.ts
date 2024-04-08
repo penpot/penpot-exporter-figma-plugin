@@ -1,5 +1,5 @@
 import { createPenpotItem } from '.';
-import { NodeData } from '../interfaces';
+import { NodeData } from '../../common/interfaces';
 import { createFile } from '../penpot';
 
 export const createPenpotFile = (node: NodeData) => {

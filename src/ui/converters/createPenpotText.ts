@@ -1,6 +1,6 @@
 import slugify from 'slugify';
 
-import { TextData } from '../interfaces';
+import { TextData } from '../../common/interfaces';
 import { PenpotFile } from '../penpot';
 import {
   translateFills,

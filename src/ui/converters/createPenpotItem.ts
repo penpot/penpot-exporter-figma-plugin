@@ -7,7 +7,7 @@ import {
   createPenpotRectangle,
   createPenpotText
 } from '.';
-import { NodeData, TextData } from '../interfaces';
+import { NodeData, TextData } from '../../common/interfaces';
 import { PenpotFile } from '../penpot';
 import { calculateAdjustment } from '../utils';
 
