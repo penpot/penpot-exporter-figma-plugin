@@ -19,13 +19,17 @@ function detectMimeType(b64: string) {
   }
 }
 
-function traverse(node: BaseNode): NodeData | TextData {
+async function traverse(node: BaseNode): Promise<NodeData | TextData> {
   const children: (NodeData | TextData)[] = [];
+
+  if (node.type === 'PAGE') {
+    await node.loadAsync();
+  }
 
   if ('children' in node) {
     if (node.type !== 'INSTANCE') {
       for (const child of node.children) {
-        children.push(traverse(child));
+        children.push(await traverse(child));
       }
     }
   }
@@ -101,7 +105,7 @@ function traverse(node: BaseNode): NodeData | TextData {
 
 figma.showUI(__html__, { themeColors: true, height: 200, width: 300 });
 
-const root: NodeData | TextData = traverse(figma.root); // start the traversal at the root
+const root: NodeData | TextData = await traverse(figma.root); // start the traversal at the root
 figma.ui.postMessage({ type: 'FIGMAFILE', data: root });
 
 figma.ui.onmessage = msg => {
