@@ -2,40 +2,22 @@ import * as React from 'react';
 import { createRoot } from 'react-dom/client';
 import slugify from 'slugify';
 
+import fonts from './gfonts.json';
 import { NodeData, TextData, TextDataChildren } from './interfaces';
 import { PenpotFile, createFile } from './penpot';
 import './ui.css';
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-declare function require(path: string): any;
-
-// Open resources/gfonts.json and create a set of matched font names
-const gfonts = new Set();
-require('./gfonts.json').forEach((font: string) => gfonts.add(font));
-
-type FigmaImageData = {
-  value: string;
-  width: number;
-  height: number;
-};
+const gfonts = new Set(fonts);
 
 type PenpotExporterState = {
-  isDebug: boolean;
-  penpotFileData: string;
   missingFonts: Set<string>;
-  figmaFileData: string;
-  figmaRootNode: NodeData | null;
-  images: { [id: string]: FigmaImageData };
+  exporting: boolean;
 };
 
 export default class PenpotExporter extends React.Component<unknown, PenpotExporterState> {
   state: PenpotExporterState = {
-    isDebug: false,
-    penpotFileData: '',
-    figmaFileData: '',
     missingFonts: new Set(),
-    figmaRootNode: null,
-    images: {}
+    exporting: false
   };
 
   componentDidMount = () => {
@@ -292,24 +274,18 @@ export default class PenpotExporter extends React.Component<unknown, PenpotExpor
     });
   }
 
-  createPenpotImage(
-    file: PenpotFile,
-    node: NodeData,
-    baseX: number,
-    baseY: number,
-    image: FigmaImageData
-  ) {
+  createPenpotImage(file: PenpotFile, node: NodeData, baseX: number, baseY: number) {
     file.createImage({
       name: node.name,
       x: node.x + baseX,
       y: node.y + baseY,
-      width: image.width,
-      height: image.height,
+      width: node.width,
+      height: node.height,
       metadata: {
-        width: image.width,
-        height: image.height
+        width: node.width,
+        height: node.height
       },
-      dataUri: image.value
+      dataUri: node.imageFill
     });
   }
 
@@ -342,13 +318,7 @@ export default class PenpotExporter extends React.Component<unknown, PenpotExpor
       // height of the image.
       const [adjustedX, adjustedY] = this.calculateAdjustment(node);
 
-      this.createPenpotImage(
-        file,
-        node,
-        baseX + adjustedX,
-        baseY + adjustedY,
-        this.state.images[node.id]
-      );
+      this.createPenpotImage(file, node, baseX + adjustedX, baseY + adjustedY);
     } else if (node.type == 'PAGE') {
       this.createPenpotPage(file, node);
     } else if (node.type == 'FRAME') {
@@ -364,13 +334,7 @@ export default class PenpotExporter extends React.Component<unknown, PenpotExpor
     }
   }
 
-  createPenpotFile() {
-    const node = this.state.figmaRootNode;
-
-    if (node === null) {
-      throw new Error('No Figma file data found');
-    }
-
+  createPenpotFile(node: NodeData) {
     const file = createFile(node.name);
     for (const page of node.children) {
       this.createPenpotItem(file, page, 0, 0);
@@ -379,16 +343,8 @@ export default class PenpotExporter extends React.Component<unknown, PenpotExpor
   }
 
   onCreatePenpot = () => {
-    const file = this.createPenpotFile();
-    const penpotFileMap = file.asMap();
-    this.setState(() => ({
-      penpotFileData: JSON.stringify(
-        penpotFileMap,
-        (key, value) => (value instanceof Map ? [...value] : value),
-        4
-      )
-    }));
-    file.export();
+    this.setState(() => ({ exporting: true }));
+    parent.postMessage({ pluginMessage: { type: 'export' } }, '*');
   };
 
   onCancel = () => {
@@ -398,30 +354,9 @@ export default class PenpotExporter extends React.Component<unknown, PenpotExpor
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   onMessage = (event: any) => {
     if (event.data.pluginMessage.type == 'FIGMAFILE') {
-      this.setState(() => ({
-        figmaFileData: JSON.stringify(
-          event.data.pluginMessage.data,
-          (key, value) => (value instanceof Map ? [...value] : value),
-          4
-        ),
-        figmaRootNode: event.data.pluginMessage.data
-      }));
-    } else if (event.data.pluginMessage.type == 'IMAGE') {
-      const data = event.data.pluginMessage.data;
-      const image = document.createElement('img');
-
-      image.addEventListener('load', () => {
-        // Get byte array from response
-        this.setState(state => {
-          state.images[data.id] = {
-            value: data.value,
-            width: image.naturalWidth,
-            height: image.naturalHeight
-          };
-          return state;
-        });
-      });
-      image.src = data.value;
+      const file = this.createPenpotFile(event.data.pluginMessage.data);
+      file.export();
+      this.setState(() => ({ exporting: false }));
     }
   };
 
@@ -434,19 +369,8 @@ export default class PenpotExporter extends React.Component<unknown, PenpotExpor
     if (isMissingFonts) {
       height += this.state.missingFonts.size * 20;
       width = 400;
+      parent.postMessage({ pluginMessage: { type: 'resize', width: width, height: height } }, '*');
     }
-
-    if (this.state.isDebug) {
-      height += 600;
-      width = 800;
-    }
-
-    parent.postMessage({ pluginMessage: { type: 'resize', width: width, height: height } }, '*');
-  };
-
-  toggleDebug = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const isDebug = event.currentTarget.checked;
-    this.setState(() => ({ isDebug: isDebug }));
   };
 
   renderFontWarnings = () => {
@@ -476,34 +400,10 @@ export default class PenpotExporter extends React.Component<unknown, PenpotExpor
             <small>Ensure fonts are installed in Penpot before importing.</small>
             <div id="missing-fonts-list">{this.renderFontWarnings()}</div>
           </div>
-          <div>
-            <input type="checkbox" id="chkDebug" name="chkDebug" onChange={this.toggleDebug} />
-            <label htmlFor="chkDebug">Show debug data</label>
-          </div>
         </section>
-        <div style={{ display: this.state.isDebug ? '' : 'none' }}>
-          <section>
-            <textarea
-              style={{ width: '790px', height: '270px' }}
-              id="figma-file-data"
-              value={this.state.figmaFileData}
-              readOnly
-            />
-            <label htmlFor="figma-file-data">Figma file data</label>
-          </section>
-          <section>
-            <textarea
-              style={{ width: '790px', height: '270px' }}
-              id="penpot-file-data"
-              value={this.state.penpotFileData}
-              readOnly
-            />
-            <label htmlFor="penpot-file-data">Penpot file data</label>
-          </section>
-        </div>
         <footer>
-          <button className="brand" onClick={this.onCreatePenpot}>
-            Export
+          <button className="brand" disabled={this.state.exporting} onClick={this.onCreatePenpot}>
+            {this.state.exporting ? 'Exporting...' : 'Export to Penpot'}
           </button>
           <button onClick={this.onCancel}>Cancel</button>
         </footer>

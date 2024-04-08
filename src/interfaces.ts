@@ -8,6 +8,7 @@ export type NodeData = {
   width: number;
   height: number;
   fills: readonly Paint[];
+  imageFill?: string;
 };
 
 export type TextDataChildren = Pick<
