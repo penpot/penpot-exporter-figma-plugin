@@ -43,27 +43,21 @@ async function traverse(node: BaseNode): Promise<NodeData | TextData> {
     y: 'y' in node ? node.y : 0,
     width: 'width' in node ? node.width : 0,
     height: 'height' in node ? node.height : 0,
-    fills: 'fills' in node ? (node.fills === figma.mixed ? [] : node.fills) : [] // TODO: Support mixed fills
+    fills: 'fills' in node ? (node.fills === figma.mixed ? [] : node.fills) : [], // TODO: Support mixed fills
+    imageFill: ''
   };
 
   if (result.fills) {
     // Find any fill of type image
     const imageFill = result.fills.find(fill => fill.type === 'IMAGE');
-    if (imageFill) {
+    if (imageFill && 'exportAsync' in node) {
       // An "image" in Figma is a shape with one or more image fills, potentially blended with other fill
       // types.  Given the complexity of mirroring this exactly in Penpot, which treats images as first-class
       // objects, we're going to simplify this by exporting this shape as a PNG image.
-      'exportAsync' in node &&
-        node.exportAsync({ format: 'PNG' }).then(value => {
-          const b64 = figma.base64Encode(value);
-          figma.ui.postMessage({
-            type: 'IMAGE',
-            data: {
-              id: node.id,
-              value: 'data:' + detectMimeType(b64) + ';base64,' + b64
-            }
-          });
-        });
+      const value = await node.exportAsync({ format: 'PNG' });
+      const b64 = figma.base64Encode(value);
+
+      result.imageFill = 'data:' + detectMimeType(b64) + ';base64,' + b64;
     }
   }
 
@@ -105,10 +99,11 @@ async function traverse(node: BaseNode): Promise<NodeData | TextData> {
 
 figma.showUI(__html__, { themeColors: true, height: 200, width: 300 });
 
-const root: NodeData | TextData = await traverse(figma.root); // start the traversal at the root
-figma.ui.postMessage({ type: 'FIGMAFILE', data: root });
-
-figma.ui.onmessage = msg => {
+figma.ui.onmessage = async msg => {
+  if (msg.type === 'export') {
+    const root: NodeData | TextData = await traverse(figma.root); // start the traversal at the root
+    figma.ui.postMessage({ type: 'FIGMAFILE', data: root });
+  }
   if (msg.type === 'cancel') {
     figma.closePlugin();
   }

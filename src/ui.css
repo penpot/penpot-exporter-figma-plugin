@@ -57,6 +57,12 @@ button:focus-visible {
   outline-color: var(--color-border-focus);
 }
 
+button:disabled {
+  background-color: black;
+  color: var(--color-text);
+  cursor: not-allowed;
+}
+
 button.brand {
   --color-bg: var(--color-bg-brand);
   --color-text: var(--color-text-brand);
