@@ -1,8 +1,9 @@
-const InlineChunkHtmlPlugin = require('react-dev-utils/InlineChunkHtmlPlugin');
-const HtmlWebpackPlugin = require('html-webpack-plugin')
+/* eslint-disable @typescript-eslint/no-var-requires */
 
-const path = require('path')
-const webpack = require('webpack')
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const path = require('path');
+const InlineChunkHtmlPlugin = require('react-dev-utils/InlineChunkHtmlPlugin');
+const webpack = require('webpack');
 
 module.exports = (env, argv) => ({
   mode: argv.mode === 'production' ? 'production' : 'development',
@@ -12,7 +13,7 @@ module.exports = (env, argv) => ({
 
   entry: {
     ui: './src/ui.tsx', // The entry point for your UI code
-    code: './src/code.ts', // The entry point for your plugin code
+    code: './src/code.ts' // The entry point for your plugin code
   },
 
   module: {
@@ -27,7 +28,7 @@ module.exports = (env, argv) => ({
       // Enables including CSS by doing "import './file.css'" in your TypeScript code
       {
         test: /\.css$/,
-        use: ["style-loader", "css-loader"],
+        use: ['style-loader', 'css-loader']
       },
       // Allows you to use "<%= require('./file.svg') %>" in your HTML code to get a data URI
       // { test: /\.(png|jpg|gif|webp|svg|zip)$/, loader: [{ loader: 'url-loader' }] }
@@ -39,25 +40,24 @@ module.exports = (env, argv) => ({
   },
 
   // Webpack tries these extensions for you if you omit the extension like "import './file'"
-  resolve: { extensions: ['.tsx', '.ts', '.jsx', '.js'] ,
-              fallback: { "crypto": false }},
+  resolve: { extensions: ['.tsx', '.ts', '.jsx', '.js'], fallback: { crypto: false } },
 
   output: {
     filename: '[name].js',
-    path: path.resolve(__dirname, 'dist'), // Compile into a folder called "dist"
+    path: path.resolve(__dirname, 'dist') // Compile into a folder called "dist"
   },
 
   // Tells Webpack to generate "ui.html" and to inline "ui.ts" into it
   plugins: [
     new webpack.DefinePlugin({
-      'global': {} // Fix missing symbol error when running in developer VM
+      global: {} // Fix missing symbol error when running in developer VM
     }),
     new HtmlWebpackPlugin({
-      inject: "body",
+      inject: 'body',
       template: './src/ui.html',
       filename: 'ui.html',
       chunks: ['ui']
     }),
-    new InlineChunkHtmlPlugin(HtmlWebpackPlugin, [/ui/]),
-  ],
-})
+    new InlineChunkHtmlPlugin(HtmlWebpackPlugin, [/ui/])
+  ]
+});

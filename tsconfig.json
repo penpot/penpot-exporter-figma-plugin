@@ -1,13 +1,14 @@
 {
   "compilerOptions": {
-    "target": "es6",
+    "esModuleInterop": true,
+    "isolatedModules": true,
+    "skipLibCheck": true,
     "jsx": "react",
-    "typeRoots": [
-      "./node_modules/@types",
-      "./node_modules/@figma"
-    ],
-    "moduleResolution":"node"
-  },
-  "include": ["src/**/*.ts", "src/**/*.tsx"]
+    "lib": ["DOM", "ES6"],
+    "target": "ES6",
+    "module": "ESNext",
+    "moduleResolution": "Node10",
+    "strict": true,
+    "typeRoots": ["src/penpot.d.ts", "node_modules/@figma", "node_modules/@types"]
+  }
 }
-
