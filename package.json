@@ -47,7 +47,6 @@
     "stylelint-config-standard": "^36.0",
     "ts-loader": "^9.5",
     "typescript": "^5.4.4",
-    "typescript-eslint": "^7.4",
     "webpack": "^5.91",
     "webpack-cli": "^5.1"
   }
