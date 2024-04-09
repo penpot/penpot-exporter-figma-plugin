@@ -1,6 +1,6 @@
 import { createPenpotItem } from '.';
 import { ExportFile, NodeData } from '../../common/interfaces';
-import { createFile } from '../penpot';
+import { createFile } from '../lib/penpot';
 
 export const createPenpotFile = (node: NodeData) => {
   const exportFile = { penpotFile: createFile(node.name), fontNames: new Set<FontName>() };
