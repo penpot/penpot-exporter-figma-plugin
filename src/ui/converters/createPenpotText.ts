@@ -54,7 +54,7 @@ export const createPenpotText = (
           type: 'paragraph-set',
           children: [
             {
-              lineHeight: node.lineHeight,
+              // lineHeight: node.lineHeight,
               fontStyle: 'normal',
               children: children,
               textTransform: translateTextTransform(node),

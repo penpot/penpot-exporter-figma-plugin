@@ -1,9 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { TextOptions } from './types/textOptions';
 
 export interface PenpotFile {
   asMap(): any;
   export(): void;
-  addPage(name: string): void;
+  addPage(name: string, options?: object): void;
   closePage(): void;
   addArtboard(artboard: any): void;
   closeArtboard(): void;
@@ -11,7 +12,7 @@ export interface PenpotFile {
   closeGroup(): void;
   createRect(rect: any): void;
   createCircle(circle: any): void;
-  createText(text: any): void;
+  createText(options: TextOptions): void;
   createImage(image: any): void;
 }
 
