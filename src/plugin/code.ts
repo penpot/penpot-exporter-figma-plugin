@@ -9,7 +9,6 @@ figma.ui.onmessage = async msg => {
   if (msg.type === 'cancel') {
     handleCancelMessage();
   }
-
   if (msg.type === 'resize') {
     handleResizeMessage(msg.width, msg.height);
   }
