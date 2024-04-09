@@ -1,14 +1,13 @@
-import { NodeData } from '../../common/interfaces';
-import { PenpotFile } from '../penpot';
+import { ExportFile, NodeData } from '../../common/interfaces';
 import { translateFills } from '../translators';
 
 export const createPenpotRectangle = (
-  file: PenpotFile,
+  file: ExportFile,
   node: NodeData,
   baseX: number,
   baseY: number
 ) => {
-  file.createRect({
+  file.penpotFile.createRect({
     name: node.name,
     x: node.x + baseX,
     y: node.y + baseY,

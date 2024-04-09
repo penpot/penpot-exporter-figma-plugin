@@ -1,13 +1,12 @@
-import { NodeData } from '../../common/interfaces';
-import { PenpotFile } from '../penpot';
+import { ExportFile, NodeData } from '../../common/interfaces';
 
 export const createPenpotImage = (
-  file: PenpotFile,
+  file: ExportFile,
   node: NodeData,
   baseX: number,
   baseY: number
 ) => {
-  file.createImage({
+  file.penpotFile.createImage({
     name: node.name,
     x: node.x + baseX,
     y: node.y + baseY,

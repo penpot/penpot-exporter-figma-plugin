@@ -1,7 +1,6 @@
 import slugify from 'slugify';
 
-import { TextData } from '../../common/interfaces';
-import { PenpotFile } from '../penpot';
+import { ExportFile, TextData } from '../../common/interfaces';
 import {
   translateFills,
   translateFontStyle,
@@ -10,16 +9,15 @@ import {
   translateTextTransform,
   translateVerticalAlign
 } from '../translators';
-import { validateFont } from '../validators';
 
 export const createPenpotText = (
-  file: PenpotFile,
+  file: ExportFile,
   node: TextData,
   baseX: number,
   baseY: number
 ) => {
   const children = node.children.map(val => {
-    validateFont(val.fontName);
+    file.fontNames.add(val.fontName);
 
     return {
       lineHeight: val.lineHeight,
@@ -38,9 +36,9 @@ export const createPenpotText = (
     };
   });
 
-  validateFont(node.fontName);
+  file.fontNames.add(node.fontName);
 
-  file.createText({
+  file.penpotFile.createText({
     name: node.name,
     x: node.x + baseX,
     y: node.y + baseY,

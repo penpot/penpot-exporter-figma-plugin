@@ -1,8 +1,10 @@
 import * as React from 'react';
 import { createRoot } from 'react-dom/client';
+import slugify from 'slugify';
 
 import { createPenpotFile } from './converters';
 import './ui.css';
+import { validateFont } from './validators';
 
 type PenpotExporterState = {
   missingFonts: Set<string>;
@@ -26,14 +28,12 @@ export default class PenpotExporter extends React.Component<unknown, PenpotExpor
   componentWillUnmount = () => {
     window.removeEventListener('message', this.onMessage);
   };
+  addFontWarning(font: string) {
+    const newMissingFonts = this.state.missingFonts;
+    newMissingFonts.add(font);
 
-  // TODO: FIX THIS CODE
-  // addFontWarning(font: string) {
-  //   const newMissingFonts = this.state.missingFonts;
-  //   newMissingFonts.add(font);
-  //
-  //   this.setState(() => ({ missingFonts: newMissingFonts }));
-  // }
+    this.setState(() => ({ missingFonts: newMissingFonts }));
+  }
 
   onCreatePenpot = () => {
     this.setState(() => ({ exporting: true }));
@@ -48,7 +48,13 @@ export default class PenpotExporter extends React.Component<unknown, PenpotExpor
   onMessage = (event: any) => {
     if (event.data.pluginMessage.type == 'FIGMAFILE') {
       const file = createPenpotFile(event.data.pluginMessage.data);
-      file.export();
+      // validate file.fontNames
+      file.fontNames.forEach(font => {
+        if (!validateFont(font)) {
+          this.addFontWarning(slugify(font.family.toLowerCase()));
+        }
+      });
+      file.penpotFile.export();
       this.setState(() => ({ exporting: false }));
     }
   };
