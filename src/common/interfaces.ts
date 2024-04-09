@@ -49,3 +49,7 @@ export type ExportFile = {
   penpotFile: PenpotFile;
   fontNames: Set<FontName>;
 };
+
+export interface Signatures {
+  [key: string]: string;
+}
