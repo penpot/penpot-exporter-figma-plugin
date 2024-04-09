@@ -3,7 +3,7 @@
     "esModuleInterop": true,
     "isolatedModules": true,
     "skipLibCheck": true,
-    "jsx": "react",
+    "jsx": "react-jsx",
     "lib": ["DOM", "ES6"],
     "target": "es2017",
     "module": "ESNext",
