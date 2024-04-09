@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import slugify from 'slugify';
 
+import { NodeData } from '../common/interfaces';
 import { createPenpotFile } from './converters';
 import { validateFont } from './validators';
 
@@ -12,8 +13,7 @@ export const PenpotExporter = () => {
     setMissingFonts(missingFonts => missingFonts.add(font));
   };
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const onMessage = (event: any) => {
+  const onMessage = (event: MessageEvent<{ pluginMessage: { type: string; data: NodeData } }>) => {
     if (event.data.pluginMessage.type == 'FIGMAFILE') {
       const file = createPenpotFile(event.data.pluginMessage.data);
 
