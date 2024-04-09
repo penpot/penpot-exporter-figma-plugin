@@ -1,4 +1,4 @@
-import { NodeData } from '../interfaces.js';
+import { NodeData } from '../../common/interfaces';
 
 export const calculateAdjustment = (node: NodeData) => {
   // For each child, check whether the X or Y position is less than 0 and less than the

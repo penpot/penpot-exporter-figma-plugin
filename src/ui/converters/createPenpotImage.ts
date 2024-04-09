@@ -1,19 +1,22 @@
-import { NodeData } from '../interfaces';
+import { NodeData } from '../../common/interfaces';
 import { PenpotFile } from '../penpot';
-import { translateFills } from '../translators';
 
-export const createPenpotRectangle = (
+export const createPenpotImage = (
   file: PenpotFile,
   node: NodeData,
   baseX: number,
   baseY: number
 ) => {
-  file.createRect({
+  file.createImage({
     name: node.name,
     x: node.x + baseX,
     y: node.y + baseY,
     width: node.width,
     height: node.height,
-    fills: translateFills(node.fills /*, node.width, node.height*/)
+    metadata: {
+      width: node.width,
+      height: node.height
+    },
+    dataUri: node.imageFill
   });
 };

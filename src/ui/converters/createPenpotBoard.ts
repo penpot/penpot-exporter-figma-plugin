@@ -1,14 +1,15 @@
-import { NodeData } from '../interfaces';
+import { createPenpotItem } from '.';
+import { NodeData } from '../../common/interfaces';
 import { PenpotFile } from '../penpot';
 import { translateFills } from '../translators';
 
-export const createPenpotCircle = (
+export const createPenpotBoard = (
   file: PenpotFile,
   node: NodeData,
   baseX: number,
   baseY: number
 ) => {
-  file.createCircle({
+  file.addArtboard({
     name: node.name,
     x: node.x + baseX,
     y: node.y + baseY,
@@ -16,4 +17,8 @@ export const createPenpotCircle = (
     height: node.height,
     fills: translateFills(node.fills /*, node.width, node.height*/)
   });
+  for (const child of node.children) {
+    createPenpotItem(file, child, node.x + baseX, node.y + baseY);
+  }
+  file.closeArtboard();
 };

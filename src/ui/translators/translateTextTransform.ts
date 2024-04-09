@@ -1,4 +1,4 @@
-import { TextData, TextDataChildren } from '../interfaces.js';
+import { TextData, TextDataChildren } from '../../common/interfaces';
 
 export const translateTextTransform = (node: TextData | TextDataChildren) => {
   const textCase = node.textCase;

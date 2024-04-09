@@ -1,4 +1,4 @@
-import { TextData, TextDataChildren } from '../interfaces.js';
+import { TextData, TextDataChildren } from '../../common/interfaces';
 
 export const translateTextDecoration = (node: TextData | TextDataChildren) => {
   const textDecoration = node.textDecoration;

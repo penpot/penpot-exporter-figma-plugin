@@ -9,7 +9,7 @@
     "module": "ESNext",
     "moduleResolution": "Node10",
     "strict": true,
-    "typeRoots": ["src/penpot.d.ts", "node_modules/@figma", "node_modules/@types"],
+    "typeRoots": ["src/ui/penpot.d.ts", "node_modules/@figma", "node_modules/@types"],
     "resolveJsonModule": true
   }
 }

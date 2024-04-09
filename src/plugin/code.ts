@@ -1,4 +1,4 @@
-import { NodeData, TextData } from './interfaces';
+import { NodeData, TextData } from '../common/interfaces';
 
 interface Signatures {
   [key: string]: string;
