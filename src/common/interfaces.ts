@@ -1,3 +1,5 @@
+import { PenpotFile } from '../ui/penpot';
+
 export type NodeData = {
   id: string;
   name: string;
@@ -41,4 +43,9 @@ export type TextData = Pick<
   textAlignHorizontal: 'CENTER' | 'LEFT' | 'RIGHT' | 'JUSTIFIED';
   textAlignVertical: 'CENTER' | 'TOP' | 'BOTTOM';
   children: TextDataChildren[];
+};
+
+export type ExportFile = {
+  penpotFile: PenpotFile;
+  fontNames: Set<FontName>;
 };

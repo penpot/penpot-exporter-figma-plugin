@@ -7,12 +7,11 @@ import {
   createPenpotRectangle,
   createPenpotText
 } from '.';
-import { NodeData, TextData } from '../../common/interfaces';
-import { PenpotFile } from '../penpot';
+import { ExportFile, NodeData, TextData } from '../../common/interfaces';
 import { calculateAdjustment } from '../utils';
 
 export const createPenpotItem = (
-  file: PenpotFile,
+  file: ExportFile,
   node: NodeData,
   baseX: number,
   baseY: number

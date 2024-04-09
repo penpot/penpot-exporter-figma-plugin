@@ -1,16 +1,15 @@
 import { createPenpotItem } from '.';
-import { NodeData } from '../../common/interfaces';
-import { PenpotFile } from '../penpot';
+import { ExportFile, NodeData } from '../../common/interfaces';
 
 export const createPenpotGroup = (
-  file: PenpotFile,
+  file: ExportFile,
   node: NodeData,
   baseX: number,
   baseY: number
 ) => {
-  file.addGroup({ name: node.name });
+  file.penpotFile.addGroup({ name: node.name });
   for (const child of node.children) {
     createPenpotItem(file, child, baseX, baseY);
   }
-  file.closeGroup();
+  file.penpotFile.closeGroup();
 };

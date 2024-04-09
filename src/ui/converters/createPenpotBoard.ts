@@ -1,15 +1,14 @@
 import { createPenpotItem } from '.';
-import { NodeData } from '../../common/interfaces';
-import { PenpotFile } from '../penpot';
+import { ExportFile, NodeData } from '../../common/interfaces';
 import { translateFills } from '../translators';
 
 export const createPenpotBoard = (
-  file: PenpotFile,
+  file: ExportFile,
   node: NodeData,
   baseX: number,
   baseY: number
 ) => {
-  file.addArtboard({
+  file.penpotFile.addArtboard({
     name: node.name,
     x: node.x + baseX,
     y: node.y + baseY,
@@ -20,5 +19,5 @@ export const createPenpotBoard = (
   for (const child of node.children) {
     createPenpotItem(file, child, node.x + baseX, node.y + baseY);
   }
-  file.closeArtboard();
+  file.penpotFile.closeArtboard();
 };

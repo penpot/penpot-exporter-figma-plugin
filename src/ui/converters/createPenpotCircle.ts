@@ -1,14 +1,13 @@
-import { NodeData } from '../../common/interfaces';
-import { PenpotFile } from '../penpot';
+import { ExportFile, NodeData } from '../../common/interfaces';
 import { translateFills } from '../translators';
 
 export const createPenpotCircle = (
-  file: PenpotFile,
+  file: ExportFile,
   node: NodeData,
   baseX: number,
   baseY: number
 ) => {
-  file.createCircle({
+  file.penpotFile.createCircle({
     name: node.name,
     x: node.x + baseX,
     y: node.y + baseY,
