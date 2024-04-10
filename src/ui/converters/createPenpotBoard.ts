@@ -9,6 +9,7 @@ export const createPenpotBoard = (
   baseY: number
 ) => {
   file.penpotFile.addArtboard({
+    type: Symbol.for('frame'),
     name: node.name,
     x: node.x + baseX,
     y: node.y + baseY,

@@ -1,4 +1,5 @@
 import { CircleShape } from './types/circle/circleShape';
+import { FrameShape } from './types/frame/frameShape';
 import { GroupShape } from './types/group/groupShape';
 import { ImageShape } from './types/image/imageShape';
 import { RectShape } from './types/rect/rectShape';
@@ -8,10 +9,10 @@ export interface PenpotFile {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   asMap(): any;
   export(): void;
-  addPage(name: string, options?: object): void;
-  closePage(): void;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  addArtboard(artboard: any): void;
+  addPage(name: string, options?: any): void;
+  closePage(): void;
+  addArtboard(artboard: FrameShape): void;
   closeArtboard(): void;
   addGroup(group: GroupShape): void;
   closeGroup(): void;
