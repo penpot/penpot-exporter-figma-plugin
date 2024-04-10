@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { TextOptions } from './types/textOptions';
+import { TextShape } from './types/text/textShape';
 
 export interface PenpotFile {
   asMap(): any;
@@ -12,7 +12,7 @@ export interface PenpotFile {
   closeGroup(): void;
   createRect(rect: any): void;
   createCircle(circle: any): void;
-  createText(options: TextOptions): void;
+  createText(options: TextShape): void;
   createImage(image: any): void;
 }
 

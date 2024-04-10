@@ -1,13 +1,11 @@
-import slugify from 'slugify';
-
+// import slugify from 'slugify';
 import { ExportFile, TextData } from '../../common/interfaces';
+import { TextNode } from '../lib/types/text/textContent';
 import {
-  translateFills,
-  translateFontStyle,
-  translateHorizontalAlign,
+  translateFills, // translateFontStyle,
+  // translateHorizontalAlign,
   translateTextDecoration,
-  translateTextTransform,
-  translateVerticalAlign
+  translateTextTransform // translateVerticalAlign
 } from '../translators';
 
 export const createPenpotText = (
@@ -20,20 +18,20 @@ export const createPenpotText = (
     file.fontNames.add(val.fontName);
 
     return {
-      lineHeight: val.lineHeight,
-      fontStyle: 'normal',
-      textAlign: translateHorizontalAlign(node.textAlignHorizontal),
-      fontId: 'gfont-' + slugify(val.fontName.family.toLowerCase()),
-      fontSize: val.fontSize.toString(),
-      fontWeight: val.fontWeight.toString(),
-      fontVariantId: translateFontStyle(val.fontName.style),
-      textDecoration: translateTextDecoration(val),
-      textTransform: translateTextTransform(val),
-      letterSpacing: val.letterSpacing,
+      text: val.characters,
       fills: translateFills(val.fills /*, node.width, node.height*/),
       fontFamily: val.fontName.family,
-      text: val.characters
-    };
+      fontSize: val.fontSize.toString(),
+      fontStyle: 'normal',
+      fontWeight: val.fontWeight.toString(),
+      textDecoration: translateTextDecoration(val),
+      textTransform: translateTextTransform(val)
+      // lineHeight: val.lineHeight,
+      // textAlign: translateHorizontalAlign(node.textAlignHorizontal),
+      // fontId: 'gfont-' + slugify(val.fontName.family.toLowerCase()),
+      // fontVariantId: translateFontStyle(val.fontName.style),
+      // letterSpacing: val.letterSpacing,
+    } as TextNode;
   });
 
   file.fontNames.add(node.fontName);
@@ -44,8 +42,8 @@ export const createPenpotText = (
     y: node.y + baseY,
     width: node.width,
     height: node.height,
-    rotation: 0,
-    type: Symbol.for('text'),
+    // rotation: 0,
+    type: 'text',
     content: {
       type: 'root',
       // verticalAlign: translateVerticalAlign(node.textAlignVertical),
