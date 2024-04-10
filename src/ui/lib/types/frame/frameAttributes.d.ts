@@ -1,6 +1,7 @@
+import { Uuid } from '../utils/uuid';
+
 export type FrameAttributes = {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  id?: any;
+  id?: Uuid;
   type: symbol;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   shapes?: any[];

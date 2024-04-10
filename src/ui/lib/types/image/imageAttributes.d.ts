@@ -1,6 +1,7 @@
+import { Uuid } from '../utils/uuid';
+
 export type ImageAttributes = {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  id?: any;
+  id?: Uuid;
   type: symbol;
   // TODO: Investigate where it comes from
   dataUri?: string;
@@ -8,7 +9,6 @@ export type ImageAttributes = {
     width: number;
     height: number;
     mtype?: string;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    id?: any;
+    id?: Uuid;
   };
 };
