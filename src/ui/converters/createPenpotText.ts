@@ -22,7 +22,7 @@ export const createPenpotText = (
       fills: translateFills(val.fills /*, node.width, node.height*/),
       fontFamily: val.fontName.family,
       fontSize: val.fontSize.toString(),
-      fontStyle: 'normal',
+      fontStyle: val.fontName.style,
       fontWeight: val.fontWeight.toString(),
       textDecoration: translateTextDecoration(val),
       textTransform: translateTextTransform(val)
@@ -33,6 +33,7 @@ export const createPenpotText = (
       // letterSpacing: val.letterSpacing,
     } as TextNode;
   });
+  console.log(node);
 
   file.fontNames.add(node.fontName);
 
@@ -52,19 +53,19 @@ export const createPenpotText = (
           type: 'paragraph-set',
           children: [
             {
-              // lineHeight: node.lineHeight,
-              fontStyle: 'normal',
-              children: children,
+              type: 'paragraph',
+              fills: translateFills(node.fills /*, node.width, node.height*/),
+              fontFamily: node.fontName.family,
+              fontSize: node.fontSize.toString(),
+              fontStyle: node.fontName.style,
+              fontWeight: node.fontWeight.toString(),
+              textDecoration: translateTextDecoration(node),
               textTransform: translateTextTransform(node),
+              children: children
+              // lineHeight: node.lineHeight,
               // textAlign: translateHorizontalAlign(node.textAlignHorizontal),
               // fontId: 'gfont-' + slugify(node.fontName.family.toLowerCase()),
-              fontSize: node.fontSize.toString(),
-              fontWeight: node.fontWeight.toString(),
-              type: 'paragraph',
-              textDecoration: translateTextDecoration(node),
               // letterSpacing: node.letterSpacing,
-              fills: translateFills(node.fills /*, node.width, node.height*/),
-              fontFamily: node.fontName.family
             }
           ]
         }

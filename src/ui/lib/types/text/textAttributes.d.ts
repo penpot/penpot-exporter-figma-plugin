@@ -1,7 +1,7 @@
 import { TextContent } from './textContent';
 
 export type TextAttributes = {
-  id?: string;
+  id?: any;
   type: symbol;
   content?: TextContent;
 };
