@@ -8,6 +8,7 @@ export const createPenpotCircle = (
   baseY: number
 ) => {
   file.penpotFile.createCircle({
+    type: Symbol.for('circle'),
     name: node.name,
     x: node.x + baseX,
     y: node.y + baseY,

@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { CircleShape } from './types/circle/circleShape';
 import { TextShape } from './types/text/textShape';
 
 export interface PenpotFile {
@@ -11,7 +12,7 @@ export interface PenpotFile {
   addGroup(group: any): void;
   closeGroup(): void;
   createRect(rect: any): void;
-  createCircle(circle: any): void;
+  createCircle(circle: CircleShape): void;
   createText(options: TextShape): void;
   createImage(image: any): void;
 }
