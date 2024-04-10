@@ -21,7 +21,7 @@ export interface PenpotFile {
   createText(options: TextShape): void;
   createImage(image: ImageShape): void;
   // createSVG(svg: any): void;
-  // closeeSVG(): void;
+  // closeSVG(): void;
   // addLibraryColor(color: any): void;
   // updateLibraryColor(color: any): void;
   // deleteLibraryColor(color: any): void;
