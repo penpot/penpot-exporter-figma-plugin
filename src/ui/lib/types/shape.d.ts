@@ -1,3 +1,4 @@
+import { Point } from './utils/point';
 import { Selrect } from './utils/selrect';
 
 export type Shape = {
@@ -7,8 +8,7 @@ export type Shape = {
   componentRoot?: boolean;
   shapeRef?: string;
   selrect?: Selrect;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  points?: any;
+  points?: Point[];
   blocked?: boolean;
   collapsed?: boolean;
   locked?: boolean;
