@@ -43,7 +43,7 @@ export const createPenpotText = (
     width: node.width,
     height: node.height,
     // rotation: 0,
-    type: 'text',
+    type: Symbol.for('text'),
     content: {
       type: 'root',
       // verticalAlign: translateVerticalAlign(node.textAlignVertical),
