@@ -1,11 +1,12 @@
+import { Selrect } from './utils/selrect';
+
 export type Shape = {
   name?: string;
   componentId?: string;
   componentFile?: string;
   componentRoot?: boolean;
   shapeRef?: string;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  selrect?: any;
+  selrect?: Selrect;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   points?: any;
   blocked?: boolean;
