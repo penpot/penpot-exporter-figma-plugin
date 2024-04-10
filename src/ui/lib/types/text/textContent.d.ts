@@ -21,8 +21,8 @@ type Paragraph = {
   direction?: string;
   textDecoration?: string;
   textTransform?: string;
-  typographyRefId?: string | null;
-  typographyRefFile?: string | null;
+  typographyRefId?: string;
+  typographyRefFile?: string;
   children: TextNode[];
 };
 
@@ -37,8 +37,8 @@ type TextNode = {
   direction?: string;
   textDecoration?: string;
   textTransform?: string;
-  typographyRefId?: string | null;
-  typographyRefFile?: string | null;
+  typographyRefId?: string;
+  typographyRefFile?: string;
 };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
