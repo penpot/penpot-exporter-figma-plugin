@@ -19,7 +19,7 @@ export const createPenpotText = (
 
     return {
       text: val.characters,
-      fills: translateFills(val.fills /*, node.width, node.height*/),
+      fills: translateFills(val.fills, node.width, node.height),
       fontFamily: val.fontName.family,
       fontSize: val.fontSize.toString(),
       fontStyle: val.fontName.style,
@@ -33,8 +33,6 @@ export const createPenpotText = (
       // letterSpacing: val.letterSpacing,
     } as TextNode;
   });
-  console.log(node);
-
   file.fontNames.add(node.fontName);
 
   file.penpotFile.createText({
@@ -54,7 +52,7 @@ export const createPenpotText = (
           children: [
             {
               type: 'paragraph',
-              fills: translateFills(node.fills /*, node.width, node.height*/),
+              fills: translateFills(node.fills, node.width, node.height),
               fontFamily: node.fontName.family,
               fontSize: node.fontSize.toString(),
               fontStyle: node.fontName.style,

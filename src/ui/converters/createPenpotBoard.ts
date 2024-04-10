@@ -15,7 +15,7 @@ export const createPenpotBoard = (
     y: node.y + baseY,
     width: node.width,
     height: node.height,
-    fills: translateFills(node.fills /*, node.width, node.height*/)
+    fills: translateFills(node.fills, node.width, node.height)
   });
   for (const child of node.children) {
     createPenpotItem(file, child, node.x + baseX, node.y + baseY);

@@ -1,3 +1,5 @@
+import { Fill } from '../utils/fill';
+
 export type TextContent = {
   type: 'root';
   key?: string;
@@ -40,6 +42,3 @@ type TextNode = {
   typographyRefId?: string;
   typographyRefFile?: string;
 };
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-type Fill = any;

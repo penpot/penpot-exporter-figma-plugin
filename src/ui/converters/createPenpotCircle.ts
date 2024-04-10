@@ -14,6 +14,6 @@ export const createPenpotCircle = (
     y: node.y + baseY,
     width: node.width,
     height: node.height,
-    fills: translateFills(node.fills /*, node.width, node.height*/)
+    fills: translateFills(node.fills, node.width, node.height)
   });
 };
