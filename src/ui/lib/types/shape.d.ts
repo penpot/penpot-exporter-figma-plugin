@@ -1,5 +1,10 @@
+import { Export } from './utils/export';
+import { Fill } from './utils/fill';
+import { Grid } from './utils/grid';
+import { Matrix } from './utils/matrix';
 import { Point } from './utils/point';
 import { Selrect } from './utils/selrect';
+import { Stroke } from './utils/stroke';
 
 export type Shape = {
   name?: string;
@@ -14,8 +19,7 @@ export type Shape = {
   locked?: boolean;
   hidden?: boolean;
   maskedGroup?: boolean;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  fills?: any;
+  fills?: Fill[];
   hideFillOnExport?: boolean;
   proportion?: number;
   proportionLock?: boolean;
@@ -33,16 +37,11 @@ export type Shape = {
   width?: number;
   height?: number;
   opacity?: number;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  grids?: any;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  exports?: any;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  strokes?: any;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  transform?: any;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  transformInverse?: any;
+  grids?: Grid[];
+  exports?: Export[];
+  strokes?: Stroke[];
+  transform?: Matrix;
+  transformInverse?: Matrix;
   blendMode?: string;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   interactions?: any;
