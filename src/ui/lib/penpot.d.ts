@@ -1,4 +1,5 @@
 import { CircleShape } from './types/circle/circleShape';
+import { GroupShape } from './types/group/groupShape';
 import { ImageShape } from './types/image/imageShape';
 import { RectShape } from './types/rect/rectShape';
 import { TextShape } from './types/text/textShape';
@@ -12,8 +13,7 @@ export interface PenpotFile {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   addArtboard(artboard: any): void;
   closeArtboard(): void;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  addGroup(group: any): void;
+  addGroup(group: GroupShape): void;
   closeGroup(): void;
   createRect(rect: RectShape): void;
   createCircle(circle: CircleShape): void;

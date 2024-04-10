@@ -7,9 +7,14 @@ export const createPenpotGroup = (
   baseX: number,
   baseY: number
 ) => {
-  file.penpotFile.addGroup({ name: node.name });
+  file.penpotFile.addGroup({
+    type: Symbol.for('group'),
+    name: node.name
+  });
+
   for (const child of node.children) {
     createPenpotItem(file, child, baseX, baseY);
   }
+
   file.penpotFile.closeGroup();
 };
