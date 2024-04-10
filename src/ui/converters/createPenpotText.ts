@@ -48,7 +48,7 @@ export const createPenpotText = (
     type: Symbol.for('text'),
     content: {
       type: 'root',
-      verticalAlign: translateVerticalAlign(node.textAlignVertical),
+      // verticalAlign: translateVerticalAlign(node.textAlignVertical),
       children: [
         {
           type: 'paragraph-set',
@@ -58,13 +58,13 @@ export const createPenpotText = (
               fontStyle: 'normal',
               children: children,
               textTransform: translateTextTransform(node),
-              textAlign: translateHorizontalAlign(node.textAlignHorizontal),
-              fontId: 'gfont-' + slugify(node.fontName.family.toLowerCase()),
+              // textAlign: translateHorizontalAlign(node.textAlignHorizontal),
+              // fontId: 'gfont-' + slugify(node.fontName.family.toLowerCase()),
               fontSize: node.fontSize.toString(),
               fontWeight: node.fontWeight.toString(),
               type: 'paragraph',
               textDecoration: translateTextDecoration(node),
-              letterSpacing: node.letterSpacing,
+              // letterSpacing: node.letterSpacing,
               fills: translateFills(node.fills /*, node.width, node.height*/),
               fontFamily: node.fontName.family
             }
