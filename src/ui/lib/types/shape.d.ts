@@ -1,6 +1,7 @@
 import { Export } from './utils/export';
 import { Fill } from './utils/fill';
 import { Grid } from './utils/grid';
+import { Interaction } from './utils/interactions/interaction';
 import { Matrix } from './utils/matrix';
 import { Point } from './utils/point';
 import { Selrect } from './utils/selrect';
@@ -43,8 +44,7 @@ export type Shape = {
   transform?: Matrix;
   transformInverse?: Matrix;
   blendMode?: string;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  interactions?: any;
+  interactions?: Interaction[];
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   shadow?: any;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
