@@ -1,3 +1,4 @@
+import { Blur } from './utils/blur';
 import { Export } from './utils/export';
 import { Fill } from './utils/fill';
 import { Grid } from './utils/grid';
@@ -46,8 +47,7 @@ export type Shape = {
   transformInverse?: Matrix;
   blendMode?: string;
   interactions?: Interaction[];
-  shadow?: Shadow;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  blur?: any;
+  shadow?: Shadow[];
+  blur?: Blur;
   growType?: 'auto-width' | 'auto-height' | 'fixed';
 };

@@ -1,11 +1,9 @@
 import { Gradient } from './gradient';
 import { Uuid } from './uuid';
 
-type ShadowStyle = 'drop-shadow' | 'inner-shadow';
-
 export type Shadow = {
   id?: Uuid;
-  style: ShadowStyle;
+  style: symbol; // 'drop-shadow' | 'inner-shadow'
   offsetX: number;
   offsetY: number;
   blur: number;
