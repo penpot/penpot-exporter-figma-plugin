@@ -9,12 +9,13 @@ export const createPenpotBoard = (
   baseY: number
 ) => {
   file.penpotFile.addArtboard({
+    type: Symbol.for('frame'),
     name: node.name,
     x: node.x + baseX,
     y: node.y + baseY,
     width: node.width,
     height: node.height,
-    fills: translateFills(node.fills /*, node.width, node.height*/)
+    fills: translateFills(node.fills, node.width, node.height)
   });
   for (const child of node.children) {
     createPenpotItem(file, child, node.x + baseX, node.y + baseY);

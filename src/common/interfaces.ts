@@ -1,4 +1,4 @@
-import { PenpotFile } from '../ui/penpot';
+import { PenpotFile } from '../ui/lib/penpot';
 
 export type NodeData = {
   id: string;

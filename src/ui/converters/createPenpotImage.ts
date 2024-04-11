@@ -7,6 +7,7 @@ export const createPenpotImage = (
   baseY: number
 ) => {
   file.penpotFile.createImage({
+    type: Symbol.for('image'),
     name: node.name,
     x: node.x + baseX,
     y: node.y + baseY,

@@ -1,4 +1,4 @@
 node_modules
 dist
-src/ui/penpot.js
+src/ui/lib/penpot.js
 LICENSE

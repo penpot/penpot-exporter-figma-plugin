@@ -8,11 +8,12 @@ export const createPenpotRectangle = (
   baseY: number
 ) => {
   file.penpotFile.createRect({
+    type: Symbol.for('rect'),
     name: node.name,
     x: node.x + baseX,
     y: node.y + baseY,
     width: node.width,
     height: node.height,
-    fills: translateFills(node.fills /*, node.width, node.height*/)
+    fills: translateFills(node.fills, node.width, node.height)
   });
 };
