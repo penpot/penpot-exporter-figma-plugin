@@ -5,6 +5,7 @@ import { Interaction } from './utils/interactions/interaction';
 import { Matrix } from './utils/matrix';
 import { Point } from './utils/point';
 import { Selrect } from './utils/selrect';
+import { Shadow } from './utils/shadow';
 import { Stroke } from './utils/stroke';
 
 export type Shape = {
@@ -45,8 +46,7 @@ export type Shape = {
   transformInverse?: Matrix;
   blendMode?: string;
   interactions?: Interaction[];
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  shadow?: any;
+  shadow?: Shadow;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   blur?: any;
   growType?: 'auto-width' | 'auto-height' | 'fixed';
