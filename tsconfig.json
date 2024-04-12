@@ -10,6 +10,10 @@
     "moduleResolution": "Node10",
     "strict": true,
     "typeRoots": ["src/ui/lib/penpot.d.ts", "node_modules/@figma", "node_modules/@types"],
-    "resolveJsonModule": true
+    "resolveJsonModule": true,
+    "paths": {
+      "@plugin/*": ["./src/plugin/*"],
+      "@ui/*": ["./src/ui/*"]
+    }
   }
 }

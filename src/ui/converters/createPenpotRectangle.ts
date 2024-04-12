@@ -1,7 +1,7 @@
-import { PenpotFile } from '../lib/penpot';
-import { RECT_TYPE } from '../lib/types/rect/rectAttributes';
-import { RectShape } from '../lib/types/rect/rectShape';
-import { translateFillGradients } from '../translators';
+import { PenpotFile } from '@ui/lib/penpot';
+import { RECT_TYPE } from '@ui/lib/types/rect/rectAttributes';
+import { RectShape } from '@ui/lib/types/rect/rectShape';
+import { translateFillGradients } from '@ui/translators';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const createPenpotRectangle = (file: PenpotFile, { type, fills, ...rest }: RectShape) => {

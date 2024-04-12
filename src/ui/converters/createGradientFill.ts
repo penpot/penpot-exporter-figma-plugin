@@ -1,4 +1,4 @@
-import { Gradient, LINEAR_TYPE, RADIAL_TYPE } from '../lib/types/utils/gradient';
+import { Gradient, LINEAR_TYPE, RADIAL_TYPE } from '@ui/lib/types/utils/gradient';
 
 export const createGradientFill = ({ type, ...rest }: Gradient): Gradient => {
   switch (type) {

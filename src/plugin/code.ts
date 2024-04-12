@@ -1,4 +1,8 @@
-import { handleCancelMessage, handleExportMessage, handleResizeMessage } from './messageHandlers';
+import {
+  handleCancelMessage,
+  handleExportMessage,
+  handleResizeMessage
+} from '@plugin/messageHandlers';
 
 figma.showUI(__html__, { themeColors: true, height: 200, width: 300 });
 

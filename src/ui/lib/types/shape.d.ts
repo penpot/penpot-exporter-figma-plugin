@@ -1,13 +1,13 @@
-import { Blur } from './utils/blur';
-import { Export } from './utils/export';
-import { Fill } from './utils/fill';
-import { Grid } from './utils/grid';
-import { Interaction } from './utils/interactions/interaction';
-import { Matrix } from './utils/matrix';
-import { Point } from './utils/point';
-import { Selrect } from './utils/selrect';
-import { Shadow } from './utils/shadow';
-import { Stroke } from './utils/stroke';
+import { Blur } from '@ui/lib/types/utils/blur';
+import { Export } from '@ui/lib/types/utils/export';
+import { Fill } from '@ui/lib/types/utils/fill';
+import { Grid } from '@ui/lib/types/utils/grid';
+import { Interaction } from '@ui/lib/types/utils/interaction';
+import { Matrix } from '@ui/lib/types/utils/matrix';
+import { Point } from '@ui/lib/types/utils/point';
+import { Selrect } from '@ui/lib/types/utils/selrect';
+import { Shadow } from '@ui/lib/types/utils/shadow';
+import { Stroke } from '@ui/lib/types/utils/stroke';
 
 export type Shape = {
   name?: string;

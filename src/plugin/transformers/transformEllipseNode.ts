@@ -1,5 +1,6 @@
-import { CircleShape } from '../../ui/lib/types/circle/circleShape';
-import { translateFills } from '../translators/translateFills';
+import { translateFills } from '@plugin/translators';
+
+import { CircleShape } from '@ui/lib/types/circle/circleShape';
 
 export const transformEllipseNode = (
   node: EllipseNode,

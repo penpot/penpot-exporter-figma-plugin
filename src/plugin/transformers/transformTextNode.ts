@@ -1,6 +1,11 @@
-import { TextNode as PenpotTextNode } from '../../ui/lib/types/text/textContent';
-import { TextShape } from '../../ui/lib/types/text/textShape';
-import { translateFills, translateTextDecoration, translateTextTransform } from '../translators';
+import {
+  translateFills,
+  translateTextDecoration,
+  translateTextTransform
+} from '@plugin/translators';
+
+import { TextNode as PenpotTextNode } from '@ui/lib/types/text/textContent';
+import { TextShape } from '@ui/lib/types/text/textShape';
 
 export const transformTextNode = (node: TextNode, baseX: number, baseY: number): TextShape => {
   const styledTextSegments = node.getStyledTextSegments([

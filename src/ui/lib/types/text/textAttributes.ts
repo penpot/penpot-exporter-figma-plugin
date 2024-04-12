@@ -1,4 +1,5 @@
-import { Uuid } from '../utils/uuid';
+import { Uuid } from '@ui/lib/types/utils/uuid';
+
 import { TextContent } from './textContent';
 
 export const TEXT_TYPE: unique symbol = Symbol.for('text');

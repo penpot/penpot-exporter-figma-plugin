@@ -1,4 +1,4 @@
-import { Point } from '../utils/point';
+import { Point } from '@ui/lib/types/utils/point';
 
 export type BoolContent = {
   command: string; // @TODO: in Penpot this is of type :keyword. check if it makes sense

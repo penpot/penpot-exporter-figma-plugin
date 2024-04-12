@@ -1,5 +1,6 @@
-import { ImageShape } from '../../ui/lib/types/image/imageShape';
-import { detectMimeType } from '../utils';
+import { detectMimeType } from '@plugin/utils';
+
+import { ImageShape } from '@ui/lib/types/image/imageShape';
 
 export const transformImageNode = async (
   node: SceneNode,

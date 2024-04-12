@@ -1,9 +1,10 @@
-import { CircleShape } from './types/circle/circleShape';
-import { FrameShape } from './types/frame/frameShape';
-import { GroupShape } from './types/group/groupShape';
-import { ImageShape } from './types/image/imageShape';
-import { RectShape } from './types/rect/rectShape';
-import { TextShape } from './types/text/textShape';
+import { BoolShape } from '@ui/lib/types/bool/boolShape';
+import { CircleShape } from '@ui/lib/types/circle/circleShape';
+import { FrameShape } from '@ui/lib/types/frame/frameShape';
+import { GroupShape } from '@ui/lib/types/group/groupShape';
+import { ImageShape } from '@ui/lib/types/image/imageShape';
+import { RectShape } from '@ui/lib/types/rect/rectShape';
+import { TextShape } from '@ui/lib/types/text/textShape';
 
 export interface PenpotFile {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -13,8 +14,8 @@ export interface PenpotFile {
   closeArtboard(): void;
   addGroup(group: GroupShape): void;
   closeGroup(): void;
-  // addBool(bool: any): void;
-  // closeBool(): void;
+  addBool(bool: BoolShape): void;
+  closeBool(): void;
   createRect(rect: RectShape): void;
   createCircle(circle: CircleShape): void;
   // createPath(path: any): void;

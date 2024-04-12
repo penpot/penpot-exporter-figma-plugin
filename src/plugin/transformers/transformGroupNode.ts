@@ -1,4 +1,5 @@
-import { GroupShape } from '../../ui/lib/types/group/groupShape';
+import { GroupShape } from '@ui/lib/types/group/groupShape';
+
 import { transformSceneNode } from './transformSceneNode';
 
 export const transformGroupNode = async (

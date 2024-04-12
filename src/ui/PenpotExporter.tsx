@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
 import slugify from 'slugify';
 
-import { createPenpotFile } from './converters';
-import { PenpotDocument } from './lib/types/penpotDocument';
-import { validateFont } from './validators';
+import { createPenpotFile } from '@ui/converters';
+import { PenpotDocument } from '@ui/lib/types/penpotDocument';
+import { validateFont } from '@ui/validators';
 
 export const PenpotExporter = () => {
   const [missingFonts, setMissingFonts] = useState(new Set<string>());

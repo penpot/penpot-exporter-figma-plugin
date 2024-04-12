@@ -1,6 +1,8 @@
-import { FrameShape } from '../../ui/lib/types/frame/frameShape';
-import { translateFills } from '../translators/translateFills';
-import { transformSceneNode } from './transformSceneNode';
+import { translateFills } from '@plugin/translators';
+
+import { FrameShape } from '@ui/lib/types/frame/frameShape';
+
+import { transformSceneNode } from '.';
 
 export const transformFrameNode = async (
   node: FrameNode,

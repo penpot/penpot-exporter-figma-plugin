@@ -1,4 +1,4 @@
-import { transformDocumentNode } from '../transformers';
+import { transformDocumentNode } from '@plugin/transformers';
 
 export async function handleExportMessage() {
   await figma.loadAllPagesAsync();

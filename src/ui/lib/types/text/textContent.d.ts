@@ -1,4 +1,4 @@
-import { Fill } from '../utils/fill';
+import { Fill } from '@ui/lib/types/utils/fill';
 
 export type TextContent = {
   type: 'root';

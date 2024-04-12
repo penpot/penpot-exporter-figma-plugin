@@ -1,4 +1,5 @@
-import { Fill } from '../../ui/lib/types/utils/fill';
+import { Fill } from '@ui/lib/types/utils/fill';
+
 // import { translateGradientLinearFill } from './translateGradientLinearFill';
 import { translateSolidFill } from './translateSolidFill';
 

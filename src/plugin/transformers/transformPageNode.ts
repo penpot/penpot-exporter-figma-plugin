@@ -1,5 +1,6 @@
-import { PenpotPage } from '../../ui/lib/types/penpotPage';
-import { transformSceneNode } from './transformSceneNode';
+import { PenpotPage } from '@ui/lib/types/penpotPage';
+
+import { transformSceneNode } from '.';
 
 export const transformPageNode = async (node: PageNode): Promise<PenpotPage> => {
   return {

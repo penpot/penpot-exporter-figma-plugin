@@ -1,3 +1,6 @@
+import { PenpotFile } from '@ui/lib/penpot';
+import { PenpotNode } from '@ui/lib/types/penpotNode';
+
 import {
   createPenpotArtboard,
   createPenpotCircle,
@@ -6,8 +9,6 @@ import {
   createPenpotRectangle,
   createPenpotText
 } from '.';
-import { PenpotFile } from '../lib/penpot';
-import { PenpotNode } from '../lib/types/penpotNode';
 
 export const createPenpotItem = (file: PenpotFile, node: PenpotNode) => {
   switch (node.type) {

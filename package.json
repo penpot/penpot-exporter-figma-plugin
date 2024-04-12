@@ -20,21 +20,21 @@
   "author": "Kaleidos",
   "license": "MPL2.0",
   "dependencies": {
-    "@figma-plugin/helpers": "^0.15.2",
+    "@figma-plugin/helpers": "^0.15",
     "react": "^18.2",
     "react-dom": "^18.2",
     "slugify": "^1.6"
   },
   "devDependencies": {
-    "@figma/eslint-plugin-figma-plugins": "^0.15.0",
-    "@figma/plugin-typings": "^1.90.0",
+    "@figma/eslint-plugin-figma-plugins": "^0.15",
+    "@figma/plugin-typings": "^1.90",
     "@trivago/prettier-plugin-sort-imports": "^4.3",
     "@types/react": "^18.2",
     "@types/react-dom": "^18.2",
-    "@typescript-eslint/eslint-plugin": "^7.5.0",
-    "@typescript-eslint/parser": "^7.5.0",
+    "@typescript-eslint/eslint-plugin": "^7.5",
+    "@typescript-eslint/parser": "^7.5",
     "css-loader": "^6.10",
-    "eslint": "^8.57.0",
+    "eslint": "^8.57",
     "eslint-config-prettier": "^9.1",
     "eslint-plugin-prettier": "^5.1",
     "eslint-plugin-react": "^7.34",
@@ -47,7 +47,8 @@
     "stylelint": "^16.3",
     "stylelint-config-standard": "^36.0",
     "ts-loader": "^9.5",
-    "typescript": "^5.4.4",
+    "tsconfig-paths-webpack-plugin": "^4.1",
+    "typescript": "^5.4",
     "webpack": "^5.91",
     "webpack-cli": "^5.1"
   }

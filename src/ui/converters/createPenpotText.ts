@@ -1,6 +1,6 @@
-import { PenpotFile } from '../lib/penpot';
-import { TEXT_TYPE } from '../lib/types/text/textAttributes';
-import { TextShape } from '../lib/types/text/textShape';
+import { PenpotFile } from '@ui/lib/penpot';
+import { TEXT_TYPE } from '@ui/lib/types/text/textAttributes';
+import { TextShape } from '@ui/lib/types/text/textShape';
 
 export const createPenpotText = (
   file: PenpotFile,

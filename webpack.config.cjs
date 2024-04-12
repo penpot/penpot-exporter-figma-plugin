@@ -3,6 +3,7 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const path = require('path');
 const InlineChunkHtmlPlugin = require('react-dev-utils/InlineChunkHtmlPlugin');
+const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 const webpack = require('webpack');
 
 module.exports = (env, argv) => ({
@@ -40,7 +41,11 @@ module.exports = (env, argv) => ({
   },
 
   // Webpack tries these extensions for you if you omit the extension like "import './file'"
-  resolve: { extensions: ['.tsx', '.ts', '.jsx', '.js'], fallback: { crypto: false } },
+  resolve: {
+    extensions: ['.tsx', '.ts', '.jsx', '.js'],
+    fallback: { crypto: false },
+    plugins: [new TsconfigPathsPlugin()]
+  },
 
   output: {
     filename: '[name].js',

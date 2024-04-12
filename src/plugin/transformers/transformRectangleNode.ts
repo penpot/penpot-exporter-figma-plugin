@@ -1,5 +1,6 @@
-import { RectShape } from '../../ui/lib/types/rect/rectShape';
-import { translateFills } from '../translators/translateFills';
+import { translateFills } from '@plugin/translators';
+
+import { RectShape } from '@ui/lib/types/rect/rectShape';
 
 export const transformRectangleNode = (
   node: RectangleNode,

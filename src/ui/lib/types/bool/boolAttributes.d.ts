@@ -1,4 +1,5 @@
-import { Uuid } from '../utils/uuid';
+import { Uuid } from '@ui/lib/types/utils/uuid';
+
 import { BoolContent } from './boolContent';
 
 export type BoolAttributes = {

@@ -1,7 +1,8 @@
-import { PenpotFile } from '../lib/penpot';
-import { GROUP_TYPE } from '../lib/types/group/groupAttributes';
-import { GroupShape } from '../lib/types/group/groupShape';
-import { createPenpotItem } from './createPenpotItem';
+import { PenpotFile } from '@ui/lib/penpot';
+import { GROUP_TYPE } from '@ui/lib/types/group/groupAttributes';
+import { GroupShape } from '@ui/lib/types/group/groupShape';
+
+import { createPenpotItem } from '.';
 
 export const createPenpotGroup = (
   file: PenpotFile,

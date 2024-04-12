@@ -1,7 +1,8 @@
-import { PenpotFile } from '../lib/penpot';
-import { FRAME_TYPE } from '../lib/types/frame/frameAttributes';
-import { FrameShape } from '../lib/types/frame/frameShape';
-import { createPenpotItem } from './createPenpotItem';
+import { PenpotFile } from '@ui/lib/penpot';
+import { FRAME_TYPE } from '@ui/lib/types/frame/frameAttributes';
+import { FrameShape } from '@ui/lib/types/frame/frameShape';
+
+import { createPenpotItem } from '.';
 
 export const createPenpotArtboard = (
   file: PenpotFile,

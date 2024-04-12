@@ -1,6 +1,7 @@
+import { PenpotFile } from '@ui/lib/penpot';
+import { PenpotPage } from '@ui/lib/types/penpotPage';
+
 import { createPenpotItem } from '.';
-import { PenpotFile } from '../lib/penpot';
-import { PenpotPage } from '../lib/types/penpotPage';
 
 export const createPenpotPage = (file: PenpotFile, node: PenpotPage) => {
   file.addPage(node.name);

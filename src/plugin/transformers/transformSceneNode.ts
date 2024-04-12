@@ -1,3 +1,7 @@
+import { calculateAdjustment } from '@plugin/utils';
+
+import { PenpotNode } from '@ui/lib/types/penpotNode';
+
 import {
   transformEllipseNode,
   transformFrameNode,
@@ -6,8 +10,6 @@ import {
   transformRectangleNode,
   transformTextNode
 } from '.';
-import { PenpotNode } from '../../ui/lib/types/penpotNode';
-import { calculateAdjustment } from '../utils';
 
 export const transformSceneNode = async (
   node: SceneNode,

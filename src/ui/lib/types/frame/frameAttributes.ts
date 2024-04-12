@@ -1,4 +1,4 @@
-import { Uuid } from '../utils/uuid';
+import { Uuid } from '@ui/lib/types/utils/uuid';
 
 export const FRAME_TYPE: unique symbol = Symbol.for('frame');
 

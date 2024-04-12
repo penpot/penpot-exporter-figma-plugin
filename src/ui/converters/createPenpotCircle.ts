@@ -1,7 +1,7 @@
-import { PenpotFile } from '../lib/penpot';
-import { CIRCLE_TYPE } from '../lib/types/circle/circleAttributes';
-import { CircleShape } from '../lib/types/circle/circleShape';
-import { translateFillGradients } from '../translators';
+import { PenpotFile } from '@ui/lib/penpot';
+import { CIRCLE_TYPE } from '@ui/lib/types/circle/circleAttributes';
+import { CircleShape } from '@ui/lib/types/circle/circleShape';
+import { translateFillGradients } from '@ui/translators';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const createPenpotCircle = (file: PenpotFile, { type, fills, ...rest }: CircleShape) => {
