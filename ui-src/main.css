@@ -86,6 +86,8 @@ input:focus-visible {
 
 svg {
   stroke: var(--color-icon, rgb(0 0 0 / 90%));
+  height: auto;
+  width: 2rem;
 }
 
 main {
@@ -109,11 +111,6 @@ section > * + * {
 
 footer > * + * {
   margin-left: 0.5rem;
-}
-
-img {
-  height: auto;
-  width: 2rem;
 }
 
 .missing-fonts small {

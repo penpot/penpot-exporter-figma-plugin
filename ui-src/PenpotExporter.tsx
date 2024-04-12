@@ -5,6 +5,8 @@ import { createPenpotFile } from '@ui/converters';
 import { PenpotDocument } from '@ui/lib/types/penpotDocument';
 import { validateFont } from '@ui/validators';
 
+import Logo from './logo.svg?react';
+
 export const PenpotExporter = () => {
   const [missingFonts, setMissingFonts] = useState(new Set<string>());
   const [exporting, setExporting] = useState(false);
@@ -68,7 +70,7 @@ export const PenpotExporter = () => {
   return (
     <main>
       <header>
-        <img src={require('./logo.svg')} />
+        <Logo />
         <h2>Penpot Exporter</h2>
       </header>
       <section>
