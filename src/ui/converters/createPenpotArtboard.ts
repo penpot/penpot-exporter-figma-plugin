@@ -1,15 +1,15 @@
 import { PenpotFile } from '../lib/penpot';
-import { GROUP_TYPE } from '../lib/types/group/groupAttributes';
-import { GroupShape } from '../lib/types/group/groupShape';
+import { FRAME_TYPE } from '../lib/types/frame/frameAttributes';
+import { FrameShape } from '../lib/types/frame/frameShape';
 import { createPenpotItem } from './createPenpotItem';
 
-export const createPenpotGroup = (
+export const createPenpotArtboard = (
   file: PenpotFile,
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  { type, children = [], ...rest }: GroupShape
+  { type, children = [], ...rest }: FrameShape
 ) => {
-  file.addGroup({
-    type: GROUP_TYPE,
+  file.addArtboard({
+    type: FRAME_TYPE,
     ...rest
   });
 
@@ -17,5 +17,5 @@ export const createPenpotGroup = (
     createPenpotItem(file, child);
   }
 
-  file.closeGroup();
+  file.closeArtboard();
 };

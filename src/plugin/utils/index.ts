@@ -1,4 +1,3 @@
 export * from './detectMimeType';
-export * from './getImageFill';
-export * from './getNodeData';
-export * from './getTextData';
+export * from './rgbToHex';
+export * from './calculateAdjustment';

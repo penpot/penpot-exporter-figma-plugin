@@ -1,11 +1,13 @@
-import { createPenpotItem } from '.';
-import { ExportFile, NodeData } from '../../common/interfaces';
+import { createPenpotPage } from '.';
 import { createFile } from '../lib/penpot';
+import { PenpotDocument } from '../lib/types/penpotDocument';
 
-export const createPenpotFile = (node: NodeData) => {
-  const exportFile = { penpotFile: createFile(node.name), fontNames: new Set<FontName>() };
-  for (const page of node.children) {
-    createPenpotItem(exportFile as ExportFile, page, 0, 0);
+export const createPenpotFile = (node: PenpotDocument) => {
+  const file = createFile(node.name);
+
+  for (const page of node.children ?? []) {
+    createPenpotPage(file, page);
   }
-  return exportFile;
+
+  return file;
 };

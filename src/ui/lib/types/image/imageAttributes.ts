@@ -1,9 +1,10 @@
 import { Uuid } from '../utils/uuid';
 
+export const IMAGE_TYPE: unique symbol = Symbol.for('image');
+
 export type ImageAttributes = {
   id?: Uuid;
-  type: symbol;
-  // TODO: Investigate where it comes from
+  type: 'image' | typeof IMAGE_TYPE;
   dataUri?: string;
   metadata: {
     width: number;

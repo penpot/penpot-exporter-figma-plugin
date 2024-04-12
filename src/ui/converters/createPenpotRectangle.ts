@@ -1,19 +1,13 @@
-import { ExportFile, NodeData } from '../../common/interfaces';
-import { translateFills } from '../translators';
+import { PenpotFile } from '../lib/penpot';
+import { RECT_TYPE } from '../lib/types/rect/rectAttributes';
+import { RectShape } from '../lib/types/rect/rectShape';
+import { translateFillGradients } from '../translators';
 
-export const createPenpotRectangle = (
-  file: ExportFile,
-  node: NodeData,
-  baseX: number,
-  baseY: number
-) => {
-  file.penpotFile.createRect({
-    type: Symbol.for('rect'),
-    name: node.name,
-    x: node.x + baseX,
-    y: node.y + baseY,
-    width: node.width,
-    height: node.height,
-    fills: translateFills(node.fills, node.width, node.height)
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export const createPenpotRectangle = (file: PenpotFile, { type, fills, ...rest }: RectShape) => {
+  file.createRect({
+    type: RECT_TYPE,
+    fills: translateFillGradients(fills),
+    ...rest
   });
 };

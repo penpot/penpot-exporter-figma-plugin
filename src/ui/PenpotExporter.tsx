@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import slugify from 'slugify';
 
-import { NodeData } from '../common/interfaces';
 import { createPenpotFile } from './converters';
+import { PenpotDocument } from './lib/types/penpotDocument';
 import { validateFont } from './validators';
 
 export const PenpotExporter = () => {
@@ -13,19 +13,20 @@ export const PenpotExporter = () => {
     setMissingFonts(missingFonts => missingFonts.add(font));
   };
 
-  const onMessage = (event: MessageEvent<{ pluginMessage: { type: string; data: NodeData } }>) => {
+  const onMessage = (event: MessageEvent<{ pluginMessage: { type: string; data: unknown } }>) => {
     if (event.data.pluginMessage.type == 'FIGMAFILE') {
-      const file = createPenpotFile(event.data.pluginMessage.data);
+      const document = event.data.pluginMessage.data as PenpotDocument;
+      const file = createPenpotFile(document);
 
-      file.fontNames.forEach(font => {
-        if (!validateFont(font)) {
-          addFontWarning(slugify(font.family.toLowerCase()));
-        }
-      });
-
-      file.penpotFile.export();
+      file.export();
 
       setExporting(false);
+    } else if (event.data.pluginMessage.type == 'FONT_NAME') {
+      const fontName = event.data.pluginMessage.data as string;
+
+      if (!validateFont(fontName)) {
+        addFontWarning(slugify(fontName.toLowerCase()));
+      }
     }
   };
 

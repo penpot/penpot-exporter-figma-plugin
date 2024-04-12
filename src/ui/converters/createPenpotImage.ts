@@ -1,22 +1,11 @@
-import { ExportFile, NodeData } from '../../common/interfaces';
+import { PenpotFile } from '../lib/penpot';
+import { IMAGE_TYPE } from '../lib/types/image/imageAttributes';
+import { ImageShape } from '../lib/types/image/imageShape';
 
-export const createPenpotImage = (
-  file: ExportFile,
-  node: NodeData,
-  baseX: number,
-  baseY: number
-) => {
-  file.penpotFile.createImage({
-    type: Symbol.for('image'),
-    name: node.name,
-    x: node.x + baseX,
-    y: node.y + baseY,
-    width: node.width,
-    height: node.height,
-    metadata: {
-      width: node.width,
-      height: node.height
-    },
-    dataUri: node.imageFill
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export const createPenpotImage = (file: PenpotFile, { type, ...rest }: ImageShape) => {
+  file.createImage({
+    type: IMAGE_TYPE,
+    ...rest
   });
 };

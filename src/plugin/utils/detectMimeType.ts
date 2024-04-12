@@ -1,4 +1,6 @@
-import { Signatures } from '../../common/interfaces';
+export interface Signatures {
+  [key: string]: string;
+}
 
 const signatures: Signatures = {
   'R0lGODdh': 'image/gif',

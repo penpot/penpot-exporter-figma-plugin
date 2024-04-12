@@ -4,7 +4,7 @@ import fonts from '../gfonts.json';
 
 const gfonts = new Set(fonts);
 
-export const validateFont = (fontName: FontName): boolean => {
-  const name = slugify(fontName.family.toLowerCase());
+export const validateFont = (fontFamily: string): boolean => {
+  const name = slugify(fontFamily.toLowerCase());
   return gfonts.has(name);
 };

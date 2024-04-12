@@ -1,19 +1,13 @@
-import { ExportFile, NodeData } from '../../common/interfaces';
-import { translateFills } from '../translators';
+import { PenpotFile } from '../lib/penpot';
+import { CIRCLE_TYPE } from '../lib/types/circle/circleAttributes';
+import { CircleShape } from '../lib/types/circle/circleShape';
+import { translateFillGradients } from '../translators';
 
-export const createPenpotCircle = (
-  file: ExportFile,
-  node: NodeData,
-  baseX: number,
-  baseY: number
-) => {
-  file.penpotFile.createCircle({
-    type: Symbol.for('circle'),
-    name: node.name,
-    x: node.x + baseX,
-    y: node.y + baseY,
-    width: node.width,
-    height: node.height,
-    fills: translateFills(node.fills, node.width, node.height)
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export const createPenpotCircle = (file: PenpotFile, { type, fills, ...rest }: CircleShape) => {
+  file.createCircle({
+    type: CIRCLE_TYPE,
+    fills: translateFillGradients(fills),
+    ...rest
   });
 };

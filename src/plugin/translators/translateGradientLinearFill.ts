@@ -1,6 +1,6 @@
 import { extractLinearGradientParamsFromTransform } from '@figma-plugin/helpers';
 
-import { Fill } from '../lib/types/utils/fill';
+import { Fill } from '../../ui/lib/types/utils/fill';
 import { rgbToHex } from '../utils';
 
 export const translateGradientLinearFill = (
@@ -9,9 +9,10 @@ export const translateGradientLinearFill = (
   height: number
 ): Fill => {
   const points = extractLinearGradientParamsFromTransform(width, height, fill.gradientTransform);
+
   return {
     fillColorGradient: {
-      type: Symbol.for('linear'),
+      type: 'linear',
       startX: points.start[0] / width,
       startY: points.start[1] / height,
       endX: points.end[0] / width,
