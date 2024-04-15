@@ -1,6 +1,6 @@
-import { Children } from '@ui/lib/types/utils/children';
+import { transformSceneNode } from '@plugin/transformers';
 
-import { transformSceneNode } from '../transformSceneNode';
+import { Children } from '@ui/lib/types/utils/children';
 
 export const transformChildren = async (
   node: ChildrenMixin,
