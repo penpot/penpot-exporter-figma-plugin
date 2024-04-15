@@ -6,7 +6,6 @@ import { createPenpotItem } from '.';
 
 export const createPenpotArtboard = (
   file: PenpotFile,
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   { type, children = [], ...rest }: FrameShape
 ) => {
   file.addArtboard({
