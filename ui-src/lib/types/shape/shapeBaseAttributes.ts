@@ -3,15 +3,17 @@ import { Point } from '@ui/lib/types/utils/point';
 import { Selrect } from '@ui/lib/types/utils/selrect';
 import { Uuid } from '@ui/lib/types/utils/uuid';
 
-export const FRAME_TYPE: unique symbol = Symbol.for('frame');
-export const GROUP_TYPE: unique symbol = Symbol.for('group');
-export const BOOL_TYPE: unique symbol = Symbol.for('bool');
-export const RECT_TYPE: unique symbol = Symbol.for('rect');
+import { BOOL_TYPE } from '../bool/boolAttributes';
+import { CIRCLE_TYPE } from '../circle/circleAttributes';
+import { FRAME_TYPE } from '../frame/frameAttributes';
+import { GROUP_TYPE } from '../group/groupAttributes';
+import { IMAGE_TYPE } from '../image/imageAttributes';
+import { RECT_TYPE } from '../rect/rectAttributes';
+import { TEXT_TYPE } from '../text/textAttributes';
+
+// @TODO: Move to its own file once we support all the shapes
 export const PATH_TYPE: unique symbol = Symbol.for('path');
-export const TEXT_TYPE: unique symbol = Symbol.for('text');
-export const CIRCLE_TYPE: unique symbol = Symbol.for('circle');
 export const SVG_RAW_TYPE: unique symbol = Symbol.for('svg-raw');
-export const IMAGE_TYPE: unique symbol = Symbol.for('image');
 
 export type ShapeBaseAttributes = {
   id?: Uuid;
