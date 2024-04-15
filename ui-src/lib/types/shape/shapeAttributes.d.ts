@@ -1,3 +1,4 @@
+import { BlendMode } from '@ui/lib/types/utils/blendModes';
 import { Blur } from '@ui/lib/types/utils/blur';
 import { Export } from '@ui/lib/types/utils/export';
 import { Fill } from '@ui/lib/types/utils/fill';
@@ -47,7 +48,7 @@ export type ShapeAttributes = {
   strokes?: Stroke[];
   transform?: Matrix;
   transformInverse?: Matrix;
-  blendMode?: string;
+  blendMode?: BlendMode;
   interactions?: Interaction[];
   shadow?: Shadow[];
   blur?: Blur;
