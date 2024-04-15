@@ -1,4 +1,4 @@
-import { transformDimensionAndPosition } from '@plugin/transformers/partials';
+import { transformDimensionAndPosition, transformSceneNode } from '@plugin/transformers/partials';
 import { transformChildren } from '@plugin/transformers/partials';
 import { translateFills } from '@plugin/translators';
 
@@ -14,6 +14,7 @@ export const transformFrameNode = async (
     name: node.name,
     fills: translateFills(node.fills, node.width, node.height),
     ...(await transformChildren(node, baseX, baseY)),
-    ...transformDimensionAndPosition(node, baseX, baseY)
+    ...transformDimensionAndPosition(node, baseX, baseY),
+    ...transformSceneNode(node)
   };
 };
