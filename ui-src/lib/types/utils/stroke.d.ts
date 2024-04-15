@@ -9,8 +9,7 @@ export type Stroke = {
   strokeStyle?: 'solid' | 'dotted' | 'dashed' | 'mixed' | 'none' | 'svg';
   strokeWidth?: number;
   strokeAlignment?: 'center' | 'inner' | 'outer';
-  strokeCapStart?: 'butt' | 'round' | 'square';
-  strokeCapStart: StrokeCaps;
+  strokeCapStart?: StrokeCaps;
   strokeCapEnd?: StrokeCaps;
   strokeColorGradient: Gradient;
 };
