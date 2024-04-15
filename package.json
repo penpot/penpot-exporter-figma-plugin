@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "build": "npm run build:ui && npm run build:main -- --minify",
-    "build:main": "esbuild plugin-src/code.ts --bundle --outfile=dist/code.js",
+    "build:main": "esbuild plugin-src/code.ts --bundle --outfile=dist/code.js --target=es2016",
     "build:ui": "vite build --minify esbuild --emptyOutDir=false",
     "build:watch": "concurrently -n widget,iframe \"npm run build:main -- --watch\" \"npm run build:ui -- --watch\"",
     "dev": "concurrently -n tsc,build,vite 'npm:tsc:watch' 'npm:build:watch' 'vite'",
