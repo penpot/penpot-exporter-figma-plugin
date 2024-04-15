@@ -24,7 +24,6 @@
   "author": "Kaleidos",
   "license": "MPL2.0",
   "dependencies": {
-    "@figma-plugin/helpers": "^0.15",
     "react": "^18.2",
     "react-dom": "^18.2",
     "slugify": "^1.6"
