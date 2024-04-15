@@ -13,6 +13,7 @@ export const transformRectangleNode = (
     name: node.name,
     fills: translateFills(node.fills, node.width, node.height),
     blendMode: translateBlendMode(node.blendMode),
+    opacity: !node.visible ? 0 : node.opacity,
     ...transformDimensionAndPosition(node, baseX, baseY)
   };
 };
