@@ -43,4 +43,5 @@ export type ShapeBaseAttributes = {
   transformInverse?: Matrix;
   parentId?: Uuid;
   frameId?: Uuid;
+  rotation?: number;
 };
