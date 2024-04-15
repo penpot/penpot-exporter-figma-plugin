@@ -16,14 +16,14 @@ export const PenpotExporter = () => {
   };
 
   const onMessage = (event: MessageEvent<{ pluginMessage: { type: string; data: unknown } }>) => {
-    if (event.data.pluginMessage.type == 'FIGMAFILE') {
+    if (event.data.pluginMessage?.type == 'FIGMAFILE') {
       const document = event.data.pluginMessage.data as PenpotDocument;
       const file = createPenpotFile(document);
 
       file.export();
 
       setExporting(false);
-    } else if (event.data.pluginMessage.type == 'FONT_NAME') {
+    } else if (event.data.pluginMessage?.type == 'FONT_NAME') {
       const fontName = event.data.pluginMessage.data as string;
 
       if (!validateFont(fontName)) {
