@@ -1,3 +1,4 @@
+import { transformDimensionAndPosition } from '@plugin/transformers/partials';
 import { translateBlendMode, translateFills } from '@plugin/translators';
 
 import { RectShape } from '@ui/lib/types/rect/rectShape';
@@ -10,11 +11,8 @@ export const transformRectangleNode = (
   return {
     type: 'rect',
     name: node.name,
-    x: node.x + baseX,
-    y: node.y + baseY,
-    width: node.width,
-    height: node.height,
     fills: translateFills(node.fills, node.width, node.height),
-    blendMode: translateBlendMode(node.blendMode)
+    blendMode: translateBlendMode(node.blendMode),
+    ...transformDimensionAndPosition(node, baseX, baseY)
   };
 };

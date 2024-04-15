@@ -1,3 +1,4 @@
+import { transformDimensionAndPosition } from '@plugin/transformers/partials';
 import { translateFills } from '@plugin/translators';
 
 import { FrameShape } from '@ui/lib/types/frame/frameShape';
@@ -12,13 +13,10 @@ export const transformFrameNode = async (
   return {
     type: 'frame',
     name: node.name,
-    x: node.x + baseX,
-    y: node.y + baseY,
-    width: node.width,
-    height: node.height,
     fills: translateFills(node.fills, node.width, node.height),
     children: await Promise.all(
       node.children.map(child => transformSceneNode(child, baseX + node.x, baseY + node.y))
-    )
+    ),
+    ...transformDimensionAndPosition(node, baseX, baseY)
   };
 };

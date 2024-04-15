@@ -6,7 +6,6 @@ import { createPenpotItem } from '.';
 
 export const createPenpotGroup = (
   file: PenpotFile,
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   { type, children = [], ...rest }: GroupShape
 ) => {
   file.addGroup({
