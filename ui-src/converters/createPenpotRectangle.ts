@@ -5,7 +5,6 @@ import { translateFillGradients, translateUiBlendMode } from '@ui/translators';
 
 export const createPenpotRectangle = (
   file: PenpotFile,
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   { type, fills, blendMode, ...rest }: RectShape
 ) => {
   file.createRect({
