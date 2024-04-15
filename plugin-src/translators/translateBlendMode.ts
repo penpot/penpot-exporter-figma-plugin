@@ -2,24 +2,24 @@ import { BlendMode as PenpotBlendMode } from '@ui/lib/types/utils/blendModes';
 
 export const translateBlendMode = (blendMode: BlendMode): PenpotBlendMode => {
   switch (blendMode) {
+    //@TODO: is not translatable in penpot, this is the closest one
     case 'PASS_THROUGH':
-      return 'normal'; //@TODO: is not translatable in penpot, this is the closest one
     case 'NORMAL':
       return 'normal';
+    //@TODO: is not translatable in penpot, this is the closest one
+    case 'LINEAR_BURN':
     case 'DARKEN':
       return 'darken';
     case 'MULTIPLY':
       return 'multiply';
-    case 'LINEAR_BURN':
-      return 'darken'; //@TODO: is not translatable in penpot, this is the closest one
     case 'COLOR_BURN':
       return 'color-burn';
     case 'LIGHTEN':
       return 'lighten';
-    case 'LINEAR_DODGE':
-      return 'color-dodge'; //@TODO: is not translatable in penpot, this is the closest one
     case 'SCREEN':
       return 'screen';
+    //@TODO: is not translatable in penpot, this is the closest one
+    case 'LINEAR_DODGE':
     case 'COLOR_DODGE':
       return 'color-dodge';
     case 'OVERLAY':
