@@ -1,3 +1,4 @@
+import { transformDimensionAndPosition } from '@plugin/transformers/partials';
 import { detectMimeType } from '@plugin/utils';
 
 import { ImageShape } from '@ui/lib/types/image/imageShape';
@@ -17,14 +18,11 @@ export const transformImageNode = async (
   return {
     type: 'image',
     name: node.name,
-    x: node.x + baseX,
-    y: node.y + baseY,
-    width: node.width,
-    height: node.height,
     metadata: {
       width: node.width,
       height: node.height
     },
-    dataUri: dataUri
+    dataUri: dataUri,
+    ...transformDimensionAndPosition(node, baseX, baseY)
   };
 };
