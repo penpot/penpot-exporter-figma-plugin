@@ -1,4 +1,4 @@
-import { translateFills } from '@plugin/translators';
+import { translateBlendMode, translateFills } from '@plugin/translators';
 
 import { RectShape } from '@ui/lib/types/rect/rectShape';
 
@@ -14,6 +14,7 @@ export const transformRectangleNode = (
     y: node.y + baseY,
     width: node.width,
     height: node.height,
-    fills: translateFills(node.fills, node.width, node.height)
+    fills: translateFills(node.fills, node.width, node.height),
+    blendMode: translateBlendMode(node.blendMode)
   };
 };
