@@ -10,6 +10,10 @@ export const transformGroupNode = async (
   return {
     type: 'group',
     name: node.name,
+    x: node.x + baseX,
+    y: node.y + baseY,
+    width: node.width,
+    height: node.height,
     children: await Promise.all(node.children.map(child => transformSceneNode(child, baseX, baseY)))
   };
 };

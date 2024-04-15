@@ -1,5 +1,7 @@
 import { Uuid } from '@ui/lib/types/utils/uuid';
 
+import { Fill } from '../utils/fill';
+
 export const FRAME_TYPE: unique symbol = Symbol.for('frame');
 
 export type FrameAttributes = {
@@ -9,4 +11,5 @@ export type FrameAttributes = {
   hideFillOnExport?: boolean;
   showContent?: boolean;
   hideInViewer?: boolean;
+  fills: Fill[]; // @TODO: Discover why is not defined on Penpot types
 };
