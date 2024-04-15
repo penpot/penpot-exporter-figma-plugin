@@ -5,11 +5,10 @@
   "type": "module",
   "scripts": {
     "build": "npm run build:ui && npm run build:main -- --minify",
-    "build:main": "esbuild plugin-src/code.ts --bundle --outfile=dist/code.js",
+    "build:main": "esbuild plugin-src/code.ts --bundle --outfile=dist/code.js --target=es2016",
     "build:ui": "vite build --minify esbuild --emptyOutDir=false",
     "build:watch": "concurrently -n widget,iframe \"npm run build:main -- --watch\" \"npm run build:ui -- --watch\"",
     "dev": "concurrently -n tsc,build,vite 'npm:tsc:watch' 'npm:build:watch' 'vite'",
-    "watch": "webpack watch",
     "lint": "concurrently \"npm:lint:*\"",
     "lint:eslint": "eslint .",
     "lint:stylelint": "stylelint ui-src/**.css",
@@ -24,7 +23,6 @@
   "author": "Kaleidos",
   "license": "MPL2.0",
   "dependencies": {
-    "@figma-plugin/helpers": "^0.15",
     "react": "^18.2",
     "react-dom": "^18.2",
     "slugify": "^1.6"
