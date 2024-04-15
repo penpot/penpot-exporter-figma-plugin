@@ -3,7 +3,7 @@ import { BlendMode as PenpotBlendMode } from '@ui/lib/types/utils/blendModes';
 export const translateBlendMode = (blendMode: BlendMode): PenpotBlendMode => {
   switch (blendMode) {
     case 'PASS_THROUGH':
-      return 'normal';
+      return 'normal'; //@TODO: is not translatable in penpot, this is the closest one
     case 'NORMAL':
       return 'normal';
     case 'DARKEN':
