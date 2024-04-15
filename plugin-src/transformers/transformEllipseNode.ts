@@ -1,5 +1,5 @@
-import { transformDimensionAndPosition } from '@plugin/transformers/partials';
-import { translateBlendMode, translateFills } from '@plugin/translators';
+import { transformBlend, transformDimensionAndPosition } from '@plugin/transformers/partials';
+import { translateFills } from '@plugin/translators';
 
 import { CircleShape } from '@ui/lib/types/circle/circleShape';
 
@@ -12,8 +12,7 @@ export const transformEllipseNode = (
     type: 'circle',
     name: node.name,
     fills: translateFills(node.fills, node.width, node.height),
-    blendMode: translateBlendMode(node.blendMode),
-    opacity: !node.visible ? 0 : node.opacity, //@TODO: check this. If we use the property hidden and it's hidden, it won't export
-    ...transformDimensionAndPosition(node, baseX, baseY)
+    ...transformDimensionAndPosition(node, baseX, baseY),
+    ...transformBlend(node)
   };
 };
