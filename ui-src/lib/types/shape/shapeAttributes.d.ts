@@ -9,11 +9,13 @@ import { Selrect } from '@ui/lib/types/utils/selrect';
 import { Shadow } from '@ui/lib/types/utils/shadow';
 import { Stroke } from '@ui/lib/types/utils/stroke';
 
-export type Shape = {
+export type ShapeAttributes = {
   name?: string;
   componentId?: string;
   componentFile?: string;
   componentRoot?: boolean;
+  mainInstance?: boolean;
+  remoteSynced?: boolean;
   shapeRef?: string;
   selrect?: Selrect;
   points?: Point[];
