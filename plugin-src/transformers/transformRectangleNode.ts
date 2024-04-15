@@ -13,7 +13,7 @@ export const transformRectangleNode = (
     name: node.name,
     fills: translateFills(node.fills, node.width, node.height),
     blendMode: translateBlendMode(node.blendMode),
-    opacity: !node.visible ? 0 : node.opacity,
+    opacity: !node.visible ? 0 : node.opacity, //@TODO: check this. If we use the property hidden and it's hidden, it won't export
     ...transformDimensionAndPosition(node, baseX, baseY)
   };
 };
