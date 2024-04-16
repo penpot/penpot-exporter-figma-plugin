@@ -7,6 +7,5 @@ export * from './transformPageNode';
 export * from './transformPolygonNode';
 export * from './transformRectangleNode';
 export * from './transformSceneNode';
-export * from './transformStarNode';
 export * from './transformTextNode';
 export * from './transformVectorNode';
