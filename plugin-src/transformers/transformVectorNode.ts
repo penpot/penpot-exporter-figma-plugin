@@ -3,7 +3,7 @@ import {
   transformDimensionAndPosition,
   transformSceneNode
 } from '@plugin/transformers/partials';
-import { translateFills, translateVectorPaths } from '@plugin/translators';
+import { translateFills, translateStrokes, translateVectorPaths } from '@plugin/translators';
 
 import { PathShape } from '@ui/lib/types/path/pathShape';
 
@@ -13,6 +13,7 @@ export const transformVectorNode = (node: VectorNode, baseX: number, baseY: numb
     name: node.name,
     fills: translateFills(node.fills, node.width, node.height),
     content: translateVectorPaths(node.vectorPaths, baseX + node.x, baseY + node.y),
+    strokes: translateStrokes(node),
     ...transformDimensionAndPosition(node, baseX, baseY),
     ...transformSceneNode(node),
     ...transformBlend(node)

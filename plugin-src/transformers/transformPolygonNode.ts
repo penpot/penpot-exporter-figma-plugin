@@ -3,7 +3,7 @@ import {
   transformDimensionAndPosition,
   transformSceneNode
 } from '@plugin/transformers/partials';
-import { translateFills, translateVectorPaths } from '@plugin/translators';
+import { translateFills, translateStrokes, translateVectorPaths } from '@plugin/translators';
 
 import { PathShape } from '@ui/lib/types/path/pathShape';
 
@@ -12,10 +12,12 @@ export const transformPolygonNode = (
   baseX: number,
   baseY: number
 ): PathShape => {
+  console.log(node);
   return {
     type: 'path',
     name: node.name,
     content: translateVectorPaths(node.fillGeometry, baseX + node.x, baseY + node.y),
+    strokes: translateStrokes(node),
     fills: translateFills(node.fills, node.width, node.height),
     ...transformDimensionAndPosition(node, baseX, baseY),
     ...transformSceneNode(node),
