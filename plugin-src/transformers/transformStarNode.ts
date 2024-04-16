@@ -7,11 +7,7 @@ import { translateFills, translateStrokes, translateVectorPaths } from '@plugin/
 
 import { PathShape } from '@ui/lib/types/path/pathShape';
 
-export const transformPolygonNode = (
-  node: PolygonNode,
-  baseX: number,
-  baseY: number
-): PathShape => {
+export const transformStarNode = (node: StarNode, baseX: number, baseY: number): PathShape => {
   return {
     type: 'path',
     name: node.name,
