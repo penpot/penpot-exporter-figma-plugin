@@ -11,7 +11,7 @@ export const transformVectorNode = (node: VectorNode, baseX: number, baseY: numb
   return {
     type: 'path',
     name: node.name,
-    fills: translateFills(node.fills, node.width, node.height),
+    fills: node.fillGeometry.length ? translateFills(node.fills, node.width, node.height) : [],
     content: translateVectorPaths(node.vectorPaths, baseX + node.x, baseY + node.y),
     strokes: translateStrokes(node),
     ...transformDimensionAndPosition(node, baseX, baseY),
