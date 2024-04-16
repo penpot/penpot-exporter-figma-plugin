@@ -3,6 +3,7 @@ import { CircleShape } from '@ui/lib/types/circle/circleShape';
 import { FrameShape } from '@ui/lib/types/frame/frameShape';
 import { GroupShape } from '@ui/lib/types/group/groupShape';
 import { ImageShape } from '@ui/lib/types/image/imageShape';
+import { PathShape } from '@ui/lib/types/path/pathShape';
 import { RectShape } from '@ui/lib/types/rect/rectShape';
 import { TextShape } from '@ui/lib/types/text/textShape';
 
@@ -18,7 +19,7 @@ export interface PenpotFile {
   closeBool(): void;
   createRect(rect: RectShape): void;
   createCircle(circle: CircleShape): void;
-  // createPath(path: any): void;
+  createPath(path: PathShape): void;
   createText(options: TextShape): void;
   createImage(image: ImageShape): void;
   // createSVG(svg: any): void;

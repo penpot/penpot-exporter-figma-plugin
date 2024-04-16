@@ -1,3 +1,4 @@
+import { PATH_TYPE } from '@ui/lib/types/path/pathAttributes';
 import { Matrix } from '@ui/lib/types/utils/matrix';
 import { Point } from '@ui/lib/types/utils/point';
 import { Selrect } from '@ui/lib/types/utils/selrect';
@@ -12,7 +13,6 @@ import { RECT_TYPE } from '../rect/rectAttributes';
 import { TEXT_TYPE } from '../text/textAttributes';
 
 // @TODO: Move to its own file once we support all the shapes
-export const PATH_TYPE: unique symbol = Symbol.for('path');
 export const SVG_RAW_TYPE: unique symbol = Symbol.for('svg-raw');
 
 export type ShapeBaseAttributes = {
