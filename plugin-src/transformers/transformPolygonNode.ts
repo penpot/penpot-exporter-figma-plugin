@@ -15,7 +15,7 @@ export const transformPolygonNode = (
   return {
     type: 'path',
     name: node.name,
-    content: translateVectorPaths(node.fillGeometry),
+    content: translateVectorPaths(node.fillGeometry, baseX + node.x, baseY + node.y),
     fills: translateFills(node.fills, node.width, node.height),
     ...transformDimensionAndPosition(node, baseX, baseY),
     ...transformSceneNode(node),

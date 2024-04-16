@@ -2,18 +2,21 @@ import SVGPathCommander from 'svg-path-commander';
 
 import { Segment } from '@ui/lib/types/path/PathContent';
 
-export const translateVectorPaths = (paths: VectorPaths): Segment[] => {
+export const translateVectorPaths = (
+  paths: VectorPaths,
+  baseX: number,
+  baseY: number
+): Segment[] => {
   let segments: Segment[] = [];
 
   for (const path of paths) {
-    segments = [...segments, ...translateVectorPath(path)];
+    segments = [...segments, ...translateVectorPath(path, baseX, baseY)];
   }
 
   return segments;
 };
 
-const translateVectorPath = (path: VectorPath): Segment[] => {
-  console.log(path);
+const translateVectorPath = (path: VectorPath, baseX: number, baseY: number): Segment[] => {
   const segments: Segment[] = [];
 
   const normalizedPath = SVGPathCommander.normalizePath(path.data);
@@ -23,25 +26,25 @@ const translateVectorPath = (path: VectorPath): Segment[] => {
       case 'M':
         segments.push({
           command: 'move-to',
-          params: { x: rest[0] ?? 0, y: rest[1] ?? 0 }
+          params: { x: (rest[0] ?? 0) + baseX, y: (rest[1] ?? 0) + baseY }
         });
         break;
       case 'L':
         segments.push({
           command: 'line-to',
-          params: { x: rest[0] ?? 0, y: rest[1] ?? 0 }
+          params: { x: (rest[0] ?? 0) + baseX, y: (rest[1] ?? 0) + baseY }
         });
         break;
       case 'C':
         segments.push({
           command: 'curve-to',
           params: {
-            x: rest[0] ?? 0,
-            y: rest[1] ?? 0,
-            c1x: rest[2] ?? 0,
-            c1y: rest[3] ?? 0,
-            c2x: rest[4] ?? 0,
-            c2y: rest[5] ?? 0
+            c1x: (rest[0] ?? 0) + baseX,
+            c1y: (rest[1] ?? 0) + baseY,
+            c2x: (rest[2] ?? 0) + baseX,
+            c2y: (rest[3] ?? 0) + baseY,
+            x: (rest[4] ?? 0) + baseX,
+            y: (rest[5] ?? 0) + baseY
           }
         });
         break;
@@ -52,8 +55,6 @@ const translateVectorPath = (path: VectorPath): Segment[] => {
         break;
     }
   }
-
-  console.log(segments);
 
   return segments;
 };

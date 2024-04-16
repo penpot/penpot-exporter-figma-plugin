@@ -11,7 +11,6 @@ export const createPenpotPath = (
   file: PenpotFile,
   { type, fills, blendMode, content, ...rest }: PathShape
 ) => {
-  console.log('a ver');
   file.createPath({
     type: PATH_TYPE,
     fills: translateFillGradients(fills),

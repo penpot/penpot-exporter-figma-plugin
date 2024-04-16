@@ -12,7 +12,7 @@ export const transformVectorNode = (node: VectorNode, baseX: number, baseY: numb
     type: 'path',
     name: node.name,
     fills: translateFills(node.fills, node.width, node.height),
-    content: translateVectorPaths(node.vectorPaths),
+    content: translateVectorPaths(node.vectorPaths, baseX + node.x, baseY + node.y),
     ...transformDimensionAndPosition(node, baseX, baseY),
     ...transformSceneNode(node),
     ...transformBlend(node)
