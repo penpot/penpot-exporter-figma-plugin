@@ -11,5 +11,5 @@ export type FrameAttributes = {
   hideFillOnExport?: boolean;
   showContent?: boolean;
   hideInViewer?: boolean;
-  fills: Fill[]; // @TODO: Discover why is not defined on Penpot types
+  fills: Fill[];
 };
