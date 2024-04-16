@@ -24,7 +24,7 @@ export const transformRectangleNode = (
       e: 0,
       f: 0
     },
-    rotation: node.rotation < 0 ? node.rotation + 360 : node.rotation,
+    rotation: -node.rotation < 0 ? -node.rotation + 360 : -node.rotation,
     ...transformDimensionAndPosition(node, baseX, baseY),
     ...transformSceneNode(node),
     ...transformBlend(node)
