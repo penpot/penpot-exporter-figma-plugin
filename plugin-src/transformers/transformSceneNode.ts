@@ -7,6 +7,7 @@ import {
   transformFrameNode,
   transformGroupNode,
   transformImageNode,
+  transformLineNode,
   transformPolygonNode,
   transformRectangleNode,
   transformTextNode,
@@ -47,6 +48,8 @@ export const transformSceneNode = async (
       return transformPolygonNode(node, baseX, baseY);
     case 'VECTOR':
       return transformVectorNode(node, baseX, baseY);
+    case 'LINE':
+      return transformLineNode(node, baseX, baseY);
   }
 
   throw new Error(`Unsupported node type: ${node.type}`);

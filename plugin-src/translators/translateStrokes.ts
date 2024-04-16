@@ -1,14 +1,45 @@
 import { translateFill } from '@plugin/translators/translateFills';
 
-import { Stroke } from '@ui/lib/types/utils/stroke';
+import { Stroke, StrokeCaps } from '@ui/lib/types/utils/stroke';
 
-export const translateStrokes = (node: MinimalStrokesMixin): Stroke[] => {
-  return node.strokes.map(stroke => {
+export const translateStrokes = (
+  node: MinimalStrokesMixin,
+  vectorNetwork?: VectorNetwork
+): Stroke[] => {
+  const strokes = node.strokes.map(stroke => {
     const fill = translateFill(stroke, 0, 0);
     return {
       strokeColor: fill?.fillColor,
       strokeOpacity: fill?.fillOpacity,
       strokeWidth: node.strokeWeight === figma.mixed ? 1 : node.strokeWeight
-    };
+    } as Stroke;
   });
+
+  // if line check for arrow strokes
+  if (vectorNetwork && vectorNetwork.vertices.length === 2) {
+    strokes[0].strokeCapStart = translateStrokeCap(vectorNetwork.vertices[0]);
+    strokes[0].strokeCapEnd = translateStrokeCap(vectorNetwork.vertices[1]);
+  }
+
+  return strokes;
+};
+
+const translateStrokeCap = (vertex: VectorVertex): StrokeCaps | undefined => {
+  switch (vertex.strokeCap as StrokeCap | ConnectorStrokeCap) {
+    case 'NONE':
+      return;
+    case 'ROUND':
+      return 'round';
+    case 'ARROW_EQUILATERAL':
+      return 'triangle-arrow';
+    case 'SQUARE':
+      return 'square';
+    case 'CIRCLE_FILLED':
+      return 'circle-marker';
+    case 'DIAMOND_FILLED':
+      return 'diamond-marker';
+    case 'ARROW_LINES':
+    default:
+      return 'line-arrow';
+  }
 };

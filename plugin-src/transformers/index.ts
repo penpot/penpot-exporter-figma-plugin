@@ -3,6 +3,7 @@ export * from './transformEllipseNode';
 export * from './transformFrameNode';
 export * from './transformGroupNode';
 export * from './transformImageNode';
+export * from './transformLineNode';
 export * from './transformPageNode';
 export * from './transformPolygonNode';
 export * from './transformRectangleNode';
