@@ -17,12 +17,12 @@ export const transformRectangleNode = (
     name: node.name,
     fills: translateFills(node.fills, node.width, node.height),
     transform: {
-      a: node.relativeTransform[0][0],
-      b: -node.relativeTransform[0][1],
-      c: node.relativeTransform[1][0],
-      d: -node.relativeTransform[1][1],
+      a: node.absoluteTransform[0][0],
+      b: node.absoluteTransform[1][0],
+      c: node.absoluteTransform[0][1],
+      d: node.absoluteTransform[1][1],
       e: 0,
-      f: -0
+      f: 0
     },
     rotation: node.rotation < 0 ? node.rotation + 360 : node.rotation,
     ...transformDimensionAndPosition(node, baseX, baseY),
