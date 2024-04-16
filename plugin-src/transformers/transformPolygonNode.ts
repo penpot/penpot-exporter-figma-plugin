@@ -1,4 +1,9 @@
-import { transformDimensionAndPosition } from '@plugin/transformers/partials';
+import {
+  transformBlend,
+  transformDimensionAndPosition,
+  transformSceneNode
+} from '@plugin/transformers/partials';
+import { translateFills, translateVectorPaths } from '@plugin/translators';
 
 import { PathShape } from '@ui/lib/types/path/pathShape';
 
@@ -10,7 +15,10 @@ export const transformPolygonNode = (
   return {
     type: 'path',
     name: node.name,
-    content: [],
-    ...transformDimensionAndPosition(node, baseX, baseY)
+    content: translateVectorPaths(node.fillGeometry),
+    fills: translateFills(node.fills, node.width, node.height),
+    ...transformDimensionAndPosition(node, baseX, baseY),
+    ...transformSceneNode(node),
+    ...transformBlend(node)
   };
 };

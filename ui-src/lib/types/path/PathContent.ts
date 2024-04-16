@@ -3,7 +3,17 @@ export const VECTOR_CLOSE_PATH: unique symbol = Symbol.for('close-path');
 export const VECTOR_MOVE_TO: unique symbol = Symbol.for('move-to');
 export const VECTOR_CURVE_TO: unique symbol = Symbol.for('curve-to');
 
-export type PathContent = (LineTo | ClosePath | MoveTo | CurveTo)[];
+export type PathContent = Segment[];
+export type Segment = LineTo | ClosePath | MoveTo | CurveTo;
+export type Command =
+  | 'line-to'
+  | 'close-path'
+  | 'move-to'
+  | 'curve-to'
+  | typeof VECTOR_LINE_TO
+  | typeof VECTOR_CLOSE_PATH
+  | typeof VECTOR_MOVE_TO
+  | typeof VECTOR_CURVE_TO;
 
 type LineTo = {
   command: 'line-to' | typeof VECTOR_LINE_TO;
