@@ -3,7 +3,7 @@ import {
   transformDimensionAndPosition,
   transformSceneNode
 } from '@plugin/transformers/partials';
-import { translateFills } from '@plugin/translators';
+import { translateFills, translateStrokes } from '@plugin/translators';
 
 import { RectShape } from '@ui/lib/types/rect/rectShape';
 
@@ -16,6 +16,7 @@ export const transformRectangleNode = (
     type: 'rect',
     name: node.name,
     fills: translateFills(node.fills, node.width, node.height),
+    strokes: translateStrokes(node),
     ...transformDimensionAndPosition(node, baseX, baseY),
     ...transformSceneNode(node),
     ...transformBlend(node)

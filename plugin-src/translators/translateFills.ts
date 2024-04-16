@@ -3,7 +3,7 @@ import { Fill } from '@ui/lib/types/utils/fill';
 import { translateGradientLinearFill } from './translateGradientLinearFill';
 import { translateSolidFill } from './translateSolidFill';
 
-const translateFill = (fill: Paint, width: number, height: number): Fill | undefined => {
+export const translateFill = (fill: Paint, width: number, height: number): Fill | undefined => {
   switch (fill.type) {
     case 'SOLID':
       return translateSolidFill(fill);

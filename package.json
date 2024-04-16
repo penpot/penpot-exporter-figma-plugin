@@ -25,7 +25,8 @@
   "dependencies": {
     "react": "^18.2",
     "react-dom": "^18.2",
-    "slugify": "^1.6"
+    "slugify": "^1.6",
+    "svg-path-commander": "^2.0"
   },
   "devDependencies": {
     "@figma/eslint-plugin-figma-plugins": "^0.15",

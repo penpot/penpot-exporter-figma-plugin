@@ -5,5 +5,6 @@ export * from './createPenpotGroup';
 export * from './createPenpotImage';
 export * from './createPenpotItem';
 export * from './createPenpotPage';
+export * from './createPenpotPath';
 export * from './createPenpotRectangle';
 export * from './createPenpotText';

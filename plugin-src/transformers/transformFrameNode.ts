@@ -1,6 +1,6 @@
 import { transformDimensionAndPosition, transformSceneNode } from '@plugin/transformers/partials';
 import { transformChildren } from '@plugin/transformers/partials';
-import { translateFills } from '@plugin/translators';
+import { translateFills, translateStrokes } from '@plugin/translators';
 
 import { FrameShape } from '@ui/lib/types/frame/frameShape';
 
@@ -13,6 +13,7 @@ export const transformFrameNode = async (
     type: 'frame',
     name: node.name,
     fills: translateFills(node.fills, node.width, node.height),
+    strokes: translateStrokes(node),
     ...(await transformChildren(node, baseX, baseY)),
     ...transformDimensionAndPosition(node, baseX, baseY),
     ...transformSceneNode(node)

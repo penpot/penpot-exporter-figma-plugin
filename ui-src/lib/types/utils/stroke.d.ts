@@ -8,11 +8,13 @@ export type Stroke = {
   strokeOpacity?: number;
   strokeStyle?: 'solid' | 'dotted' | 'dashed' | 'mixed' | 'none' | 'svg';
   strokeWidth?: number;
-  strokeAlignment?: 'center' | 'inner' | 'outer';
+  strokeAlignment?: StrokeAlignment;
   strokeCapStart?: StrokeCaps;
   strokeCapEnd?: StrokeCaps;
-  strokeColorGradient: Gradient;
+  strokeColorGradient?: Gradient;
 };
+
+export type StrokeAlignment = 'center' | 'inner' | 'outer';
 
 type StrokeCapLine = 'round' | 'square';
 type StrokeCapMarker =
