@@ -1,19 +1,21 @@
+import { BlendMode } from '@ui/lib/types/utils/blendModes';
 import { Blur } from '@ui/lib/types/utils/blur';
 import { Export } from '@ui/lib/types/utils/export';
 import { Fill } from '@ui/lib/types/utils/fill';
 import { Grid } from '@ui/lib/types/utils/grid';
 import { Interaction } from '@ui/lib/types/utils/interaction';
-import { Matrix } from '@ui/lib/types/utils/matrix';
 import { Point } from '@ui/lib/types/utils/point';
 import { Selrect } from '@ui/lib/types/utils/selrect';
 import { Shadow } from '@ui/lib/types/utils/shadow';
 import { Stroke } from '@ui/lib/types/utils/stroke';
 
-export type Shape = {
+export type ShapeAttributes = {
   name?: string;
   componentId?: string;
   componentFile?: string;
   componentRoot?: boolean;
+  mainInstance?: boolean;
+  remoteSynced?: boolean;
   shapeRef?: string;
   selrect?: Selrect;
   points?: Point[];
@@ -35,17 +37,11 @@ export type Shape = {
   r2?: number;
   r3?: number;
   r4?: number;
-  x?: number;
-  y?: number;
-  width?: number;
-  height?: number;
   opacity?: number;
   grids?: Grid[];
   exports?: Export[];
   strokes?: Stroke[];
-  transform?: Matrix;
-  transformInverse?: Matrix;
-  blendMode?: string;
+  blendMode?: BlendMode;
   interactions?: Interaction[];
   shadow?: Shadow[];
   blur?: Blur;

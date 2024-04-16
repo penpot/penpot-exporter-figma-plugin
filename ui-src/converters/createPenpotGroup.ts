@@ -1,16 +1,17 @@
 import { PenpotFile } from '@ui/lib/penpot';
 import { GROUP_TYPE } from '@ui/lib/types/group/groupAttributes';
 import { GroupShape } from '@ui/lib/types/group/groupShape';
+import { translateUiBlendMode } from '@ui/translators';
 
 import { createPenpotItem } from '.';
 
 export const createPenpotGroup = (
   file: PenpotFile,
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  { type, children = [], ...rest }: GroupShape
+  { type, blendMode, children = [], ...rest }: GroupShape
 ) => {
   file.addGroup({
     type: GROUP_TYPE,
+    blendMode: translateUiBlendMode(blendMode),
     ...rest
   });
 

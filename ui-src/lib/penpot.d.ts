@@ -36,8 +36,7 @@ export interface PenpotFile {
   // lookupShape(shapeId: string): void;
   // updateObject(id: string, object: any): void;
   // deleteObject(id: string): void;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  asMap(): any;
+  asMap(): unknown;
   export(): void;
 }
 

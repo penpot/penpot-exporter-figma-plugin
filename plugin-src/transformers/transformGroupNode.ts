@@ -1,6 +1,11 @@
-import { GroupShape } from '@ui/lib/types/group/groupShape';
+import {
+  transformBlend,
+  transformDimensionAndPosition,
+  transformSceneNode
+} from '@plugin/transformers/partials';
+import { transformChildren } from '@plugin/transformers/partials';
 
-import { transformSceneNode } from './transformSceneNode';
+import { GroupShape } from '@ui/lib/types/group/groupShape';
 
 export const transformGroupNode = async (
   node: GroupNode,
@@ -10,6 +15,9 @@ export const transformGroupNode = async (
   return {
     type: 'group',
     name: node.name,
-    children: await Promise.all(node.children.map(child => transformSceneNode(child, baseX, baseY)))
+    ...(await transformChildren(node, baseX, baseY)),
+    ...transformDimensionAndPosition(node, baseX, baseY),
+    ...transformSceneNode(node),
+    ...transformBlend(node)
   };
 };

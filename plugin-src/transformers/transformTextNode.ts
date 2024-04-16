@@ -1,4 +1,9 @@
 import {
+  transformBlend,
+  transformDimensionAndPosition,
+  transformSceneNode
+} from '@plugin/transformers/partials';
+import {
   translateFills,
   translateTextDecoration,
   translateTextTransform
@@ -37,10 +42,6 @@ export const transformTextNode = (node: TextNode, baseX: number, baseY: number):
   return {
     type: 'text',
     name: node.name,
-    x: node.x + baseX,
-    y: node.y + baseY,
-    width: node.width,
-    height: node.height,
     content: {
       type: 'root',
       children: [
@@ -61,6 +62,9 @@ export const transformTextNode = (node: TextNode, baseX: number, baseY: number):
           ]
         }
       ]
-    }
+    },
+    ...transformDimensionAndPosition(node, baseX, baseY),
+    ...transformSceneNode(node),
+    ...transformBlend(node)
   };
 };
