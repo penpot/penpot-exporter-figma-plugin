@@ -1,3 +1,4 @@
+import { transformVectorNode } from '@plugin/transformers/transformVectorNode';
 import { calculateAdjustment } from '@plugin/utils';
 
 import { PenpotNode } from '@ui/lib/types/penpotNode';
@@ -43,6 +44,8 @@ export const transformSceneNode = async (
       return transformTextNode(node, baseX, baseY);
     case 'POLYGON':
       return transformPolygonNode(node, baseX, baseY);
+    case 'VECTOR':
+      return transformVectorNode(node, baseX, baseY);
   }
 
   throw new Error(`Unsupported node type: ${node.type}`);
