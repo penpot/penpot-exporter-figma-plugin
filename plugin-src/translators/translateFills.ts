@@ -20,12 +20,13 @@ export const translateFills = (
   height: number
 ): Fill[] => {
   const figmaFills = fills === figma.mixed ? [] : fills;
-  let penpotFills: Fill[] = [];
+  const penpotFills: Fill[] = [];
 
   for (const fill of figmaFills) {
     const penpotFill = translateFill(fill, width, height);
     if (penpotFill) {
-      penpotFills = [penpotFill, ...penpotFills];
+      // colors are applied in reverse order in Figma, that's why we unshift
+      penpotFills.unshift(penpotFill);
     }
   }
 

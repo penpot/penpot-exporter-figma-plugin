@@ -1,15 +1,12 @@
 import {
   transformBlend,
   transformDimensionAndPosition,
-  transformSceneNode
+  transformFills,
+  transformSceneNode,
+  transformTextStyle
 } from '@plugin/transformers/partials';
-import {
-  translateFills,
-  translateTextDecoration,
-  translateTextTransform
-} from '@plugin/translators';
+import { translateStyledTextSegments } from '@plugin/translators';
 
-import { TextNode as PenpotTextNode } from '@ui/lib/types/text/textContent';
 import { TextShape } from '@ui/lib/types/text/textShape';
 
 export const transformTextNode = (node: TextNode, baseX: number, baseY: number): TextShape => {
@@ -22,23 +19,7 @@ export const transformTextNode = (node: TextNode, baseX: number, baseY: number):
     'textCase',
     'textDecoration',
     'fills'
-  ]);
-
-  const children: PenpotTextNode[] = styledTextSegments.map(segment => {
-    figma.ui.postMessage({ type: 'FONT_NAME', data: segment.fontName.family });
-
-    return {
-      text: segment.characters,
-      fills: translateFills(segment.fills, node.width, node.height),
-      fontFamily: segment.fontName.family,
-      fontSize: segment.fontSize.toString(),
-      fontStyle: segment.fontName.style,
-      fontWeight: segment.fontWeight.toString(),
-      textDecoration: translateTextDecoration(segment),
-      textTransform: translateTextTransform(segment)
-    };
-  });
-
+  ]) as StyledTextSegment[];
   return {
     type: 'text',
     name: node.name,
@@ -50,14 +31,9 @@ export const transformTextNode = (node: TextNode, baseX: number, baseY: number):
           children: [
             {
               type: 'paragraph',
-              fills: translateFills(node.fills, node.width, node.height),
-              fontFamily: children[0].fontFamily,
-              fontSize: children[0].fontSize,
-              fontStyle: children[0].fontStyle,
-              fontWeight: children[0].fontWeight,
-              textDecoration: children[0].textDecoration,
-              textTransform: children[0].textTransform,
-              children: children
+              children: translateStyledTextSegments(styledTextSegments, node.width, node.height),
+              ...(styledTextSegments.length ? transformTextStyle(styledTextSegments[0]) : {}),
+              ...transformFills(node)
             }
           ]
         }

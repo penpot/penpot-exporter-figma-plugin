@@ -4,4 +4,5 @@ export * from './transformDimensionAndPosition';
 export * from './transformFills';
 export * from './transformSceneNode';
 export * from './transformStrokes';
+export * from './transformTextStyle';
 export * from './transformVectorPaths';
