@@ -23,10 +23,11 @@
   "author": "Kaleidos",
   "license": "MPL2.0",
   "dependencies": {
+    "@types/svg-path-parser": "^1.1.6",
     "react": "^18.2",
     "react-dom": "^18.2",
     "slugify": "^1.6",
-    "svg-path-commander": "^2.0"
+    "svg-path-parser": "^1.1.0"
   },
   "devDependencies": {
     "@figma/eslint-plugin-figma-plugins": "^0.15",

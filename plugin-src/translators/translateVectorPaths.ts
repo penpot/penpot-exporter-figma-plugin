@@ -1,4 +1,4 @@
-import SVGPathCommander from 'svg-path-commander';
+import { CurveToCommand, LineToCommand, MoveToCommand, parseSVG } from 'svg-path-parser';
 
 import { Segment } from '@ui/lib/types/path/PathContent';
 
@@ -17,44 +17,53 @@ export const translateVectorPaths = (
 };
 
 const translateVectorPath = (path: VectorPath, baseX: number, baseY: number): Segment[] => {
-  const segments: Segment[] = [];
+  const normalizedPaths = parseSVG(path.data);
 
-  const normalizedPath = SVGPathCommander.normalizePath(path.data);
-
-  for (const [command, ...rest] of normalizedPath) {
-    switch (command) {
-      case 'M':
-        segments.push({
-          command: 'move-to',
-          params: { x: (rest[0] ?? 0) + baseX, y: (rest[1] ?? 0) + baseY }
-        });
-        break;
-      case 'L':
-        segments.push({
-          command: 'line-to',
-          params: { x: (rest[0] ?? 0) + baseX, y: (rest[1] ?? 0) + baseY }
-        });
-        break;
-      case 'C':
-        segments.push({
-          command: 'curve-to',
-          params: {
-            c1x: (rest[0] ?? 0) + baseX,
-            c1y: (rest[1] ?? 0) + baseY,
-            c2x: (rest[2] ?? 0) + baseX,
-            c2y: (rest[3] ?? 0) + baseY,
-            x: (rest[4] ?? 0) + baseX,
-            y: (rest[5] ?? 0) + baseY
-          }
-        });
-        break;
-      case 'Z':
-        segments.push({
+  return normalizedPaths.map(command => {
+    switch (command.command) {
+      case 'moveto':
+        return translateMoveToCommand(command, baseX, baseY);
+      case 'lineto':
+        return translateLineToCommand(command, baseX, baseY);
+      case 'curveto':
+        return translateCurveToCommand(command, baseX, baseY);
+      case 'closepath':
+      default:
+        return {
           command: 'close-path'
-        });
-        break;
+        };
     }
-  }
+  });
+};
 
-  return segments;
+const translateMoveToCommand = (command: MoveToCommand, baseX: number, baseY: number): Segment => {
+  return {
+    command: 'move-to',
+    params: { x: command.x + baseX, y: command.y + baseY }
+  };
+};
+
+const translateLineToCommand = (command: LineToCommand, baseX: number, baseY: number): Segment => {
+  return {
+    command: 'line-to',
+    params: { x: command.x + baseX, y: command.y + baseY }
+  };
+};
+
+const translateCurveToCommand = (
+  command: CurveToCommand,
+  baseX: number,
+  baseY: number
+): Segment => {
+  return {
+    command: 'curve-to',
+    params: {
+      c1x: command.x1 + baseX,
+      c1y: command.y1 + baseY,
+      c2x: command.x2 + baseX,
+      c2y: command.y2 + baseY,
+      x: command.x + baseX,
+      y: command.y + baseY
+    }
+  };
 };
