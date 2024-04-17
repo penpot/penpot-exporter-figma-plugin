@@ -11,5 +11,5 @@ export type FrameAttributes = {
   hideFillOnExport?: boolean;
   showContent?: boolean;
   hideInViewer?: boolean;
-  fills: Fill[];
+  fills?: Fill[];
 };

@@ -1,7 +1,7 @@
-import { Fill } from '@ui/lib/types/utils/fill';
+import { rgbToHex } from '@plugin/utils';
+import { calculateLinearGradient } from '@plugin/utils/calculateLinearGradient';
 
-import { translateGradientLinearFill } from './translateGradientLinearFill';
-import { translateSolidFill } from './translateSolidFill';
+import { Fill } from '@ui/lib/types/utils/fill';
 
 export const translateFill = (fill: Paint, width: number, height: number): Fill | undefined => {
   switch (fill.type) {
@@ -19,19 +19,50 @@ export const translateFills = (
   width: number,
   height: number
 ): Fill[] => {
-  // @TODO: think better variable name
-  // @TODO: make it work with figma.mixed
-  const fills2 = fills === figma.mixed ? [] : fills;
+  const figmaFills = fills === figma.mixed ? [] : fills;
+  let penpotFills: Fill[] = [];
 
-  const penpotFills = [];
-
-  for (const fill of fills2) {
+  for (const fill of figmaFills) {
     const penpotFill = translateFill(fill, width, height);
-
     if (penpotFill) {
-      penpotFills.unshift(penpotFill);
+      penpotFills = [penpotFill, ...penpotFills];
     }
   }
 
   return penpotFills;
+};
+
+const translateSolidFill = (fill: SolidPaint): Fill => {
+  return {
+    fillColor: rgbToHex(fill.color),
+    fillOpacity: !fill.visible ? 0 : fill.opacity
+  };
+};
+
+const translateGradientLinearFill = (fill: GradientPaint, width: number, height: number): Fill => {
+  const points = calculateLinearGradient(width, height, fill.gradientTransform);
+
+  return {
+    fillColorGradient: {
+      type: 'linear',
+      startX: points.start[0] / width,
+      startY: points.start[1] / height,
+      endX: points.end[0] / width,
+      endY: points.end[1] / height,
+      width: 1,
+      stops: [
+        {
+          color: rgbToHex(fill.gradientStops[0].color),
+          offset: fill.gradientStops[0].position,
+          opacity: fill.gradientStops[0].color.a * (fill.opacity ?? 1)
+        },
+        {
+          color: rgbToHex(fill.gradientStops[1].color),
+          offset: fill.gradientStops[1].position,
+          opacity: fill.gradientStops[1].color.a * (fill.opacity ?? 1)
+        }
+      ]
+    },
+    fillOpacity: fill.visible === false ? 0 : undefined
+  };
 };
