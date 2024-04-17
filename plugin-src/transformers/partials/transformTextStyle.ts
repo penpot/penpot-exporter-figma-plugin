@@ -3,7 +3,20 @@ import { translateTextDecoration, translateTextTransform } from '@plugin/transla
 import { Paragraph, TextNode } from '@ui/lib/types/text/textContent';
 
 export const transformTextStyle = (
-  node: StyledTextSegment
+  node: Pick<
+    StyledTextSegment,
+    | 'characters'
+    | 'start'
+    | 'end'
+    | 'fontName'
+    | 'fontSize'
+    | 'fontWeight'
+    | 'lineHeight'
+    | 'letterSpacing'
+    | 'textCase'
+    | 'textDecoration'
+    | 'fills'
+  >
 ): Partial<Paragraph> | Partial<TextNode> => {
   return {
     fontFamily: node.fontName.family,

@@ -19,7 +19,8 @@ export const transformTextNode = (node: TextNode, baseX: number, baseY: number):
     'textCase',
     'textDecoration',
     'fills'
-  ]) as StyledTextSegment[];
+  ]);
+
   return {
     type: 'text',
     name: node.name,

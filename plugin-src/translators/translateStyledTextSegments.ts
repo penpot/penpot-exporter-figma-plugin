@@ -4,7 +4,20 @@ import { translateFills } from '@plugin/translators/translateFills';
 import { TextNode } from '@ui/lib/types/text/textContent';
 
 export const translateStyledTextSegments = (
-  segments: StyledTextSegment[],
+  segments: Pick<
+    StyledTextSegment,
+    | 'characters'
+    | 'start'
+    | 'end'
+    | 'fontName'
+    | 'fontSize'
+    | 'fontWeight'
+    | 'lineHeight'
+    | 'letterSpacing'
+    | 'textCase'
+    | 'textDecoration'
+    | 'fills'
+  >[],
   width: number,
   height: number
 ): TextNode[] => {
