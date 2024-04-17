@@ -1,25 +1,24 @@
 import {
   transformBlend,
   transformDimensionAndPosition,
-  transformSceneNode
+  transformSceneNode,
+  transformStrokes,
+  transformVectorPaths
 } from '@plugin/transformers/partials';
-import { translateFills, translateStrokes, translateVectorPaths } from '@plugin/translators';
+import { translateFills } from '@plugin/translators';
 
 import { PathShape } from '@ui/lib/types/path/pathShape';
 
 export const transformPathNode = (
-  node: DefaultShapeMixin,
+  node: VectorNode | StarNode | LineNode | PolygonNode,
   baseX: number,
-  baseY: number,
-  vectorPaths: readonly VectorPath[],
-  vectorNetwork?: VectorNetwork
+  baseY: number
 ): PathShape => {
   return {
-    type: 'path',
     name: node.name,
-    content: translateVectorPaths(vectorPaths, baseX + node.x, baseY + node.y),
-    strokes: translateStrokes(node, vectorNetwork),
     fills: node.fillGeometry.length ? translateFills(node.fills, node.width, node.height) : [],
+    ...transformStrokes(node),
+    ...transformVectorPaths(node, baseX, baseY),
     ...transformDimensionAndPosition(node, baseX, baseY),
     ...transformSceneNode(node),
     ...transformBlend(node)

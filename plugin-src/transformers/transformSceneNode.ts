@@ -43,11 +43,9 @@ export const transformSceneNode = async (
       return transformTextNode(node, baseX, baseY);
     case 'STAR':
     case 'POLYGON':
-      return transformPathNode(node, baseX, baseY, node.fillGeometry);
     case 'VECTOR':
-      return transformPathNode(node, baseX, baseY, node.vectorPaths, node.vectorNetwork);
     case 'LINE':
-      return transformPathNode(node, baseX, baseY, node.strokeGeometry);
+      return transformPathNode(node, baseX, baseY);
   }
 
   throw new Error(`Unsupported node type: ${node.type}`);

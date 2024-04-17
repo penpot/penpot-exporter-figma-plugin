@@ -3,19 +3,20 @@ import { translateFill } from '@plugin/translators/translateFills';
 import { Stroke, StrokeCaps } from '@ui/lib/types/utils/stroke';
 
 export const translateStrokes = (
-  node: MinimalStrokesMixin,
+  paints: readonly Paint[],
+  strokeWeight: number | typeof figma.mixed,
   vectorNetwork?: VectorNetwork
 ): Stroke[] => {
-  const strokes = node.strokes.map(stroke => {
-    const fill = translateFill(stroke, 0, 0);
+  const strokes = paints.map(paint => {
+    const fill = translateFill(paint, 0, 0);
+
     return {
       strokeColor: fill?.fillColor,
       strokeOpacity: fill?.fillOpacity,
-      strokeWidth: node.strokeWeight === figma.mixed ? 1 : node.strokeWeight
+      strokeWidth: strokeWeight === figma.mixed ? 1 : strokeWeight
     } as Stroke;
   });
 
-  // if line check for arrow strokes
   if (vectorNetwork && vectorNetwork.vertices.length === 2) {
     strokes[0].strokeCapStart = translateStrokeCap(vectorNetwork.vertices[0]);
     strokes[0].strokeCapEnd = translateStrokeCap(vectorNetwork.vertices[1]);
