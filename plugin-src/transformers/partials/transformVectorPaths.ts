@@ -26,11 +26,3 @@ export const transformVectorPaths = (
     content: translateVectorPaths(vectorPaths, baseX + node.x, baseY + node.y)
   };
 };
-
-// case 'STAR':
-// case 'POLYGON':
-//   return transformPathNode(node, baseX, baseY, node.fillGeometry);
-// case 'VECTOR':
-//   return transformPathNode(node, baseX, baseY, node.vectorPaths, node.vectorNetwork);
-// case 'LINE':
-//   return transformPathNode(node, baseX, baseY, node.strokeGeometry);
