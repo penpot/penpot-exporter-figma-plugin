@@ -7,11 +7,9 @@ import {
   transformFrameNode,
   transformGroupNode,
   transformImageNode,
-  transformLineNode,
-  transformPolygonNode,
+  transformPathNode,
   transformRectangleNode,
-  transformTextNode,
-  transformVectorNode
+  transformTextNode
 } from '.';
 
 export const transformSceneNode = async (
@@ -45,11 +43,11 @@ export const transformSceneNode = async (
       return transformTextNode(node, baseX, baseY);
     case 'STAR':
     case 'POLYGON':
-      return transformPolygonNode(node, baseX, baseY);
+      return transformPathNode(node, baseX, baseY, node.fillGeometry);
     case 'VECTOR':
-      return transformVectorNode(node, baseX, baseY);
+      return transformPathNode(node, baseX, baseY, node.vectorPaths, node.vectorNetwork);
     case 'LINE':
-      return transformLineNode(node, baseX, baseY);
+      return transformPathNode(node, baseX, baseY, node.strokeGeometry);
   }
 
   throw new Error(`Unsupported node type: ${node.type}`);

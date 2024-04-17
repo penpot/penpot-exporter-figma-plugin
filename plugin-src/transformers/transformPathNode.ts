@@ -7,13 +7,19 @@ import { translateFills, translateStrokes, translateVectorPaths } from '@plugin/
 
 import { PathShape } from '@ui/lib/types/path/pathShape';
 
-export const transformVectorNode = (node: VectorNode, baseX: number, baseY: number): PathShape => {
+export const transformPathNode = (
+  node: DefaultShapeMixin,
+  baseX: number,
+  baseY: number,
+  vectorPaths: readonly VectorPath[],
+  vectorNetwork?: VectorNetwork
+): PathShape => {
   return {
     type: 'path',
     name: node.name,
+    content: translateVectorPaths(vectorPaths, baseX + node.x, baseY + node.y),
+    strokes: translateStrokes(node, vectorNetwork),
     fills: node.fillGeometry.length ? translateFills(node.fills, node.width, node.height) : [],
-    content: translateVectorPaths(node.vectorPaths, baseX + node.x, baseY + node.y),
-    strokes: translateStrokes(node, node.vectorNetwork),
     ...transformDimensionAndPosition(node, baseX, baseY),
     ...transformSceneNode(node),
     ...transformBlend(node)

@@ -31,6 +31,7 @@ const translateStrokeCap = (vertex: VectorVertex): StrokeCaps | undefined => {
     case 'ROUND':
       return 'round';
     case 'ARROW_EQUILATERAL':
+    case 'TRIANGLE_FILLED':
       return 'triangle-arrow';
     case 'SQUARE':
       return 'square';
