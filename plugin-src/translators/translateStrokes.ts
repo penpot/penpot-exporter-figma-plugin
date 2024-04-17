@@ -7,22 +7,20 @@ export const translateStrokes = (
   strokeWeight: number | typeof figma.mixed,
   vectorNetwork?: VectorNetwork
 ): Stroke[] => {
-  const strokes = paints.map(paint => {
+  return paints.map((paint, index) => {
     const fill = translateFill(paint, 0, 0);
-
-    return {
+    const stroke: Stroke = {
       strokeColor: fill?.fillColor,
       strokeOpacity: fill?.fillOpacity,
       strokeWidth: strokeWeight === figma.mixed ? 1 : strokeWeight
-    } as Stroke;
+    };
+
+    if (index == 0 && vectorNetwork && vectorNetwork.vertices.length === 2) {
+      stroke.strokeCapStart = translateStrokeCap(vectorNetwork.vertices[0]);
+      stroke.strokeCapEnd = translateStrokeCap(vectorNetwork.vertices[1]);
+    }
+    return stroke;
   });
-
-  if (vectorNetwork && vectorNetwork.vertices.length === 2) {
-    strokes[0].strokeCapStart = translateStrokeCap(vectorNetwork.vertices[0]);
-    strokes[0].strokeCapEnd = translateStrokeCap(vectorNetwork.vertices[1]);
-  }
-
-  return strokes;
 };
 
 const translateStrokeCap = (vertex: VectorVertex): StrokeCaps | undefined => {
