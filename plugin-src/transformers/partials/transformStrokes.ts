@@ -6,13 +6,20 @@ const isVectorLike = (node: MinimalStrokesMixin | VectorLikeMixin): node is Vect
   return 'vectorNetwork' in node;
 };
 
+const hasGeometry = (
+  node: MinimalStrokesMixin | GeometryMixin | (MinimalStrokesMixin & VectorLikeMixin)
+): boolean => {
+  return 'fillGeometry' in node && node.fillGeometry.length > 0;
+};
+
 export const transformStrokes = (
-  node: MinimalStrokesMixin | (MinimalStrokesMixin & VectorLikeMixin)
+  node: MinimalStrokesMixin | GeometryMixin | (MinimalStrokesMixin & VectorLikeMixin)
 ): Partial<ShapeAttributes> => {
   return {
     strokes: translateStrokes(
       node.strokes,
       node.strokeWeight,
+      hasGeometry(node),
       isVectorLike(node) ? node.vectorNetwork : undefined
     )
   };
