@@ -1,6 +1,6 @@
 import { translateTextDecoration, translateTextTransform } from '@plugin/translators';
 
-import { Paragraph, TextNode } from '@ui/lib/types/text/textContent';
+import { TextStyle } from '@ui/lib/types/text/textContent';
 
 export const transformTextStyle = (
   node: Pick<
@@ -17,7 +17,7 @@ export const transformTextStyle = (
     | 'textDecoration'
     | 'fills'
   >
-): Partial<Paragraph> | Partial<TextNode> => {
+): Partial<TextStyle> => {
   return {
     fontFamily: node.fontName.family,
     fontSize: node.fontSize.toString(),
