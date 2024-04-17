@@ -1,13 +1,17 @@
 import {
   transformBlend,
   transformDimensionAndPosition,
+  transformFills,
   transformSceneNode,
   transformStrokes,
   transformVectorPaths
 } from '@plugin/transformers/partials';
-import { translateFills } from '@plugin/translators';
 
 import { PathShape } from '@ui/lib/types/path/pathShape';
+
+const hasFillGeometry = (node: VectorNode | StarNode | LineNode | PolygonNode): boolean => {
+  return 'fillGeometry' in node && node.fillGeometry.length > 0;
+};
 
 export const transformPathNode = (
   node: VectorNode | StarNode | LineNode | PolygonNode,
@@ -16,7 +20,7 @@ export const transformPathNode = (
 ): PathShape => {
   return {
     name: node.name,
-    fills: node.fillGeometry.length ? translateFills(node.fills, node.width, node.height) : [],
+    ...(hasFillGeometry(node) ? transformFills(node) : []),
     ...transformStrokes(node),
     ...transformVectorPaths(node, baseX, baseY),
     ...transformDimensionAndPosition(node, baseX, baseY),

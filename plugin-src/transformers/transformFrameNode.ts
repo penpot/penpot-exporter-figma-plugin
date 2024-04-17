@@ -1,11 +1,11 @@
 import {
   transformBlend,
+  transformChildren,
   transformDimensionAndPosition,
+  transformFills,
   transformSceneNode,
   transformStrokes
 } from '@plugin/transformers/partials';
-import { transformChildren } from '@plugin/transformers/partials';
-import { translateFills } from '@plugin/translators';
 
 import { FrameShape } from '@ui/lib/types/frame/frameShape';
 
@@ -21,7 +21,7 @@ export const transformFrameNode = async (
   return {
     type: 'frame',
     name: node.name,
-    fills: translateFills(node.fills, node.width, node.height),
+    ...transformFills(node),
     // Figma API does not expose strokes for sections,
     // they plan to add it in the future. Refactor this when available.
     // @see: https://forum.figma.com/t/why-are-strokes-not-available-on-section-nodes/41658
