@@ -5,7 +5,7 @@ import { Stroke, StrokeCaps } from '@ui/lib/types/utils/stroke';
 export const translateStrokes = (
   paints: readonly Paint[],
   strokeWeight: number | typeof figma.mixed,
-  hasGeometry?: boolean,
+  hasFillGeometry?: boolean,
   vectorNetwork?: VectorNetwork
 ): Stroke[] => {
   return paints.map((paint, index) => {
@@ -16,7 +16,7 @@ export const translateStrokes = (
       strokeWidth: strokeWeight === figma.mixed ? 1 : strokeWeight
     };
 
-    if (!hasGeometry && index === 0 && vectorNetwork && vectorNetwork.vertices.length) {
+    if (!hasFillGeometry && index === 0 && vectorNetwork && vectorNetwork.vertices.length) {
       stroke.strokeCapStart = translateStrokeCap(vectorNetwork.vertices[0]);
       stroke.strokeCapEnd = translateStrokeCap(
         vectorNetwork.vertices[vectorNetwork.vertices.length - 1]

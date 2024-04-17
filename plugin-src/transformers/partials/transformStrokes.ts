@@ -2,24 +2,22 @@ import { translateStrokes } from '@plugin/translators';
 
 import { ShapeAttributes } from '@ui/lib/types/shape/shapeAttributes';
 
-const isVectorLike = (node: MinimalStrokesMixin | VectorLikeMixin): node is VectorLikeMixin => {
+const isVectorLike = (node: GeometryMixin | VectorLikeMixin): node is VectorLikeMixin => {
   return 'vectorNetwork' in node;
 };
 
-const hasGeometry = (
-  node: MinimalStrokesMixin | GeometryMixin | (MinimalStrokesMixin & VectorLikeMixin)
-): boolean => {
-  return 'fillGeometry' in node && node.fillGeometry.length > 0;
+const hasFillGeometry = (node: GeometryMixin | (GeometryMixin & VectorLikeMixin)): boolean => {
+  return node.fillGeometry.length > 0;
 };
 
 export const transformStrokes = (
-  node: MinimalStrokesMixin | GeometryMixin | (MinimalStrokesMixin & VectorLikeMixin)
+  node: GeometryMixin | (GeometryMixin & VectorLikeMixin)
 ): Partial<ShapeAttributes> => {
   return {
     strokes: translateStrokes(
       node.strokes,
       node.strokeWeight,
-      hasGeometry(node),
+      hasFillGeometry(node),
       isVectorLike(node) ? node.vectorNetwork : undefined
     )
   };
