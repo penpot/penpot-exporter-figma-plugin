@@ -23,11 +23,10 @@
   "author": "Kaleidos",
   "license": "MPL2.0",
   "dependencies": {
-    "@types/svg-path-parser": "^1.1.6",
     "react": "^18.2",
     "react-dom": "^18.2",
     "slugify": "^1.6",
-    "svg-path-parser": "^1.1.0"
+    "svg-path-parser": "^1.1"
   },
   "devDependencies": {
     "@figma/eslint-plugin-figma-plugins": "^0.15",
@@ -37,6 +36,7 @@
     "@types/react-dom": "^18.2",
     "@typescript-eslint/eslint-plugin": "^7.5",
     "@typescript-eslint/parser": "^7.5",
+    "@types/svg-path-parser": "^1.1",
     "@vitejs/plugin-react-swc": "^3.6",
     "concurrently": "^8.2",
     "esbuild": "^0.20",
