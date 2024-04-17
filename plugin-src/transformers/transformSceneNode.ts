@@ -35,6 +35,7 @@ export const transformSceneNode = async (
       return transformRectangleNode(node, baseX, baseY);
     case 'ELLIPSE':
       return transformEllipseNode(node, baseX, baseY);
+    case 'SECTION':
     case 'FRAME':
       return await transformFrameNode(node, baseX, baseY);
     case 'GROUP':
