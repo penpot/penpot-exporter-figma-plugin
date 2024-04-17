@@ -15,10 +15,11 @@ export const translateStrokes = (
       strokeWidth: strokeWeight === figma.mixed ? 1 : strokeWeight
     };
 
-    if (index == 0 && vectorNetwork && vectorNetwork.vertices.length === 2) {
+    if (index === 0 && vectorNetwork && vectorNetwork.vertices.length === 2) {
       stroke.strokeCapStart = translateStrokeCap(vectorNetwork.vertices[0]);
       stroke.strokeCapEnd = translateStrokeCap(vectorNetwork.vertices[1]);
     }
+
     return stroke;
   });
 };
