@@ -1,3 +1,5 @@
+import { ImageColor } from '@ui/lib/types/utils/imageColor';
+
 import { Gradient } from './gradient';
 import { Uuid } from './uuid';
 
@@ -7,4 +9,5 @@ type Fill = {
   fillColorGradient?: Gradient;
   fillColorRefFile?: Uuid;
   fillColorRefId?: Uuid;
+  fillImage?: ImageColor;
 };

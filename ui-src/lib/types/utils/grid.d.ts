@@ -1,3 +1,5 @@
+import { RgbColor } from '@ui/lib/types/utils/rgbColor';
+
 export type Grid = ColumnGrid | RowGrid | SquareGrid;
 
 type ColumnGrid = {
@@ -7,7 +9,7 @@ type ColumnGrid = {
 };
 
 type RowGrid = {
-  type: 'column';
+  type: 'row';
   display: boolean;
   params: ColumnParams;
 };
@@ -33,7 +35,6 @@ type SquareParams = {
 };
 
 type GridColor = {
-  // @TODO: Maybe we need a proper type here
-  color: number;
+  color: RgbColor;
   opacity: number;
 };
