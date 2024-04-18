@@ -1,9 +1,10 @@
 {
   "name": "Penpot Exporter",
-  "id": "",
+  "id": "1362760353975083275",
   "api": "1.0.0",
   "main": "dist/code.js",
   "ui": "dist/index.html",
-  "editorType": ["figma", "figjam"],
+  "editorType": ["figma"],
+  "networkAccess": { "allowedDomains": ["none"] },
   "documentAccess": "dynamic-page"
 }
