@@ -1,5 +1,5 @@
 export type RgbColor = {
-  title: 'rgb-color';
-  description: 'RGB Color String';
+  title?: string;
+  description?: string;
   gen: string;
 };
