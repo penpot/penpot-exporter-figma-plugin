@@ -1,5 +1,6 @@
-import { Gradient } from './gradient';
-import { Uuid } from './uuid';
+import { Gradient } from '@ui/lib/types/utils/gradient';
+import { ImageColor } from '@ui/lib/types/utils/imageColor';
+import { Uuid } from '@ui/lib/types/utils/uuid';
 
 export type Stroke = {
   strokeColor?: string;
@@ -12,6 +13,7 @@ export type Stroke = {
   strokeCapStart?: StrokeCaps;
   strokeCapEnd?: StrokeCaps;
   strokeColorGradient?: Gradient;
+  strokeImage?: ImageColor;
 };
 
 export type StrokeAlignment = 'center' | 'inner' | 'outer';

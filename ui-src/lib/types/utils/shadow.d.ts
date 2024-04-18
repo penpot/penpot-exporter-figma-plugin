@@ -1,4 +1,5 @@
-import { Gradient } from './gradient';
+import { Color } from '@ui/lib/types/utils/color';
+
 import { Uuid } from './uuid';
 
 export type Shadow = {
@@ -9,11 +10,5 @@ export type Shadow = {
   blur: number;
   spread: number;
   hidden: boolean;
-  color: {
-    color?: string;
-    opacity?: number;
-    gradient?: Gradient;
-    fileId?: Uuid;
-    id?: Uuid;
-  };
+  color: Color;
 };
