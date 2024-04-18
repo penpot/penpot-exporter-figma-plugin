@@ -6,19 +6,25 @@ const isVectorLike = (node: GeometryMixin | VectorLikeMixin): node is VectorLike
   return 'vectorNetwork' in node;
 };
 
-const hasFillGeometry = (node: GeometryMixin | (GeometryMixin & VectorLikeMixin)): boolean => {
+const isIndividualStrokes = (
+  node: GeometryMixin | IndividualStrokesMixin
+): node is IndividualStrokesMixin => {
+  return 'strokeTopWeight' in node;
+};
+
+const hasFillGeometry = (node: GeometryMixin): boolean => {
   return node.fillGeometry.length > 0;
 };
 
 export const transformStrokes = (
-  node: GeometryMixin | (GeometryMixin & VectorLikeMixin)
+  node: GeometryMixin | (GeometryMixin & IndividualStrokesMixin)
 ): Partial<ShapeAttributes> => {
   return {
     strokes: translateStrokes(
-      node.strokes,
-      node.strokeWeight,
+      node,
       hasFillGeometry(node),
-      isVectorLike(node) ? node.vectorNetwork : undefined
+      isVectorLike(node) ? node.vectorNetwork : undefined,
+      isIndividualStrokes(node) ? node : undefined
     )
   };
 };
