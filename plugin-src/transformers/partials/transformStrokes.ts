@@ -14,18 +14,16 @@ const isVectorLike = (node: GeometryMixin | VectorLikeMixin): node is VectorLike
 };
 
 const isIndividualStrokes = (
-  node: DefaultShapeMixin | IndividualStrokesMixin
+  node: GeometryMixin | IndividualStrokesMixin
 ): node is IndividualStrokesMixin => {
   return 'strokeTopWeight' in node;
 };
 
-const hasFillGeometry = (node: GeometryMixin | (GeometryMixin & VectorLikeMixin)): boolean => {
+const hasFillGeometry = (node: GeometryMixin): boolean => {
   return node.fillGeometry.length > 0;
 };
 
-const getNodeStrokes = (
-  node: DefaultShapeMixin | (DefaultShapeMixin & IndividualStrokesMixin)
-): NodeStrokes => {
+const getNodeStrokes = (node: GeometryMixin): NodeStrokes => {
   return {
     strokes: node.strokes,
     strokeWeight: node.strokeWeight,
@@ -44,7 +42,7 @@ const getIndividualStrokes = (node: IndividualStrokesMixin): IndividualStrokesMi
 };
 
 export const transformStrokes = (
-  node: DefaultShapeMixin | (DefaultShapeMixin & IndividualStrokesMixin)
+  node: GeometryMixin | (GeometryMixin & IndividualStrokesMixin)
 ): Partial<ShapeAttributes> => {
   return {
     strokes: translateStrokes(
