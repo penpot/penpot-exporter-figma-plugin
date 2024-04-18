@@ -6,8 +6,8 @@ export const transformDimensionAndPosition = (
   baseY: number
 ): ShapeGeomAttributes => {
   return {
-    x: node.x + baseX,
-    y: node.y + baseY,
+    x: node.absoluteBoundingBox?.x ?? 0,
+    y: node.absoluteBoundingBox?.y ?? 0,
     width: node.width,
     height: node.height
   };
