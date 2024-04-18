@@ -1,10 +1,9 @@
-import { NodeStrokes } from '@plugin/transformers/partials';
 import { translateFill } from '@plugin/translators/translateFills';
 
 import { Stroke, StrokeAlignment, StrokeCaps } from '@ui/lib/types/utils/stroke';
 
 export const translateStrokes = (
-  nodeStrokes: NodeStrokes,
+  nodeStrokes: MinimalStrokesMixin,
   hasFillGeometry?: boolean,
   vectorNetwork?: VectorNetwork,
   individualStrokes?: IndividualStrokesMixin
