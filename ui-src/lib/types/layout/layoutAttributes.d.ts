@@ -2,6 +2,17 @@ import { GridCell } from '@ui/lib/types/layout/gridCell';
 import { GridTrack } from '@ui/lib/types/layout/gridTrack';
 import { Uuid } from '@ui/lib/types/utils/uuid';
 
+type JustifyAlignContent =
+  | 'start'
+  | 'center'
+  | 'end'
+  | 'space-between'
+  | 'space-around'
+  | 'space-evenly'
+  | 'stretch';
+
+type JustifyAlignItems = 'start' | 'end' | 'center' | 'stretch';
+
 export type LayoutAttributes = {
   layout?: 'flex' | 'grid';
   layoutFlexDir?:
@@ -24,24 +35,10 @@ export type LayoutAttributes = {
     p3?: number;
     p4?: number;
   };
-  layoutJustifyContent?:
-    | 'start'
-    | 'center'
-    | 'end'
-    | 'space-between'
-    | 'space-around'
-    | 'space-evenly'
-    | 'stretch';
-  layoutJustifyItems?: 'start' | 'end' | 'center' | 'stretch';
-  layoutAlignContent?:
-    | 'start'
-    | 'center'
-    | 'end'
-    | 'space-between'
-    | 'space-around'
-    | 'space-evenly'
-    | 'stretch';
-  layoutAlignItems?: 'start' | 'end' | 'center' | 'stretch';
+  layoutJustifyContent?: JustifyAlignContent;
+  layoutJustifyItems?: JustifyAlignItems;
+  layoutAlignContent?: JustifyAlignContent;
+  layoutAlignItems?: JustifyAlignItems;
   layoutGridDir?: 'row' | 'column';
   layoutGridRows?: GridTrack[];
   layoutGridColumns?: GridTrack[];
