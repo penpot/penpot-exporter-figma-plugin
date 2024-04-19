@@ -21,6 +21,7 @@ export const transformFrameNode = async (
   return {
     type: 'frame',
     name: node.name,
+    showContent: isSectionNode(node) ? true : !node.clipsContent,
     ...transformFills(node),
     // Figma API does not expose strokes for sections,
     // they plan to add it in the future. Refactor this when available.
