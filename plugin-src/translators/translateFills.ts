@@ -11,7 +11,7 @@ export const translateFill = (fill: Paint, width: number, height: number): Fill 
       return translateGradientLinearFill(fill, width, height);
   }
 
-  console.error('Color type ' + fill.type + ' not supported yet');
+  console.error(`Unsupported fill type: ${fill.type}`);
 };
 
 export const translateFills = (

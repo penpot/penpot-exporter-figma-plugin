@@ -1,6 +1,6 @@
 import { Gradient, LINEAR_TYPE, RADIAL_TYPE } from '@ui/lib/types/utils/gradient';
 
-export const createGradientFill = ({ type, ...rest }: Gradient): Gradient => {
+export const createGradientFill = ({ type, ...rest }: Gradient): Gradient | undefined => {
   switch (type) {
     case 'linear':
       return {
@@ -14,5 +14,5 @@ export const createGradientFill = ({ type, ...rest }: Gradient): Gradient => {
       };
   }
 
-  throw new Error(`Unsupported gradient type: ${String(type)}`);
+  console.error(`Unsupported gradient type: ${String(type)}`);
 };
