@@ -3,7 +3,7 @@
 
 <h1 align="center">
   <br>
-  <img style="width:100px" src="src/logo.svg" alt="PENPOT">
+  <img style="width:100px" src="ui-src/logo.svg" alt="PENPOT">
   <br>
   PENPOT EXPORTER
 </h1>
