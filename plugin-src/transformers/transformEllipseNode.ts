@@ -2,6 +2,7 @@ import {
   transformBlend,
   transformDimensionAndPosition,
   transformFills,
+  transformProportion,
   transformSceneNode,
   transformStrokes
 } from '@plugin/transformers/partials';
@@ -20,6 +21,7 @@ export const transformEllipseNode = (
     ...transformStrokes(node),
     ...transformDimensionAndPosition(node, baseX, baseY),
     ...transformSceneNode(node),
-    ...transformBlend(node)
+    ...transformBlend(node),
+    ...transformProportion(node)
   };
 };
