@@ -9,21 +9,16 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node: ['16.x']
+        node: ['20.x']
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node }}
-          registry-url: https://registry.npmjs.org
       - uses: bahmutov/npm-install@v1
-        with:
-          useLockFile: false
-      - uses: changesets/action@master
+      - uses: changesets/action@v1
         with:
           title: Release
-          publish: npm run release
+          publish: npx changeset tag
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
