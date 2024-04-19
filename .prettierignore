@@ -1,0 +1,5 @@
+.changeset
+node_modules
+dist
+ui-src/lib/penpot.js
+LICENSE

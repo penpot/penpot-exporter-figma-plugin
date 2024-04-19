@@ -1,0 +1,31 @@
+name: Publish and release
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+  issues: write
+  pull-requests: write
+
+concurrency: ${{ github.workflow }}-${{ github.ref }}
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node: ['20.x']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+      - uses: bahmutov/npm-install@v1
+      - uses: changesets/action@v1
+        with:
+          title: Release
+          publish: npx changeset tag
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
