@@ -2,6 +2,7 @@ import {
   transformBlend,
   transformDimensionAndPosition,
   transformFills,
+  transformProportion,
   transformSceneNode,
   transformStrokes,
   transformVectorPaths
@@ -25,6 +26,7 @@ export const transformPathNode = (
     ...transformVectorPaths(node, baseX, baseY),
     ...transformDimensionAndPosition(node, baseX, baseY),
     ...transformSceneNode(node),
-    ...transformBlend(node)
+    ...transformBlend(node),
+    ...transformProportion(node)
   };
 };

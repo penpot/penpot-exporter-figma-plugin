@@ -3,6 +3,7 @@ import {
   transformChildren,
   transformDimensionAndPosition,
   transformFills,
+  transformProportion,
   transformSceneNode,
   transformStrokes
 } from '@plugin/transformers/partials';
@@ -33,6 +34,8 @@ export const transformFrameNode = async (
     // they plan to add it in the future. Refactor this when available.
     // @see: https://forum.figma.com/t/add-a-blendmode-property-for-sectionnode/58560
     ...(isSectionNode(node) ? [] : transformBlend(node)),
-    ...transformSceneNode(node)
+    ...transformSceneNode(node),
+    // Figma API does not expose constraints proportions for sections
+    ...(isSectionNode(node) ? [] : transformProportion(node))
   };
 };

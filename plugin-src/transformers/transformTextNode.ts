@@ -2,6 +2,7 @@ import {
   transformBlend,
   transformDimensionAndPosition,
   transformFills,
+  transformProportion,
   transformSceneNode,
   transformTextStyle
 } from '@plugin/transformers/partials';
@@ -42,6 +43,7 @@ export const transformTextNode = (node: TextNode, baseX: number, baseY: number):
     },
     ...transformDimensionAndPosition(node, baseX, baseY),
     ...transformSceneNode(node),
-    ...transformBlend(node)
+    ...transformBlend(node),
+    ...transformProportion(node)
   };
 };
