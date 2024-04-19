@@ -9,14 +9,20 @@ import {
 } from '@ui/lib/types/path/PathContent';
 
 export const translatePathContent = (content: PathContent): PathContent =>
-  content.map(({ command, ...rest }) => {
-    return {
-      command: translatePathCommand(command),
-      ...rest
-    } as Segment;
-  });
+  content
+    .map(({ command: stringCommand, ...rest }) => {
+      const command = translatePathCommand(stringCommand);
 
-const translatePathCommand = (command: Command): Command => {
+      if (!command) return null;
+
+      return {
+        command,
+        ...rest
+      } as Segment;
+    })
+    .filter((command): command is Segment => !!command);
+
+const translatePathCommand = (command: Command): Command | undefined => {
   switch (command) {
     case 'line-to':
       return VECTOR_LINE_TO;
@@ -28,5 +34,5 @@ const translatePathCommand = (command: Command): Command => {
       return VECTOR_CURVE_TO;
   }
 
-  throw new Error('Unknown path command');
+  console.error(`Unsupported svg command type: ${String(command)}`);
 };

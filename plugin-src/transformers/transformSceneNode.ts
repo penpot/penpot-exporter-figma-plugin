@@ -16,7 +16,7 @@ export const transformSceneNode = async (
   node: SceneNode,
   baseX: number = 0,
   baseY: number = 0
-): Promise<PenpotNode> => {
+): Promise<PenpotNode | undefined> => {
   // @TODO: when penpot 2.0, manage image as fills for the basic types
   if (
     'fills' in node &&
@@ -49,5 +49,5 @@ export const transformSceneNode = async (
       return transformPathNode(node, baseX, baseY);
   }
 
-  throw new Error(`Unsupported node type: ${node.type}`);
+  console.error(`Unsupported node type: ${node.type}`);
 };
