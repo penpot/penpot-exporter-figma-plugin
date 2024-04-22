@@ -1,6 +1,7 @@
 import {
   transformBlend,
   transformChildren,
+  transformCornerRadius,
   transformDimensionAndPosition,
   transformFills,
   transformProportion,
@@ -36,6 +37,8 @@ export const transformFrameNode = async (
     ...(isSectionNode(node) ? [] : transformBlend(node)),
     ...transformSceneNode(node),
     // Figma API does not expose constraints proportions for sections
-    ...(isSectionNode(node) ? [] : transformProportion(node))
+    ...(isSectionNode(node) ? [] : transformProportion(node)),
+    // Figma API does not expose corner radius for sections
+    ...(isSectionNode(node) ? [] : transformCornerRadius(node))
   };
 };

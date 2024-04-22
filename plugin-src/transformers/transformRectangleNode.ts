@@ -1,5 +1,6 @@
 import {
   transformBlend,
+  transformCornerRadius,
   transformDimensionAndPosition,
   transformFills,
   transformProportion,
@@ -22,6 +23,7 @@ export const transformRectangleNode = (
     ...transformDimensionAndPosition(node, baseX, baseY),
     ...transformSceneNode(node),
     ...transformBlend(node),
-    ...transformProportion(node)
+    ...transformProportion(node),
+    ...transformCornerRadius(node)
   };
 };
