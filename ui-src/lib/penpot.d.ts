@@ -9,7 +9,6 @@ import { RectShape } from '@ui/lib/types/rect/rectShape';
 import { TextShape } from '@ui/lib/types/text/textShape';
 
 export interface PenpotFile {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   addPage(name: string, options?: PenpotPageOptions): void;
   closePage(): void;
   addArtboard(artboard: FrameShape): void;
