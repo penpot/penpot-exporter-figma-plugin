@@ -2,6 +2,7 @@ export * from './transformBlend';
 export * from './transformChildren';
 export * from './transformCornerRadius';
 export * from './transformDimensionAndPosition';
+export * from './transformEffects';
 export * from './transformFills';
 export * from './transformProportion';
 export * from './transformSceneNode';

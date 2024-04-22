@@ -12,6 +12,6 @@ export type Color = {
   modifiedAt?: string; //@TODO: check this attribute in penpot
   refId?: Uuid;
   refFile?: Uuid;
-  gradient: Gradient;
+  gradient?: Gradient;
   image?: ImageColor;
 };

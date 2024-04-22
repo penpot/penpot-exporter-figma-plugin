@@ -1,6 +1,7 @@
 import {
   transformBlend,
   transformDimensionAndPosition,
+  transformEffects,
   transformFills,
   transformProportion,
   transformSceneNode,
@@ -18,6 +19,7 @@ export const transformEllipseNode = (
     type: 'circle',
     name: node.name,
     ...transformFills(node),
+    ...transformEffects(node),
     ...transformStrokes(node),
     ...transformDimensionAndPosition(node, baseX, baseY),
     ...transformSceneNode(node),
