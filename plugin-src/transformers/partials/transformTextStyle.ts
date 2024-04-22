@@ -1,9 +1,17 @@
-import { translateTextDecoration, translateTextTransform } from '@plugin/translators';
+import slugify from 'slugify';
+
+import {
+  translateFontStyle,
+  translateHorizontalAlign,
+  translateTextDecoration,
+  translateTextTransform
+} from '@plugin/translators';
 
 import { TextStyle } from '@ui/lib/types/text/textContent';
 
 export const transformTextStyle = (
-  node: Pick<
+  node: TextNode,
+  segment: Pick<
     StyledTextSegment,
     | 'characters'
     | 'start'
@@ -18,12 +26,16 @@ export const transformTextStyle = (
     | 'fills'
   >
 ): Partial<TextStyle> => {
+  //@TODO: translate lineHeight and letterspacing
   return {
-    fontFamily: node.fontName.family,
-    fontSize: node.fontSize.toString(),
-    fontStyle: node.fontName.style,
-    fontWeight: node.fontWeight.toString(),
-    textDecoration: translateTextDecoration(node),
-    textTransform: translateTextTransform(node)
+    fontFamily: segment.fontName.family,
+    // fontId: `gfont-${slugify(segment.fontName.family.toLowerCase())}`,
+    fontSize: segment.fontSize.toString(),
+    fontStyle: segment.fontName.style,
+    fontWeight: segment.fontWeight.toString(),
+    fontVariantId: translateFontStyle(segment.fontName.style),
+    textAlign: translateHorizontalAlign(node.textAlignHorizontal),
+    textDecoration: translateTextDecoration(segment),
+    textTransform: translateTextTransform(segment)
   };
 };
