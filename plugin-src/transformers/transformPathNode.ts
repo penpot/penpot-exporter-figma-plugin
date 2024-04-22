@@ -19,7 +19,6 @@ export const transformPathNode = (
   baseX: number,
   baseY: number
 ): PathShape => {
-  console.log(node.name, node);
   return {
     name: node.name,
     ...(hasFillGeometry(node) ? transformFills(node) : []),
