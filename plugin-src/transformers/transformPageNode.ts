@@ -7,7 +7,7 @@ export const transformPageNode = async (node: PageNode): Promise<PenpotPage> => 
   return {
     name: node.name,
     options: {
-      background: node.backgrounds[0] ? translatePageFill(node.backgrounds[0]) : undefined
+      background: node.backgrounds.length ? translatePageFill(node.backgrounds[0]) : undefined
     },
     ...(await transformChildren(node))
   };
