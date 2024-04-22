@@ -1,6 +1,10 @@
-import { RgbColor } from '@ui/lib/types/utils/rgbColor';
-
 export type Grid = ColumnGrid | RowGrid | SquareGrid;
+
+export type SavedGrids = {
+  square?: SquareParams;
+  row?: ColumnParams;
+  column?: ColumnParams;
+};
 
 type ColumnGrid = {
   type: 'column';
@@ -35,6 +39,6 @@ type SquareParams = {
 };
 
 type GridColor = {
-  color: RgbColor;
+  color: string; // hex color
   opacity: number;
 };
