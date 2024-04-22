@@ -33,6 +33,15 @@ export const translateFills = (
   return penpotFills;
 };
 
+export const translatePageFill = (fill: Paint): string | undefined => {
+  switch (fill.type) {
+    case 'SOLID':
+      return rgbToHex(fill.color);
+  }
+
+  console.error(`Unsupported page fill type: ${fill.type}`);
+};
+
 const translateSolidFill = (fill: SolidPaint): Fill => {
   return {
     fillColor: rgbToHex(fill.color),

@@ -4,12 +4,13 @@ import { FrameShape } from '@ui/lib/types/frame/frameShape';
 import { GroupShape } from '@ui/lib/types/group/groupShape';
 import { ImageShape } from '@ui/lib/types/image/imageShape';
 import { PathShape } from '@ui/lib/types/path/pathShape';
+import { PenpotPageOptions } from '@ui/lib/types/penpotPage';
 import { RectShape } from '@ui/lib/types/rect/rectShape';
 import { TextShape } from '@ui/lib/types/text/textShape';
 
 export interface PenpotFile {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  addPage(name: string, options?: any): void;
+  addPage(name: string, options?: PenpotPageOptions): void;
   closePage(): void;
   addArtboard(artboard: FrameShape): void;
   closeArtboard(): void;

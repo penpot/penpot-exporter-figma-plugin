@@ -1,6 +1,5 @@
 import { Gradient } from '@ui/lib/types/utils/gradient';
 import { ImageColor } from '@ui/lib/types/utils/imageColor';
-import { RgbColor } from '@ui/lib/types/utils/rgbColor';
 import { Uuid } from '@ui/lib/types/utils/uuid';
 
 export type Color = {
@@ -8,7 +7,7 @@ export type Color = {
   name?: string;
   path?: string;
   value?: string;
-  color?: RgbColor;
+  color?: string; // hex color
   opacity?: number;
   modifiedAt?: string; //@TODO: check this attribute in penpot
   refId?: Uuid;
