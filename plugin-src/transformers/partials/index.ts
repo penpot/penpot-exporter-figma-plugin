@@ -1,5 +1,6 @@
 export * from './transformBlend';
 export * from './transformChildren';
+export * from './transformCornerRadius';
 export * from './transformDimensionAndPosition';
 export * from './transformFills';
 export * from './transformProportion';
