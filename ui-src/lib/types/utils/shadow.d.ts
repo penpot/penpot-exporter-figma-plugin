@@ -2,9 +2,11 @@ import { Color } from '@ui/lib/types/utils/color';
 
 import { Uuid } from './uuid';
 
+export type ShadowStyle = 'drop-shadow' | 'inner-shadow';
+
 export type Shadow = {
   id?: Uuid;
-  style: symbol; // 'drop-shadow' | 'inner-shadow'
+  style: ShadowStyle;
   offsetX: number;
   offsetY: number;
   blur: number;

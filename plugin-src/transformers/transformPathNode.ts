@@ -1,6 +1,7 @@
 import {
   transformBlend,
   transformDimensionAndPosition,
+  transformEffects,
   transformFills,
   transformProportion,
   transformSceneNode,
@@ -23,6 +24,7 @@ export const transformPathNode = (
     name: node.name,
     ...(hasFillGeometry(node) ? transformFills(node) : []),
     ...transformStrokes(node),
+    ...transformEffects(node),
     ...transformVectorPaths(node, baseX, baseY),
     ...transformDimensionAndPosition(node, baseX, baseY),
     ...transformSceneNode(node),

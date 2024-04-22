@@ -1,6 +1,7 @@
 import {
   transformBlend,
   transformDimensionAndPosition,
+  transformEffects,
   transformFills,
   transformProportion,
   transformSceneNode,
@@ -42,6 +43,7 @@ export const transformTextNode = (node: TextNode, baseX: number, baseY: number):
       ]
     },
     ...transformDimensionAndPosition(node, baseX, baseY),
+    ...transformEffects(node),
     ...transformSceneNode(node),
     ...transformBlend(node),
     ...transformProportion(node)

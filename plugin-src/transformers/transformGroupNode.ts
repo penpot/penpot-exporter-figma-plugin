@@ -1,6 +1,7 @@
 import {
   transformBlend,
   transformDimensionAndPosition,
+  transformEffects,
   transformSceneNode
 } from '@plugin/transformers/partials';
 import { transformChildren } from '@plugin/transformers/partials';
@@ -17,6 +18,7 @@ export const transformGroupNode = async (
     name: node.name,
     ...(await transformChildren(node, baseX, baseY)),
     ...transformDimensionAndPosition(node, baseX, baseY),
+    ...transformEffects(node),
     ...transformSceneNode(node),
     ...transformBlend(node)
   };
