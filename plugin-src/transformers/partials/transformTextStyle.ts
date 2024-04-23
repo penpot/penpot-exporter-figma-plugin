@@ -26,7 +26,7 @@ export const transformTextStyle = (
     | 'fills'
   >
 ): Partial<TextStyle> => {
-  //@TODO: translate lineHeight and letterspacing
+  // @TODO: translate lineHeight and letterspacing
   return {
     fontFamily: segment.fontName.family,
     // fontId: `gfont-${slugify(segment.fontName.family.toLowerCase())}`,
