@@ -5,6 +5,9 @@
   "main": "dist/code.js",
   "ui": "dist/index.html",
   "editorType": ["figma"],
-  "networkAccess": { "allowedDomains": ["https://design.penpot.app"] },
+  "networkAccess": {
+    "allowedDomains": ["https://design.penpot.app"],
+    "devAllowedDomains": ["http://localhost:5173"]
+  },
   "documentAccess": "dynamic-page"
 }

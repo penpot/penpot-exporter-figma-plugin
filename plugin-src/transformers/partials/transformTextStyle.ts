@@ -29,7 +29,7 @@ export const transformTextStyle = (
   // @TODO: translate lineHeight and letterspacing
   return {
     fontFamily: segment.fontName.family,
-    // fontId: `gfont-${slugify(segment.fontName.family.toLowerCase())}`,
+    fontId: `gfont-${slugify(segment.fontName.family.toLowerCase())}`,
     fontSize: segment.fontSize.toString(),
     fontStyle: segment.fontName.style,
     fontWeight: segment.fontWeight.toString(),
