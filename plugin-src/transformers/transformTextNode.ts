@@ -45,6 +45,7 @@ export const transformTextNode = (node: TextNode, baseX: number, baseY: number):
         }
       ]
     },
+    growType: 'auto-width',
     positionData: segments,
     ...transformDimensionAndPosition(node, baseX, baseY),
     ...transformEffects(node),
