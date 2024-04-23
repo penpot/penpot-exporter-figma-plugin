@@ -23,6 +23,8 @@ export const transformTextNode = (node: TextNode, baseX: number, baseY: number):
     'fills'
   ]);
 
+  const segments = translateStyledTextSegments(node, styledTextSegments);
+
   return {
     type: 'text',
     name: node.name,
@@ -35,7 +37,7 @@ export const transformTextNode = (node: TextNode, baseX: number, baseY: number):
           children: [
             {
               type: 'paragraph',
-              children: translateStyledTextSegments(node, styledTextSegments),
+              children: segments,
               ...(styledTextSegments.length ? transformTextStyle(node, styledTextSegments[0]) : {}),
               ...transformFills(node)
             }
@@ -43,6 +45,7 @@ export const transformTextNode = (node: TextNode, baseX: number, baseY: number):
         }
       ]
     },
+    positionData: segments,
     ...transformDimensionAndPosition(node, baseX, baseY),
     ...transformEffects(node),
     ...transformSceneNode(node),
