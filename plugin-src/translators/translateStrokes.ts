@@ -63,10 +63,7 @@ const translateStrokeAlignment = (
 };
 
 const translateStrokeCap = (vertex: VectorVertex): StrokeCaps | undefined => {
-  if (!vertex.strokeCap) return;
   switch (vertex.strokeCap as StrokeCap | ConnectorStrokeCap) {
-    case 'NONE':
-      return;
     case 'ROUND':
       return 'round';
     case 'ARROW_EQUILATERAL':
@@ -79,7 +76,9 @@ const translateStrokeCap = (vertex: VectorVertex): StrokeCaps | undefined => {
     case 'DIAMOND_FILLED':
       return 'diamond-marker';
     case 'ARROW_LINES':
-    default:
       return 'line-arrow';
+    case 'NONE':
+    default:
+      return;
   }
 };
