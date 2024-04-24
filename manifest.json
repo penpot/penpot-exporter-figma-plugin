@@ -6,7 +6,7 @@
   "ui": "dist/index.html",
   "editorType": ["figma"],
   "networkAccess": {
-    "allowedDomains": ["https://design.penpot.app", "https://fonts.googleapis.com"],
+    "allowedDomains": ["https://cors-anywhere.herokuapp.com"],
     "devAllowedDomains": ["http://localhost:5173"]
   },
   "documentAccess": "dynamic-page"

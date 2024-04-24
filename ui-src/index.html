@@ -8,12 +8,10 @@
   <body>
     <div id="root"></div>
     <script>
-      // Original penpot deployment
-      window.penpotPublicURI = 'https://design.penpot.app';
-      // Local proxy for testing purposes
-      // window.penpotPublicURI = 'http://localhost:5173';
-      // Google fonts url
-      // window.penpotPublicURI = 'https://fonts.googleapis.com';
+      // Proxy of Penpot App
+      // window.penpotPublicURI = 'https://localhost:5173';
+      // Random url with CORS configured
+      window.penpotPublicURI = 'https://cors-anywhere.herokuapp.com/';
       window.penpotVersion = '2.0.0-13062-gc97f2d620';
     </script>
     <script type="module" src="./main.tsx"></script>
