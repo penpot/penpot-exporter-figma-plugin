@@ -2,6 +2,7 @@ export * from './translateBlendMode';
 export * from './translateShadowEffects';
 export * from './translateFills';
 export * from './translateFontStyle';
+export * from './translateGrowType';
 export * from './translateHorizontalAlign';
 export * from './translateStrokes';
 export * from './translateStyledTextSegments';

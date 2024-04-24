@@ -7,7 +7,11 @@ import {
   transformSceneNode,
   transformTextStyle
 } from '@plugin/transformers/partials';
-import { translateStyledTextSegments, translateVerticalAlign } from '@plugin/translators';
+import {
+  translateGrowType,
+  translateStyledTextSegments,
+  translateVerticalAlign
+} from '@plugin/translators';
 
 import { TextShape } from '@ui/lib/types/text/textShape';
 
@@ -45,7 +49,7 @@ export const transformTextNode = (node: TextNode, baseX: number, baseY: number):
         }
       ]
     },
-    growType: 'auto-width',
+    growType: translateGrowType(node.textAutoResize),
     positionData: segments,
     ...transformDimensionAndPosition(node, baseX, baseY),
     ...transformEffects(node),

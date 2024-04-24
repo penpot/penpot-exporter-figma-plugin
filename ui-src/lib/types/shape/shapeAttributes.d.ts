@@ -45,5 +45,7 @@ export type ShapeAttributes = {
   interactions?: Interaction[];
   shadow?: Shadow[];
   blur?: Blur;
-  growType?: 'auto-width' | 'auto-height' | 'fixed';
+  growType?: GrowType;
 };
+
+export type GrowType = 'auto-width' | 'auto-height' | 'fixed';
