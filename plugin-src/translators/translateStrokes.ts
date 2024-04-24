@@ -18,7 +18,7 @@ export const translateStrokes = (
       strokeStyle: nodeStrokes.dashPattern.length ? 'dashed' : 'solid'
     };
 
-    if (!hasFillGeometry && index === 0 && vectorNetwork && vectorNetwork.vertices.length) {
+    if (!hasFillGeometry && index === 0 && vectorNetwork && vectorNetwork.vertices.length > 0) {
       stroke.strokeCapStart = translateStrokeCap(vectorNetwork.vertices[0]);
       stroke.strokeCapEnd = translateStrokeCap(
         vectorNetwork.vertices[vectorNetwork.vertices.length - 1]
@@ -64,8 +64,6 @@ const translateStrokeAlignment = (
 
 const translateStrokeCap = (vertex: VectorVertex): StrokeCaps | undefined => {
   switch (vertex.strokeCap as StrokeCap | ConnectorStrokeCap) {
-    case 'NONE':
-      return;
     case 'ROUND':
       return 'round';
     case 'ARROW_EQUILATERAL':
@@ -78,7 +76,9 @@ const translateStrokeCap = (vertex: VectorVertex): StrokeCaps | undefined => {
     case 'DIAMOND_FILLED':
       return 'diamond-marker';
     case 'ARROW_LINES':
-    default:
       return 'line-arrow';
+    case 'NONE':
+    default:
+      return;
   }
 };
