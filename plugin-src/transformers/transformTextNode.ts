@@ -5,6 +5,7 @@ import {
   transformFills,
   transformProportion,
   transformSceneNode,
+  transformStrokes,
   transformTextStyle
 } from '@plugin/transformers/partials';
 import {
@@ -56,6 +57,7 @@ export const transformTextNode = (node: TextNode, baseX: number, baseY: number):
     ...transformEffects(node),
     ...transformSceneNode(node),
     ...transformBlend(node),
-    ...transformProportion(node)
+    ...transformProportion(node),
+    ...transformStrokes(node)
   };
 };
