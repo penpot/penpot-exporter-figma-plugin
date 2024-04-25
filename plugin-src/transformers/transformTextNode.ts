@@ -10,6 +10,7 @@ import {
 import {
   translateGrowType,
   translateStyledTextSegments,
+  translateTextPositionData,
   translateVerticalAlign
 } from '@plugin/translators';
 
@@ -50,7 +51,7 @@ export const transformTextNode = (node: TextNode, baseX: number, baseY: number):
       ]
     },
     growType: translateGrowType(node.textAutoResize),
-    positionData: segments,
+    positionData: translateTextPositionData(segments),
     ...transformDimensionAndPosition(node, baseX, baseY),
     ...transformEffects(node),
     ...transformSceneNode(node),

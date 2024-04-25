@@ -3,6 +3,8 @@ import slugify from 'slugify';
 import {
   translateFontStyle,
   translateHorizontalAlign,
+  translateLetterSpacing,
+  translateLineHeight,
   translateTextDecoration,
   translateTextTransform
 } from '@plugin/translators';
@@ -26,7 +28,6 @@ export const transformTextStyle = (
     | 'fills'
   >
 ): Partial<TextStyle> => {
-  // @TODO: translate lineHeight and letterspacing
   return {
     fontFamily: segment.fontName.family,
     fontId: `gfont-${slugify(segment.fontName.family.toLowerCase())}`,
@@ -36,6 +37,8 @@ export const transformTextStyle = (
     fontVariantId: translateFontStyle(segment.fontName.style),
     textAlign: translateHorizontalAlign(node.textAlignHorizontal),
     textDecoration: translateTextDecoration(segment),
-    textTransform: translateTextTransform(segment)
+    textTransform: translateTextTransform(segment),
+    letterSpacing: translateLetterSpacing(segment),
+    lineHeight: translateLineHeight(segment)
   };
 };
