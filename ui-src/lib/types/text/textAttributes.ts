@@ -1,5 +1,4 @@
-import { Fill } from '../utils/fill';
-import { TextContent } from './textContent';
+import { TextContent, TextStyle } from './textContent';
 
 export const TEXT_TYPE: unique symbol = Symbol.for('text');
 
@@ -15,13 +14,5 @@ export type PositionData = {
   y?: number;
   height?: number;
   width?: number;
-  fills?: Fill[];
-  fontFamily?: string;
-  fontSize?: string;
-  fontStyle?: string;
-  fontWeight?: string;
-  rtl?: boolean;
   text?: string;
-  textDecoration?: string;
-  textTransform?: string;
-};
+} & TextStyle;

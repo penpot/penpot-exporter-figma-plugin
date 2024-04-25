@@ -1,18 +1,18 @@
-import { PositionData } from '@ui/lib/types/text/textAttributes';
-import { TextNode } from '@ui/lib/types/text/textContent';
+import { transformDimensionAndPosition } from '@plugin/transformers/partials';
 
-export const translateTextPositionData = (segments: TextNode[]): PositionData[] => {
+import { PositionData } from '@ui/lib/types/text/textAttributes';
+import { TextNode as PenpotTextNode } from '@ui/lib/types/text/textContent';
+
+export const translateTextPositionData = (
+  node: TextNode,
+  segments: PenpotTextNode[],
+  baseX: number,
+  baseY: number
+): PositionData[] => {
   return segments.map((segment): PositionData => {
     return {
-      fills: segment.fills,
-      fontFamily: segment.fontFamily,
-      fontSize: segment.fontSize,
-      fontStyle: segment.fontStyle,
-      fontWeight: segment.fontWeight,
-      rtl: segment.direction === 'rtl',
-      text: segment.text,
-      textDecoration: segment.textDecoration,
-      textTransform: segment.textTransform
+      ...transformDimensionAndPosition(node, baseX, baseY),
+      ...segment
     };
   });
 };
