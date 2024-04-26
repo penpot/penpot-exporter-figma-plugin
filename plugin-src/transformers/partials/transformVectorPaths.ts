@@ -6,6 +6,10 @@ const hasFillGeometry = (node: VectorNode | StarNode | LineNode | PolygonNode): 
   return 'fillGeometry' in node && node.fillGeometry.length > 0;
 };
 
+const hasStrokeGeometry = (node: VectorNode | StarNode | LineNode | PolygonNode): boolean => {
+  return 'strokeGeometry' in node && node.strokeGeometry.length > 0;
+};
+
 const hasStrokeCaps = (node: GeometryMixin & VectorLikeMixin): boolean => {
   if (node.strokeCap !== figma.mixed) {
     return node.strokeCap !== 'NONE';
@@ -22,19 +26,20 @@ const hasStrokeCaps = (node: GeometryMixin & VectorLikeMixin): boolean => {
 };
 
 const getVectorPaths = (node: VectorNode | StarNode | LineNode | PolygonNode): VectorPaths => {
+  console.log(node);
   switch (node.type) {
     case 'STAR':
     case 'POLYGON':
       return node.fillGeometry;
     case 'VECTOR':
-      // closed figures always work with fillGeometry
-      if (hasFillGeometry(node)) {
-        return node.fillGeometry;
+      // mixed vector & simple open figures
+      if (hasStrokeGeometry(node) && !hasStrokeCaps(node) && node.strokeGeometry.length > 0) {
+        return node.strokeGeometry;
       }
 
-      // open figures without stroke caps work with strokeGeometry
-      if (!hasStrokeCaps(node) && node.strokeGeometry.length > 0) {
-        return node.strokeGeometry;
+      // simple closed figures
+      if (hasFillGeometry(node)) {
+        return node.fillGeometry;
       }
 
       return node.vectorPaths;
