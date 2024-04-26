@@ -1,5 +1,11 @@
 # penpot-exporter
 
+## 0.2.1
+
+### Patch Changes
+
+- [#71](https://github.com/penpot/penpot-exporter-figma-plugin/pull/71) [`3dec0a4`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/3dec0a452079e1a1a3e64290e16b881a47a22876) Thanks [@Cenadros](https://github.com/Cenadros)! - Fix blend mode 'color' translation
+
 ## 0.2.0
 
 ### Minor Changes
