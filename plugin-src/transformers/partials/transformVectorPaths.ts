@@ -6,13 +6,17 @@ const hasFillGeometry = (node: VectorNode | StarNode | LineNode | PolygonNode): 
   return 'fillGeometry' in node && node.fillGeometry.length > 0;
 };
 
+const hasStrokeCaps = (node: GeometryMixin): boolean => {
+  return node.strokeCap !== 'NONE';
+};
+
 const getVectorPaths = (node: VectorNode | StarNode | LineNode | PolygonNode): VectorPaths => {
   switch (node.type) {
     case 'STAR':
     case 'POLYGON':
       return node.fillGeometry;
     case 'VECTOR':
-      return hasFillGeometry(node) ? node.fillGeometry : node.vectorPaths;
+      return !hasStrokeCaps(node) || hasFillGeometry(node) ? node.strokeGeometry : node.vectorPaths;
     case 'LINE':
       return node.strokeGeometry;
   }
