@@ -1,5 +1,11 @@
 # penpot-exporter
 
+## 0.2.2
+
+### Patch Changes
+
+- [#76](https://github.com/penpot/penpot-exporter-figma-plugin/pull/76) [`59d70d2`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/59d70d251094895b18bd6af7a8818a0b1de6abf3) Thanks [@Cenadros](https://github.com/Cenadros)! - Fix vector shapes to be more precise with what you draw on figma
+
 ## 0.2.1
 
 ### Patch Changes
