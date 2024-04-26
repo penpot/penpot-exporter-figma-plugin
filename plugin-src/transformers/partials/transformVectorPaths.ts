@@ -6,8 +6,19 @@ const hasFillGeometry = (node: VectorNode | StarNode | LineNode | PolygonNode): 
   return 'fillGeometry' in node && node.fillGeometry.length > 0;
 };
 
-const hasStrokeCaps = (node: GeometryMixin): boolean => {
-  return node.strokeCap !== 'NONE';
+const hasStrokeCaps = (node: GeometryMixin & VectorLikeMixin): boolean => {
+  if (node.strokeCap !== figma.mixed) {
+    return node.strokeCap !== 'NONE';
+  }
+
+  if (node.vectorNetwork && node.vectorNetwork.vertices.length > 0) {
+    // check all vertices to see if they have stroke caps
+    return node.vectorNetwork.vertices.some(
+      vertex => vertex.strokeCap && vertex.strokeCap !== 'NONE'
+    );
+  }
+
+  return false;
 };
 
 const getVectorPaths = (node: VectorNode | StarNode | LineNode | PolygonNode): VectorPaths => {
@@ -16,7 +27,17 @@ const getVectorPaths = (node: VectorNode | StarNode | LineNode | PolygonNode): V
     case 'POLYGON':
       return node.fillGeometry;
     case 'VECTOR':
-      return !hasStrokeCaps(node) || hasFillGeometry(node) ? node.strokeGeometry : node.vectorPaths;
+      // closed figures always work with fillGeometry
+      if (hasFillGeometry(node)) {
+        return node.fillGeometry;
+      }
+
+      // open figures without stroke caps work with strokeGeometry
+      if (!hasStrokeCaps(node) && node.strokeGeometry.length > 0) {
+        return node.strokeGeometry;
+      }
+
+      return node.vectorPaths;
     case 'LINE':
       return node.strokeGeometry;
   }
