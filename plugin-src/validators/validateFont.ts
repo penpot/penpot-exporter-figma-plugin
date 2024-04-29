@@ -1,6 +1,6 @@
 import slugify from 'slugify';
 
-import fonts from '@ui/gfonts.json';
+import fonts from '@plugin/gfonts.json';
 
 const gfonts = new Set(fonts);
 

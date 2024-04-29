@@ -3,7 +3,6 @@ import slugify from 'slugify';
 
 import { createPenpotFile } from '@ui/converters';
 import { PenpotDocument } from '@ui/lib/types/penpotDocument';
-import { validateFont } from '@ui/validators';
 
 import Logo from './logo.svg?react';
 
@@ -25,10 +24,7 @@ export const PenpotExporter = () => {
       setExporting(false);
     } else if (event.data.pluginMessage?.type == 'FONT_NAME') {
       const fontName = event.data.pluginMessage.data as string;
-
-      if (!validateFont(fontName)) {
-        addFontWarning(slugify(fontName.toLowerCase()));
-      }
+      addFontWarning(slugify(fontName.toLowerCase()));
     }
   };
 
