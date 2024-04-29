@@ -1,17 +1,15 @@
 import { transformFills } from '@plugin/transformers/partials';
-import {
-  translateFills,
-  translateHorizontalAlign,
-  translateVerticalAlign
-} from '@plugin/translators';
+import { translateFills } from '@plugin/translators';
 import {
   translateFont,
   translateFontStyle,
   translateGrowType,
+  translateHorizontalAlign,
   translateLetterSpacing,
   translateLineHeight,
   translateTextDecoration,
-  translateTextTransform
+  translateTextTransform,
+  translateVerticalAlign
 } from '@plugin/translators/text';
 
 import { TextStyle } from '@ui/lib/types/text/textContent';
