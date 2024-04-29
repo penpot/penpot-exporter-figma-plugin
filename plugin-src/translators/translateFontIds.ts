@@ -1,7 +1,26 @@
-import { loadGoogleFonts, loadLocalFonts } from '@plugin/utils';
+import slugify from 'slugify';
 
-import { Gfont } from '@ui/lib/types/utils/gfont';
-import { LocalFont } from '@ui/lib/types/utils/localFont';
+import { items as gfonts } from '@plugin/gfonts.json';
+import localFonts from '@plugin/localFonts.json';
+
+export const translateFontId = (fontName: FontName): string => {
+  // is gfont
+  if (isGfont(fontName.family)) {
+    return `gfont-${slugify(fontName.family.toLowerCase())}`;
+  }
+
+  // is local font
+  const localFont = localFonts.find(localFont => localFont.name === fontName.family);
+  if (localFont !== undefined) {
+    return localFont.family;
+  }
+
+  // always send font name if not gfont or source sans pro
+  figma.ui.postMessage({ type: 'FONT_NAME', data: fontName.family });
+
+  // @TODO: custom font
+  return slugify(fontName.family.toLowerCase());
+};
 
 export const translateFontVariantId = (fontName: FontName, fontWeight: number) => {
   // Gfont
@@ -20,16 +39,14 @@ export const translateFontVariantId = (fontName: FontName, fontWeight: number) =
   return fontName.style.toLowerCase().replace(/\s/g, '');
 };
 
-const getGfont = (fontFamily: string): Gfont | undefined => {
-  return loadGoogleFonts().find(gfont => gfont.family === fontFamily);
-};
+const isGfont = (fontFamily: string): boolean => {
+  const foundFamily = gfonts.find(gfont => gfont.family === fontFamily);
 
-const getLocalFont = (fontFamily: string): LocalFont | undefined => {
-  return loadLocalFonts().find(localFont => localFont.name === fontFamily);
+  return foundFamily !== undefined;
 };
 
 const translateGfontVariantId = (fontName: FontName, fontWeight: number): string | undefined => {
-  const gfont = getGfont(fontName.family);
+  const gfont = gfonts.find(font => font.family === fontName.family);
   if (gfont === undefined) {
     return;
   }
@@ -54,7 +71,7 @@ const translateLocalFontVariantId = (
   fontName: FontName,
   fontWeight: number
 ): string | undefined => {
-  const font = getLocalFont(fontName.family);
+  const font = localFonts.find(localFont => localFont.name === fontName.family);
   if (font === undefined) {
     return;
   }
