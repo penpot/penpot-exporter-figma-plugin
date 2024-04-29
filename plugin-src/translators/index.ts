@@ -9,7 +9,6 @@ export * from './translateLineHeight';
 export * from './translateStrokes';
 export * from './translateStyledTextSegments';
 export * from './translateTextDecoration';
-export * from './translateTextPositionData';
 export * from './translateTextTransform';
 export * from './translateVectorPaths';
 export * from './translateVerticalAlign';
