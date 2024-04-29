@@ -9,6 +9,7 @@ export type TextContent = {
 
 export type TextVerticalAlign = 'top' | 'bottom' | 'center';
 export type TextHorizontalAlign = 'left' | 'right' | 'center' | 'justify';
+export type TextFontStyle = 'normal' | 'italic';
 
 type ParagraphSet = {
   type: 'paragraph-set';
@@ -32,7 +33,7 @@ type TextStyle = {
   fontFamily?: string;
   fontVariantId?: string;
   fontSize?: string;
-  fontStyle?: string;
+  fontStyle?: TextFontStyle;
   fontWeight?: string;
   textDecoration?: string;
   textTransform?: string;

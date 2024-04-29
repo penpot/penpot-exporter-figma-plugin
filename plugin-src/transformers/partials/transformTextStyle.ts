@@ -2,6 +2,7 @@ import slugify from 'slugify';
 
 import {
   translateFontStyle,
+  translateFontVariantId,
   translateHorizontalAlign,
   translateLetterSpacing,
   translateLineHeight,
@@ -32,9 +33,9 @@ export const transformTextStyle = (
     fontFamily: segment.fontName.family,
     fontId: `gfont-${slugify(segment.fontName.family.toLowerCase())}`,
     fontSize: segment.fontSize.toString(),
-    fontStyle: segment.fontName.style,
+    fontStyle: translateFontStyle(segment.fontName.style),
     fontWeight: segment.fontWeight.toString(),
-    fontVariantId: translateFontStyle(segment.fontName.style),
+    fontVariantId: translateFontVariantId(segment.fontName.style),
     textAlign: translateHorizontalAlign(node.textAlignHorizontal),
     textDecoration: translateTextDecoration(segment),
     textTransform: translateTextTransform(segment),
