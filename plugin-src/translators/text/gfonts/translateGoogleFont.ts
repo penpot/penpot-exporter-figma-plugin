@@ -1,9 +1,11 @@
 import slugify from 'slugify';
 
-import { items as gfonts } from '@plugin/gfonts.json';
 import { translateFontVariantId } from '@plugin/translators/text/gfonts';
 
 import { FontId } from '@ui/lib/types/text/textContent';
+
+import { items as gfonts } from './gfonts.json';
+import { GoogleFont } from './googleFont';
 
 export const translateGoogleFont = (fontName: FontName, fontWeight: number): FontId | undefined => {
   const googleFont = getGoogleFont(fontName);
@@ -16,6 +18,6 @@ export const translateGoogleFont = (fontName: FontName, fontWeight: number): Fon
   };
 };
 
-const getGoogleFont = (fontName: FontName) => {
+const getGoogleFont = (fontName: FontName): GoogleFont | undefined => {
   return gfonts.find(font => font.family === fontName.family);
 };

@@ -1,8 +1,8 @@
-import { items as localFonts } from '@plugin/localFonts.json';
-import { translateFontVariantId } from '@plugin/translators/text/local';
+import { LocalFont, translateFontVariantId } from '@plugin/translators/text/local';
 
 import { FontId } from '@ui/lib/types/text/textContent';
-import { LocalFont } from '@ui/lib/types/utils/localFont';
+
+import { items as localFonts } from './localFonts.json';
 
 export const translateLocalFont = (fontName: FontName, fontWeight: number): FontId | undefined => {
   const localFont = getLocalFont(fontName);

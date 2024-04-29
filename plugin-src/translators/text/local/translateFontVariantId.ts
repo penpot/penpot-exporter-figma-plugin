@@ -1,4 +1,4 @@
-import { LocalFont } from '@ui/lib/types/utils/localFont';
+import { LocalFont } from './localFont';
 
 export const translateFontVariantId = (
   localFont: LocalFont,
