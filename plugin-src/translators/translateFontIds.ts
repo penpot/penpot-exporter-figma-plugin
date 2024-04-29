@@ -14,7 +14,7 @@ export const translateFontId = (fontName: FontName): string => {
     return localFont.family;
   }
 
-  // always send font name if not gfont or source sans pro
+  // always send font name if custom font
   figma.ui.postMessage({ type: 'FONT_NAME', data: fontName.family });
 
   // @TODO: custom font
