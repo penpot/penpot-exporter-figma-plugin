@@ -1,8 +1,6 @@
-import fonts from '@plugin/gfonts.json';
+import { loadGoogleFonts } from '@plugin/utils';
 
 import { Gfont } from '@ui/lib/types/utils/gfont';
-
-const gfonts: Gfont[] = fonts.items;
 
 export const translateFontVariantId = (fontName: FontName, fontWeight: number) => {
   // Gfont
@@ -17,11 +15,10 @@ export const translateFontVariantId = (fontName: FontName, fontWeight: number) =
 };
 
 const getGfont = (fontFamily: string): Gfont | undefined => {
-  return gfonts.find(gfont => gfont.family === fontFamily);
+  return loadGoogleFonts().find(gfont => gfont.family === fontFamily);
 };
 
 const translateGfontVariantId = (fontName: FontName, fontWeight: number): string | undefined => {
-  // is gfont
   const gfont = getGfont(fontName.family);
   if (gfont === undefined) {
     return;
