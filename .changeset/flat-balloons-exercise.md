@@ -1,5 +1,0 @@
----
-"penpot-exporter": minor
----
-
-Shadows

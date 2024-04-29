@@ -1,4 +1,5 @@
 import {
+  BLEND_MODE_COLOR,
   BLEND_MODE_COLOR_BURN,
   BLEND_MODE_COLOR_DODGE,
   BLEND_MODE_DARKEN,
@@ -50,7 +51,7 @@ export const translateUiBlendMode = (blendMode?: BlendMode): BlendMode | undefin
     case 'saturation':
       return BLEND_MODE_SATURATION;
     case 'color':
-      return BLEND_MODE_COLOR_BURN;
+      return BLEND_MODE_COLOR;
     case 'luminosity':
       return BLEND_MODE_LUMINOSITY;
     default:
