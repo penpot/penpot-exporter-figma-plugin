@@ -12,10 +12,10 @@ export const translateFontId = (fontName: FontName): string => {
     return `gfont-${slugify(fontName.family.toLowerCase())}`;
   }
 
-  // @TODO: check if source sans pro
   // always send font name if not gfont or source sans pro
   figma.ui.postMessage({ type: 'FONT_NAME', data: fontName.family });
 
+  // @TODO: check if source sans pro
   // @TODO: custom font
   return slugify(fontName.family.toLowerCase());
 };
