@@ -7,5 +7,5 @@ export * from './transformFills';
 export * from './transformProportion';
 export * from './transformSceneNode';
 export * from './transformStrokes';
-export * from './transformTextStyle';
+export * from './transformText';
 export * from './transformVectorPaths';

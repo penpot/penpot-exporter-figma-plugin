@@ -6,7 +6,6 @@
     "strict": true,
     "typeRoots": ["../node_modules/@figma"],
     "moduleResolution": "Node",
-    "resolveJsonModule": true,
-    "allowSyntheticDefaultImports": true
+    "resolveJsonModule": true
   }
 }
