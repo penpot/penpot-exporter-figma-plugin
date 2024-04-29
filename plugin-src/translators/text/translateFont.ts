@@ -7,8 +7,8 @@ import { findLocalFont } from './local';
 
 export const translateFont = (fontName: FontName, fontWeight: number): PenpotFont | undefined => {
   return (
-    findLocalFont(fontName, fontWeight) ??
     findGoogleFont(fontName, fontWeight) ??
+    findLocalFont(fontName, fontWeight) ??
     findCustomFont(fontName)
   );
 };
