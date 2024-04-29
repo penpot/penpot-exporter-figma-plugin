@@ -5,9 +5,14 @@ import {
   transformFills,
   transformProportion,
   transformSceneNode,
+  transformStrokes,
   transformTextStyle
 } from '@plugin/transformers/partials';
-import { translateStyledTextSegments } from '@plugin/translators';
+import {
+  translateGrowType,
+  translateStyledTextSegments,
+  translateVerticalAlign
+} from '@plugin/translators';
 
 import { TextShape } from '@ui/lib/types/text/textShape';
 
@@ -28,24 +33,27 @@ export const transformTextNode = (node: TextNode, baseX: number, baseY: number):
     name: node.name,
     content: {
       type: 'root',
+      verticalAlign: translateVerticalAlign(node.textAlignVertical),
       children: [
         {
           type: 'paragraph-set',
           children: [
             {
               type: 'paragraph',
-              children: translateStyledTextSegments(styledTextSegments, node.width, node.height),
-              ...(styledTextSegments.length ? transformTextStyle(styledTextSegments[0]) : {}),
+              children: translateStyledTextSegments(node, styledTextSegments),
+              ...(styledTextSegments.length ? transformTextStyle(node, styledTextSegments[0]) : {}),
               ...transformFills(node)
             }
           ]
         }
       ]
     },
+    growType: translateGrowType(node),
     ...transformDimensionAndPosition(node, baseX, baseY),
     ...transformEffects(node),
     ...transformSceneNode(node),
     ...transformBlend(node),
-    ...transformProportion(node)
+    ...transformProportion(node),
+    ...transformStrokes(node)
   };
 };

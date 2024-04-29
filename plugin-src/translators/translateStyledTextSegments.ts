@@ -1,9 +1,10 @@
 import { transformTextStyle } from '@plugin/transformers/partials';
 import { translateFills } from '@plugin/translators/translateFills';
 
-import { TextNode } from '@ui/lib/types/text/textContent';
+import { TextNode as PenpotTextNode } from '@ui/lib/types/text/textContent';
 
 export const translateStyledTextSegments = (
+  node: TextNode,
   segments: Pick<
     StyledTextSegment,
     | 'characters'
@@ -17,17 +18,15 @@ export const translateStyledTextSegments = (
     | 'textCase'
     | 'textDecoration'
     | 'fills'
-  >[],
-  width: number,
-  height: number
-): TextNode[] => {
+  >[]
+): PenpotTextNode[] => {
   return segments.map(segment => {
     figma.ui.postMessage({ type: 'FONT_NAME', data: segment.fontName.family });
 
     return {
-      fills: translateFills(segment.fills, width, height),
+      fills: translateFills(segment.fills, node.width, node.height),
       text: segment.characters,
-      ...transformTextStyle(segment)
+      ...transformTextStyle(node, segment)
     };
   });
 };
