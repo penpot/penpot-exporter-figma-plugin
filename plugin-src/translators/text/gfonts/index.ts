@@ -1,2 +1,2 @@
-export * from './findGoogleFont';
+export * from './translateGoogleFont';
 export * from './translateFontVariantId';

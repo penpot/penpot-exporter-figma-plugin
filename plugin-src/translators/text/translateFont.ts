@@ -1,14 +1,13 @@
-import { findCustomFont } from '@plugin/translators/text/custom';
+import { FontId } from '@ui/lib/types/text/textContent';
 
-import { PenpotFont } from '@ui/lib/types/utils/penpotFont';
+import { translateCustomFont } from './custom';
+import { translateGoogleFont } from './gfonts';
+import { translateLocalFont } from './local';
 
-import { findGoogleFont } from './gfonts';
-import { findLocalFont } from './local';
-
-export const translateFont = (fontName: FontName, fontWeight: number): PenpotFont | undefined => {
+export const translateFont = (fontName: FontName, fontWeight: number): FontId | undefined => {
   return (
-    findGoogleFont(fontName, fontWeight) ??
-    findLocalFont(fontName, fontWeight) ??
-    findCustomFont(fontName)
+    translateGoogleFont(fontName, fontWeight) ??
+    translateLocalFont(fontName, fontWeight) ??
+    translateCustomFont(fontName)
   );
 };

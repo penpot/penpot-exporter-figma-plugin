@@ -28,10 +28,8 @@ type TextNode = {
   key?: string;
 } & TextStyle;
 
-type TextStyle = {
-  fontId?: string;
+type TextStyle = FontId & {
   fontFamily?: string;
-  fontVariantId?: string;
   fontSize?: string;
   fontStyle?: TextFontStyle;
   fontWeight?: string;
@@ -45,4 +43,9 @@ type TextStyle = {
   textAlign?: TextHorizontalAlign;
   textDirection?: 'ltr' | 'rtl' | 'auto';
   fills?: Fill[];
+};
+
+export type FontId = {
+  fontId?: string;
+  fontVariantId?: string;
 };

@@ -1,1 +1,1 @@
-export * from './findCustomFont';
+export * from './translateCustomFont';

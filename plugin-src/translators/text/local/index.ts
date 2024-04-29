@@ -1,2 +1,2 @@
-export * from './findLocalFont';
+export * from './translateLocalFont';
 export * from './translateFontVariantId';
