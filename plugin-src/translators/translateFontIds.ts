@@ -1,6 +1,21 @@
-import { loadGoogleFonts } from '@plugin/utils';
+import slugify from 'slugify';
 
-import { Gfont } from '@ui/lib/types/utils/gfont';
+import { items as gfonts } from '@plugin/gfonts.json';
+
+export const translateFontId = (fontName: FontName): string => {
+  // is gfont
+  if (isGfont(fontName.family)) {
+    return `gfont-${slugify(fontName.family.toLowerCase())}`;
+  }
+
+  // @TODO: check if source sans pro
+
+  // always send font name if not gfont or source sans pro
+  figma.ui.postMessage({ type: 'FONT_NAME', data: fontName.family });
+
+  // @TODO: custom font
+  return slugify(fontName.family.toLowerCase());
+};
 
 export const translateFontVariantId = (fontName: FontName, fontWeight: number) => {
   // Gfont
@@ -14,12 +29,14 @@ export const translateFontVariantId = (fontName: FontName, fontWeight: number) =
   return fontName.style.toLowerCase().replace(/\s/g, '');
 };
 
-const getGfont = (fontFamily: string): Gfont | undefined => {
-  return loadGoogleFonts().find(gfont => gfont.family === fontFamily);
+const isGfont = (fontFamily: string): boolean => {
+  const foundFamily = gfonts.find(gfont => gfont.family === fontFamily);
+
+  return foundFamily !== undefined;
 };
 
 const translateGfontVariantId = (fontName: FontName, fontWeight: number): string | undefined => {
-  const gfont = getGfont(fontName.family);
+  const gfont = gfonts.find(font => font.family === fontName.family);
   if (gfont === undefined) {
     return;
   }
