@@ -1,6 +1,7 @@
 export * from './translateBlendMode';
 export * from './translateShadowEffects';
 export * from './translateFills';
+export * from './translateFontId';
 export * from './translateFontStyle';
 export * from './translateFontVariantId';
 export * from './translateGrowType';

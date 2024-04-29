@@ -23,8 +23,7 @@ export const PenpotExporter = () => {
 
       setExporting(false);
     } else if (event.data.pluginMessage?.type == 'FONT_NAME') {
-      const fontName = event.data.pluginMessage.data as string;
-      addFontWarning(slugify(fontName.toLowerCase()));
+      addFontWarning(event.data.pluginMessage.data as string);
     }
   };
 

@@ -1,6 +1,5 @@
-import slugify from 'slugify';
-
 import {
+  translateFontId,
   translateFontStyle,
   translateFontVariantId,
   translateHorizontalAlign,
@@ -31,11 +30,11 @@ export const transformTextStyle = (
 ): Partial<TextStyle> => {
   return {
     fontFamily: segment.fontName.family,
-    fontId: `gfont-${slugify(segment.fontName.family.toLowerCase())}`,
+    fontId: translateFontId(segment.fontName),
     fontSize: segment.fontSize.toString(),
     fontStyle: translateFontStyle(segment.fontName.style),
     fontWeight: segment.fontWeight.toString(),
-    fontVariantId: translateFontVariantId(segment.fontName.style),
+    fontVariantId: translateFontVariantId(segment.fontName, segment.fontWeight),
     textAlign: translateHorizontalAlign(node.textAlignHorizontal),
     textDecoration: translateTextDecoration(segment),
     textTransform: translateTextTransform(segment),
