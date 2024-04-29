@@ -1,9 +1,11 @@
 import { GrowType } from '@ui/lib/types/shape/shapeAttributes';
 
-export const translateGrowType = (
-  growType: 'NONE' | 'WIDTH_AND_HEIGHT' | 'HEIGHT' | 'TRUNCATE'
-): GrowType => {
-  switch (growType) {
+export const translateGrowType = (node: TextNode): GrowType => {
+  if (node.leadingTrim === 'CAP_HEIGHT') {
+    return 'fixed';
+  }
+
+  switch (node.textAutoResize) {
     case 'WIDTH_AND_HEIGHT':
       return 'auto-width';
     case 'HEIGHT':

@@ -50,7 +50,7 @@ export const transformTextNode = (node: TextNode, baseX: number, baseY: number):
         }
       ]
     },
-    growType: translateGrowType(node.textAutoResize),
+    growType: translateGrowType(node),
     ...transformDimensionAndPosition(node, baseX, baseY),
     ...transformEffects(node),
     ...transformSceneNode(node),
