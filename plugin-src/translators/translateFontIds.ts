@@ -3,8 +3,7 @@ import slugify from 'slugify';
 import { items as gfonts } from '@plugin/gfonts.json';
 
 export const translateFontId = (fontName: FontName): string => {
-  // is gfont
-  if (isGfont(fontName.family)) {
+  if (isGfont(fontName)) {
     return `gfont-${slugify(fontName.family.toLowerCase())}`;
   }
 
@@ -18,7 +17,6 @@ export const translateFontId = (fontName: FontName): string => {
 };
 
 export const translateFontVariantId = (fontName: FontName, fontWeight: number) => {
-  // Gfont
   const variantId = translateGfontVariantId(fontName, fontWeight);
   if (variantId !== undefined) {
     return variantId;
@@ -29,14 +27,17 @@ export const translateFontVariantId = (fontName: FontName, fontWeight: number) =
   return fontName.style.toLowerCase().replace(/\s/g, '');
 };
 
-const isGfont = (fontFamily: string): boolean => {
-  const foundFamily = gfonts.find(gfont => gfont.family === fontFamily);
+const findGoogleFont = (fontName: FontName) => {
+  return gfonts.find(font => font.family === fontName.family);
+};
 
-  return foundFamily !== undefined;
+const isGfont = (fontName: FontName): boolean => {
+  return findGoogleFont(fontName) !== undefined;
 };
 
 const translateGfontVariantId = (fontName: FontName, fontWeight: number): string | undefined => {
-  const gfont = gfonts.find(font => font.family === fontName.family);
+  const gfont = findGoogleFont(fontName);
+
   if (gfont === undefined) {
     return;
   }
@@ -52,6 +53,7 @@ const translateGfontVariantId = (fontName: FontName, fontWeight: number): string
   const variantWithWeight = gfont.variants.find(
     variant => variant === `${fontWeight.toString()}${italic}`
   );
+
   if (variantWithWeight !== undefined) {
     return variantWithWeight;
   }
