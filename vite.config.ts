@@ -7,11 +7,6 @@ import tsconfigPaths from 'vite-tsconfig-paths';
 export default defineConfig({
   root: './ui-src',
   plugins: [svgr(), react(), viteSingleFile(), tsconfigPaths()],
-  server: {
-    proxy: {
-      '/': 'https://design.penpot.app'
-    }
-  },
   build: {
     target: 'esnext',
     assetsInlineLimit: 100000000,
