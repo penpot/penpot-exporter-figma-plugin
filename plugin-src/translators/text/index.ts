@@ -1,4 +1,4 @@
-export * from './translateFontIds';
+export * from './translateFont';
 export * from './translateFontStyle';
 export * from './translateGrowType';
 export * from './translateLetterSpacing';

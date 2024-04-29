@@ -1,1 +1,2 @@
-export * from './translateFontIds';
+export * from './findGoogleFont';
+export * from './translateFontVariantId';

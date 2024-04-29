@@ -5,9 +5,8 @@ import {
   translateVerticalAlign
 } from '@plugin/translators';
 import {
-  translateFontId,
+  translateFont,
   translateFontStyle,
-  translateFontVariantId,
   translateGrowType,
   translateLetterSpacing,
   translateLineHeight,
@@ -75,8 +74,6 @@ const transformTextStyle = (
 ): Partial<TextStyle> => {
   return {
     fontFamily: segment.fontName.family,
-    fontId: translateFontId(segment.fontName),
-    fontVariantId: translateFontVariantId(segment.fontName, segment.fontWeight),
     fontSize: segment.fontSize.toString(),
     fontStyle: translateFontStyle(segment.fontName.style),
     fontWeight: segment.fontWeight.toString(),
@@ -84,6 +81,7 @@ const transformTextStyle = (
     textDecoration: translateTextDecoration(segment),
     textTransform: translateTextTransform(segment),
     letterSpacing: translateLetterSpacing(segment),
-    lineHeight: translateLineHeight(segment)
+    lineHeight: translateLineHeight(segment),
+    ...translateFont(segment.fontName, segment.fontWeight)
   };
 };
