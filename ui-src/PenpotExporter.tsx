@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import slugify from 'slugify';
 
 import { createPenpotFile } from '@ui/converters';
 import { PenpotDocument } from '@ui/lib/types/penpotDocument';
