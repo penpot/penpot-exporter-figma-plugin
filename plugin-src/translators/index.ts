@@ -8,7 +8,6 @@ export * from './translateHorizontalAlign';
 export * from './translateLetterSpacing';
 export * from './translateLineHeight';
 export * from './translateStrokes';
-export * from './translateStyledTextSegments';
 export * from './translateTextDecoration';
 export * from './translateTextTransform';
 export * from './translateVectorPaths';
