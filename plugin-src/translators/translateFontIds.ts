@@ -1,7 +1,7 @@
 import slugify from 'slugify';
 
 import { items as gfonts } from '@plugin/gfonts.json';
-import localFonts from '@plugin/localFonts.json';
+import { items as localFonts } from '@plugin/localFonts.json';
 
 export const translateFontId = (fontName: FontName): string => {
   if (isGfont(fontName)) {
