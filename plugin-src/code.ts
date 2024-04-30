@@ -3,8 +3,8 @@ import {
   handleExportMessage,
   handleResizeMessage
 } from '@plugin/messageHandlers';
-import {isGoogleFont} from "@plugin/translators/text/gfonts";
-import {isLocalFont} from "@plugin/translators/text/local";
+import { isGoogleFont } from '@plugin/translators/text/gfonts';
+import { isLocalFont } from '@plugin/translators/text/local';
 
 const findAllTextNodes = async () => {
   await figma.loadAllPagesAsync();
@@ -13,7 +13,7 @@ const findAllTextNodes = async () => {
     types: ['TEXT']
   });
 
-  const fonts = new Set<string>;
+  const fonts = new Set<string>();
   nodes.forEach(node => {
     const styledTextSegments = node.getStyledTextSegments(['fontName']);
     styledTextSegments.forEach(segment => {
@@ -28,7 +28,7 @@ const findAllTextNodes = async () => {
     type: 'CUSTOM_FONTS',
     data: Array.from(fonts)
   });
-}
+};
 
 figma.showUI(__html__, { themeColors: true, height: 200, width: 300 });
 
