@@ -1,15 +1,20 @@
 import { useEffect, useState } from 'react';
+import { FormProvider, useForm } from 'react-hook-form';
 
 import { createPenpotFile } from '@ui/converters';
 import { PenpotDocument } from '@ui/lib/types/penpotDocument';
 
 import { Loader } from './Loader';
 import { MissingFontsSection } from './MissingFontsSection';
-import Logo from './logo.svg?react';
+
+type FormValues = Record<string, string>;
 
 export const PenpotExporter = () => {
   const [missingFonts, setMissingFonts] = useState<string[]>();
   const [exporting, setExporting] = useState(false);
+  const methods = useForm<FormValues>();
+
+  methods.getValues();
 
   const onMessage = (event: MessageEvent<{ pluginMessage: { type: string; data: unknown } }>) => {
     if (event.data.pluginMessage?.type == 'PENPOT_DOCUMENT') {
@@ -24,10 +29,18 @@ export const PenpotExporter = () => {
     }
   };
 
-  const exportPenpot = () => {
+  const exportPenpot = (data: FormValues) => {
     setExporting(true);
 
-    parent.postMessage({ pluginMessage: { type: 'export' } }, '*');
+    parent.postMessage(
+      {
+        pluginMessage: {
+          type: 'export',
+          data
+        }
+      },
+      '*'
+    );
   };
 
   const cancel = () => {
@@ -47,19 +60,17 @@ export const PenpotExporter = () => {
   const pluginReady = missingFonts !== undefined;
 
   return (
-    <main>
-      <header>
-        <Logo />
-        <h2>Penpot Exporter</h2>
-      </header>
-      <Loader loading={!pluginReady} />
-      <MissingFontsSection fonts={missingFonts} />
-      <footer>
-        <button className="brand" disabled={exporting || !pluginReady} onClick={exportPenpot}>
-          {exporting ? 'Exporting...' : 'Export to Penpot'}
-        </button>
-        <button onClick={cancel}>Cancel</button>
-      </footer>
-    </main>
+    <FormProvider {...methods}>
+      <form onSubmit={methods.handleSubmit(exportPenpot)}>
+        <Loader loading={!pluginReady} />
+        <MissingFontsSection fonts={missingFonts} />
+        <footer>
+          <button type="submit" className="brand" disabled={exporting || !pluginReady}>
+            {exporting ? 'Exporting...' : 'Export to Penpot'}
+          </button>
+          <button onClick={cancel}>Cancel</button>
+        </footer>
+      </form>
+    </FormProvider>
   );
 };

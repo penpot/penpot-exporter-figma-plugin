@@ -1,8 +1,12 @@
+import { useFormContext } from 'react-hook-form';
+
 type MissingFontsSectionProps = {
   fonts?: string[];
 };
 
 export const MissingFontsSection = ({ fonts }: MissingFontsSectionProps) => {
+  const { register } = useFormContext();
+
   if (fonts === undefined || !fonts.length) return;
 
   return (
@@ -14,8 +18,11 @@ export const MissingFontsSection = ({ fonts }: MissingFontsSectionProps) => {
       <small>Ensure fonts are installed in Penpot before exporting.</small>
       <div id="missing-fonts-list">
         <ul>
-          {Array.from(fonts).map(font => (
-            <li key={font}>{font}</li>
+          {fonts.map(font => (
+            <li key={font}>
+              {font}
+              <input placeholder="Enter font name" {...register(font)} />
+            </li>
           ))}
         </ul>
       </div>

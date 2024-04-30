@@ -29,5 +29,5 @@ export const findAllTextNodes = async () => {
 
   if (fonts.size === 0) return;
 
-  figma.ui.resize(400, 280 + fonts.size * 20);
+  figma.ui.resize(400, 280 + fonts.size * 40);
 };
