@@ -6,12 +6,8 @@ import { PenpotDocument } from '@ui/lib/types/penpotDocument';
 import Logo from './logo.svg?react';
 
 export const PenpotExporter = () => {
-  const [missingFonts, setMissingFonts] = useState(new Set<string>());
+  const [missingFonts, setMissingFonts] = useState<string[]>([]);
   const [exporting, setExporting] = useState(false);
-
-  const addFontWarning = (font: string) => {
-    setMissingFonts(missingFonts => missingFonts.add(font));
-  };
 
   const onMessage = (event: MessageEvent<{ pluginMessage: { type: string; data: unknown } }>) => {
     if (event.data.pluginMessage?.type == 'FIGMAFILE') {
@@ -21,8 +17,8 @@ export const PenpotExporter = () => {
       file.export();
 
       setExporting(false);
-    } else if (event.data.pluginMessage?.type == 'FONT_NAME') {
-      addFontWarning(event.data.pluginMessage.data as string);
+    } else if (event.data.pluginMessage?.type == 'CUSTOM_FONTS') {
+      setMissingFonts(event.data.pluginMessage.data as string[]);
     }
   };
 
@@ -37,13 +33,13 @@ export const PenpotExporter = () => {
   };
 
   const setDimensions = () => {
-    const isMissingFonts = missingFonts.size > 0;
+    const isMissingFonts = missingFonts.length > 0;
 
     let width = 300;
     let height = 280;
 
     if (isMissingFonts) {
-      height += missingFonts.size * 20;
+      height += missingFonts.length * 20;
       width = 400;
       parent.postMessage({ pluginMessage: { type: 'resize', width: width, height: height } }, '*');
     }
@@ -51,6 +47,8 @@ export const PenpotExporter = () => {
 
   useEffect(() => {
     window.addEventListener('message', onMessage);
+
+    parent.postMessage({ pluginMessage: { type: 'ready' } }, '*');
 
     return () => {
       window.removeEventListener('message', onMessage);
@@ -68,12 +66,12 @@ export const PenpotExporter = () => {
         <h2>Penpot Exporter</h2>
       </header>
       <section>
-        <div style={{ display: missingFonts.size > 0 ? 'inline' : 'none' }}>
+        <div style={{ display: missingFonts.length > 0 ? 'inline' : 'none' }}>
           <div id="missing-fonts">
-            {missingFonts.size} non-default font
-            {missingFonts.size > 1 ? 's' : ''}:{' '}
+            {missingFonts.length} non-default font
+            {missingFonts.length > 1 ? 's' : ''}:{' '}
           </div>
-          <small>Ensure fonts are installed in Penpot before importing.</small>
+          <small>Ensure fonts are installed in Penpot before exporting.</small>
           <div id="missing-fonts-list">
             <ul>
               {Array.from(missingFonts).map(font => (
