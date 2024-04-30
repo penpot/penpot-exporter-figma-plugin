@@ -1,13 +1,14 @@
 type MissingFontsSectionProps = {
-  missingFonts: string[];
+  missingFonts?: string[];
 };
 
 export const MissingFontsSection = ({ missingFonts }: MissingFontsSectionProps) => {
   if (missingFonts === undefined || !missingFonts.length) return;
+
   return (
     <section>
       <div id="missing-fonts">
-        {missingFonts.length} non-default font
+        {missingFonts.length} missing font
         {missingFonts.length > 1 ? 's' : ''}:{' '}
       </div>
       <small>Ensure fonts are installed in Penpot before exporting.</small>

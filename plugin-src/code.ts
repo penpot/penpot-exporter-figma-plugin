@@ -1,48 +1,32 @@
-import {
-  handleCancelMessage,
-  handleExportMessage,
-  handleResizeMessage
-} from '@plugin/messageHandlers';
-import { isGoogleFont } from '@plugin/translators/text/gfonts';
-import { isLocalFont } from '@plugin/translators/text/local';
+import { transformDocumentNode } from '@plugin/transformers';
 
-const findAllTextNodes = async () => {
-  await figma.loadAllPagesAsync();
-
-  const nodes = figma.root.findAllWithCriteria({
-    types: ['TEXT']
-  });
-
-  const fonts = new Set<string>();
-  nodes.forEach(node => {
-    const styledTextSegments = node.getStyledTextSegments(['fontName']);
-    styledTextSegments.forEach(segment => {
-      if (isGoogleFont(segment.fontName) || isLocalFont(segment.fontName)) {
-        return;
-      }
-      fonts.add(segment.fontName.family);
-    });
-  });
-
-  figma.ui.postMessage({
-    type: 'CUSTOM_FONTS',
-    data: Array.from(fonts)
-  });
-};
+import { findAllTextNodes } from './findAllTextnodes';
 
 figma.showUI(__html__, { themeColors: true, height: 200, width: 300 });
 
-figma.ui.onmessage = async msg => {
-  if (msg.type === 'ready') {
+figma.ui.onmessage = message => {
+  if (message.type === 'ready') {
     findAllTextNodes();
   }
-  if (msg.type === 'export') {
-    await handleExportMessage();
+
+  if (message.type === 'export') {
+    handleExportMessage();
   }
-  if (msg.type === 'cancel') {
-    handleCancelMessage();
+
+  if (message.type === 'cancel') {
+    figma.closePlugin();
   }
-  if (msg.type === 'resize') {
-    handleResizeMessage(msg.width, msg.height);
+
+  if (message.type === 'resize') {
+    figma.ui.resize(message.width, message.height);
   }
+};
+
+const handleExportMessage = async () => {
+  await figma.loadAllPagesAsync();
+
+  figma.ui.postMessage({
+    type: 'PENPOT_DOCUMENT',
+    data: await transformDocumentNode(figma.root)
+  });
 };
