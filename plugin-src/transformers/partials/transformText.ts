@@ -1,18 +1,15 @@
 import { transformFills } from '@plugin/transformers/partials';
-import {
-  translateFills,
-  translateHorizontalAlign,
-  translateVerticalAlign
-} from '@plugin/translators';
+import { translateFills } from '@plugin/translators';
 import {
   translateFontId,
   translateFontStyle,
-  translateFontVariantId,
   translateGrowType,
+  translateHorizontalAlign,
   translateLetterSpacing,
   translateLineHeight,
   translateTextDecoration,
-  translateTextTransform
+  translateTextTransform,
+  translateVerticalAlign
 } from '@plugin/translators/text';
 
 import { TextStyle } from '@ui/lib/types/text/textContent';
@@ -74,9 +71,8 @@ const transformTextStyle = (
   >
 ): Partial<TextStyle> => {
   return {
+    ...translateFontId(segment.fontName, segment.fontWeight),
     fontFamily: segment.fontName.family,
-    fontId: translateFontId(segment.fontName),
-    fontVariantId: translateFontVariantId(segment.fontName, segment.fontWeight),
     fontSize: segment.fontSize.toString(),
     fontStyle: translateFontStyle(segment.fontName.style),
     fontWeight: segment.fontWeight.toString(),
