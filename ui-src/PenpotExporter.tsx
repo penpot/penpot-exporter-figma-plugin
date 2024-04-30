@@ -6,7 +6,7 @@ import { PenpotDocument } from '@ui/lib/types/penpotDocument';
 import Logo from './logo.svg?react';
 
 export const PenpotExporter = () => {
-  const [missingFonts, setMissingFonts] = useState<string[]>([]);
+  const [missingFonts, setMissingFonts] = useState<string[]>();
   const [exporting, setExporting] = useState(false);
 
   const onMessage = (event: MessageEvent<{ pluginMessage: { type: string; data: unknown } }>) => {
@@ -33,6 +33,7 @@ export const PenpotExporter = () => {
   };
 
   const setDimensions = () => {
+    if (missingFonts === undefined) return;
     const isMissingFonts = missingFonts.length > 0;
 
     let width = 300;
@@ -59,12 +60,9 @@ export const PenpotExporter = () => {
     setDimensions();
   }, [missingFonts]);
 
-  return (
-    <main>
-      <header>
-        <Logo />
-        <h2>Penpot Exporter</h2>
-      </header>
+  const pluginReady = missingFonts !== undefined;
+  const missingFontsSection =
+    missingFonts && missingFonts.length > 0 ? (
       <section>
         <div style={{ display: missingFonts.length > 0 ? 'inline' : 'none' }}>
           <div id="missing-fonts">
@@ -81,8 +79,17 @@ export const PenpotExporter = () => {
           </div>
         </div>
       </section>
+    ) : null;
+
+  return (
+    <main>
+      <header>
+        <Logo />
+        <h2>Penpot Exporter</h2>
+      </header>
+      {pluginReady ? missingFontsSection : <section>Checking for missing fonts...</section>}
       <footer>
-        <button className="brand" disabled={exporting} onClick={onCreatePenpot}>
+        <button className="brand" disabled={exporting || !pluginReady} onClick={onCreatePenpot}>
           {exporting ? 'Exporting...' : 'Export to Penpot'}
         </button>
         <button onClick={onCancel}>Cancel</button>
