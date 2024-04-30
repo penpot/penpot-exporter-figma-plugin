@@ -26,4 +26,8 @@ export const findAllTextNodes = async () => {
     type: 'CUSTOM_FONTS',
     data: Array.from(fonts)
   });
+
+  if (fonts.size === 0) return;
+
+  figma.ui.resize(400, 280 + fonts.size * 20);
 };

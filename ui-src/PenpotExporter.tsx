@@ -34,15 +34,6 @@ export const PenpotExporter = () => {
     parent.postMessage({ pluginMessage: { type: 'cancel' } }, '*');
   };
 
-  const setDimensions = () => {
-    if (missingFonts === undefined || missingFonts.length === 0) return;
-
-    parent.postMessage(
-      { pluginMessage: { type: 'resize', width: 400, height: 280 + missingFonts.length * 20 } },
-      '*'
-    );
-  };
-
   useEffect(() => {
     window.addEventListener('message', onMessage);
 
@@ -52,10 +43,6 @@ export const PenpotExporter = () => {
       window.removeEventListener('message', onMessage);
     };
   }, []);
-
-  useEffect(() => {
-    setDimensions();
-  }, [missingFonts]);
 
   const pluginReady = missingFonts !== undefined;
 

@@ -16,10 +16,6 @@ figma.ui.onmessage = message => {
   if (message.type === 'cancel') {
     figma.closePlugin();
   }
-
-  if (message.type === 'resize') {
-    figma.ui.resize(message.width, message.height);
-  }
 };
 
 const handleExportMessage = async () => {
