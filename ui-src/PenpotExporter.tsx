@@ -53,7 +53,7 @@ export const PenpotExporter = () => {
         <h2>Penpot Exporter</h2>
       </header>
       <Loader loading={!pluginReady} />
-      <MissingFontsSection missingFonts={missingFonts} />
+      <MissingFontsSection fonts={missingFonts} />
       <footer>
         <button className="brand" disabled={exporting || !pluginReady} onClick={exportPenpot}>
           {exporting ? 'Exporting...' : 'Export to Penpot'}
