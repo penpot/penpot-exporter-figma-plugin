@@ -8,6 +8,6 @@ export const translateFontId = (fontName: FontName, fontWeight: number): FontId 
   return (
     translateGoogleFont(fontName, fontWeight) ??
     translateLocalFont(fontName, fontWeight) ??
-    translateCustomFont(fontName)
+    translateCustomFont(fontName, fontWeight)
   );
 };
