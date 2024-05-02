@@ -7,6 +7,8 @@ import {
   translateHorizontalAlign,
   translateLetterSpacing,
   translateLineHeight,
+  translateParagraphIndent,
+  translateParagraphSpacing,
   translateTextDecoration,
   translateTextTransform,
   translateVerticalAlign
@@ -37,9 +39,20 @@ export const transformText = (node: TextNode): Partial<TextShape> => {
           children: [
             {
               type: 'paragraph',
-              children: styledTextSegments.map(segment => ({
+              children: styledTextSegments.map((segment, index) => ({
                 fills: translateFills(segment.fills, node.width, node.height),
-                text: segment.characters,
+                text: translateParagraphSpacing(
+                  node,
+                  translateParagraphIndent(
+                    node,
+                    segment.characters,
+                    segment.fontSize,
+                    translateLetterSpacing(segment),
+                    index
+                  ),
+                  segment.fontSize,
+                  translateLineHeight(segment) ?? 1.2 // Approximation for line height
+                ),
                 ...transformTextStyle(node, segment)
               })),
               ...(styledTextSegments.length ? transformTextStyle(node, styledTextSegments[0]) : {}),
