@@ -138,8 +138,8 @@ ul {
 
 .missing-fonts-section {
   width: 100%;
-  max-width: 500px; /* Adjust as needed */
-  margin: 0 auto; /* Center the section */
+  max-width: 500px;
+  margin: 0 auto;
 }
 
 .missing-fonts-list {
@@ -157,19 +157,19 @@ ul {
 }
 
 .font-name {
-  flex: 0 0 auto; /* Allow label to shrink */
+  flex: 0 0 auto;
   width: 100%;
-  max-width: 30%; /* Adjust as needed */
-  text-align: center; /* Center text */
-  white-space: normal; /* Allow for multiple lines */
+  max-width: 30%;
+  text-align: center;
+  white-space: normal;
 }
 
 .font-id-input {
-  flex: 1; /* Take all available width */
-  width: 70%; /* Ensure inputs have the same width */
-  max-width: 70%; /* Adjust as needed */
-  margin-left: 10px; /* Add margin between input and label */
-  padding: 5px; /* Add padding to input */
-  box-sizing: border-box; /* Include padding and border in width */
+  flex: 1;
+  width: 70%;
+  max-width: 70%;
+  margin-left: 10px;
+  padding: 5px;
+  box-sizing: border-box;
 }
 
