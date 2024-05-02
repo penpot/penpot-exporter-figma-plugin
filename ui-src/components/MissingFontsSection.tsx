@@ -10,21 +10,24 @@ export const MissingFontsSection = ({ fonts }: MissingFontsSectionProps) => {
   if (fonts === undefined || !fonts.length) return;
 
   return (
-    <section>
-      <div id="missing-fonts">
-        {fonts.length} missing font
-        {fonts.length > 1 ? 's' : ''}:{' '}
+    <section className="missing-fonts-section">
+      <div className="missing-fonts-header">
+        {fonts.length} missing font{fonts.length > 1 ? 's' : ''}:{' '}
       </div>
-      <small>Ensure fonts are installed in Penpot before exporting.</small>
-      <div id="missing-fonts-list">
-        <ul>
-          {fonts.map(font => (
-            <li key={font}>
-              {font}
-              <input placeholder="Enter font name" {...register(font)} />
-            </li>
-          ))}
-        </ul>
+      <small className="font-install-message">
+        Ensure fonts are installed in Penpot before exporting.
+      </small>
+      <div className="missing-fonts-list">
+        {fonts.map(font => (
+          <div key={font} className="font-input-row">
+            <span className="font-name">{font}</span>
+            <input
+              className="font-id-input"
+              placeholder="Enter Penpot font id"
+              {...register(font)}
+            />
+          </div>
+        ))}
       </div>
     </section>
   );

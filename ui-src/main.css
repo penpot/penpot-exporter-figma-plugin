@@ -123,3 +123,53 @@ ul {
   padding: 0;
   list-style-type: none;
 }
+
+.centered-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+.missing-fonts-form-container {
+  width: 100%;
+  margin: 0 auto 10px;
+}
+
+.missing-fonts-section {
+  width: 100%;
+  max-width: 500px; /* Adjust as needed */
+  margin: 0 auto; /* Center the section */
+}
+
+.missing-fonts-list {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  width: 90%;
+}
+
+.font-input-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 15px;
+}
+
+.font-name {
+  flex: 0 0 auto; /* Allow label to shrink */
+  width: 100%;
+  max-width: 30%; /* Adjust as needed */
+  text-align: center; /* Center text */
+  white-space: normal; /* Allow for multiple lines */
+}
+
+.font-id-input {
+  flex: 1; /* Take all available width */
+  width: 70%; /* Ensure inputs have the same width */
+  max-width: 70%; /* Adjust as needed */
+  margin-left: 10px; /* Add margin between input and label */
+  padding: 5px; /* Add padding to input */
+  box-sizing: border-box; /* Include padding and border in width */
+}
+

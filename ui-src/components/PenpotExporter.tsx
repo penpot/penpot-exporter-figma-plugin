@@ -61,9 +61,11 @@ export const PenpotExporter = () => {
 
   return (
     <FormProvider {...methods}>
-      <form onSubmit={methods.handleSubmit(exportPenpot)}>
+      <form className="centered-form" onSubmit={methods.handleSubmit(exportPenpot)}>
         <Loader loading={!pluginReady} />
-        <MissingFontsSection fonts={missingFonts} />
+        <div className="missing-fonts-form-container">
+          <MissingFontsSection fonts={missingFonts} />
+        </div>
         <footer>
           <button type="submit" className="brand" disabled={exporting || !pluginReady}>
             {exporting ? 'Exporting...' : 'Export to Penpot'}
