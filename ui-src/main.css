@@ -134,6 +134,8 @@ ul {
 .missing-fonts-form-container {
   width: 100%;
   margin: 0 auto 10px;
+  max-height: 300px;
+  overflow: auto;
 }
 
 .missing-fonts-section {

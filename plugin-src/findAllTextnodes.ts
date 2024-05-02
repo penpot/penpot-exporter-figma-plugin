@@ -27,7 +27,14 @@ export const findAllTextNodes = async () => {
     data: Array.from(fonts)
   });
 
+  const maxHeight = 300;
+
   if (fonts.size === 0) return;
 
-  figma.ui.resize(400, 280 + fonts.size * 40);
+  if (fonts.size * 40 > maxHeight) {
+    figma.ui.resize(400, 300 + maxHeight);
+    return;
+  }
+
+  figma.ui.resize(400, 300 + fonts.size * 40);
 };
