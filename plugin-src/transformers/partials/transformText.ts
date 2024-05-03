@@ -17,6 +17,8 @@ export const transformText = (node: TextNode): Partial<TextShape> => {
     'letterSpacing',
     'textCase',
     'textDecoration',
+    'indentation',
+    'listOptions',
     'fills'
   ]);
 

@@ -1,18 +1,50 @@
 import { TextNode as PenpotTextNode } from '@ui/lib/types/text/textContent';
 
+export type StyleTextSegment = Pick<
+  StyledTextSegment,
+  | 'characters'
+  | 'start'
+  | 'end'
+  | 'fontName'
+  | 'fontSize'
+  | 'fontWeight'
+  | 'lineHeight'
+  | 'letterSpacing'
+  | 'textCase'
+  | 'textDecoration'
+  | 'indentation'
+  | 'listOptions'
+  | 'fills'
+>;
+
+type PartialTranslation = {
+  textNodes: PenpotTextNode[];
+  segment: StyleTextSegment;
+};
+
 export const translateParagraphProperties = (
   node: TextNode,
-  segments: PenpotTextNode[]
+  partials: PartialTranslation[]
 ): PenpotTextNode[] => {
-  if (node.paragraphSpacing === 0 && node.paragraphIndent === 0) return segments;
+  if (node.paragraphSpacing === 0 && node.paragraphIndent === 0)
+    return unwrapPartialTranslations(partials);
 
-  const splitSegments: PenpotTextNode[] = [segmentIndent(node.paragraphIndent)];
+  const splitSegments: PartialTranslation[] = [];
 
-  segments.forEach(segment => {
-    splitSegments.push(...splitTextNodeByEOL(segment));
+  partials.forEach(({ textNodes, segment }) => {
+    splitSegments.push({
+      textNodes: splitTextNodeByEOL(textNodes[0]),
+      segment
+    });
   });
 
   return addParagraphProperties(splitSegments, node.paragraphIndent, node.paragraphSpacing);
+};
+
+const unwrapPartialTranslations = (partials: PartialTranslation[]): PenpotTextNode[] => {
+  return partials.reduce((acc: PenpotTextNode[], partial) => {
+    return [...acc, ...partial.textNodes];
+  }, []);
 };
 
 const splitTextNodeByEOL = (node: PenpotTextNode): PenpotTextNode[] => {
@@ -25,27 +57,66 @@ const splitTextNodeByEOL = (node: PenpotTextNode): PenpotTextNode[] => {
 };
 
 const addParagraphProperties = (
-  nodes: PenpotTextNode[],
+  partials: PartialTranslation[],
   indent: number,
   paragraphSpacing: number
 ): PenpotTextNode[] => {
-  const indentedTextNodes: PenpotTextNode[] = [];
+  const result: PenpotTextNode[] = [];
 
-  nodes.forEach(node => {
-    indentedTextNodes.push(node);
+  let lastIndentation = 0;
 
-    if (node.text !== '\n') return;
+  partials.forEach(({ textNodes, segment }) =>
+    textNodes.forEach(textNode => {
+      const hasDifferentIndentation = segment.indentation !== lastIndentation;
 
-    if (paragraphSpacing !== 0) {
-      indentedTextNodes.push(segmentParagraphSpacing(paragraphSpacing));
-    }
+      result.push(
+        ...addParagraphPropertiesSingle(
+          textNode,
+          segment,
+          indent,
+          paragraphSpacing,
+          hasDifferentIndentation
+        )
+      );
 
-    if (indent !== 0) {
-      indentedTextNodes.push(segmentIndent(indent));
-    }
-  });
+      lastIndentation = segment.indentation;
+    })
+  );
 
-  return indentedTextNodes;
+  return result;
+};
+
+const addParagraphPropertiesSingle = (
+  node: PenpotTextNode,
+  segment: StyleTextSegment,
+  indent: number,
+  paragraphSpacing: number,
+  hasDifferentIndentation: boolean
+): PenpotTextNode[] => {
+  console.log(node, segment.indentation, segment.listOptions);
+
+  const result: PenpotTextNode[] = [
+    hasDifferentIndentation ? applyUnorderedList(node, segment.indentation) : node
+  ];
+
+  if (node.text !== '\n') return result;
+
+  if (paragraphSpacing !== 0 && segment.indentation === 0) {
+    result.push(segmentParagraphSpacing(paragraphSpacing));
+  }
+
+  if (indent !== 0 && segment.indentation === 0) {
+    result.push(segmentIndent(indent));
+  }
+
+  return result;
+};
+
+const applyUnorderedList = (node: PenpotTextNode, indentation: number): PenpotTextNode => {
+  return {
+    ...node,
+    text: `${'  '.repeat(indentation)} • ${node.text}`
+  };
 };
 
 const segmentIndent = (indent: number): PenpotTextNode => {

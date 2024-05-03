@@ -1,5 +1,6 @@
 import { translateFills } from '@plugin/translators';
 import {
+  StyleTextSegment,
   translateFontId,
   translateFontStyle,
   translateHorizontalAlign,
@@ -12,30 +13,16 @@ import {
 
 import { TextNode as PenpotTextNode, TextStyle } from '@ui/lib/types/text/textContent';
 
-type StyleTextSegment = Pick<
-  StyledTextSegment,
-  | 'characters'
-  | 'start'
-  | 'end'
-  | 'fontName'
-  | 'fontSize'
-  | 'fontWeight'
-  | 'lineHeight'
-  | 'letterSpacing'
-  | 'textCase'
-  | 'textDecoration'
-  | 'fills'
->;
-
 export const translateStyleTextSegments = (
   node: TextNode,
   segments: StyleTextSegment[]
 ): PenpotTextNode[] => {
-  const textNodes = segments.map(segment => {
-    return translateStyleTextSegment(node, segment);
-  });
+  const partials = segments.map(segment => ({
+    textNodes: [translateStyleTextSegment(node, segment)],
+    segment
+  }));
 
-  return translateParagraphProperties(node, textNodes);
+  return translateParagraphProperties(node, partials);
 };
 
 export const transformTextStyle = (
