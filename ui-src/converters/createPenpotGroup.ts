@@ -1,5 +1,4 @@
 import { PenpotFile } from '@ui/lib/penpot';
-import { GROUP_TYPE } from '@ui/lib/types/group/groupAttributes';
 import { GroupShape } from '@ui/lib/types/group/groupShape';
 import { translateUiBlendMode } from '@ui/translators';
 
@@ -10,7 +9,6 @@ export const createPenpotGroup = (
   { type, blendMode, children = [], ...rest }: GroupShape
 ) => {
   file.addGroup({
-    type: GROUP_TYPE,
     blendMode: translateUiBlendMode(blendMode),
     ...rest
   });
