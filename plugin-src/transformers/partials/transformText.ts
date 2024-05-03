@@ -70,43 +70,49 @@ const transformStyleTextSegments = (
   node: TextNode,
   segments: StyleTextSegment[]
 ): PenpotTextNode[] => {
-  console.log(segments);
   const textNodes = segments.map(segment => {
     return transformStyleTextSegment(node, segment);
   });
 
   if (node.paragraphIndent === 0) return textNodes;
 
-  const finalTextNodes: PenpotTextNode[] = [];
+  const splittedTextNodes: PenpotTextNode[] = [segmentIndent(node.paragraphIndent)];
+
   textNodes.forEach(textNode => {
-    const splitTextNode = splitTextNodeByEOL(textNode, node.paragraphIndent);
-    finalTextNodes.push(...splitTextNode);
+    splittedTextNodes.push(...splitTextNodeByEOL(textNode));
   });
-  return finalTextNodes;
+
+  const indentedTextNodes = addIndentations(splittedTextNodes, node.paragraphIndent);
+
+  return indentedTextNodes;
 };
 
-const splitTextNodeByEOL = (node: PenpotTextNode, indent: number): PenpotTextNode[] => {
+const splitTextNodeByEOL = (node: PenpotTextNode): PenpotTextNode[] => {
   const splittedTextNodes: PenpotTextNode[] = [];
-  const foo = node.text.split('\n');
-  if (foo.length === 1) return [node];
+  const spplitted = node.text.split(/(\n)/).filter(text => text !== '');
 
-  foo.forEach((text, index) => {
-    splittedTextNodes.push(segmentIndent(indent));
+  spplitted.forEach(text => {
     splittedTextNodes.push({
       ...node,
-      text: text + (index === foo.length - 1 ? '' : '\n')
+      text: text
     });
   });
 
   return splittedTextNodes;
 };
 
-const needsSegmentIndent = (node: TextNode, segment: StyleTextSegment, index: number): boolean => {
-  if (node.paragraphIndent === 0) return false;
+const addIndentations = (nodes: PenpotTextNode[], indent: number): PenpotTextNode[] => {
+  const indentedTextNodes: PenpotTextNode[] = [];
 
-  if (segment.characters.indexOf('\n') === -1) return false;
+  nodes.forEach(node => {
+    indentedTextNodes.push(node);
 
-  return true;
+    if (node.text !== '\n') return;
+
+    indentedTextNodes.push(segmentIndent(indent));
+  });
+
+  return indentedTextNodes;
 };
 
 const transformStyleTextSegment = (node: TextNode, segment: StyleTextSegment): PenpotTextNode => {
@@ -118,7 +124,6 @@ const transformStyleTextSegment = (node: TextNode, segment: StyleTextSegment): P
 };
 
 const segmentIndent = (indent: number): PenpotTextNode => {
-  // space is 10px
   return {
     text: ' '.repeat(indent),
     fontId: 'sourcesanspro',
