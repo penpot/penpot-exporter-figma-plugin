@@ -1,18 +1,11 @@
 import { transformFills } from '@plugin/transformers/partials';
-import { translateFills } from '@plugin/translators';
 import {
-  translateFontId,
-  translateFontStyle,
+  transformTextStyle,
   translateGrowType,
-  translateHorizontalAlign,
-  translateLetterSpacing,
-  translateLineHeight,
-  translateTextDecoration,
-  translateTextTransform,
+  translateStyleTextSegments,
   translateVerticalAlign
 } from '@plugin/translators/text';
 
-import { TextStyle } from '@ui/lib/types/text/textContent';
 import { TextShape } from '@ui/lib/types/text/textShape';
 
 export const transformText = (node: TextNode): Partial<TextShape> => {
@@ -37,11 +30,7 @@ export const transformText = (node: TextNode): Partial<TextShape> => {
           children: [
             {
               type: 'paragraph',
-              children: styledTextSegments.map(segment => ({
-                fills: translateFills(segment.fills, node.width, node.height),
-                text: segment.characters,
-                ...transformTextStyle(node, segment)
-              })),
+              children: translateStyleTextSegments(node, styledTextSegments),
               ...(styledTextSegments.length ? transformTextStyle(node, styledTextSegments[0]) : {}),
               ...transformFills(node)
             }
@@ -50,36 +39,5 @@ export const transformText = (node: TextNode): Partial<TextShape> => {
       ]
     },
     growType: translateGrowType(node)
-  };
-};
-
-const transformTextStyle = (
-  node: TextNode,
-  segment: Pick<
-    StyledTextSegment,
-    | 'characters'
-    | 'start'
-    | 'end'
-    | 'fontName'
-    | 'fontSize'
-    | 'fontWeight'
-    | 'lineHeight'
-    | 'letterSpacing'
-    | 'textCase'
-    | 'textDecoration'
-    | 'fills'
-  >
-): Partial<TextStyle> => {
-  return {
-    ...translateFontId(segment.fontName, segment.fontWeight),
-    fontFamily: segment.fontName.family,
-    fontSize: segment.fontSize.toString(),
-    fontStyle: translateFontStyle(segment.fontName.style),
-    fontWeight: segment.fontWeight.toString(),
-    textAlign: translateHorizontalAlign(node.textAlignHorizontal),
-    textDecoration: translateTextDecoration(segment),
-    textTransform: translateTextTransform(segment),
-    letterSpacing: translateLetterSpacing(segment),
-    lineHeight: translateLineHeight(segment)
   };
 };
