@@ -18,6 +18,10 @@ export const translateGoogleFont = (fontName: FontName, fontWeight: number): Fon
   };
 };
 
+export const isGoogleFont = (fontName: FontName): boolean => {
+  return getGoogleFont(fontName) !== undefined;
+};
+
 const getGoogleFont = (fontName: FontName): GoogleFont | undefined => {
   return gfonts.find(font => font.family === fontName.family);
 };

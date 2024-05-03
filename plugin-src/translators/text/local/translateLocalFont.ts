@@ -15,6 +15,10 @@ export const translateLocalFont = (fontName: FontName, fontWeight: number): Font
   };
 };
 
+export const isLocalFont = (fontName: FontName): boolean => {
+  return getLocalFont(fontName) !== undefined;
+};
+
 const getLocalFont = (fontName: FontName): LocalFont | undefined => {
   return localFonts.find(localFont => localFont.name === fontName.family);
 };

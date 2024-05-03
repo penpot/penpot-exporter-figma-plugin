@@ -1,19 +1,33 @@
-import {
-  handleCancelMessage,
-  handleExportMessage,
-  handleResizeMessage
-} from '@plugin/messageHandlers';
+import { transformDocumentNode } from '@plugin/transformers';
 
-figma.showUI(__html__, { themeColors: true, height: 200, width: 300 });
+import { findAllTextNodes } from './findAllTextnodes';
+import { setCustomFontId } from './translators/text/custom';
 
-figma.ui.onmessage = async msg => {
-  if (msg.type === 'export') {
-    await handleExportMessage();
+figma.showUI(__html__, { themeColors: true, height: 300, width: 400 });
+
+figma.ui.onmessage = message => {
+  if (message.type === 'ready') {
+    findAllTextNodes();
   }
-  if (msg.type === 'cancel') {
-    handleCancelMessage();
+
+  if (message.type === 'export') {
+    handleExportMessage(message.data as Record<string, string>);
   }
-  if (msg.type === 'resize') {
-    handleResizeMessage(msg.width, msg.height);
+
+  if (message.type === 'cancel') {
+    figma.closePlugin();
   }
+};
+
+const handleExportMessage = async (missingFontIds: Record<string, string>) => {
+  await figma.loadAllPagesAsync();
+
+  Object.entries(missingFontIds).forEach(([fontFamily, fontId]) => {
+    setCustomFontId(fontFamily, fontId);
+  });
+
+  figma.ui.postMessage({
+    type: 'PENPOT_DOCUMENT',
+    data: await transformDocumentNode(figma.root)
+  });
 };
