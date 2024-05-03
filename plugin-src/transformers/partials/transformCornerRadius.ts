@@ -1,4 +1,4 @@
-import { ShapeAttributes } from '@ui/lib/types/shape/shapeAttributes';
+import { ShapeAttributes } from '@ui/lib/types/shapes/shape';
 
 const isRectangleCornerMixin = (
   node: CornerMixin | (CornerMixin & RectangleCornerMixin)

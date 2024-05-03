@@ -1,5 +1,5 @@
 import { PenpotFile } from '@ui/lib/penpot';
-import { CircleShape } from '@ui/lib/types/circle/circleShape';
+import { CircleShape } from '@ui/lib/types/shapes/circleShape';
 
 import { translateFillGradients, translateUiBlendMode } from '../translators';
 

@@ -1,6 +1,6 @@
 import { getCustomFontId, translateFontVariantId } from '@plugin/translators/text/custom';
 
-import { FontId } from '@ui/lib/types/text/textContent';
+import { FontId } from '@ui/lib/types/shapes/textShape';
 
 export const translateCustomFont = (fontName: FontName, fontWeight: number): FontId | undefined => {
   return {

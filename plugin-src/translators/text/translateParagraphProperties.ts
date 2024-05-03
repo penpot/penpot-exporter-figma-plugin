@@ -1,4 +1,4 @@
-import { TextNode as PenpotTextNode } from '@ui/lib/types/text/textContent';
+import { TextNode as PenpotTextNode } from '@ui/lib/types/shapes/textShape';
 
 export const translateParagraphProperties = (
   node: TextNode,

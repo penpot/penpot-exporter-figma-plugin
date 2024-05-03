@@ -1,4 +1,4 @@
-import { TextHorizontalAlign } from '@ui/lib/types/text/textContent';
+import { TextHorizontalAlign } from '@ui/lib/types/shapes/textShape';
 
 export const translateHorizontalAlign = (
   align: 'LEFT' | 'CENTER' | 'RIGHT' | 'JUSTIFIED'

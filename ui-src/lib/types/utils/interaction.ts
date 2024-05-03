@@ -1,6 +1,5 @@
-import { Point } from '@ui/lib/types/utils/point';
-
 import { Animation } from './animation';
+import { Point } from './point';
 import { Uuid } from './uuid';
 
 export type Interaction =

@@ -1,6 +1,23 @@
+import { LayoutChildAttributes } from '@ui/lib/types/shapes/layout';
+import {
+  ShapeAttributes,
+  ShapeBaseAttributes,
+  ShapeGeomAttributes
+} from '@ui/lib/types/shapes/shape';
 import { Fill } from '@ui/lib/types/utils/fill';
 
-export type TextContent = {
+export type TextShape = ShapeBaseAttributes &
+  ShapeGeomAttributes &
+  ShapeAttributes &
+  TextAttributes &
+  LayoutChildAttributes;
+
+type TextAttributes = {
+  type?: 'text';
+  content?: TextContent;
+};
+
+type TextContent = {
   type: 'root';
   key?: string;
   verticalAlign?: TextVerticalAlign;
@@ -23,12 +40,12 @@ type Paragraph = {
   children: TextNode[];
 } & TextStyle;
 
-type TextNode = {
+export type TextNode = {
   text: string;
   key?: string;
 } & TextStyle;
 
-type TextStyle = FontId & {
+export type TextStyle = FontId & {
   fontFamily?: string;
   fontSize?: string;
   fontStyle?: TextFontStyle;

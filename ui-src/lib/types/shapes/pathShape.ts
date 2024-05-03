@@ -1,3 +1,16 @@
+import { LayoutChildAttributes } from '@ui/lib/types/shapes/layout';
+import { ShapeAttributes, ShapeBaseAttributes } from '@ui/lib/types/shapes/shape';
+
+export type PathShape = ShapeBaseAttributes &
+  ShapeAttributes &
+  PathAttributes &
+  LayoutChildAttributes;
+
+export type PathAttributes = {
+  type?: 'path';
+  content: PathContent;
+};
+
 export const VECTOR_LINE_TO: unique symbol = Symbol.for('line-to');
 export const VECTOR_CLOSE_PATH: unique symbol = Symbol.for('close-path');
 export const VECTOR_MOVE_TO: unique symbol = Symbol.for('move-to');

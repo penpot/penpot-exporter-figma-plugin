@@ -1,4 +1,4 @@
-import { ShapeAttributes } from '@ui/lib/types/shape/shapeAttributes';
+import { ShapeAttributes } from '@ui/lib/types/shapes/shape';
 
 export const transformProportion = (node: LayoutMixin): Partial<ShapeAttributes> => {
   return {

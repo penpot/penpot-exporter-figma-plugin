@@ -1,5 +1,5 @@
 import { PenpotFile } from '@ui/lib/penpot';
-import { FrameShape } from '@ui/lib/types/frame/frameShape';
+import { FrameShape } from '@ui/lib/types/shapes/frameShape';
 
 import { createPenpotItem } from '.';
 

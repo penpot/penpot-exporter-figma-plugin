@@ -1,5 +1,5 @@
 import { PenpotFile } from '@ui/lib/penpot';
-import { GroupShape } from '@ui/lib/types/group/groupShape';
+import { GroupShape } from '@ui/lib/types/shapes/groupShape';
 import { translateUiBlendMode } from '@ui/translators';
 
 import { createPenpotItem } from '.';
