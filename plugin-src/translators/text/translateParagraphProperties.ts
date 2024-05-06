@@ -63,6 +63,14 @@ const addParagraphProperties = (
       if (isParagraphStarting) {
         const isList = segment.listOptions.type !== 'NONE';
 
+        if (index !== 0) {
+          const paragraphSpacing = segmentParagraphSpacing(
+            isPreviousNodeAList && isList ? node.paragraphSpacing : node.listSpacing
+          );
+
+          if (paragraphSpacing) result.push(paragraphSpacing);
+        }
+
         if (isList) {
           if (segment.indentation > indentation) {
             bulletStyles.push(applyUnorderedList(textNode, segment.indentation));
@@ -74,27 +82,11 @@ const addParagraphProperties = (
 
           indentation = segment.indentation;
 
-          if (isPreviousNodeAList) {
-            if (node.listSpacing !== 0 && index !== 0) {
-              result.push(segmentParagraphSpacing(node.listSpacing));
-            }
-          } else {
-            if (node.paragraphSpacing !== 0 && index !== 0) {
-              result.push(segmentParagraphSpacing(node.paragraphSpacing));
-            }
-          }
-
           const currentBulletStyles = bulletStyles[bulletStyles.length - 1];
 
           result.push(currentBulletStyles);
         } else {
-          if (node.paragraphSpacing !== 0 && index !== 0) {
-            result.push(segmentParagraphSpacing(node.paragraphSpacing));
-          }
-
-          if (node.paragraphIndent !== 0) {
-            result.push(segmentIndent(node.paragraphIndent));
-          }
+          result.push(segmentIndent(node.paragraphIndent));
         }
       }
 
@@ -128,7 +120,9 @@ const segmentIndent = (indent: number): PenpotTextNode => {
   };
 };
 
-const segmentParagraphSpacing = (paragraphSpacing: number): PenpotTextNode => {
+const segmentParagraphSpacing = (paragraphSpacing: number): PenpotTextNode | undefined => {
+  if (paragraphSpacing === 0) return;
+
   return {
     text: '\n',
     fontId: 'sourcesanspro',
