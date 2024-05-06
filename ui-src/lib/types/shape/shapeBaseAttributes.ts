@@ -6,6 +6,7 @@ import { Uuid } from '@ui/lib/types/utils/uuid';
 
 import { BOOL_TYPE } from '../bool/boolAttributes';
 import { CIRCLE_TYPE } from '../circle/circleAttributes';
+import { COMPONENT_TYPE } from '../component/componentAttributes';
 import { FRAME_TYPE } from '../frame/frameAttributes';
 import { GROUP_TYPE } from '../group/groupAttributes';
 import { IMAGE_TYPE } from '../image/imageAttributes';
@@ -28,6 +29,7 @@ export type ShapeBaseAttributes = {
     | 'circle'
     | 'svg-raw'
     | 'image'
+    | 'component'
     | typeof FRAME_TYPE
     | typeof GROUP_TYPE
     | typeof BOOL_TYPE
@@ -36,7 +38,8 @@ export type ShapeBaseAttributes = {
     | typeof TEXT_TYPE
     | typeof CIRCLE_TYPE
     | typeof SVG_RAW_TYPE
-    | typeof IMAGE_TYPE;
+    | typeof IMAGE_TYPE
+    | typeof COMPONENT_TYPE;
   selrect?: Selrect;
   points?: Point[];
   transform?: Matrix;

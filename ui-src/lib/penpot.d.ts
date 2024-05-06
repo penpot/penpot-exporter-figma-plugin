@@ -8,6 +8,8 @@ import { PenpotPageOptions } from '@ui/lib/types/penpotPage';
 import { RectShape } from '@ui/lib/types/rect/rectShape';
 import { TextShape } from '@ui/lib/types/text/textShape';
 
+import { ComponentShape } from './types/component/componentShape';
+
 export interface PenpotFile {
   addPage(name: string, options?: PenpotPageOptions): void;
   closePage(): void;
@@ -31,8 +33,8 @@ export interface PenpotFile {
   // deleteLibraryMedia(media: any): void;
   // addLibraryTypography(typography: any): void;
   // deleteLibraryTypography(typography: any): void;
-  // startComponent(component: any): void;
-  // finishComponent(): void;
+  startComponent(component: ComponentShape): void;
+  finishComponent(): void;
   // createComponentInstance(instance: any): void;
   // lookupShape(shapeId: string): void;
   // updateObject(id: string, object: any): void;

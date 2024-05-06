@@ -3,6 +3,7 @@ import { calculateAdjustment } from '@plugin/utils';
 import { PenpotNode } from '@ui/lib/types/penpotNode';
 
 import {
+  transformComponentNode,
   transformEllipseNode,
   transformFrameNode,
   transformGroupNode,
@@ -47,6 +48,8 @@ export const transformSceneNode = async (
     case 'VECTOR':
     case 'LINE':
       return transformPathNode(node, baseX, baseY);
+    case 'COMPONENT':
+      return await transformComponentNode(node, baseX, baseY);
   }
 
   console.error(`Unsupported node type: ${node.type}`);

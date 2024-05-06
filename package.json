@@ -27,7 +27,8 @@
     "react-dom": "^18.3",
     "react-hook-form": "^7.51",
     "slugify": "^1.6",
-    "svg-path-parser": "^1.1"
+    "svg-path-parser": "^1.1",
+    "uuid": "^9.0.1"
   },
   "devDependencies": {
     "@changesets/changelog-github": "^0.5",
@@ -38,6 +39,7 @@
     "@types/react": "^18.3",
     "@types/react-dom": "^18.3",
     "@types/svg-path-parser": "^1.1",
+    "@types/uuid": "^9.0.8",
     "@typescript-eslint/eslint-plugin": "^7.8",
     "@typescript-eslint/parser": "^7.8",
     "@vitejs/plugin-react-swc": "^3.6",

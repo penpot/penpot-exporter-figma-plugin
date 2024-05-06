@@ -1,4 +1,5 @@
 import { CircleShape } from '@ui/lib/types/circle/circleShape';
+import { ComponentShape } from '@ui/lib/types/component/componentShape';
 import { FrameShape } from '@ui/lib/types/frame/frameShape';
 import { GroupShape } from '@ui/lib/types/group/groupShape';
 import { ImageShape } from '@ui/lib/types/image/imageShape';
@@ -13,4 +14,5 @@ export type PenpotNode =
   | RectShape
   | CircleShape
   | TextShape
-  | ImageShape;
+  | ImageShape
+  | ComponentShape;
