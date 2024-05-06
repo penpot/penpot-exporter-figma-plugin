@@ -1,6 +1,6 @@
 import slugify from 'slugify';
 
-import { translateFontVariantId } from '@plugin/translators/text/gfonts';
+import { translateFontVariantId } from '@plugin/translators/text/font/gfonts';
 
 import { FontId } from '@ui/lib/types/shapes/textShape';
 

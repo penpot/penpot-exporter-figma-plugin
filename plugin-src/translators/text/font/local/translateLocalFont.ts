@@ -1,4 +1,4 @@
-import { LocalFont, translateFontVariantId } from '@plugin/translators/text/local';
+import { LocalFont, translateFontVariantId } from '@plugin/translators/text/font/local';
 
 import { FontId } from '@ui/lib/types/shapes/textShape';
 

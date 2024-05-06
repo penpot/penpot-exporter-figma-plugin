@@ -1,15 +1,14 @@
 import { translateFills } from '@plugin/translators';
 import {
-  StyleTextSegment,
-  translateFontId,
   translateFontStyle,
   translateHorizontalAlign,
   translateLetterSpacing,
   translateLineHeight,
-  translateParagraphProperties,
   translateTextDecoration,
   translateTextTransform
 } from '@plugin/translators/text';
+import { translateFontId } from '@plugin/translators/text/font';
+import { StyleTextSegment, translateParagraphProperties } from '@plugin/translators/text/paragraph';
 
 import { TextNode as PenpotTextNode, TextStyle } from '@ui/lib/types/shapes/textShape';
 

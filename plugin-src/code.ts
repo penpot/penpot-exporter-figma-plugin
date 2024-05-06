@@ -1,7 +1,7 @@
 import { transformDocumentNode } from '@plugin/transformers';
 
 import { findAllTextNodes } from './findAllTextnodes';
-import { setCustomFontId } from './translators/text/custom';
+import { setCustomFontId } from './translators/text/font/custom';
 
 figma.showUI(__html__, { themeColors: true, height: 300, width: 400 });
 
