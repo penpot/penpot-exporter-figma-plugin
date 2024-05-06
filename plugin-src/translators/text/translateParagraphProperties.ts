@@ -64,11 +64,11 @@ const addParagraphProperties = (
         const isList = segment.listOptions.type !== 'NONE';
 
         if (index !== 0) {
-          const paragraphSpacing = segmentParagraphSpacing(
-            isPreviousNodeAList && isList ? node.paragraphSpacing : node.listSpacing
+          const paragraphSpaceSegment = segmentParagraphSpacing(
+            isPreviousNodeAList && isList ? node.listSpacing : node.paragraphSpacing
           );
 
-          if (paragraphSpacing) result.push(paragraphSpacing);
+          if (paragraphSpaceSegment) result.push(paragraphSpaceSegment);
         }
 
         if (isList) {
