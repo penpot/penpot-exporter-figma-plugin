@@ -1,5 +1,7 @@
 import { TextNode as PenpotTextNode } from '@ui/lib/types/shapes/textShape';
 
+import { UnorderedList } from './UnorderedList';
+
 export type StyleTextSegment = Pick<
   StyledTextSegment,
   | 'characters'
@@ -52,11 +54,10 @@ const addParagraphProperties = (
   partials: PartialTranslation[]
 ): PenpotTextNode[] => {
   const result: PenpotTextNode[] = [];
+  const unorderedList = new UnorderedList();
 
   let isParagraphStarting = true;
   let isPreviousNodeAList = false;
-  const bulletStyles: PenpotTextNode[] = [];
-  let indentation = 0;
 
   partials.forEach(({ textNodes, segment }, index) => {
     return textNodes.forEach(textNode => {
@@ -72,19 +73,7 @@ const addParagraphProperties = (
         }
 
         if (isList) {
-          if (segment.indentation > indentation) {
-            bulletStyles.push(applyUnorderedList(textNode, segment.indentation));
-          } else if (segment.indentation < indentation) {
-            const elementsToRemove = indentation - segment.indentation;
-
-            bulletStyles.splice(bulletStyles.length - elementsToRemove, elementsToRemove);
-          }
-
-          indentation = segment.indentation;
-
-          const currentBulletStyles = bulletStyles[bulletStyles.length - 1];
-
-          result.push(currentBulletStyles);
+          result.push(unorderedList.getCurrentList(textNode, segment));
         } else {
           result.push(segmentIndent(node.paragraphIndent));
         }
@@ -98,13 +87,6 @@ const addParagraphProperties = (
   });
 
   return result;
-};
-
-const applyUnorderedList = (node: PenpotTextNode, indentation: number): PenpotTextNode => {
-  return {
-    ...node,
-    text: `${'     '.repeat(Math.max(0, indentation - 1))}  •  `
-  };
 };
 
 const segmentIndent = (indent: number): PenpotTextNode => {
