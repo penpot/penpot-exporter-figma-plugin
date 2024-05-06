@@ -1,4 +1,4 @@
-import { ShapeGeomAttributes } from '@ui/lib/types/shape/shapeGeomAttributes';
+import { ShapeGeomAttributes } from '@ui/lib/types/shapes/shape';
 
 export const transformDimensionAndPosition = (
   node: DimensionAndPositionMixin,

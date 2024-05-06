@@ -9,7 +9,7 @@ import {
   transformStrokes
 } from '@plugin/transformers/partials';
 
-import { RectShape } from '@ui/lib/types/rect/rectShape';
+import { RectShape } from '@ui/lib/types/shapes/rectShape';
 
 export const transformRectangleNode = (
   node: RectangleNode,

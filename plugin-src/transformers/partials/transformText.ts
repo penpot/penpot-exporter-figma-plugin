@@ -6,7 +6,7 @@ import {
   translateVerticalAlign
 } from '@plugin/translators/text';
 
-import { TextShape } from '@ui/lib/types/text/textShape';
+import { TextShape } from '@ui/lib/types/shapes/textShape';
 
 export const transformText = (node: TextNode): Partial<TextShape> => {
   const styledTextSegments = node.getStyledTextSegments([

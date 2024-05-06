@@ -1,6 +1,6 @@
 import { translateShadowEffects } from '@plugin/translators';
 
-import { ShapeAttributes } from '@ui/lib/types/shape/shapeAttributes';
+import { ShapeAttributes } from '@ui/lib/types/shapes/shape';
 
 export const transformEffects = (node: BlendMixin): Partial<ShapeAttributes> => {
   return {

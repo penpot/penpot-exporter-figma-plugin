@@ -1,4 +1,4 @@
-import { TextVerticalAlign } from '@ui/lib/types/text/textContent';
+import { TextVerticalAlign } from '@ui/lib/types/shapes/textShape';
 
 export const translateVerticalAlign = (align: 'TOP' | 'CENTER' | 'BOTTOM'): TextVerticalAlign => {
   switch (align) {

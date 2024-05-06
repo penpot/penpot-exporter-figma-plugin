@@ -1,4 +1,4 @@
-import { Uuid } from '@ui/lib/types/utils/uuid';
+import { Uuid } from './uuid';
 
 //@TODO: check how this exports the image through a dataUri
 export type ImageColor = {

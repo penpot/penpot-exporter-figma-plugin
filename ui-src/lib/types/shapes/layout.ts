@@ -1,3 +1,5 @@
+import { Uuid } from '@ui/lib/types/utils/uuid';
+
 export const ITEM_MARGIN_SIMPLE_TYPE: unique symbol = Symbol.for('simple');
 export const ITEM_MARGIN_MULTIPLE_TYPE: unique symbol = Symbol.for('multiple');
 export const ITEM_HSIZING_FILL: unique symbol = Symbol.for('fill');
@@ -52,4 +54,65 @@ export type LayoutChildAttributes = {
     | typeof ITEM_ALIGN_SELF_STRETCH;
   layoutItemAbsolute?: boolean;
   layoutItemZIndex?: number;
+};
+
+type JustifyAlignContent =
+  | 'start'
+  | 'center'
+  | 'end'
+  | 'space-between'
+  | 'space-around'
+  | 'space-evenly'
+  | 'stretch';
+
+type JustifyAlignItems = 'start' | 'end' | 'center' | 'stretch';
+
+export type LayoutAttributes = {
+  layout?: 'flex' | 'grid';
+  layoutFlexDir?:
+    | 'row'
+    | 'reverse-row'
+    | 'row-reverse'
+    | 'column'
+    | 'reverse-column'
+    | 'column-reverse';
+  layoutGap?: {
+    rowGap?: number;
+    columnGap?: number;
+  };
+  layoutGapType?: 'simple' | 'multiple';
+  layoutWrapType?: 'wrap' | 'nowrap' | 'no-wrap';
+  layoutPaddingType?: 'simple' | 'multiple';
+  layoutPadding?: {
+    p1?: number;
+    p2?: number;
+    p3?: number;
+    p4?: number;
+  };
+  layoutJustifyContent?: JustifyAlignContent;
+  layoutJustifyItems?: JustifyAlignItems;
+  layoutAlignContent?: JustifyAlignContent;
+  layoutAlignItems?: JustifyAlignItems;
+  layoutGridDir?: 'row' | 'column';
+  layoutGridRows?: GridTrack[];
+  layoutGridColumns?: GridTrack[];
+  layoutGridCells?: { [uuid: Uuid]: GridCell };
+};
+
+type GridTrack = {
+  type: 'percent' | 'flex' | 'auto' | 'fixed';
+  value?: number;
+};
+
+type GridCell = {
+  id?: Uuid;
+  areaName?: string;
+  row: number;
+  rowSpan: number;
+  column: number;
+  columnSpan: number;
+  position?: 'auto' | 'manual' | 'area';
+  alignSelf?: 'auto' | 'start' | 'end' | 'center' | 'stretch';
+  justifySelf?: 'auto' | 'start' | 'end' | 'center' | 'stretch';
+  shapes?: Uuid[];
 };

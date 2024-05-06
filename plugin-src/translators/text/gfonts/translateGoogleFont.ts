@@ -2,7 +2,7 @@ import slugify from 'slugify';
 
 import { translateFontVariantId } from '@plugin/translators/text/gfonts';
 
-import { FontId } from '@ui/lib/types/text/textContent';
+import { FontId } from '@ui/lib/types/shapes/textShape';
 
 import { items as gfonts } from './gfonts.json';
 import { GoogleFont } from './googleFont';
