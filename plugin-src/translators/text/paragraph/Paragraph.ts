@@ -90,8 +90,11 @@ export class Paragraph {
   }
 
   private getListType(textListOptions: TextListOptions): List | undefined {
-    if (textListOptions.type === 'NONE') return;
-
-    return textListOptions.type === 'ORDERED' ? this.orderedList : this.unorderedList;
+    switch (textListOptions.type) {
+      case 'ORDERED':
+        return this.orderedList;
+      case 'UNORDERED':
+        return this.unorderedList;
+    }
   }
 }
