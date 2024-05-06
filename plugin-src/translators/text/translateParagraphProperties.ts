@@ -59,49 +59,49 @@ const addParagraphProperties = (
   let indentation = 0;
 
   partials.forEach(({ textNodes, segment }, index) => {
-    return textNodes.forEach(textNode => {
-      if (isParagraphStarting) {
-        const isList = segment.listOptions.type !== 'NONE';
+    textNodes.forEach(textNode => {
+      if (!isParagraphStarting) {
+        result.push(textNode);
 
-        if (isList) {
-          if (segment.indentation > indentation) {
-            bulletStyles.push(applyUnorderedList(textNode, segment.indentation));
-          } else if (segment.indentation < indentation) {
-            const elementsToRemove = indentation - segment.indentation;
+        isPreviousNodeAList = segment.listOptions.type !== 'NONE';
+        isParagraphStarting = textNode.text === '\n';
+        return;
+      }
 
-            bulletStyles.splice(bulletStyles.length - elementsToRemove, elementsToRemove);
-          }
+      const isList = segment.listOptions.type !== 'NONE';
+      if (!isList) {
+        if (node.paragraphSpacing !== 0 && index !== 0) {
+          result.push(segmentParagraphSpacing(node.paragraphSpacing));
+        }
 
-          indentation = segment.indentation;
+        if (node.paragraphIndent !== 0) {
+          result.push(segmentIndent(node.paragraphIndent));
+        }
+        return;
+      }
 
-          if (isPreviousNodeAList) {
-            if (node.listSpacing !== 0 && index !== 0) {
-              result.push(segmentParagraphSpacing(node.listSpacing));
-            }
-          } else {
-            if (node.paragraphSpacing !== 0 && index !== 0) {
-              result.push(segmentParagraphSpacing(node.paragraphSpacing));
-            }
-          }
+      if (segment.indentation > indentation) {
+        bulletStyles.push(applyUnorderedList(textNode, segment.indentation));
+      } else if (segment.indentation < indentation) {
+        const elementsToRemove = indentation - segment.indentation;
 
-          const currentBulletStyles = bulletStyles[bulletStyles.length - 1];
+        bulletStyles.splice(bulletStyles.length - elementsToRemove, elementsToRemove);
+      }
 
-          result.push(currentBulletStyles);
-        } else {
-          if (node.paragraphSpacing !== 0 && index !== 0) {
-            result.push(segmentParagraphSpacing(node.paragraphSpacing));
-          }
-
-          if (node.paragraphIndent !== 0) {
-            result.push(segmentIndent(node.paragraphIndent));
-          }
+      if (isPreviousNodeAList) {
+        if (node.listSpacing !== 0 && index !== 0) {
+          result.push(segmentParagraphSpacing(node.listSpacing));
+        }
+      } else {
+        if (node.paragraphSpacing !== 0 && index !== 0) {
+          result.push(segmentParagraphSpacing(node.paragraphSpacing));
         }
       }
 
-      result.push(textNode);
+      const currentBulletStyles = bulletStyles[bulletStyles.length - 1];
+      indentation = segment.indentation;
 
-      isPreviousNodeAList = segment.listOptions.type !== 'NONE';
-      isParagraphStarting = textNode.text === '\n';
+      result.push(currentBulletStyles);
     });
   });
 
