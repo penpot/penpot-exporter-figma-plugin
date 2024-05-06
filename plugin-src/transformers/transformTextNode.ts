@@ -8,7 +8,7 @@ import {
   transformText
 } from '@plugin/transformers/partials';
 
-import { TextShape } from '@ui/lib/types/text/textShape';
+import { TextShape } from '@ui/lib/types/shapes/textShape';
 
 export const transformTextNode = (node: TextNode, baseX: number, baseY: number): TextShape => {
   return {

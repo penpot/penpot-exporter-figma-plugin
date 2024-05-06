@@ -1,6 +1,6 @@
-import { Gradient } from '@ui/lib/types/utils/gradient';
-import { ImageColor } from '@ui/lib/types/utils/imageColor';
-import { Uuid } from '@ui/lib/types/utils/uuid';
+import { Gradient } from './gradient';
+import { ImageColor } from './imageColor';
+import { Uuid } from './uuid';
 
 export type Stroke = {
   strokeColor?: string;
@@ -26,4 +26,4 @@ type StrokeCapMarker =
   | 'circle-marker'
   | 'diamond-marker';
 
-type StrokeCaps = StrokeCapLine | StrokeCapMarker;
+export type StrokeCaps = StrokeCapLine | StrokeCapMarker;

@@ -1,6 +1,6 @@
 import { translateBlendMode } from '@plugin/translators';
 
-import { ShapeAttributes } from '@ui/lib/types/shape/shapeAttributes';
+import { ShapeAttributes } from '@ui/lib/types/shapes/shape';
 
 export const transformBlend = (
   node: SceneNodeMixin & MinimalBlendMixin

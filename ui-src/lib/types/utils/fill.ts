@@ -1,9 +1,8 @@
-import { ImageColor } from '@ui/lib/types/utils/imageColor';
-
 import { Gradient } from './gradient';
+import { ImageColor } from './imageColor';
 import { Uuid } from './uuid';
 
-type Fill = {
+export type Fill = {
   fillColor?: string;
   fillOpacity?: number;
   fillColorGradient?: Gradient;

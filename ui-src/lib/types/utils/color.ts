@@ -1,6 +1,6 @@
-import { Gradient } from '@ui/lib/types/utils/gradient';
-import { ImageColor } from '@ui/lib/types/utils/imageColor';
-import { Uuid } from '@ui/lib/types/utils/uuid';
+import { Gradient } from './gradient';
+import { ImageColor } from './imageColor';
+import { Uuid } from './uuid';
 
 export type Color = {
   id?: Uuid;

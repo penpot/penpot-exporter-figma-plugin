@@ -11,7 +11,7 @@ import {
   translateTextTransform
 } from '@plugin/translators/text';
 
-import { TextNode as PenpotTextNode, TextStyle } from '@ui/lib/types/text/textContent';
+import { TextNode as PenpotTextNode, TextStyle } from '@ui/lib/types/shapes/textShape';
 
 export const translateStyleTextSegments = (
   node: TextNode,

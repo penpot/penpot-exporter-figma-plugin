@@ -1,7 +1,7 @@
 import { transformDimensionAndPosition } from '@plugin/transformers/partials';
 import { detectMimeType } from '@plugin/utils';
 
-import { ImageShape } from '@ui/lib/types/image/imageShape';
+import { ImageShape } from '@ui/lib/types/shapes/imageShape';
 
 export const transformImageNode = async (
   node: SceneNode,

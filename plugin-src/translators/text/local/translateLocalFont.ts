@@ -1,6 +1,6 @@
 import { LocalFont, translateFontVariantId } from '@plugin/translators/text/local';
 
-import { FontId } from '@ui/lib/types/text/textContent';
+import { FontId } from '@ui/lib/types/shapes/textShape';
 
 import { items as localFonts } from './localFonts.json';
 

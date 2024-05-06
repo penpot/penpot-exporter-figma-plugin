@@ -10,7 +10,7 @@ import {
   transformStrokes
 } from '@plugin/transformers/partials';
 
-import { FrameShape } from '@ui/lib/types/frame/frameShape';
+import { FrameShape } from '@ui/lib/types/shapes/frameShape';
 
 const isSectionNode = (node: FrameNode | SectionNode): node is SectionNode => {
   return node.type === 'SECTION';

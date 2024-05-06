@@ -6,7 +6,7 @@ import {
 } from '@plugin/transformers/partials';
 import { transformChildren } from '@plugin/transformers/partials';
 
-import { GroupShape } from '@ui/lib/types/group/groupShape';
+import { GroupShape } from '@ui/lib/types/shapes/groupShape';
 
 export const transformGroupNode = async (
   node: GroupNode,
