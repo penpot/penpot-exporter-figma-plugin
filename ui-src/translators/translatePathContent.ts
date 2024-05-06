@@ -6,7 +6,7 @@ import {
   VECTOR_CURVE_TO,
   VECTOR_LINE_TO,
   VECTOR_MOVE_TO
-} from '@ui/lib/types/path/PathContent';
+} from '@ui/lib/types/shapes/pathShape';
 
 export const translatePathContent = (content: PathContent): PathContent =>
   content

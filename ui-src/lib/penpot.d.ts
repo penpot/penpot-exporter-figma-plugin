@@ -1,12 +1,12 @@
-import { BoolShape } from '@ui/lib/types/bool/boolShape';
-import { CircleShape } from '@ui/lib/types/circle/circleShape';
-import { FrameShape } from '@ui/lib/types/frame/frameShape';
-import { GroupShape } from '@ui/lib/types/group/groupShape';
-import { ImageShape } from '@ui/lib/types/image/imageShape';
-import { PathShape } from '@ui/lib/types/path/pathShape';
 import { PenpotPageOptions } from '@ui/lib/types/penpotPage';
-import { RectShape } from '@ui/lib/types/rect/rectShape';
-import { TextShape } from '@ui/lib/types/text/textShape';
+import { BoolShape } from '@ui/lib/types/shapes/boolShape';
+import { CircleShape } from '@ui/lib/types/shapes/circleShape';
+import { FrameShape } from '@ui/lib/types/shapes/frameShape';
+import { GroupShape } from '@ui/lib/types/shapes/groupShape';
+import { ImageShape } from '@ui/lib/types/shapes/imageShape';
+import { PathShape } from '@ui/lib/types/shapes/pathShape';
+import { RectShape } from '@ui/lib/types/shapes/rectShape';
+import { TextShape } from '@ui/lib/types/shapes/textShape';
 
 export interface PenpotFile {
   addPage(name: string, options?: PenpotPageOptions): void;

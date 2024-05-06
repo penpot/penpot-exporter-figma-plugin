@@ -1,6 +1,6 @@
 import { translateVectorPaths } from '@plugin/translators';
 
-import { PathAttributes } from '@ui/lib/types/path/pathAttributes';
+import { PathAttributes } from '@ui/lib/types/shapes/pathShape';
 
 const getVectorPaths = (node: VectorNode | StarNode | LineNode | PolygonNode): VectorPaths => {
   switch (node.type) {

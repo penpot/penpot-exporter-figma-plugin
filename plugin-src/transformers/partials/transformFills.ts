@@ -1,6 +1,6 @@
 import { translateFills } from '@plugin/translators';
 
-import { ShapeAttributes } from '@ui/lib/types/shape/shapeAttributes';
+import { ShapeAttributes } from '@ui/lib/types/shapes/shape';
 
 export const transformFills = (
   node: MinimalFillsMixin & DimensionAndPositionMixin

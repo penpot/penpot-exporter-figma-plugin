@@ -1,6 +1,6 @@
 import { translateStrokes } from '@plugin/translators';
 
-import { ShapeAttributes } from '@ui/lib/types/shape/shapeAttributes';
+import { ShapeAttributes } from '@ui/lib/types/shapes/shape';
 
 const isVectorLike = (node: GeometryMixin | VectorLikeMixin): node is VectorLikeMixin => {
   return 'vectorNetwork' in node;

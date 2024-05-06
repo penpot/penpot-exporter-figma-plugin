@@ -9,7 +9,7 @@ import {
   transformVectorPaths
 } from '@plugin/transformers/partials';
 
-import { PathShape } from '@ui/lib/types/path/pathShape';
+import { PathShape } from '@ui/lib/types/shapes/pathShape';
 
 const hasFillGeometry = (node: VectorNode | StarNode | LineNode | PolygonNode): boolean => {
   return 'fillGeometry' in node && node.fillGeometry.length > 0;

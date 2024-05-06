@@ -1,6 +1,6 @@
 import { CurveToCommand, LineToCommand, MoveToCommand, parseSVG } from 'svg-path-parser';
 
-import { Segment } from '@ui/lib/types/path/PathContent';
+import { Segment } from '@ui/lib/types/shapes/pathShape';
 
 export const translateVectorPaths = (
   paths: VectorPaths,
