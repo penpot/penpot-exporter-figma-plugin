@@ -10,7 +10,7 @@ export class OrderedList implements List {
   public getCurrentList(textNode: PenpotTextNode, segment: StyleTextSegment): PenpotTextNode {
     this.updateStyles(textNode, segment);
 
-    return this.styles[this.styles.length - 1];
+    return this.updateCurrentSymbol('*');
   }
 
   private updateStyles(textNode: PenpotTextNode, segment: StyleTextSegment): void {
@@ -28,7 +28,16 @@ export class OrderedList implements List {
   private createStyle(node: PenpotTextNode, indentation: number): PenpotTextNode {
     return {
       ...node,
-      text: `${'     '.repeat(Math.max(0, indentation - 1))}  •  `
+      text: `${'     '.repeat(Math.max(0, indentation - 1))}  {currentSymbol}.  `
+    };
+  }
+
+  private updateCurrentSymbol(character: string): PenpotTextNode {
+    const currentList = this.styles[this.styles.length - 1];
+
+    return {
+      ...currentList,
+      text: currentList.text.replace('{currentSymbol}', character)
     };
   }
 }

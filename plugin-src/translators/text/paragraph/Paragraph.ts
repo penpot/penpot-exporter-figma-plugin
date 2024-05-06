@@ -20,7 +20,8 @@ export class Paragraph {
     const textNodes: PenpotTextNode[] = [];
 
     if (this.isParagraphStarting) {
-      const isList = segment.listOptions.type !== 'NONE';
+      const listType = this.getListType(segment.listOptions);
+      const isList = listType !== undefined;
 
       if (!this.isFirstSegment(segment)) {
         const paragraphSpaceSegment = this.segmentParagraphSpacing(
@@ -32,7 +33,7 @@ export class Paragraph {
 
       textNodes.push(
         isList
-          ? this.unorderedList.getCurrentList(textNode, segment)
+          ? listType.getCurrentList(textNode, segment)
           : this.segmentIndent(node.paragraphIndent)
       );
     }
