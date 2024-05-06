@@ -55,6 +55,8 @@ const addParagraphProperties = (
 
   let isParagraphStarting = true;
   let isPreviousNodeAList = false;
+  const bulletStyles: PenpotTextNode[] = [];
+  let indentation = 0;
 
   partials.forEach(({ textNodes, segment }, index) => {
     return textNodes.forEach(textNode => {
@@ -62,6 +64,16 @@ const addParagraphProperties = (
         const isList = segment.listOptions.type !== 'NONE';
 
         if (isList) {
+          if (segment.indentation > indentation) {
+            bulletStyles.push(applyUnorderedList(textNode, segment.indentation));
+          } else if (segment.indentation < indentation) {
+            const elementsToRemove = indentation - segment.indentation;
+
+            bulletStyles.splice(bulletStyles.length - elementsToRemove, elementsToRemove);
+          }
+
+          indentation = segment.indentation;
+
           if (isPreviousNodeAList) {
             if (node.listSpacing !== 0 && index !== 0) {
               result.push(segmentParagraphSpacing(node.listSpacing));
@@ -72,7 +84,9 @@ const addParagraphProperties = (
             }
           }
 
-          result.push(applyUnorderedList(textNode, segment.indentation));
+          const currentBulletStyles = bulletStyles[bulletStyles.length - 1];
+
+          result.push(currentBulletStyles);
         } else {
           if (node.paragraphSpacing !== 0 && index !== 0) {
             result.push(segmentParagraphSpacing(node.paragraphSpacing));
