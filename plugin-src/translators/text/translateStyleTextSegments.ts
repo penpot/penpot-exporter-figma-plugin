@@ -18,7 +18,7 @@ export const translateStyleTextSegments = (
   segments: StyleTextSegment[]
 ): PenpotTextNode[] => {
   const partials = segments.map(segment => ({
-    textNodes: [translateStyleTextSegment(node, segment)],
+    textNode: translateStyleTextSegment(node, segment),
     segment
   }));
 

@@ -24,27 +24,18 @@ type PartialTranslation = {
 
 export const translateParagraphProperties = (
   node: TextNode,
-  partials: PartialTranslation[]
+  partials: { textNode: PenpotTextNode; segment: StyleTextSegment }[]
 ): PenpotTextNode[] => {
-  if (node.paragraphSpacing === 0 && node.paragraphIndent === 0)
-    return unwrapPartialTranslations(partials);
-
   const splitSegments: PartialTranslation[] = [];
 
-  partials.forEach(({ textNodes, segment }) => {
+  partials.forEach(({ textNode, segment }) => {
     splitSegments.push({
-      textNodes: splitTextNodeByEOL(textNodes[0]),
+      textNodes: splitTextNodeByEOL(textNode),
       segment
     });
   });
 
-  return addParagraphProperties(splitSegments, node.paragraphIndent, node.paragraphSpacing);
-};
-
-const unwrapPartialTranslations = (partials: PartialTranslation[]): PenpotTextNode[] => {
-  return partials.reduce((acc: PenpotTextNode[], partial) => {
-    return [...acc, ...partial.textNodes];
-  }, []);
+  return addParagraphProperties(node, splitSegments);
 };
 
 const splitTextNodeByEOL = (node: PenpotTextNode): PenpotTextNode[] => {
@@ -57,57 +48,48 @@ const splitTextNodeByEOL = (node: PenpotTextNode): PenpotTextNode[] => {
 };
 
 const addParagraphProperties = (
-  partials: PartialTranslation[],
-  indent: number,
-  paragraphSpacing: number
+  node: TextNode,
+  partials: PartialTranslation[]
 ): PenpotTextNode[] => {
   const result: PenpotTextNode[] = [];
 
-  let lastIndentation = 0;
+  let isParagraphStarting = true;
+  let isPreviousNodeAList = false;
 
-  partials.forEach(({ textNodes, segment }) =>
-    textNodes.forEach(textNode => {
-      const hasDifferentIndentation = segment.indentation !== lastIndentation;
+  partials.forEach(({ textNodes, segment }, index) => {
+    return textNodes.forEach(textNode => {
+      if (isParagraphStarting) {
+        const isList = segment.listOptions.type !== 'NONE';
 
-      result.push(
-        ...addParagraphPropertiesSingle(
-          textNode,
-          segment,
-          indent,
-          paragraphSpacing,
-          hasDifferentIndentation
-        )
-      );
+        if (isList) {
+          if (isPreviousNodeAList) {
+            if (node.listSpacing !== 0 && index !== 0) {
+              result.push(segmentParagraphSpacing(node.listSpacing));
+            }
+          } else {
+            if (node.paragraphSpacing !== 0 && index !== 0) {
+              result.push(segmentParagraphSpacing(node.paragraphSpacing));
+            }
+          }
 
-      lastIndentation = segment.indentation;
-    })
-  );
+          result.push(applyUnorderedList(textNode, segment.indentation));
+        } else {
+          if (node.paragraphSpacing !== 0 && index !== 0) {
+            result.push(segmentParagraphSpacing(node.paragraphSpacing));
+          }
 
-  return result;
-};
+          if (node.paragraphIndent !== 0) {
+            result.push(segmentIndent(node.paragraphIndent));
+          }
+        }
+      }
 
-const addParagraphPropertiesSingle = (
-  node: PenpotTextNode,
-  segment: StyleTextSegment,
-  indent: number,
-  paragraphSpacing: number,
-  hasDifferentIndentation: boolean
-): PenpotTextNode[] => {
-  console.log(node, segment.indentation, segment.listOptions);
+      result.push(textNode);
 
-  const result: PenpotTextNode[] = [
-    hasDifferentIndentation ? applyUnorderedList(node, segment.indentation) : node
-  ];
-
-  if (node.text !== '\n') return result;
-
-  if (paragraphSpacing !== 0 && segment.indentation === 0) {
-    result.push(segmentParagraphSpacing(paragraphSpacing));
-  }
-
-  if (indent !== 0 && segment.indentation === 0) {
-    result.push(segmentIndent(indent));
-  }
+      isPreviousNodeAList = segment.listOptions.type !== 'NONE';
+      isParagraphStarting = textNode.text === '\n';
+    });
+  });
 
   return result;
 };
@@ -115,7 +97,7 @@ const addParagraphPropertiesSingle = (
 const applyUnorderedList = (node: PenpotTextNode, indentation: number): PenpotTextNode => {
   return {
     ...node,
-    text: `${'  '.repeat(indentation)} • ${node.text}`
+    text: `${'     '.repeat(Math.max(0, indentation - 1))}  •  `
   };
 };
 
