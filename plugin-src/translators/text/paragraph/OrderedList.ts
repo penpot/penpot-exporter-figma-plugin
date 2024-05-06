@@ -1,14 +1,13 @@
 import * as romans from 'romans';
 
-import { TextNode as PenpotTextNode } from '@ui/lib/types/shapes/textShape';
+import { UnorderedList } from '@plugin/translators/text/paragraph/UnorderedList';
 
-import { List } from './List';
+import { TextNode as PenpotTextNode, TextNode } from '@ui/lib/types/shapes/textShape';
+
 import { StyleTextSegment } from './translateParagraphProperties';
 
-export class OrderedList implements List {
-  private styles: (PenpotTextNode | undefined)[] = [];
-  private counter: number[] = [];
-  private indentation = 0;
+export class OrderedList extends UnorderedList {
+  protected counter: number[] = [];
 
   public getCurrentList(textNode: PenpotTextNode, segment: StyleTextSegment): PenpotTextNode {
     this.updateStyles(textNode, segment);
@@ -19,9 +18,13 @@ export class OrderedList implements List {
   }
 
   public restart(): void {
-    this.styles = [];
+    this.styles = new Map();
     this.counter = [];
     this.indentation = 0;
+  }
+
+  protected createStyle(node: TextNode, indentation: number): TextNode {
+    return super.createStyle(node, indentation, '{currentSymbol}. ');
   }
 
   private updateCounter(segment: StyleTextSegment): void {
@@ -61,32 +64,6 @@ export class OrderedList implements List {
       result = String.fromCharCode(letterCode + 96) + result;
     }
     return result;
-  }
-
-  private updateStyles(textNode: PenpotTextNode, segment: StyleTextSegment): void {
-    if (segment.indentation > this.indentation) {
-      for (let i = 0; i < segment.indentation - this.indentation; i++) {
-        this.styles.push(undefined);
-      }
-    } else if (segment.indentation < this.indentation) {
-      const elementsToRemove = this.indentation - segment.indentation;
-      this.styles.splice(this.styles.length - elementsToRemove, elementsToRemove);
-    }
-
-    if (this.styles[this.styles.length - 1] === undefined) {
-      this.styles[this.styles.length - 1] = this.createStyle(textNode, segment.indentation);
-    }
-  }
-
-  private currentStyle(textNode: PenpotTextNode, segment: StyleTextSegment): PenpotTextNode {
-    return this.styles[this.styles.length - 1] ?? this.createStyle(textNode, segment.indentation);
-  }
-
-  private createStyle(node: PenpotTextNode, indentation: number): PenpotTextNode {
-    return {
-      ...node,
-      text: `${'\t'.repeat(Math.max(0, indentation - 1))}{currentSymbol}. `
-    };
   }
 
   private updateCurrentSymbol(character: string, currentStyle: PenpotTextNode): PenpotTextNode {
