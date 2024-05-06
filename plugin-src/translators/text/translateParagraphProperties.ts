@@ -59,49 +59,49 @@ const addParagraphProperties = (
   let indentation = 0;
 
   partials.forEach(({ textNodes, segment }, index) => {
-    textNodes.forEach(textNode => {
-      if (!isParagraphStarting) {
-        result.push(textNode);
+    return textNodes.forEach(textNode => {
+      if (isParagraphStarting) {
+        const isList = segment.listOptions.type !== 'NONE';
 
-        isPreviousNodeAList = segment.listOptions.type !== 'NONE';
-        isParagraphStarting = textNode.text === '\n';
-        return;
+        if (isList) {
+          if (segment.indentation > indentation) {
+            bulletStyles.push(applyUnorderedList(textNode, segment.indentation));
+          } else if (segment.indentation < indentation) {
+            const elementsToRemove = indentation - segment.indentation;
+
+            bulletStyles.splice(bulletStyles.length - elementsToRemove, elementsToRemove);
+          }
+
+          indentation = segment.indentation;
+
+          if (isPreviousNodeAList) {
+            if (node.listSpacing !== 0 && index !== 0) {
+              result.push(segmentParagraphSpacing(node.listSpacing));
+            }
+          } else {
+            if (node.paragraphSpacing !== 0 && index !== 0) {
+              result.push(segmentParagraphSpacing(node.paragraphSpacing));
+            }
+          }
+
+          const currentBulletStyles = bulletStyles[bulletStyles.length - 1];
+
+          result.push(currentBulletStyles);
+        } else {
+          if (node.paragraphSpacing !== 0 && index !== 0) {
+            result.push(segmentParagraphSpacing(node.paragraphSpacing));
+          }
+
+          if (node.paragraphIndent !== 0) {
+            result.push(segmentIndent(node.paragraphIndent));
+          }
+        }
       }
 
-      const isList = segment.listOptions.type !== 'NONE';
-      if (!isList) {
-        if (node.paragraphSpacing !== 0 && index !== 0) {
-          result.push(segmentParagraphSpacing(node.paragraphSpacing));
-        }
+      result.push(textNode);
 
-        if (node.paragraphIndent !== 0) {
-          result.push(segmentIndent(node.paragraphIndent));
-        }
-        return;
-      }
-
-      if (segment.indentation > indentation) {
-        bulletStyles.push(applyUnorderedList(textNode, segment.indentation));
-      } else if (segment.indentation < indentation) {
-        const elementsToRemove = indentation - segment.indentation;
-
-        bulletStyles.splice(bulletStyles.length - elementsToRemove, elementsToRemove);
-      }
-
-      if (isPreviousNodeAList) {
-        if (node.listSpacing !== 0 && index !== 0) {
-          result.push(segmentParagraphSpacing(node.listSpacing));
-        }
-      } else {
-        if (node.paragraphSpacing !== 0 && index !== 0) {
-          result.push(segmentParagraphSpacing(node.paragraphSpacing));
-        }
-      }
-
-      const currentBulletStyles = bulletStyles[bulletStyles.length - 1];
-      indentation = segment.indentation;
-
-      result.push(currentBulletStyles);
+      isPreviousNodeAList = segment.listOptions.type !== 'NONE';
+      isParagraphStarting = textNode.text === '\n';
     });
   });
 
