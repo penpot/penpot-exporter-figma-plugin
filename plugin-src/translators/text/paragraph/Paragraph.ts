@@ -1,5 +1,7 @@
 import { TextNode as PenpotTextNode } from '@ui/lib/types/shapes/textShape';
 
+import { List } from './List';
+import { OrderedList } from './OrderedList';
 import { UnorderedList } from './UnorderedList';
 import { StyleTextSegment } from './translateParagraphProperties';
 
@@ -7,6 +9,7 @@ export class Paragraph {
   private isParagraphStarting = true;
   private isPreviousNodeAList = false;
   private unorderedList = new UnorderedList();
+  private orderedList = new OrderedList();
   private firstSegment: StyleTextSegment | null = null;
 
   public format(
@@ -78,5 +81,11 @@ export class Paragraph {
       lineHeight: 1,
       letterSpacing: 0
     };
+  }
+
+  private getListType(textListOptions: TextListOptions): List | undefined {
+    if (textListOptions.type === 'NONE') return;
+
+    return textListOptions.type === 'ORDERED' ? this.orderedList : this.unorderedList;
   }
 }

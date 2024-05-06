@@ -3,7 +3,7 @@ import { TextNode as PenpotTextNode } from '@ui/lib/types/shapes/textShape';
 import { List } from './List';
 import { StyleTextSegment } from './translateParagraphProperties';
 
-export class UnorderedList implements List {
+export class OrderedList implements List {
   private styles: PenpotTextNode[] = [];
   private indentation = 0;
 
