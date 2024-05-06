@@ -4,4 +4,5 @@ import { StyleTextSegment } from './translateParagraphProperties';
 
 export interface List {
   getCurrentList(textNode: PenpotTextNode, segment: StyleTextSegment): PenpotTextNode;
+  restart(): void;
 }

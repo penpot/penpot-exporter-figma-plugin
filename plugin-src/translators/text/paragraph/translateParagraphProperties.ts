@@ -53,14 +53,14 @@ const addParagraphProperties = (
   node: TextNode,
   partials: PartialTranslation[]
 ): PenpotTextNode[] => {
-  const textNodes: PenpotTextNode[] = [];
+  const formattedParagraphs: PenpotTextNode[] = [];
   const paragraph = new Paragraph();
 
   partials.forEach(({ textNodes, segment }) =>
     textNodes.forEach(textNode => {
-      textNodes.push(...paragraph.format(node, textNode, segment));
+      formattedParagraphs.push(...paragraph.format(node, textNode, segment));
     })
   );
 
-  return textNodes;
+  return formattedParagraphs;
 };

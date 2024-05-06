@@ -43,6 +43,11 @@ export class Paragraph {
     this.isPreviousNodeAList = segment.listOptions.type !== 'NONE';
     this.isParagraphStarting = textNode.text === '\n';
 
+    if (!this.isPreviousNodeAList) {
+      this.orderedList.restart();
+      this.unorderedList.restart();
+    }
+
     return textNodes;
   }
 
