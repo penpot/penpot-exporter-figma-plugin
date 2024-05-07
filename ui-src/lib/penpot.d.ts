@@ -27,7 +27,7 @@ export interface PenpotFile {
   // addLibraryColor(color: any): void;
   // updateLibraryColor(color: any): void;
   // deleteLibraryColor(color: any): void;
-  addLibraryMedia(media: any): void;
+  addLibraryMedia(media: any): string;
   // deleteLibraryMedia(media: any): void;
   // addLibraryTypography(typography: any): void;
   // deleteLibraryTypography(typography: any): void;
