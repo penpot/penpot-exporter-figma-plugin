@@ -6,11 +6,11 @@ import { UnorderedList } from './UnorderedList';
 import { StyleTextSegment } from './translateParagraphProperties';
 
 export class Paragraph {
-  private isParagraphStarting = true;
+  private isParagraphStarting = false;
   private isPreviousNodeAList = false;
   private unorderedList = new UnorderedList();
   private orderedList = new OrderedList();
-  private firstSegment: StyleTextSegment | null = null;
+  private firstTextNode: PenpotTextNode | null = null;
 
   public format(
     node: TextNode,
@@ -19,24 +19,11 @@ export class Paragraph {
   ): PenpotTextNode[] {
     const textNodes: PenpotTextNode[] = [];
 
-    if (this.isParagraphStarting) {
-      const listType = this.getListType(segment.listOptions);
-      const isList = listType !== undefined;
+    const spacing = this.applySpacing(textNode, segment, node);
+    if (spacing) textNodes.push(spacing);
 
-      if (!this.isFirstSegment(segment)) {
-        const paragraphSpaceSegment = this.segmentParagraphSpacing(
-          this.isPreviousNodeAList && isList ? node.listSpacing : node.paragraphSpacing
-        );
-
-        if (paragraphSpaceSegment) textNodes.push(paragraphSpaceSegment);
-      }
-
-      textNodes.push(
-        isList
-          ? listType.getCurrentList(textNode, segment)
-          : this.segmentIndent(node.paragraphIndent)
-      );
-    }
+    const indentation = this.applyIndentation(textNode, segment, node);
+    if (indentation) textNodes.push(indentation);
 
     textNodes.push(textNode);
 
@@ -51,14 +38,43 @@ export class Paragraph {
     return textNodes;
   }
 
-  private isFirstSegment(segment: StyleTextSegment) {
-    if (this.firstSegment === null) {
-      this.firstSegment = segment;
+  private applyIndentation(
+    textNode: PenpotTextNode,
+    segment: StyleTextSegment,
+    node: TextNode
+  ): PenpotTextNode | undefined {
+    if (this.isParagraphStarting || this.isFirstTextNode(textNode)) {
+      const listType = this.getListType(segment.listOptions);
+      const isList = listType !== undefined;
 
+      return isList
+        ? listType.getCurrentList(textNode, segment)
+        : this.segmentIndent(node.paragraphIndent);
+    }
+  }
+
+  private applySpacing(
+    textNode: PenpotTextNode,
+    segment: StyleTextSegment,
+    node: TextNode
+  ): PenpotTextNode | undefined {
+    if (this.isParagraphStarting) {
+      const listType = this.getListType(segment.listOptions);
+      const isList = listType !== undefined;
+
+      return this.segmentParagraphSpacing(
+        this.isPreviousNodeAList && isList ? node.listSpacing : node.paragraphSpacing
+      );
+    }
+  }
+
+  private isFirstTextNode(textNode: PenpotTextNode) {
+    if (this.firstTextNode === null) {
+      this.firstTextNode = textNode;
       return true;
     }
 
-    return this.firstSegment === segment;
+    return false;
   }
 
   private segmentIndent(indent: number): PenpotTextNode {
