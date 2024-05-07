@@ -11,8 +11,9 @@ export class ListTypeFactory {
       case 'ORDERED':
         return this.orderedList;
       case 'UNORDERED':
-      default:
         return this.unorderedList;
     }
+
+    throw new Error('List type not valid');
   }
 }
