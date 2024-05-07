@@ -4,15 +4,21 @@ import { ListType } from './ListType';
 
 export class OrderedListType implements ListType {
   public getCurrentSymbol(number: number, indentation: number): string {
+    let symbol = '. ';
     switch (indentation % 3) {
       case 0:
-        return romans.romanize(number).toLowerCase();
+        symbol = romans.romanize(number).toLowerCase() + symbol;
+        break;
       case 2:
-        return this.letterOrderedList(number);
+        symbol = this.letterOrderedList(number) + symbol;
+        break;
       case 1:
       default:
-        return number.toString();
+        symbol = number.toString() + symbol;
+        break;
     }
+
+    return symbol;
   }
 
   private letterOrderedList(number: number): string {

@@ -7,8 +7,10 @@ import { ListTypeFactory } from './ListTypeFactory';
 type Level = {
   style: PenpotTextNode;
   counter: number;
-  type: 'ORDERED' | 'UNORDERED' | 'NONE';
+  type: ListType;
 };
+
+type ListType = 'ORDERED' | 'UNORDERED';
 
 export class List {
   private levels: Map<number, Level> = new Map();
@@ -25,43 +27,46 @@ export class List {
 
     let level = this.levels.get(segment.indentation);
 
-    if (!level || level.type !== segment.listOptions.type) {
+    if (!level || level.type !== this.getListType(segment)) {
       level = {
         style: this.createStyle(textNode, segment.indentation),
         counter: 0,
-        type: segment.listOptions.type
+        type: this.getListType(segment)
       };
 
       this.levels.set(segment.indentation, level);
     }
 
-    this.levels.set(segment.indentation, {
-      ...level,
-      counter: level.counter + 1
-    });
+    level.counter++;
     this.indentation = segment.indentation;
   }
 
   public getCurrentList(textNode: PenpotTextNode, segment: StyleTextSegment): PenpotTextNode {
+    const level = this.levels.get(segment.indentation);
+    if (level === undefined) {
+      throw new Error('Levels not updated');
+    }
+
     const listType = this.listTypeFactory.getListType(segment.listOptions);
-    const number = this.counter[this.counter.length - 1];
 
     return this.updateCurrentSymbol(
-      listType.getCurrentSymbol(number, segment.indentation),
-      this.currentStyle(textNode, segment)
+      listType.getCurrentSymbol(level.counter, segment.indentation),
+      level.style
     );
   }
 
-  private currentStyle(textNode: PenpotTextNode, segment: StyleTextSegment): PenpotTextNode {
-    return (
-      this.levels.get(segment.indentation)?.style ?? this.createStyle(textNode, segment.indentation)
-    );
+  private getListType(segment: StyleTextSegment): ListType {
+    if (segment.listOptions.type === 'NONE') {
+      throw new Error('List type not valid');
+    }
+
+    return segment.listOptions.type;
   }
 
   private createStyle(node: PenpotTextNode, indentation: number): PenpotTextNode {
     return {
       ...node,
-      text: `${'\t'.repeat(Math.max(0, indentation - 1))}{currentSymbol}. `
+      text: `${'\t'.repeat(Math.max(0, indentation - 1))}{currentSymbol}`
     };
   }
 
