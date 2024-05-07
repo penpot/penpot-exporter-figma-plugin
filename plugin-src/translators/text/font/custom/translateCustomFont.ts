@@ -1,4 +1,4 @@
-import { getCustomFontId, translateFontVariantId } from '@plugin/translators/text/custom';
+import { getCustomFontId, translateFontVariantId } from '@plugin/translators/text/font/custom';
 
 import { FontId } from '@ui/lib/types/shapes/textShape';
 

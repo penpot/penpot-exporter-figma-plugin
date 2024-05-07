@@ -1,5 +1,5 @@
-import { isGoogleFont } from './translators/text/gfonts';
-import { isLocalFont } from './translators/text/local';
+import { isGoogleFont } from './translators/text/font/gfonts';
+import { isLocalFont } from './translators/text/font/local';
 
 export const findAllTextNodes = async () => {
   await figma.loadAllPagesAsync();

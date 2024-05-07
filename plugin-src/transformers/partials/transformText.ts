@@ -1,10 +1,6 @@
 import { transformFills } from '@plugin/transformers/partials';
-import {
-  transformTextStyle,
-  translateGrowType,
-  translateStyleTextSegments,
-  translateVerticalAlign
-} from '@plugin/translators/text';
+import { transformTextStyle, translateStyleTextSegments } from '@plugin/translators/text';
+import { translateGrowType, translateVerticalAlign } from '@plugin/translators/text/properties';
 
 import { TextShape } from '@ui/lib/types/shapes/textShape';
 
@@ -17,6 +13,8 @@ export const transformText = (node: TextNode): Partial<TextShape> => {
     'letterSpacing',
     'textCase',
     'textDecoration',
+    'indentation',
+    'listOptions',
     'fills'
   ]);
 
