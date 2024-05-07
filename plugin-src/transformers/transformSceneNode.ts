@@ -1,12 +1,9 @@
-import { calculateAdjustment } from '@plugin/utils';
-
 import { PenpotNode } from '@ui/lib/types/penpotNode';
 
 import {
   transformEllipseNode,
   transformFrameNode,
   transformGroupNode,
-  transformImageNode,
   transformPathNode,
   transformRectangleNode,
   transformTextNode
@@ -18,17 +15,17 @@ export const transformSceneNode = async (
   baseY: number = 0
 ): Promise<PenpotNode | undefined> => {
   // @TODO: when penpot 2.0, manage image as fills for the basic types
-  if (
-    'fills' in node &&
-    node.fills !== figma.mixed &&
-    node.fills.find(fill => fill.type === 'IMAGE')
-  ) {
-    // If the nested frames extended the bounds of the rasterized image, we need to
-    // account for this both in position on the canvas and the calculated width and
-    // height of the image.
-    const [adjustedX, adjustedY] = calculateAdjustment(node);
-    return await transformImageNode(node, baseX + adjustedX, baseY + adjustedY);
-  }
+  // if (
+  //   'fills' in node &&
+  //   node.fills !== figma.mixed &&
+  //   node.fills.find(fill => fill.type === 'IMAGE')
+  // ) {
+  //   // If the nested frames extended the bounds of the rasterized image, we need to
+  //   // account for this both in position on the canvas and the calculated width and
+  //   // height of the image.
+  //   const [adjustedX, adjustedY] = calculateAdjustment(node);
+  //   return await transformImageNode(node, baseX + adjustedX, baseY + adjustedY);
+  // }
 
   switch (node.type) {
     case 'RECTANGLE':
