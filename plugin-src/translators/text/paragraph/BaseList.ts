@@ -1,10 +1,15 @@
+import { List } from '@plugin/translators/text/paragraph/List';
 import { StyleTextSegment } from '@plugin/translators/text/paragraph/translateParagraphProperties';
 
-import { TextNode as PenpotTextNode } from '@ui/lib/types/shapes/textShape';
+import { TextNode as PenpotTextNode, TextNode } from '@ui/lib/types/shapes/textShape';
 
-export class BaseList {
+export abstract class BaseList implements List {
   protected styles: Map<number, PenpotTextNode> = new Map();
   protected indentation = 0;
+
+  abstract getCurrentList(textNode: TextNode, segment: StyleTextSegment): TextNode;
+
+  abstract restart(): void;
 
   protected updateStyles(textNode: PenpotTextNode, segment: StyleTextSegment): void {
     if (segment.indentation > this.indentation) {

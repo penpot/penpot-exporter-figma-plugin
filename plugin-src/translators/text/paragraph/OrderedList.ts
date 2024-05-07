@@ -1,13 +1,12 @@
 import * as romans from 'romans';
 
 import { BaseList } from '@plugin/translators/text/paragraph/BaseList';
-import { List } from '@plugin/translators/text/paragraph/List';
 
 import { TextNode as PenpotTextNode, TextNode } from '@ui/lib/types/shapes/textShape';
 
 import { StyleTextSegment } from './translateParagraphProperties';
 
-export class OrderedList extends BaseList implements List {
+export class OrderedList extends BaseList {
   protected counter: number[] = [];
 
   public getCurrentList(textNode: PenpotTextNode, segment: StyleTextSegment): PenpotTextNode {
