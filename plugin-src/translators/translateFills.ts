@@ -58,7 +58,8 @@ const translateImageFill = (fill: ImagePaint, width: number, height: number): Fi
     fillOpacity: !fill.visible ? 0 : fill.opacity,
     fillImage: {
       width: width,
-      height: height
+      height: height,
+      mtype: 'image/png'
     }
   };
 };
