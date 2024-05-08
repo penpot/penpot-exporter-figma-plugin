@@ -1,7 +1,8 @@
-import { rgbToHex } from '@plugin/utils';
+import { detectMimeType, rgbToHex } from '@plugin/utils';
 import { calculateLinearGradient } from '@plugin/utils/calculateLinearGradient';
 
 import { Fill } from '@ui/lib/types/utils/fill';
+import { ImageColor } from '@ui/lib/types/utils/imageColor';
 
 export const translateFill = (fill: Paint, width: number, height: number): Fill | undefined => {
   switch (fill.type) {
@@ -44,24 +45,38 @@ export const translatePageFill = (fill: Paint): string | undefined => {
   console.error(`Unsupported page fill type: ${fill.type}`);
 };
 
-const translateImageFill = (fill: ImagePaint, width: number, height: number): Fill => {
-  // if (fill.imageHash) {
-  //   const image = figma.getImageByHash(fill.imageHash);
-  //   if (image) {
-  //     image.getBytesAsync().then(bytes => {
-  //       const b64 = figma.base64Encode(bytes);
-  //       const dataUri = 'data:' + detectMimeType(b64) + ';base64,' + b64;
-  //     });
-  //   }
-  // }
-  return {
-    fillOpacity: !fill.visible ? 0 : fill.opacity,
-    fillImage: {
-      width: width,
-      height: height,
-      mtype: 'image/png'
+const translateImage = async (
+  imageHash: string | null,
+  width: number,
+  height: number
+): Promise<ImageColor | undefined> => {
+  if (imageHash) {
+    const image = figma.getImageByHash(imageHash);
+    if (image) {
+      const bytes = await image.getBytesAsync();
+      const b64 = figma.base64Encode(bytes);
+      const mimeType = detectMimeType(b64);
+      const dataUri = `data:${mimeType};base64,${b64}`;
+
+      return {
+        width: width,
+        height: height,
+        mtype: mimeType,
+        dataUri: dataUri
+      };
     }
-  };
+  }
+};
+
+const translateImageFill = (fill: ImagePaint, width: number, height: number): Fill => {
+  let result = {};
+  translateImage(fill.imageHash, width, height).then(image => {
+    result = {
+      fillImage: image,
+      fillOpacity: !fill.visible ? 0 : fill.opacity
+    };
+  });
+  return result;
 };
 
 const translateSolidFill = (fill: SolidPaint): Fill => {
