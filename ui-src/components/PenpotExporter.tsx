@@ -68,8 +68,8 @@ export const PenpotExporter = () => {
         <Stack space="medium">
           <MissingFontsSection fonts={missingFonts} />
           <Stack space="extra-small" direction="row">
-            <Button type="submit" disabled={exporting}>
-              {exporting ? 'Exporting...' : 'Export to Penpot'}
+            <Button type="submit" loading={exporting}>
+              Export to Penpot
             </Button>
             <Button secondary onClick={cancel}>
               Cancel

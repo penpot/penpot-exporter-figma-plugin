@@ -1,9 +1,9 @@
 import { transformDocumentNode } from '@plugin/transformers';
 
-import { findAllTextNodes } from './findAllTextnodes';
+import { BASE_HEIGHT, BASE_WIDTH, findAllTextNodes } from './findAllTextnodes';
 import { setCustomFontId } from './translators/text/font/custom';
 
-figma.showUI(__html__, { themeColors: true, height: 140, width: 290 });
+figma.showUI(__html__, { themeColors: true, width: BASE_WIDTH, height: BASE_HEIGHT });
 
 figma.ui.onmessage = message => {
   if (message.type === 'ready') {
