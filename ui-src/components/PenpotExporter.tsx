@@ -1,7 +1,8 @@
-import { Button, LoadingIndicator, Stack } from '@create-figma-plugin/ui';
+import { Button, LoadingIndicator } from '@create-figma-plugin/ui';
 import { useEffect, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 
+import { Stack } from '@ui/components/Stack';
 import { createPenpotFile } from '@ui/converters';
 import { PenpotDocument } from '@ui/lib/types/penpotDocument';
 
@@ -66,22 +67,14 @@ export const PenpotExporter = () => {
       <form onSubmit={methods.handleSubmit(exportPenpot)}>
         <Stack space="medium">
           <MissingFontsSection fonts={missingFonts} />
-          <div
-            style={{
-              display: 'grid',
-              flexDirection: 'row',
-              gridAutoFlow: 'column',
-              gap: '8px',
-              gridTemplateColumns: '1fr 1fr'
-            }}
-          >
-            <Button type="submit" disabled={exporting} fullWidth>
+          <Stack space="extra-small" direction="row">
+            <Button type="submit" disabled={exporting}>
               {exporting ? 'Exporting...' : 'Export to Penpot'}
             </Button>
-            <Button secondary onClick={cancel} fullWidth>
+            <Button secondary onClick={cancel}>
               Cancel
             </Button>
-          </div>
+          </Stack>
         </Stack>
       </form>
     </FormProvider>

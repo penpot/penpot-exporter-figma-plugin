@@ -30,7 +30,7 @@ export const findAllTextNodes = async () => {
   if (fonts.size === 0) return;
 
   const originalSize = 140;
-  const minimumExtraSize = 200;
+  const minimumExtraSize = 230;
   const fontSize = 70;
 
   figma.ui.resize(290, originalSize + minimumExtraSize + fonts.size * fontSize);
