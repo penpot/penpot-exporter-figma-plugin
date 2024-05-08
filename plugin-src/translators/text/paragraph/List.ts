@@ -10,7 +10,7 @@ type Level = {
   type: ListType;
 };
 
-type ListType = 'ORDERED' | 'UNORDERED';
+type ListType = 'ORDERED' | 'UNORDERED' | 'NONE';
 
 export class List {
   private levels: Map<number, Level> = new Map();
@@ -27,11 +27,11 @@ export class List {
 
     let level = this.levels.get(segment.indentation);
 
-    if (!level || level.type !== this.getListType(segment)) {
+    if (!level || level.type !== segment.listOptions.type) {
       level = {
         style: this.createStyle(textNode, segment.indentation),
         counter: 0,
-        type: this.getListType(segment)
+        type: segment.listOptions.type
       };
 
       this.levels.set(segment.indentation, level);
@@ -53,14 +53,6 @@ export class List {
       listType.getCurrentSymbol(level.counter, segment.indentation),
       level.style
     );
-  }
-
-  private getListType(segment: StyleTextSegment): ListType {
-    if (segment.listOptions.type === 'NONE') {
-      throw new Error('List type not valid');
-    }
-
-    return segment.listOptions.type;
   }
 
   private createStyle(node: PenpotTextNode, indentation: number): PenpotTextNode {
