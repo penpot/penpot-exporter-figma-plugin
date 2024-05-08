@@ -4,29 +4,33 @@ import { calculateLinearGradient } from '@plugin/utils/calculateLinearGradient';
 import { Fill } from '@ui/lib/types/utils/fill';
 import { ImageColor } from '@ui/lib/types/utils/imageColor';
 
-export const translateFill = (fill: Paint, width: number, height: number): Fill | undefined => {
+export const translateFill = async (
+  fill: Paint,
+  width: number,
+  height: number
+): Promise<Fill | undefined> => {
   switch (fill.type) {
     case 'SOLID':
       return translateSolidFill(fill);
     case 'GRADIENT_LINEAR':
       return translateGradientLinearFill(fill, width, height);
     case 'IMAGE':
-      return translateImageFill(fill, width, height);
+      return await translateImageFill(fill, width, height);
   }
 
   console.error(`Unsupported fill type: ${fill.type}`);
 };
 
-export const translateFills = (
+export const translateFills = async (
   fills: readonly Paint[] | typeof figma.mixed,
   width: number,
   height: number
-): Fill[] => {
+): Promise<Fill[]> => {
   const figmaFills = fills === figma.mixed ? [] : fills;
   const penpotFills: Fill[] = [];
 
   for (const fill of figmaFills) {
-    const penpotFill = translateFill(fill, width, height);
+    const penpotFill = await translateFill(fill, width, height);
     if (penpotFill) {
       // fills are applied in reverse order in Figma, that's why we unshift
       penpotFills.unshift(penpotFill);
@@ -68,15 +72,15 @@ const translateImage = async (
   }
 };
 
-const translateImageFill = (fill: ImagePaint, width: number, height: number): Fill => {
-  let result = {};
-  translateImage(fill.imageHash, width, height).then(image => {
-    result = {
-      fillImage: image,
-      fillOpacity: !fill.visible ? 0 : fill.opacity
-    };
-  });
-  return result;
+const translateImageFill = async (
+  fill: ImagePaint,
+  width: number,
+  height: number
+): Promise<Fill> => {
+  return {
+    fillOpacity: !fill.visible ? 0 : fill.opacity,
+    fillImage: await translateImage(fill.imageHash, width, height)
+  };
 };
 
 const translateSolidFill = (fill: SolidPaint): Fill => {

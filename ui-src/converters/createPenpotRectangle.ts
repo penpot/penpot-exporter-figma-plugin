@@ -6,6 +6,7 @@ export const createPenpotRectangle = (
   file: PenpotFile,
   { type, fills, blendMode, ...rest }: RectShape
 ) => {
+  console.log(fills);
   file.createRect({
     fills: translateFillGradients(fills),
     blendMode: translateUiBlendMode(blendMode),

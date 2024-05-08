@@ -29,21 +29,21 @@ export const transformSceneNode = async (
 
   switch (node.type) {
     case 'RECTANGLE':
-      return transformRectangleNode(node, baseX, baseY);
+      return await transformRectangleNode(node, baseX, baseY);
     case 'ELLIPSE':
-      return transformEllipseNode(node, baseX, baseY);
+      return await transformEllipseNode(node, baseX, baseY);
     case 'SECTION':
     case 'FRAME':
       return await transformFrameNode(node, baseX, baseY);
     case 'GROUP':
       return await transformGroupNode(node, baseX, baseY);
     case 'TEXT':
-      return transformTextNode(node, baseX, baseY);
+      return await transformTextNode(node, baseX, baseY);
     case 'STAR':
     case 'POLYGON':
     case 'VECTOR':
     case 'LINE':
-      return transformPathNode(node, baseX, baseY);
+      return await transformPathNode(node, baseX, baseY);
   }
 
   console.error(`Unsupported node type: ${node.type}`);
