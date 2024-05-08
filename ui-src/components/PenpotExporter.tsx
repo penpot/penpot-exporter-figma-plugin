@@ -1,10 +1,10 @@
+import { Button, LoadingIndicator, Stack } from '@create-figma-plugin/ui';
 import { useEffect, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 
 import { createPenpotFile } from '@ui/converters';
 import { PenpotDocument } from '@ui/lib/types/penpotDocument';
 
-import { Loader } from './Loader';
 import { MissingFontsSection } from './MissingFontsSection';
 
 type FormValues = Record<string, string>;
@@ -57,21 +57,32 @@ export const PenpotExporter = () => {
     };
   }, []);
 
-  const pluginReady = missingFonts !== undefined;
+  if (missingFonts === undefined) {
+    return <LoadingIndicator />;
+  }
 
   return (
     <FormProvider {...methods}>
-      <form className="centered-form" onSubmit={methods.handleSubmit(exportPenpot)}>
-        <Loader loading={!pluginReady} />
-        <div className="missing-fonts-form-container">
+      <form onSubmit={methods.handleSubmit(exportPenpot)}>
+        <Stack space="medium">
           <MissingFontsSection fonts={missingFonts} />
-        </div>
-        <footer>
-          <button type="submit" className="brand" disabled={exporting || !pluginReady}>
-            {exporting ? 'Exporting...' : 'Export to Penpot'}
-          </button>
-          <button onClick={cancel}>Cancel</button>
-        </footer>
+          <div
+            style={{
+              display: 'grid',
+              flexDirection: 'row',
+              gridAutoFlow: 'column',
+              gap: '8px',
+              gridTemplateColumns: '1fr 1fr'
+            }}
+          >
+            <Button type="submit" disabled={exporting} fullWidth>
+              {exporting ? 'Exporting...' : 'Export to Penpot'}
+            </Button>
+            <Button secondary onClick={cancel} fullWidth>
+              Cancel
+            </Button>
+          </div>
+        </Stack>
       </form>
     </FormProvider>
   );

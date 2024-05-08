@@ -3,7 +3,7 @@ import { transformDocumentNode } from '@plugin/transformers';
 import { findAllTextNodes } from './findAllTextnodes';
 import { setCustomFontId } from './translators/text/font/custom';
 
-figma.showUI(__html__, { themeColors: true, height: 300, width: 400 });
+figma.showUI(__html__, { themeColors: true, height: 140, width: 290 });
 
 figma.ui.onmessage = message => {
   if (message.type === 'ready') {

@@ -1,34 +1,54 @@
-import { useFormContext } from 'react-hook-form';
+import { Banner, IconInfo32, Stack, Text, Textbox } from '@create-figma-plugin/ui';
+import { Controller, useFormContext } from 'react-hook-form';
 
 type MissingFontsSectionProps = {
-  fonts?: string[];
+  fonts: string[];
 };
 
 export const MissingFontsSection = ({ fonts }: MissingFontsSectionProps) => {
-  const { register } = useFormContext();
-
-  if (fonts === undefined || !fonts.length) return;
+  if (!fonts.length) return null;
 
   return (
-    <section className="missing-fonts-section">
-      <div className="missing-fonts-header">
-        {fonts.length} missing font{fonts.length > 1 ? 's' : ''}:{' '}
-      </div>
-      <small className="font-install-message">
-        Ensure fonts are installed in Penpot before exporting.
-      </small>
-      <div className="missing-fonts-list">
-        {fonts.map(font => (
-          <div key={font} className="font-input-row">
-            <span className="font-name">{font}</span>
-            <input
-              className="font-id-input"
-              placeholder="Enter Penpot font id"
-              {...register(font)}
-            />
-          </div>
-        ))}
-      </div>
-    </section>
+    <Stack space="medium">
+      <Banner icon={<IconInfo32 />}>
+        {fonts.length} custom font{fonts.length > 1 ? 's' : ''} detected
+      </Banner>
+      <Stack space="small">
+        <Text>To export your file with custom fonts, please follow these steps:</Text>
+        <ol
+          style={{ paddingLeft: '1rem', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}
+        >
+          <li>
+            Upload your local fonts in Penpot.{' '}
+            <a href="https://www.google.com" target="_blank" rel="noreferrer">
+              Learn how to do it.
+            </a>
+          </li>
+          <li>Copy and paste the font IDs from Penpot below.</li>
+        </ol>
+      </Stack>
+      {fonts.map(font => (
+        <Stack space="extraSmall" key={font}>
+          <ControlledTextbox name={font} placeholder="Enter Penpot font id" />
+          <Text>{font}</Text>
+        </Stack>
+      ))}
+    </Stack>
+  );
+};
+
+type ControlledTextboxProps = { name: string; placeholder: string };
+
+const ControlledTextbox = ({ name, placeholder }: ControlledTextboxProps) => {
+  const { control } = useFormContext();
+
+  return (
+    <Controller
+      control={control}
+      name={name}
+      render={({ field: { onChange, onBlur, value } }) => (
+        <Textbox onChange={onChange} onBlur={onBlur} value={value} placeholder={placeholder} />
+      )}
+    />
   );
 };
