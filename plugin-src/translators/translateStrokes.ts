@@ -16,7 +16,8 @@ export const translateStrokes = async (
         strokeOpacity: fill?.fillOpacity,
         strokeWidth: translateStrokeWeight(nodeStrokes.strokeWeight, individualStrokes),
         strokeAlignment: translateStrokeAlignment(nodeStrokes.strokeAlign),
-        strokeStyle: nodeStrokes.dashPattern.length ? 'dashed' : 'solid'
+        strokeStyle: nodeStrokes.dashPattern.length ? 'dashed' : 'solid',
+        strokeImage: fill?.fillImage
       };
 
       if (!hasFillGeometry && index === 0 && vectorNetwork && vectorNetwork.vertices.length > 0) {

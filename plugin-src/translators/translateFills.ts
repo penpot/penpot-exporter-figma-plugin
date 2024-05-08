@@ -71,7 +71,6 @@ const translateImage = async (imageHash: string | null): Promise<ImageColor | un
 };
 
 const translateImageFill = async (fill: ImagePaint): Promise<Fill> => {
-  console.log(fill);
   return {
     fillOpacity: !fill.visible ? 0 : fill.opacity,
     fillImage: await translateImage(fill.imageHash)
