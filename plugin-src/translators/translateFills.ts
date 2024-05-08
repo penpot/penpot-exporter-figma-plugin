@@ -15,7 +15,7 @@ export const translateFill = async (
     case 'GRADIENT_LINEAR':
       return translateGradientLinearFill(fill, width, height);
     case 'IMAGE':
-      return await translateImageFill(fill, width, height);
+      return await translateImageFill(fill);
   }
 
   console.error(`Unsupported fill type: ${fill.type}`);
@@ -49,37 +49,32 @@ export const translatePageFill = (fill: Paint): string | undefined => {
   console.error(`Unsupported page fill type: ${fill.type}`);
 };
 
-const translateImage = async (
-  imageHash: string | null,
-  width: number,
-  height: number
-): Promise<ImageColor | undefined> => {
+const translateImage = async (imageHash: string | null): Promise<ImageColor | undefined> => {
   if (imageHash) {
     const image = figma.getImageByHash(imageHash);
     if (image) {
       const bytes = await image.getBytesAsync();
+      const size = await image.getSizeAsync();
       const b64 = figma.base64Encode(bytes);
       const mimeType = detectMimeType(b64);
       const dataUri = `data:${mimeType};base64,${b64}`;
 
       return {
-        width: width,
-        height: height,
+        width: size.width,
+        height: size.height,
         mtype: mimeType,
+        keepAspectRatio: true,
         dataUri: dataUri
       };
     }
   }
 };
 
-const translateImageFill = async (
-  fill: ImagePaint,
-  width: number,
-  height: number
-): Promise<Fill> => {
+const translateImageFill = async (fill: ImagePaint): Promise<Fill> => {
+  console.log(fill);
   return {
     fillOpacity: !fill.visible ? 0 : fill.opacity,
-    fillImage: await translateImage(fill.imageHash, width, height)
+    fillImage: await translateImage(fill.imageHash)
   };
 };
 
