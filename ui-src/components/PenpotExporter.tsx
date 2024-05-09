@@ -75,12 +75,12 @@ export const PenpotExporter = () => {
 
   if (needsReload) {
     return (
-      <Stack space="medium">
+      <Stack space="small">
         <Banner icon={<IconInfo32 />}>
           Changes detected. Please reload the plug-in to ensure all modifications are included in
           the exported file.
         </Banner>
-        <Stack space="extra-small" direction="row">
+        <Stack space="xsmall" direction="row">
           <Button onClick={reload} fullWidth>
             Reload
           </Button>
@@ -97,7 +97,7 @@ export const PenpotExporter = () => {
       <form onSubmit={methods.handleSubmit(exportPenpot)}>
         <Stack space="medium">
           <MissingFontsSection fonts={missingFonts} />
-          <Stack space="extra-small" direction="row">
+          <Stack space="xsmall" direction="row">
             <Button type="submit" loading={exporting} fullWidth>
               Export to Penpot
             </Button>

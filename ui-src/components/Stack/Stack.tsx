@@ -1,15 +1,14 @@
 import classNames from 'classnames';
-import { CSSProperties, ReactNode } from 'react';
+import { CSSProperties, PropsWithChildren } from 'react';
 
 import styles from './Stack.module.css';
 
-type StackProps = {
-  space?: 'medium' | 'small' | 'extra-small';
+type StackProps = PropsWithChildren & {
+  space?: 'medium' | 'small' | 'xsmall' | '2xsmall';
   direction?: 'column' | 'row';
   horizontalAlign?: 'start' | 'center';
   style?: CSSProperties;
   as?: 'div' | 'ol';
-  children: ReactNode;
 };
 
 export const Stack = ({

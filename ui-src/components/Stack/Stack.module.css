@@ -18,8 +18,12 @@
     --spacing: 1rem;
   }
 
-  .stack-extra-small {
+  .stack-xsmall {
     --spacing: 0.5rem;
+  }
+
+  .stack-2xsmall {
+    --spacing: 0.25rem;
   }
 
   .stack-center {

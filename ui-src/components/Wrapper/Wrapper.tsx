@@ -1,10 +1,9 @@
-import { CSSProperties, ReactNode } from 'react';
+import { CSSProperties, PropsWithChildren } from 'react';
 
 import styles from './Wrapper.module.css';
 
-type WrapperProps = {
+type WrapperProps = PropsWithChildren & {
   style?: CSSProperties;
-  children: ReactNode;
 };
 
 export const Wrapper = ({ style, children }: WrapperProps) => {
