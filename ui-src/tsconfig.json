@@ -12,7 +12,7 @@
       "react-dom/client": ["./node_modules/preact/compat/client"]
     },
     "allowJs": false,
-    "skipLibCheck": false,
+    "skipLibCheck": true,
     "esModuleInterop": false,
     "strict": true,
     "forceConsistentCasingInFileNames": true,
