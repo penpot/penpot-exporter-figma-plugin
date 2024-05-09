@@ -50,30 +50,33 @@ export const translatePageFill = (fill: Paint): string | undefined => {
 };
 
 const translateImage = async (imageHash: string | null): Promise<ImageColor | undefined> => {
-  if (imageHash) {
-    const image = figma.getImageByHash(imageHash);
-    if (image) {
-      const bytes = await image.getBytesAsync();
-      const size = await image.getSizeAsync();
-      const b64 = figma.base64Encode(bytes);
-      const mimeType = detectMimeType(b64);
-      const dataUri = `data:${mimeType};base64,${b64}`;
+  if (!imageHash) return;
 
-      return {
-        width: size.width,
-        height: size.height,
-        mtype: mimeType,
-        keepAspectRatio: true,
-        dataUri: dataUri
-      };
-    }
-  }
+  const image = figma.getImageByHash(imageHash);
+  if (!image) return;
+
+  const bytes = await image.getBytesAsync();
+  const size = await image.getSizeAsync();
+  const b64 = figma.base64Encode(bytes);
+  const mimeType = detectMimeType(b64);
+  const dataUri = `data:${mimeType};base64,${b64}`;
+
+  return {
+    width: size.width,
+    height: size.height,
+    mtype: mimeType,
+    keepAspectRatio: true,
+    dataUri: dataUri
+  };
 };
 
-const translateImageFill = async (fill: ImagePaint): Promise<Fill> => {
+const translateImageFill = async (fill: ImagePaint): Promise<Fill | undefined> => {
+  const fillImage = await translateImage(fill.imageHash);
+  if (!fillImage) return;
+
   return {
     fillOpacity: !fill.visible ? 0 : fill.opacity,
-    fillImage: await translateImage(fill.imageHash)
+    fillImage: fillImage
   };
 };
 
