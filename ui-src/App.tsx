@@ -1,4 +1,4 @@
-import Logo from '@ui/assets/logo.svg?react';
+import Penpot from '@ui/assets/penpot.svg?react';
 import { PenpotExporter } from '@ui/components/PenpotExporter';
 import { Stack } from '@ui/components/Stack';
 
@@ -7,10 +7,14 @@ import { Wrapper } from './components/Wrapper/Wrapper';
 export const App = () => (
   <Wrapper>
     <Stack space="medium">
-      <Stack space="extra-small" horizontalAlign="center">
-        <Logo style={{ height: 'auto', width: '2rem', fill: 'var(--figma-color-icon)' }} />
-        <h2 style={{ fontSize: '18px', fontWeight: 700 }}>Penpot Exporter</h2>
-      </Stack>
+      <Penpot
+        style={{
+          alignSelf: 'center',
+          height: 'auto',
+          width: '8.125rem',
+          fill: 'var(--figma-color-icon)'
+        }}
+      />
       <PenpotExporter />
     </Stack>
   </Wrapper>
