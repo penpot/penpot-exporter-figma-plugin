@@ -1,5 +1,25 @@
 # penpot-exporter
 
+## 0.3.0
+
+### Minor Changes
+
+- [#82](https://github.com/penpot/penpot-exporter-figma-plugin/pull/82) [`c013e80`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/c013e80962196e7a3e094bb3d3200fffdb389ef4) Thanks [@Cenadros](https://github.com/Cenadros)! - Basic support for custom fonts
+
+- [#88](https://github.com/penpot/penpot-exporter-figma-plugin/pull/88) [`2920ac2`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/2920ac297b37823eef8e5cf868df9a1fe8bd5c6c) Thanks [@jordisala1991](https://github.com/jordisala1991)! - Ordered and unordered list support
+
+- [#61](https://github.com/penpot/penpot-exporter-figma-plugin/pull/61) [`881ccab`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/881ccabe86d5a96e6efc84a1ec5e74f9cf5c4ca7) Thanks [@jordisala1991](https://github.com/jordisala1991)! - Added text basic properties
+
+- [#80](https://github.com/penpot/penpot-exporter-figma-plugin/pull/80) [`8021da2`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/8021da2623363ffab7f2b3434889c69ac4eeaffd) Thanks [@Cenadros](https://github.com/Cenadros)! - Add support for Google Fonts
+
+- [#89](https://github.com/penpot/penpot-exporter-figma-plugin/pull/89) [`dddc457`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/dddc457281e6824250852355270d9e2928bbe24a) Thanks [@Cenadros](https://github.com/Cenadros)! - Basic support for image fills
+
+- [#90](https://github.com/penpot/penpot-exporter-figma-plugin/pull/90) [`3ee244d`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/3ee244db923d280e60b6fa090d7613dcf6e8c1c2) Thanks [@jordisala1991](https://github.com/jordisala1991)! - Rethink the UI to be more usable
+
+- [#81](https://github.com/penpot/penpot-exporter-figma-plugin/pull/81) [`58f7b0a`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/58f7b0ab2c346e672cc175bbdabd9d481718bd49) Thanks [@Cenadros](https://github.com/Cenadros)! - Added support for Source Sans Pro font (penpot local font)
+
+- [#84](https://github.com/penpot/penpot-exporter-figma-plugin/pull/84) [`4ded73e`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/4ded73e0e9b9d3d498aa885bdac642c26b4475d8) Thanks [@Cenadros](https://github.com/Cenadros)! - Paragraph spacing and indent support
+
 ## 0.2.2
 
 ### Patch Changes
