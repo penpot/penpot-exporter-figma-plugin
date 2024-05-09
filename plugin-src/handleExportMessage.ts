@@ -2,8 +2,6 @@ import { transformDocumentNode } from '@plugin/transformers';
 import { setCustomFontId } from '@plugin/translators/text/font/custom';
 
 export const handleExportMessage = async (missingFontIds: Record<string, string>) => {
-  await figma.loadAllPagesAsync();
-
   Object.entries(missingFontIds).forEach(([fontFamily, fontId]) => {
     setCustomFontId(fontFamily, fontId);
   });

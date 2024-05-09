@@ -14,6 +14,11 @@ export const transformSceneNode = async (
   baseX: number = 0,
   baseY: number = 0
 ): Promise<PenpotNode | undefined> => {
+  figma.ui.postMessage({
+    type: 'PROGRESS',
+    data: node.name
+  });
+
   switch (node.type) {
     case 'RECTANGLE':
       return await transformRectangleNode(node, baseX, baseY);

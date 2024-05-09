@@ -8,9 +8,15 @@ export const transformChildren = async (
   baseX: number = 0,
   baseY: number = 0
 ): Promise<Children> => {
+  const children: PenpotNode[] = [];
+  for (const child of node.children) {
+    const sceneNode = await transformSceneNode(child, baseX, baseY);
+    if (sceneNode) {
+      children.push(sceneNode);
+    }
+  }
+
   return {
-    children: (
-      await Promise.all(node.children.map(child => transformSceneNode(child, baseX, baseY)))
-    ).filter((child): child is PenpotNode => !!child)
+    children: children
   };
 };
