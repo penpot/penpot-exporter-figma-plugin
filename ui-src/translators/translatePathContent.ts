@@ -13,7 +13,7 @@ export const translatePathContent = (content: PathContent): PathContent =>
     .map(({ command: stringCommand, ...rest }) => {
       const command = translatePathCommand(stringCommand);
 
-      if (!command) return null;
+      if (!command) return;
 
       return {
         command,

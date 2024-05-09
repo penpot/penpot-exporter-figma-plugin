@@ -2,7 +2,7 @@ import { Fill } from '@ui/lib/types/utils/fill';
 import { Gradient, LINEAR_TYPE, RADIAL_TYPE } from '@ui/lib/types/utils/gradient';
 
 export const translateFillGradients = (fills?: Fill[]): Fill[] | undefined => {
-  if (!fills) return fills;
+  if (!fills) return;
 
   return fills.map(fill => {
     if (fill.fillColorGradient) {

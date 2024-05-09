@@ -20,7 +20,7 @@ export const createPenpotText = (
 };
 
 const fixContentFills = (content?: TextContent): TextContent | undefined => {
-  if (!content) return content;
+  if (!content) return;
 
   return {
     ...content,
