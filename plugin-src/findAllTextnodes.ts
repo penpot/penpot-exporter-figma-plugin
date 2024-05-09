@@ -1,8 +1,11 @@
+import {
+  BASE_WIDTH,
+  MISSING_FONTS_TEXT_HEIGHT,
+  MISSING_SINGLE_FONT_HEIGHT,
+  NORMAL_HEIGHT
+} from './pluginSizes';
 import { isGoogleFont } from './translators/text/font/gfonts';
 import { isLocalFont } from './translators/text/font/local';
-
-export const BASE_HEIGHT = 140;
-export const BASE_WIDTH = 290;
 
 export const findAllTextNodes = async () => {
   await figma.loadAllPagesAsync();
@@ -30,12 +33,9 @@ export const findAllTextNodes = async () => {
     data: Array.from(fonts)
   });
 
-  const buttonsHeight = 30;
-  const textHeight = 200;
-  const fontSize = 70;
-
   const newHeight =
-    BASE_HEIGHT + buttonsHeight + (fonts.size > 0 ? textHeight + fonts.size * fontSize : 0);
+    NORMAL_HEIGHT +
+    (fonts.size > 0 ? MISSING_FONTS_TEXT_HEIGHT + fonts.size * MISSING_SINGLE_FONT_HEIGHT : 0);
 
   figma.ui.resize(BASE_WIDTH, newHeight);
 };

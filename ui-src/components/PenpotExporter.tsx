@@ -1,4 +1,4 @@
-import { Button, LoadingIndicator } from '@create-figma-plugin/ui';
+import { Banner, Button, IconInfo32, LoadingIndicator } from '@create-figma-plugin/ui';
 import { useEffect, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 
@@ -12,6 +12,8 @@ type FormValues = Record<string, string>;
 
 export const PenpotExporter = () => {
   const [missingFonts, setMissingFonts] = useState<string[]>();
+  const [needsReload, setNeedsReload] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [exporting, setExporting] = useState(false);
   const methods = useForm<FormValues>();
 
@@ -27,6 +29,10 @@ export const PenpotExporter = () => {
       setExporting(false);
     } else if (event.data.pluginMessage?.type == 'CUSTOM_FONTS') {
       setMissingFonts(event.data.pluginMessage.data as string[]);
+      setLoading(false);
+      setNeedsReload(false);
+    } else if (event.data.pluginMessage?.type == 'CHANGES_DETECTED') {
+      setNeedsReload(true);
     }
   };
 
@@ -48,6 +54,11 @@ export const PenpotExporter = () => {
     parent.postMessage({ pluginMessage: { type: 'cancel' } }, '*');
   };
 
+  const reload = () => {
+    setLoading(true);
+    parent.postMessage({ pluginMessage: { type: 'reload' } }, '*');
+  };
+
   useEffect(() => {
     window.addEventListener('message', onMessage);
 
@@ -58,8 +69,27 @@ export const PenpotExporter = () => {
     };
   }, []);
 
-  if (missingFonts === undefined) {
+  if (loading) {
     return <LoadingIndicator />;
+  }
+
+  if (needsReload) {
+    return (
+      <Stack space="medium">
+        <Banner icon={<IconInfo32 />}>
+          New fonts detected. Please reload the plug-in to ensure that all fonts are included in the
+          exported file.
+        </Banner>
+        <Stack space="extra-small" direction="row">
+          <Button onClick={reload} fullWidth>
+            Reload
+          </Button>
+          <Button secondary onClick={cancel} fullWidth>
+            Cancel
+          </Button>
+        </Stack>
+      </Stack>
+    );
   }
 
   return (
@@ -68,10 +98,10 @@ export const PenpotExporter = () => {
         <Stack space="medium">
           <MissingFontsSection fonts={missingFonts} />
           <Stack space="extra-small" direction="row">
-            <Button type="submit" loading={exporting}>
+            <Button type="submit" loading={exporting} fullWidth>
               Export to Penpot
             </Button>
-            <Button secondary onClick={cancel}>
+            <Button secondary onClick={cancel} fullWidth>
               Cancel
             </Button>
           </Stack>

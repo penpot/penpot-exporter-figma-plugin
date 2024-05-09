@@ -4,11 +4,11 @@ import { Controller, useFormContext } from 'react-hook-form';
 import { Stack } from './Stack';
 
 type MissingFontsSectionProps = {
-  fonts: string[];
+  fonts?: string[];
 };
 
 export const MissingFontsSection = ({ fonts }: MissingFontsSectionProps) => {
-  if (!fonts.length) return null;
+  if (!fonts || !fonts.length) return null;
 
   return (
     <Stack space="medium">

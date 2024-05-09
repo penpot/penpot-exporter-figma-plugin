@@ -1,9 +1,11 @@
-import { transformDocumentNode } from '@plugin/transformers';
+import { findAllTextNodes } from './findAllTextnodes';
+import { handleExportMessage } from './handleExportMessage';
+import { BASE_WIDTH, LOADING_HEIGHT } from './pluginSizes';
+import { registerChange } from './registerChange';
 
-import { BASE_HEIGHT, BASE_WIDTH, findAllTextNodes } from './findAllTextnodes';
-import { setCustomFontId } from './translators/text/font/custom';
+let currentPage = figma.currentPage;
 
-figma.showUI(__html__, { themeColors: true, width: BASE_WIDTH, height: BASE_HEIGHT });
+figma.showUI(__html__, { themeColors: true, width: BASE_WIDTH, height: LOADING_HEIGHT });
 
 figma.ui.onmessage = message => {
   if (message.type === 'ready') {
@@ -17,17 +19,21 @@ figma.ui.onmessage = message => {
   if (message.type === 'cancel') {
     figma.closePlugin();
   }
+
+  if (message.type === 'reload') {
+    findAllTextNodes();
+  }
 };
 
-const handleExportMessage = async (missingFontIds: Record<string, string>) => {
-  await figma.loadAllPagesAsync();
+currentPage.once('nodechange', registerChange);
 
-  Object.entries(missingFontIds).forEach(([fontFamily, fontId]) => {
-    setCustomFontId(fontFamily, fontId);
-  });
+figma.on('currentpagechange', () => {
+  const newPage = figma.currentPage;
 
-  figma.ui.postMessage({
-    type: 'PENPOT_DOCUMENT',
-    data: await transformDocumentNode(figma.root)
-  });
-};
+  if (currentPage === newPage) return;
+
+  currentPage.off('nodechange', registerChange);
+  currentPage = newPage;
+
+  currentPage.once('nodechange', registerChange);
+});
