@@ -5,7 +5,6 @@ import {
   createPenpotArtboard,
   createPenpotCircle,
   createPenpotGroup,
-  createPenpotImage,
   createPenpotPath,
   createPenpotRectangle,
   createPenpotText
@@ -21,8 +20,6 @@ export const createPenpotItem = (file: PenpotFile, node: PenpotNode) => {
       return createPenpotArtboard(file, node);
     case 'group':
       return createPenpotGroup(file, node);
-    case 'image':
-      return createPenpotImage(file, node);
     case 'path':
       return createPenpotPath(file, node);
     case 'text':
