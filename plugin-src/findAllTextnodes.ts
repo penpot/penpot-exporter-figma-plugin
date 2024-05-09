@@ -1,3 +1,10 @@
+import {
+  BASE_WIDTH,
+  MISSING_FONTS_TEXT_HEIGHT,
+  MISSING_SINGLE_FONT_HEIGHT,
+  NORMAL_HEIGHT
+} from './pluginSizes';
+import { registerChange } from './registerChange';
 import { isGoogleFont } from './translators/text/font/gfonts';
 import { isLocalFont } from './translators/text/font/local';
 
@@ -27,14 +34,10 @@ export const findAllTextNodes = async () => {
     data: Array.from(fonts)
   });
 
-  const maxHeight = 300;
+  const newHeight =
+    NORMAL_HEIGHT +
+    (fonts.size > 0 ? MISSING_FONTS_TEXT_HEIGHT + fonts.size * MISSING_SINGLE_FONT_HEIGHT : 0);
 
-  if (fonts.size === 0) return;
-
-  if (fonts.size * 40 > maxHeight) {
-    figma.ui.resize(400, 300 + maxHeight);
-    return;
-  }
-
-  figma.ui.resize(400, 300 + fonts.size * 40);
+  figma.ui.resize(BASE_WIDTH, newHeight);
+  figma.currentPage.once('nodechange', registerChange);
 };

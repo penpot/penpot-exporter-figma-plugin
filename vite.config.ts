@@ -1,4 +1,4 @@
-import react from '@vitejs/plugin-react-swc';
+import preact from '@preact/preset-vite';
 import { defineConfig } from 'vite';
 import { viteSingleFile } from 'vite-plugin-singlefile';
 import svgr from 'vite-plugin-svgr';
@@ -6,7 +6,7 @@ import tsconfigPaths from 'vite-tsconfig-paths';
 
 export default defineConfig({
   root: './ui-src',
-  plugins: [svgr(), react(), viteSingleFile(), tsconfigPaths()],
+  plugins: [svgr(), preact(), viteSingleFile(), tsconfigPaths()],
   build: {
     target: 'esnext',
     assetsInlineLimit: 100000000,
@@ -16,7 +16,8 @@ export default defineConfig({
     rollupOptions: {
       output: {
         inlineDynamicImports: true
-      }
+      },
+      external: ['!../css/base.css']
     }
   }
 });
