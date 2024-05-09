@@ -2,10 +2,10 @@ import { translateFills } from '@plugin/translators';
 
 import { ShapeAttributes } from '@ui/lib/types/shapes/shape';
 
-export const transformFills = (
+export const transformFills = async (
   node: MinimalFillsMixin & DimensionAndPositionMixin
-): Partial<ShapeAttributes> => {
+): Promise<Partial<ShapeAttributes>> => {
   return {
-    fills: translateFills(node.fills, node.width, node.height)
+    fills: await translateFills(node.fills, node.width, node.height)
   };
 };

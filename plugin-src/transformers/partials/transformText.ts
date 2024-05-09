@@ -4,7 +4,7 @@ import { translateGrowType, translateVerticalAlign } from '@plugin/translators/t
 
 import { TextShape } from '@ui/lib/types/shapes/textShape';
 
-export const transformText = (node: TextNode): Partial<TextShape> => {
+export const transformText = async (node: TextNode): Promise<Partial<TextShape>> => {
   const styledTextSegments = node.getStyledTextSegments([
     'fontName',
     'fontSize',
@@ -28,9 +28,9 @@ export const transformText = (node: TextNode): Partial<TextShape> => {
           children: [
             {
               type: 'paragraph',
-              children: translateStyleTextSegments(node, styledTextSegments),
+              children: await translateStyleTextSegments(node, styledTextSegments),
               ...(styledTextSegments.length ? transformTextStyle(node, styledTextSegments[0]) : {}),
-              ...transformFills(node)
+              ...(await transformFills(node))
             }
           ]
         }

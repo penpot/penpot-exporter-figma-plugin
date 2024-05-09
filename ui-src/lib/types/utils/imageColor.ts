@@ -8,4 +8,5 @@ export type ImageColor = {
   mtype?: string;
   id?: Uuid;
   keepAspectRatio?: boolean;
+  dataUri?: string;
 };

@@ -28,7 +28,7 @@ export const transformFrameNode = async (
     // they plan to add it in the future. Refactor this when available.
     frameSpecificAttributes = {
       // @see: https://forum.figma.com/t/why-are-strokes-not-available-on-section-nodes/41658
-      ...transformStrokes(node),
+      ...(await transformStrokes(node)),
       // @see: https://forum.figma.com/t/add-a-blendmode-property-for-sectionnode/58560
       ...transformBlend(node),
       ...transformProportion(node),
@@ -41,7 +41,7 @@ export const transformFrameNode = async (
     type: 'frame',
     name: node.name,
     showContent: isSectionNode(node) ? true : !node.clipsContent,
-    ...transformFills(node),
+    ...(await transformFills(node)),
     ...frameSpecificAttributes,
     ...(await transformChildren(node, baseX + node.x, baseY + node.y)),
     ...transformDimensionAndPosition(node, baseX, baseY),

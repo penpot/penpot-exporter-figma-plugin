@@ -17,7 +17,7 @@ type TextAttributes = {
   content?: TextContent;
 };
 
-type TextContent = {
+export type TextContent = {
   type: 'root';
   key?: string;
   verticalAlign?: TextVerticalAlign;
@@ -28,13 +28,13 @@ export type TextVerticalAlign = 'top' | 'bottom' | 'center';
 export type TextHorizontalAlign = 'left' | 'right' | 'center' | 'justify';
 export type TextFontStyle = 'normal' | 'italic';
 
-type ParagraphSet = {
+export type ParagraphSet = {
   type: 'paragraph-set';
   key?: string;
   children: Paragraph[];
 };
 
-type Paragraph = {
+export type Paragraph = {
   type: 'paragraph';
   key?: string;
   children: TextNode[];

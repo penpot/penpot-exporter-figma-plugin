@@ -6,7 +6,7 @@ const signatures: Signatures = {
   'R0lGODdh': 'image/gif',
   'R0lGODlh': 'image/gif',
   'iVBORw0KGgo': 'image/png',
-  '/9j/': 'image/jpg'
+  '/9j/': 'image/jpeg'
 };
 
 export const detectMimeType = (b64: string) => {

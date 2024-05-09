@@ -2,31 +2,34 @@ import { translateFill } from '@plugin/translators/translateFills';
 
 import { Stroke, StrokeAlignment, StrokeCaps } from '@ui/lib/types/utils/stroke';
 
-export const translateStrokes = (
+export const translateStrokes = async (
   nodeStrokes: MinimalStrokesMixin,
   hasFillGeometry?: boolean,
   vectorNetwork?: VectorNetwork,
   individualStrokes?: IndividualStrokesMixin
-): Stroke[] => {
-  return nodeStrokes.strokes.map((paint, index) => {
-    const fill = translateFill(paint, 0, 0);
-    const stroke: Stroke = {
-      strokeColor: fill?.fillColor,
-      strokeOpacity: fill?.fillOpacity,
-      strokeWidth: translateStrokeWeight(nodeStrokes.strokeWeight, individualStrokes),
-      strokeAlignment: translateStrokeAlignment(nodeStrokes.strokeAlign),
-      strokeStyle: nodeStrokes.dashPattern.length ? 'dashed' : 'solid'
-    };
+): Promise<Stroke[]> => {
+  return await Promise.all(
+    nodeStrokes.strokes.map(async (paint, index) => {
+      const fill = await translateFill(paint, 0, 0);
+      const stroke: Stroke = {
+        strokeColor: fill?.fillColor,
+        strokeOpacity: fill?.fillOpacity,
+        strokeWidth: translateStrokeWeight(nodeStrokes.strokeWeight, individualStrokes),
+        strokeAlignment: translateStrokeAlignment(nodeStrokes.strokeAlign),
+        strokeStyle: nodeStrokes.dashPattern.length ? 'dashed' : 'solid',
+        strokeImage: fill?.fillImage
+      };
 
-    if (!hasFillGeometry && index === 0 && vectorNetwork && vectorNetwork.vertices.length > 0) {
-      stroke.strokeCapStart = translateStrokeCap(vectorNetwork.vertices[0]);
-      stroke.strokeCapEnd = translateStrokeCap(
-        vectorNetwork.vertices[vectorNetwork.vertices.length - 1]
-      );
-    }
+      if (!hasFillGeometry && index === 0 && vectorNetwork && vectorNetwork.vertices.length > 0) {
+        stroke.strokeCapStart = translateStrokeCap(vectorNetwork.vertices[0]);
+        stroke.strokeCapEnd = translateStrokeCap(
+          vectorNetwork.vertices[vectorNetwork.vertices.length - 1]
+        );
+      }
 
-    return stroke;
-  });
+      return stroke;
+    })
+  );
 };
 
 const translateStrokeWeight = (
