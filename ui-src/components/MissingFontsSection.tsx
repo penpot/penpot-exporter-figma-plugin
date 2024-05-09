@@ -30,7 +30,7 @@ export const MissingFontsSection = ({ fonts }: MissingFontsSectionProps) => {
       </Stack>
       {fonts.map(font => (
         <Stack space="extra-small" key={font}>
-          <ControlledTextbox name={font} placeholder="Enter Penpot font id" />
+          <ControlledTextbox name={font} placeholder="Paste font ID from Penpot" />
           <Text>{font}</Text>
         </Stack>
       ))}
@@ -48,7 +48,13 @@ const ControlledTextbox = ({ name, placeholder }: ControlledTextboxProps) => {
       control={control}
       name={name}
       render={({ field: { onChange, onBlur, value } }) => (
-        <Textbox onChange={onChange} onBlur={onBlur} value={value} placeholder={placeholder} />
+        <Textbox
+          onChange={onChange}
+          onBlur={onBlur}
+          value={value}
+          placeholder={placeholder}
+          variant="border"
+        />
       )}
     />
   );

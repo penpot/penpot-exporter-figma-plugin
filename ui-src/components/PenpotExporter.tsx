@@ -77,8 +77,8 @@ export const PenpotExporter = () => {
     return (
       <Stack space="medium">
         <Banner icon={<IconInfo32 />}>
-          New fonts detected. Please reload the plug-in to ensure that all fonts are included in the
-          exported file.
+          Changes detected. Please reload the plug-in to ensure all modifications are included in
+          the exported file.
         </Banner>
         <Stack space="extra-small" direction="row">
           <Button onClick={reload} fullWidth>
