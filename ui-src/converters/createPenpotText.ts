@@ -6,7 +6,6 @@ import {
   TextNode,
   TextShape
 } from '@ui/lib/types/shapes/textShape';
-import { Fill } from '@ui/lib/types/utils/fill';
 import { translateUiBlendMode } from '@ui/translators';
 
 export const createPenpotText = (
@@ -39,9 +38,7 @@ const fixParagraphSetFills = (paragraphSet: ParagraphSet): ParagraphSet => {
 const fixParagraphFills = (paragraph: Paragraph): Paragraph => {
   return {
     ...paragraph,
-    fills: paragraph.fills
-      ?.map(fill => removeImageFill(fill))
-      .filter((fill): fill is Fill => !!fill),
+    fills: paragraph.fills?.filter(fill => fill.fillImage === undefined),
     children: paragraph.children.map(child => fixTextNodeFills(child))
   };
 };
@@ -49,15 +46,6 @@ const fixParagraphFills = (paragraph: Paragraph): Paragraph => {
 const fixTextNodeFills = (textNode: TextNode): TextNode => {
   return {
     ...textNode,
-    fills: textNode.fills?.map(fill => removeImageFill(fill)).filter((fill): fill is Fill => !!fill)
+    fills: textNode.fills?.filter(fill => fill.fillImage === undefined)
   };
-};
-
-const removeImageFill = ({ fillImage, ...rest }: Fill): Fill | undefined => {
-  if (fillImage) {
-    return {
-      ...rest,
-      fillColor: '#000000'
-    };
-  }
 };

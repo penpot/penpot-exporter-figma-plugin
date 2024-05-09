@@ -108,6 +108,6 @@ const translateGradientLinearFill = (fill: GradientPaint, width: number, height:
         }
       ]
     },
-    fillOpacity: fill.visible === false ? 0 : undefined
+    fillOpacity: !fill.visible ? 0 : fill.opacity
   };
 };
