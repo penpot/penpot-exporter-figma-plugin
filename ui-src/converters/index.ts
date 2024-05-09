@@ -2,7 +2,6 @@ export * from './createPenpotArtboard';
 export * from './createPenpotCircle';
 export * from './createPenpotFile';
 export * from './createPenpotGroup';
-export * from './createPenpotImage';
 export * from './createPenpotItem';
 export * from './createPenpotPage';
 export * from './createPenpotPath';
