@@ -20,6 +20,7 @@ export const transformVectorPaths = (
   baseY: number
 ): PathAttributes => {
   const vectorPaths = getVectorPaths(node);
+
   return {
     type: 'path',
     content: translateVectorPaths(vectorPaths, baseX + node.x, baseY + node.y)
