@@ -70,7 +70,7 @@ export const PenpotExporter = () => {
   }, []);
 
   useEffect(() => {
-    const height = document.querySelector('#root')?.clientHeight;
+    const height = document.getElementById('root')?.clientHeight;
 
     parent.postMessage({ pluginMessage: { type: 'resize', height } }, '*');
   }, [missingFonts, loading, needsReload, exporting]);
