@@ -1,4 +1,4 @@
-import { translateVectorPaths } from '@plugin/translators';
+import { createLineGeometry, translateVectorPaths } from '@plugin/translators';
 
 import { PathAttributes } from '@ui/lib/types/shapes/pathShape';
 
@@ -10,7 +10,7 @@ const getVectorPaths = (node: VectorNode | StarNode | LineNode | PolygonNode): V
     case 'VECTOR':
       return node.vectorPaths;
     case 'LINE':
-      return node.strokeGeometry;
+      return createLineGeometry(node);
   }
 };
 
