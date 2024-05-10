@@ -16,6 +16,31 @@ export const translateVectorPaths = (
   return segments;
 };
 
+export const createLineGeometry = (node: LineNode): VectorPaths => {
+  const commands: (MoveToCommand | LineToCommand)[] = [];
+
+  commands.push({
+    command: 'moveto',
+    code: 'M',
+    x: 0,
+    y: 0
+  });
+
+  commands.push({
+    command: 'lineto',
+    code: 'L',
+    x: node.width,
+    y: node.height
+  });
+
+  return [
+    {
+      windingRule: 'NONZERO',
+      data: commands.map(({ code, x, y }) => `${code} ${x} ${y}`).join(' ') + ' Z'
+    }
+  ];
+};
+
 const translateVectorPath = (path: VectorPath, baseX: number, baseY: number): Segment[] => {
   const normalizedPaths = parseSVG(path.data);
 

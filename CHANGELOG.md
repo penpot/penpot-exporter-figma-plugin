@@ -1,5 +1,13 @@
 # penpot-exporter
 
+## 0.3.1
+
+### Patch Changes
+
+- [#96](https://github.com/penpot/penpot-exporter-figma-plugin/pull/96) [`9355f28`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/9355f282d00562aad1adef50fce61829ae9b08ec) Thanks [@Cenadros](https://github.com/Cenadros)! - Fixed correct size for line nodes
+
+- [#96](https://github.com/penpot/penpot-exporter-figma-plugin/pull/96) [`9355f28`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/9355f282d00562aad1adef50fce61829ae9b08ec) Thanks [@Cenadros](https://github.com/Cenadros)! - Fixed line node export when using opacity 0 on the line
+
 ## 0.3.0
 
 ### Minor Changes
