@@ -102,7 +102,7 @@ export const PenpotExporter = () => {
     <FormProvider {...methods}>
       <form onSubmit={methods.handleSubmit(exportPenpot)}>
         <Stack space="medium">
-          <MissingFontsSection fonts={missingFonts} exporting={exporting} />
+          <MissingFontsSection fonts={missingFonts} />
           <Stack space="xsmall" direction="row">
             <Button type="submit" loading={exporting} fullWidth>
               Export to Penpot
