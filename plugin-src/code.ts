@@ -1,9 +1,9 @@
 import { findAllTextNodes } from './findAllTextnodes';
 import { handleExportMessage } from './handleExportMessage';
-import { BASE_WIDTH, LOADING_HEIGHT } from './pluginSizes';
+import { BASE_WIDTH, NORMAL_HEIGHT, ROOT_OFFSET } from './pluginSizes';
 import { registerChange } from './registerChange';
 
-figma.showUI(__html__, { themeColors: true, width: BASE_WIDTH, height: LOADING_HEIGHT });
+figma.showUI(__html__, { themeColors: true, width: BASE_WIDTH, height: NORMAL_HEIGHT });
 
 figma.ui.onmessage = message => {
   if (message.type === 'ready') {
@@ -11,7 +11,10 @@ figma.ui.onmessage = message => {
   }
 
   if (message.type === 'export') {
-    handleExportMessage(message.data as Record<string, string>);
+    // Give the plugin time to resize before exporting
+    setTimeout(() => {
+      handleExportMessage(message.data as Record<string, string>);
+    }, 100);
   }
 
   if (message.type === 'cancel') {
@@ -20,6 +23,10 @@ figma.ui.onmessage = message => {
 
   if (message.type === 'reload') {
     findAllTextNodes();
+  }
+
+  if (message.type === 'resize') {
+    figma.ui.resize(BASE_WIDTH, message.height + ROOT_OFFSET);
   }
 };
 

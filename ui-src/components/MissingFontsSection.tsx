@@ -5,10 +5,12 @@ import { Stack } from './Stack';
 
 type MissingFontsSectionProps = {
   fonts?: string[];
+  exporting: boolean;
 };
 
-export const MissingFontsSection = ({ fonts }: MissingFontsSectionProps) => {
+export const MissingFontsSection = ({ fonts, exporting }: MissingFontsSectionProps) => {
   if (!fonts || !fonts.length) return null;
+  if (exporting) return null;
 
   return (
     <Stack space="small">

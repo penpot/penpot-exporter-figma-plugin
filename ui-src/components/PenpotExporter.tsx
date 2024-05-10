@@ -69,6 +69,12 @@ export const PenpotExporter = () => {
     };
   }, []);
 
+  useEffect(() => {
+    const height = document.querySelector('#root')?.clientHeight;
+
+    parent.postMessage({ pluginMessage: { type: 'resize', height } }, '*');
+  }, [missingFonts, loading, needsReload, exporting]);
+
   if (loading) {
     return <LoadingIndicator />;
   }
@@ -96,7 +102,7 @@ export const PenpotExporter = () => {
     <FormProvider {...methods}>
       <form onSubmit={methods.handleSubmit(exportPenpot)}>
         <Stack space="medium">
-          <MissingFontsSection fonts={missingFonts} />
+          <MissingFontsSection fonts={missingFonts} exporting={exporting} />
           <Stack space="xsmall" direction="row">
             <Button type="submit" loading={exporting} fullWidth>
               Export to Penpot
