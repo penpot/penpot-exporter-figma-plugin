@@ -2,4 +2,4 @@
 "penpot-exporter": patch
 ---
 
-Fixed line node to work in every scenario
+Fixed line node export when using opacity 0 on the line
