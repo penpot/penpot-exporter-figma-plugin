@@ -6,12 +6,12 @@
   flex-direction: var(--direction);
   gap: var(--spacing);
 
-  & > * {
-    flex: 1;
-  }
-
   .stack-row {
     --direction: row;
+
+    & > * {
+      flex: 1;
+    }
   }
 
   .stack-small {
