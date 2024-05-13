@@ -7,3 +7,4 @@ export * from './transformPathNode';
 export * from './transformRectangleNode';
 export * from './transformSceneNode';
 export * from './transformTextNode';
+export * from './transformVectorNode';

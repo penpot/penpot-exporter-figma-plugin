@@ -20,8 +20,6 @@ export interface PenpotFile {
   createCircle(circle: CircleShape): void;
   createPath(path: PathShape): void;
   createText(options: TextShape): void;
-  // createSVG(svg: any): void;
-  // closeSVG(): void;
   // addLibraryColor(color: any): void;
   // updateLibraryColor(color: any): void;
   // deleteLibraryColor(color: any): void;
