@@ -1,6 +1,5 @@
-import { PenpotFile } from '@ui/lib/penpot';
-import { RECT_TYPE } from '@ui/lib/types/rect/rectAttributes';
-import { RectShape } from '@ui/lib/types/rect/rectShape';
+import { PenpotFile } from '@ui/lib/types/penpotFile';
+import { RectShape } from '@ui/lib/types/shapes/rectShape';
 import { translateFillGradients, translateUiBlendMode } from '@ui/translators';
 
 export const createPenpotRectangle = (
@@ -8,7 +7,6 @@ export const createPenpotRectangle = (
   { type, fills, blendMode, ...rest }: RectShape
 ) => {
   file.createRect({
-    type: RECT_TYPE,
     fills: translateFillGradients(fills),
     blendMode: translateUiBlendMode(blendMode),
     ...rest

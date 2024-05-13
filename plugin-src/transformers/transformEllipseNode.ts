@@ -8,19 +8,19 @@ import {
   transformStrokes
 } from '@plugin/transformers/partials';
 
-import { CircleShape } from '@ui/lib/types/circle/circleShape';
+import { CircleShape } from '@ui/lib/types/shapes/circleShape';
 
-export const transformEllipseNode = (
+export const transformEllipseNode = async (
   node: EllipseNode,
   baseX: number,
   baseY: number
-): CircleShape => {
+): Promise<CircleShape> => {
   return {
     type: 'circle',
     name: node.name,
-    ...transformFills(node),
+    ...(await transformFills(node)),
     ...transformEffects(node),
-    ...transformStrokes(node),
+    ...(await transformStrokes(node)),
     ...transformDimensionAndPosition(node, baseX, baseY),
     ...transformSceneNode(node),
     ...transformBlend(node),

@@ -1,16 +1,19 @@
+import { Banner, Button, IconInfo32, LoadingIndicator } from '@create-figma-plugin/ui';
 import { useEffect, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 
+import { Stack } from '@ui/components/Stack';
 import { createPenpotFile } from '@ui/converters';
 import { PenpotDocument } from '@ui/lib/types/penpotDocument';
 
-import { Loader } from './Loader';
 import { MissingFontsSection } from './MissingFontsSection';
 
 type FormValues = Record<string, string>;
 
 export const PenpotExporter = () => {
   const [missingFonts, setMissingFonts] = useState<string[]>();
+  const [needsReload, setNeedsReload] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [exporting, setExporting] = useState(false);
   const methods = useForm<FormValues>();
 
@@ -26,6 +29,10 @@ export const PenpotExporter = () => {
       setExporting(false);
     } else if (event.data.pluginMessage?.type == 'CUSTOM_FONTS') {
       setMissingFonts(event.data.pluginMessage.data as string[]);
+      setLoading(false);
+      setNeedsReload(false);
+    } else if (event.data.pluginMessage?.type == 'CHANGES_DETECTED') {
+      setNeedsReload(true);
     }
   };
 
@@ -47,6 +54,11 @@ export const PenpotExporter = () => {
     parent.postMessage({ pluginMessage: { type: 'cancel' } }, '*');
   };
 
+  const reload = () => {
+    setLoading(true);
+    parent.postMessage({ pluginMessage: { type: 'reload' } }, '*');
+  };
+
   useEffect(() => {
     window.addEventListener('message', onMessage);
 
@@ -57,21 +69,43 @@ export const PenpotExporter = () => {
     };
   }, []);
 
-  const pluginReady = missingFonts !== undefined;
+  if (loading) {
+    return <LoadingIndicator />;
+  }
+
+  if (needsReload) {
+    return (
+      <Stack space="small">
+        <Banner icon={<IconInfo32 />}>
+          Changes detected. Please reload the plug-in to ensure all modifications are included in
+          the exported file.
+        </Banner>
+        <Stack space="xsmall" direction="row">
+          <Button onClick={reload} fullWidth>
+            Reload
+          </Button>
+          <Button secondary onClick={cancel} fullWidth>
+            Cancel
+          </Button>
+        </Stack>
+      </Stack>
+    );
+  }
 
   return (
     <FormProvider {...methods}>
-      <form className="centered-form" onSubmit={methods.handleSubmit(exportPenpot)}>
-        <Loader loading={!pluginReady} />
-        <div className="missing-fonts-form-container">
+      <form onSubmit={methods.handleSubmit(exportPenpot)}>
+        <Stack space="medium">
           <MissingFontsSection fonts={missingFonts} />
-        </div>
-        <footer>
-          <button type="submit" className="brand" disabled={exporting || !pluginReady}>
-            {exporting ? 'Exporting...' : 'Export to Penpot'}
-          </button>
-          <button onClick={cancel}>Cancel</button>
-        </footer>
+          <Stack space="xsmall" direction="row">
+            <Button type="submit" loading={exporting} fullWidth>
+              Export to Penpot
+            </Button>
+            <Button secondary onClick={cancel} fullWidth>
+              Cancel
+            </Button>
+          </Stack>
+        </Stack>
       </form>
     </FormProvider>
   );

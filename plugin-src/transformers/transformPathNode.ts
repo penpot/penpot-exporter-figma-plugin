@@ -6,26 +6,27 @@ import {
   transformProportion,
   transformSceneNode,
   transformStrokes,
-  transformVectorPaths
+  transformVectorPathsAsContent
 } from '@plugin/transformers/partials';
 
-import { PathShape } from '@ui/lib/types/path/pathShape';
+import { PathShape } from '@ui/lib/types/shapes/pathShape';
 
 const hasFillGeometry = (node: VectorNode | StarNode | LineNode | PolygonNode): boolean => {
   return 'fillGeometry' in node && node.fillGeometry.length > 0;
 };
 
-export const transformPathNode = (
+export const transformPathNode = async (
   node: VectorNode | StarNode | LineNode | PolygonNode,
   baseX: number,
   baseY: number
-): PathShape => {
+): Promise<PathShape> => {
   return {
+    type: 'path',
     name: node.name,
-    ...(hasFillGeometry(node) ? transformFills(node) : []),
-    ...transformStrokes(node),
+    ...(hasFillGeometry(node) ? await transformFills(node) : []),
+    ...(await transformStrokes(node)),
     ...transformEffects(node),
-    ...transformVectorPaths(node, baseX, baseY),
+    ...transformVectorPathsAsContent(node, baseX, baseY),
     ...transformDimensionAndPosition(node, baseX, baseY),
     ...transformSceneNode(node),
     ...transformBlend(node),

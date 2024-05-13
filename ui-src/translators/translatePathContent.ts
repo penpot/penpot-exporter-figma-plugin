@@ -6,14 +6,14 @@ import {
   VECTOR_CURVE_TO,
   VECTOR_LINE_TO,
   VECTOR_MOVE_TO
-} from '@ui/lib/types/path/PathContent';
+} from '@ui/lib/types/shapes/pathShape';
 
 export const translatePathContent = (content: PathContent): PathContent =>
   content
     .map(({ command: stringCommand, ...rest }) => {
       const command = translatePathCommand(stringCommand);
 
-      if (!command) return null;
+      if (!command) return;
 
       return {
         command,

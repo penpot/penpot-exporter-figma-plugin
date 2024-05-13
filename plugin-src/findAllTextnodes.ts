@@ -1,5 +1,6 @@
-import { isGoogleFont } from './translators/text/gfonts';
-import { isLocalFont } from './translators/text/local';
+import { registerChange } from './registerChange';
+import { isGoogleFont } from './translators/text/font/gfonts';
+import { isLocalFont } from './translators/text/font/local';
 
 export const findAllTextNodes = async () => {
   await figma.loadAllPagesAsync();
@@ -27,14 +28,5 @@ export const findAllTextNodes = async () => {
     data: Array.from(fonts)
   });
 
-  const maxHeight = 300;
-
-  if (fonts.size === 0) return;
-
-  if (fonts.size * 40 > maxHeight) {
-    figma.ui.resize(400, 300 + maxHeight);
-    return;
-  }
-
-  figma.ui.resize(400, 300 + fonts.size * 40);
+  figma.currentPage.once('nodechange', registerChange);
 };

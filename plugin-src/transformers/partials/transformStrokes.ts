@@ -1,6 +1,6 @@
 import { translateStrokes } from '@plugin/translators';
 
-import { ShapeAttributes } from '@ui/lib/types/shape/shapeAttributes';
+import { ShapeAttributes } from '@ui/lib/types/shapes/shape';
 
 const isVectorLike = (node: GeometryMixin | VectorLikeMixin): node is VectorLikeMixin => {
   return 'vectorNetwork' in node;
@@ -16,11 +16,11 @@ const hasFillGeometry = (node: GeometryMixin): boolean => {
   return node.fillGeometry.length > 0;
 };
 
-export const transformStrokes = (
+export const transformStrokes = async (
   node: GeometryMixin | (GeometryMixin & IndividualStrokesMixin)
-): Partial<ShapeAttributes> => {
+): Promise<Partial<ShapeAttributes>> => {
   return {
-    strokes: translateStrokes(
+    strokes: await translateStrokes(
       node,
       hasFillGeometry(node),
       isVectorLike(node) ? node.vectorNetwork : undefined,

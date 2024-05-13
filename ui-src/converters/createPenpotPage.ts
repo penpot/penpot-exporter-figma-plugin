@@ -1,4 +1,4 @@
-import { PenpotFile } from '@ui/lib/penpot';
+import { PenpotFile } from '@ui/lib/types/penpotFile';
 import { PenpotPage } from '@ui/lib/types/penpotPage';
 
 import { createPenpotItem } from '.';

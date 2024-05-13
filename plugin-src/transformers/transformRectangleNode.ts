@@ -9,19 +9,19 @@ import {
   transformStrokes
 } from '@plugin/transformers/partials';
 
-import { RectShape } from '@ui/lib/types/rect/rectShape';
+import { RectShape } from '@ui/lib/types/shapes/rectShape';
 
-export const transformRectangleNode = (
+export const transformRectangleNode = async (
   node: RectangleNode,
   baseX: number,
   baseY: number
-): RectShape => {
+): Promise<RectShape> => {
   return {
     type: 'rect',
     name: node.name,
-    ...transformFills(node),
+    ...(await transformFills(node)),
     ...transformEffects(node),
-    ...transformStrokes(node),
+    ...(await transformStrokes(node)),
     ...transformDimensionAndPosition(node, baseX, baseY),
     ...transformSceneNode(node),
     ...transformBlend(node),

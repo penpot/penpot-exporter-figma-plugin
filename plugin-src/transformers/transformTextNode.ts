@@ -8,18 +8,22 @@ import {
   transformText
 } from '@plugin/transformers/partials';
 
-import { TextShape } from '@ui/lib/types/text/textShape';
+import { TextShape } from '@ui/lib/types/shapes/textShape';
 
-export const transformTextNode = (node: TextNode, baseX: number, baseY: number): TextShape => {
+export const transformTextNode = async (
+  node: TextNode,
+  baseX: number,
+  baseY: number
+): Promise<TextShape> => {
   return {
     type: 'text',
     name: node.name,
-    ...transformText(node),
+    ...(await transformText(node)),
     ...transformDimensionAndPosition(node, baseX, baseY),
     ...transformEffects(node),
     ...transformSceneNode(node),
     ...transformBlend(node),
     ...transformProportion(node),
-    ...transformStrokes(node)
+    ...(await transformStrokes(node))
   };
 };
