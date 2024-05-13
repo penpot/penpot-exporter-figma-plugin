@@ -1,5 +1,5 @@
 import { transformChildren } from '@plugin/transformers/partials';
-import { translatePageFill } from '@plugin/translators';
+import { translatePageFill } from '@plugin/translators/fills';
 
 import { PenpotPage } from '@ui/lib/types/penpotPage';
 

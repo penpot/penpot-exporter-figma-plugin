@@ -1,4 +1,4 @@
-import { translateFills } from '@plugin/translators';
+import { translateFills } from '@plugin/translators/fills';
 
 import { ShapeAttributes } from '@ui/lib/types/shapes/shape';
 

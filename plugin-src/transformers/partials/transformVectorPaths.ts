@@ -7,7 +7,7 @@ import {
   transformStrokes
 } from '@plugin/transformers/partials';
 import { createLineGeometry, translateVectorPath, translateVectorPaths } from '@plugin/translators';
-import { translateFills } from '@plugin/translators';
+import { translateFills } from '@plugin/translators/fills';
 
 import { PathAttributes } from '@ui/lib/types/shapes/pathShape';
 import { PathShape } from '@ui/lib/types/shapes/pathShape';
