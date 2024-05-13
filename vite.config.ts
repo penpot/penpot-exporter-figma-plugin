@@ -18,6 +18,9 @@ export default defineConfig({
     emptyOutDir: false,
     target: 'esnext',
     reportCompressedSize: false,
-    outDir: '../dist'
+    outDir: '../dist',
+    rollupOptions: {
+      external: ['!../css/base.css']
+    }
   }
 });
