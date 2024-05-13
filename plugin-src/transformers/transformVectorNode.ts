@@ -8,8 +8,8 @@ import { transformGroupNodeLike, transformPathNode } from '.';
 /*
  * Vector nodes can have multiple vector paths, each with its own fills.
  *
- * If the fills are not mixed, we can treat it like a normal `PathShape`.
- * If the fills are mixed, we can treat the vector node as a `GroupShape` with multiple `PathShape` children.
+ * If the fills are not mixed, we treat it like a normal `PathShape`.
+ * If the fills are mixed, we treat the vector node as a `GroupShape` with multiple `PathShape` children.
  */
 export const transformVectorNode = async (
   node: VectorNode,
