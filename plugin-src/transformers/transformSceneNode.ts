@@ -6,7 +6,8 @@ import {
   transformGroupNode,
   transformPathNode,
   transformRectangleNode,
-  transformTextNode
+  transformTextNode,
+  transformVectorNode
 } from '.';
 
 export const transformSceneNode = async (
@@ -26,9 +27,10 @@ export const transformSceneNode = async (
       return await transformGroupNode(node, baseX, baseY);
     case 'TEXT':
       return await transformTextNode(node, baseX, baseY);
+    case 'VECTOR':
+      return await transformVectorNode(node, baseX, baseY);
     case 'STAR':
     case 'POLYGON':
-    case 'VECTOR':
     case 'LINE':
       return await transformPathNode(node, baseX, baseY);
   }

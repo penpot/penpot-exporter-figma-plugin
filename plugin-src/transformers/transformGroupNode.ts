@@ -14,9 +14,19 @@ export const transformGroupNode = async (
   baseY: number
 ): Promise<GroupShape> => {
   return {
+    ...transformGroupNodeLike(node, baseX, baseY),
+    ...(await transformChildren(node, baseX, baseY))
+  };
+};
+
+export const transformGroupNodeLike = (
+  node: BaseNodeMixin & DimensionAndPositionMixin & BlendMixin & SceneNodeMixin & MinimalBlendMixin,
+  baseX: number,
+  baseY: number
+): GroupShape => {
+  return {
     type: 'group',
     name: node.name,
-    ...(await transformChildren(node, baseX, baseY)),
     ...transformDimensionAndPosition(node, baseX, baseY),
     ...transformEffects(node),
     ...transformSceneNode(node),
