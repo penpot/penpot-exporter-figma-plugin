@@ -1,6 +1,5 @@
 import { PenpotFile } from '@ui/lib/types/penpotFile';
 import { PenpotNode } from '@ui/lib/types/penpotNode';
-import { Uuid } from '@ui/lib/types/utils/uuid';
 
 import {
   createPenpotArtboard,
@@ -12,15 +11,10 @@ import {
   createPenpotText
 } from '.';
 
-export type Options = {
-  componentId: Uuid;
-  mainInstance: boolean;
-};
-
-export const createPenpotItem = (file: PenpotFile, node: PenpotNode, options?: Options) => {
+export const createPenpotItem = (file: PenpotFile, node: PenpotNode) => {
   switch (node.type) {
     case 'rect':
-      return createPenpotRectangle(file, node, options);
+      return createPenpotRectangle(file, node);
     case 'circle':
       return createPenpotCircle(file, node);
     case 'frame':
