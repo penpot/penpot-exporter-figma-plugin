@@ -1,4 +1,4 @@
-import { PenpotFile } from '@ui/lib/penpot';
+import { PenpotFile } from '@ui/lib/types/penpotFile';
 import { RectShape } from '@ui/lib/types/shapes/rectShape';
 import { translateFillGradients, translateUiBlendMode } from '@ui/translators';
 

@@ -1,4 +1,4 @@
-import preact from '@preact/preset-vite';
+import react from '@vitejs/plugin-react-swc';
 import { defineConfig } from 'vite';
 import { viteSingleFile } from 'vite-plugin-singlefile';
 import svgr from 'vite-plugin-svgr';
@@ -6,18 +6,18 @@ import tsconfigPaths from 'vite-tsconfig-paths';
 
 export default defineConfig({
   root: './ui-src',
-  plugins: [svgr(), preact(), viteSingleFile(), tsconfigPaths()],
-  build: {
-    target: 'esnext',
-    assetsInlineLimit: 100000000,
-    chunkSizeWarningLimit: 100000000,
-    cssCodeSplit: false,
-    outDir: '../dist',
-    rollupOptions: {
-      output: {
-        inlineDynamicImports: true
-      },
-      external: ['!../css/base.css']
+  plugins: [svgr(), react(), viteSingleFile({ removeViteModuleLoader: true }), tsconfigPaths()],
+  resolve: {
+    alias: {
+      'react': 'preact/compat',
+      'react-dom': 'preact/compat',
+      '!../css/base.css': '../css/base.css'
     }
+  },
+  build: {
+    emptyOutDir: false,
+    target: 'esnext',
+    reportCompressedSize: false,
+    outDir: '../dist'
   }
 });

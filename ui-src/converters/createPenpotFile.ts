@@ -1,4 +1,4 @@
-import { createFile } from '@ui/lib/penpot.js';
+import { createFile } from '@ui/lib/penpot';
 import { PenpotDocument } from '@ui/lib/types/penpotDocument';
 
 import { createPenpotPage } from '.';

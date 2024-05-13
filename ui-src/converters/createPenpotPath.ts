@@ -1,4 +1,4 @@
-import { PenpotFile } from '@ui/lib/penpot';
+import { PenpotFile } from '@ui/lib/types/penpotFile';
 import { PathShape } from '@ui/lib/types/shapes/pathShape';
 import {
   translateFillGradients,
