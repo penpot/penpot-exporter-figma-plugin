@@ -1,7 +1,7 @@
 import { Uuid } from './uuid';
 
 export type Blur = {
-  id: Uuid;
+  id?: Uuid;
   type: 'layer-blur';
   value: number;
   hidden: boolean;

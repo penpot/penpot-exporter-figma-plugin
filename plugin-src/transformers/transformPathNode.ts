@@ -6,7 +6,7 @@ import {
   transformProportion,
   transformSceneNode,
   transformStrokes,
-  transformVectorPaths
+  transformVectorPathsAsContent
 } from '@plugin/transformers/partials';
 
 import { PathShape } from '@ui/lib/types/shapes/pathShape';
@@ -21,11 +21,12 @@ export const transformPathNode = async (
   baseY: number
 ): Promise<PathShape> => {
   return {
+    type: 'path',
     name: node.name,
     ...(hasFillGeometry(node) ? await transformFills(node) : []),
     ...(await transformStrokes(node)),
     ...transformEffects(node),
-    ...transformVectorPaths(node, baseX, baseY),
+    ...transformVectorPathsAsContent(node, baseX, baseY),
     ...transformDimensionAndPosition(node, baseX, baseY),
     ...transformSceneNode(node),
     ...transformBlend(node),
