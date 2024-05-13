@@ -98,18 +98,11 @@ const translateGradientLinearFill = (fill: GradientPaint, width: number, height:
       endX: points.end[0] / width,
       endY: points.end[1] / height,
       width: 1,
-      stops: [
-        {
-          color: rgbToHex(fill.gradientStops[0].color),
-          offset: fill.gradientStops[0].position,
-          opacity: fill.gradientStops[0].color.a * (fill.opacity ?? 1)
-        },
-        {
-          color: rgbToHex(fill.gradientStops[1].color),
-          offset: fill.gradientStops[1].position,
-          opacity: fill.gradientStops[1].color.a * (fill.opacity ?? 1)
-        }
-      ]
+      stops: fill.gradientStops.map(stop => ({
+        color: rgbToHex(stop.color),
+        offset: stop.position,
+        opacity: stop.color.a * (fill.opacity ?? 1)
+      }))
     },
     fillOpacity: !fill.visible ? 0 : fill.opacity
   };
