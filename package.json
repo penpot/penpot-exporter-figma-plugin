@@ -29,7 +29,6 @@
     "romans": "^2.0",
     "slugify": "^1.6",
     "svg-path-parser": "^1.1",
-    "uuid": "^9.0",
     "use-resize-observer": "^9.1"
   },
   "devDependencies": {
