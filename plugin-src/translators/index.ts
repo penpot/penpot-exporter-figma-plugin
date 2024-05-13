@@ -1,4 +1,5 @@
 export * from './translateBlendMode';
+export * from './translateBlurEffects';
 export * from './translateFills';
 export * from './translateShadowEffects';
 export * from './translateStrokes';
