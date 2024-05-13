@@ -5,7 +5,7 @@ import { Uuid } from '@ui/lib/types/utils/uuid';
 export type ComponentShape = ShapeGeomAttributes & ComponentAttributes & Children;
 
 export type ComponentAttributes = {
-  type: 'component';
+  type?: 'component';
   name: string;
   path: '';
   mainInstanceId: Uuid;

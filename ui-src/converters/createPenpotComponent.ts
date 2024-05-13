@@ -1,14 +1,13 @@
-import { PenpotFile } from '@ui/lib/penpot';
-import { COMPONENT_TYPE } from '@ui/lib/types/component/componentAttributes';
-import { ComponentShape } from '@ui/lib/types/component/componentShape';
 
+import { ComponentShape } from '@ui/lib/types/shapes/componentShape';
 import { createPenpotItem } from '.';
+import { PenpotFile } from '@ui/lib/types/penpotFile';
 
 export const createPenpotComponent = (
   file: PenpotFile,
   { type, children = [], ...rest }: ComponentShape
 ) => {
-  file.startComponent({ ...rest, type: COMPONENT_TYPE });
+  file.startComponent(rest);
 
   for (const child of children) {
     createPenpotItem(file, child);
