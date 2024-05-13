@@ -1,9 +1,11 @@
 import { findAllTextNodes } from './findAllTextnodes';
 import { handleExportMessage } from './handleExportMessage';
-import { BASE_WIDTH, LOADING_HEIGHT } from './pluginSizes';
 import { registerChange } from './registerChange';
 
-figma.showUI(__html__, { themeColors: true, width: BASE_WIDTH, height: LOADING_HEIGHT });
+const BASE_HEIGHT = 135;
+const BASE_WIDTH = 290;
+
+figma.showUI(__html__, { themeColors: true, width: BASE_WIDTH, height: BASE_HEIGHT });
 
 figma.ui.onmessage = message => {
   if (message.type === 'ready') {
@@ -20,6 +22,10 @@ figma.ui.onmessage = message => {
 
   if (message.type === 'reload') {
     findAllTextNodes();
+  }
+
+  if (message.type === 'resize') {
+    figma.ui.resize(BASE_WIDTH, message.height);
   }
 };
 

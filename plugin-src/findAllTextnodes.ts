@@ -1,9 +1,3 @@
-import {
-  BASE_WIDTH,
-  MISSING_FONTS_TEXT_HEIGHT,
-  MISSING_SINGLE_FONT_HEIGHT,
-  NORMAL_HEIGHT
-} from './pluginSizes';
 import { registerChange } from './registerChange';
 import { isGoogleFont } from './translators/text/font/gfonts';
 import { isLocalFont } from './translators/text/font/local';
@@ -34,10 +28,5 @@ export const findAllTextNodes = async () => {
     data: Array.from(fonts)
   });
 
-  const newHeight =
-    NORMAL_HEIGHT +
-    (fonts.size > 0 ? MISSING_FONTS_TEXT_HEIGHT + fonts.size * MISSING_SINGLE_FONT_HEIGHT : 0);
-
-  figma.ui.resize(BASE_WIDTH, newHeight);
   figma.currentPage.once('nodechange', registerChange);
 };
