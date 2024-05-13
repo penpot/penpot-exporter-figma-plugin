@@ -1,4 +1,4 @@
-import { translateFills } from '@plugin/translators';
+import { translateFills } from '@plugin/translators/fills';
 import { translateFontId } from '@plugin/translators/text/font';
 import { StyleTextSegment, translateParagraphProperties } from '@plugin/translators/text/paragraph';
 import {

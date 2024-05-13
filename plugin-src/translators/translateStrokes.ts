@@ -1,4 +1,4 @@
-import { translateFill } from '@plugin/translators/translateFills';
+import { translateFill } from '@plugin/translators/fills';
 
 import { Stroke, StrokeAlignment, StrokeCaps } from '@ui/lib/types/utils/stroke';
 
