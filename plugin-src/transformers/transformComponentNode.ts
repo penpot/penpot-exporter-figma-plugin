@@ -12,8 +12,10 @@ export const transformComponentNode = async (
     type: 'component',
     name: node.name,
     path: '',
-    mainInstanceId: '',
-    mainInstancePage: '',
+    mainInstanceId: '30dd1e1f-9615-4481-85e6-98bced410697',
+    mainInstancePage: '30dd1e1f-9615-4481-85e6-98bced410697',
+    mainInstance: true,
+    componentRoot: true,
     ...(await transformChildren(node, baseX + node.x, baseY + node.y)),
     ...transformDimensionAndPosition(node, baseX, baseY)
   };
