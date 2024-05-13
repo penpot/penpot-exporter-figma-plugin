@@ -74,11 +74,7 @@ const transformVectorPath = async (
     type: 'path',
     name: 'svg-path',
     content: translateVectorPath(vectorPath, baseX + node.x, baseY + node.y),
-    fills: await translateFills(
-      vectorRegion?.fills ?? node.fills,
-      dimensionAndPosition.width,
-      dimensionAndPosition.height
-    ),
+    fills: await translateFills(vectorRegion?.fills ?? node.fills),
     ...(await transformStrokes(node)),
     ...transformEffects(node),
     ...dimensionAndPosition,
