@@ -66,7 +66,8 @@ const translateImage = async (imageHash: string | null): Promise<ImageColor | un
     height: size.height,
     mtype: mimeType,
     keepAspectRatio: true,
-    dataUri: dataUri
+    dataUri: dataUri,
+    id: '00000000-0000-0000-0000-000000000000'
   };
 };
 
