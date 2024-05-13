@@ -1,4 +1,4 @@
-import { PenpotFile } from '@ui/lib/penpot';
+import { PenpotFile } from '@ui/lib/types/penpotFile';
 import { FrameShape } from '@ui/lib/types/shapes/frameShape';
 
 import { createPenpotItem } from '.';

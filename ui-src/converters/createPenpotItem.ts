@@ -1,4 +1,4 @@
-import { PenpotFile } from '@ui/lib/penpot';
+import { PenpotFile } from '@ui/lib/types/penpotFile';
 import { PenpotNode } from '@ui/lib/types/penpotNode';
 
 import {

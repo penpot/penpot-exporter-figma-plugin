@@ -4,8 +4,7 @@ import useResizeObserver from 'use-resize-observer';
 import Penpot from '@ui/assets/penpot.svg?react';
 import { PenpotExporter } from '@ui/components/PenpotExporter';
 import { Stack } from '@ui/components/Stack';
-
-import { Wrapper } from './components/Wrapper/Wrapper';
+import { Wrapper } from '@ui/components/Wrapper';
 
 // Safe default value to avoid overflowing from the screen
 const MAX_HEIGHT = 800;
