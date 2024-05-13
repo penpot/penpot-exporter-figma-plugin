@@ -1,19 +1,17 @@
-import { detectMimeType, rgbToHex } from '@plugin/utils';
+import { calculateRadialGradient, detectMimeType, rgbToHex } from '@plugin/utils';
 import { calculateLinearGradient } from '@plugin/utils/calculateLinearGradient';
 
 import { Fill } from '@ui/lib/types/utils/fill';
 import { ImageColor } from '@ui/lib/types/utils/imageColor';
 
-export const translateFill = async (
-  fill: Paint,
-  width: number,
-  height: number
-): Promise<Fill | undefined> => {
+export const translateFill = async (fill: Paint): Promise<Fill | undefined> => {
   switch (fill.type) {
     case 'SOLID':
       return translateSolidFill(fill);
     case 'GRADIENT_LINEAR':
-      return translateGradientLinearFill(fill, width, height);
+      return translateGradientLinearFill(fill);
+    case 'GRADIENT_RADIAL':
+      return translateGradientRadialFill(fill);
     case 'IMAGE':
       return await translateImageFill(fill);
   }
@@ -22,15 +20,13 @@ export const translateFill = async (
 };
 
 export const translateFills = async (
-  fills: readonly Paint[] | typeof figma.mixed,
-  width: number,
-  height: number
+  fills: readonly Paint[] | typeof figma.mixed
 ): Promise<Fill[]> => {
   const figmaFills = fills === figma.mixed ? [] : fills;
   const penpotFills: Fill[] = [];
 
   for (const fill of figmaFills) {
-    const penpotFill = await translateFill(fill, width, height);
+    const penpotFill = await translateFill(fill);
     if (penpotFill) {
       // fills are applied in reverse order in Figma, that's why we unshift
       penpotFills.unshift(penpotFill);
@@ -87,16 +83,37 @@ const translateSolidFill = (fill: SolidPaint): Fill => {
   };
 };
 
-const translateGradientLinearFill = (fill: GradientPaint, width: number, height: number): Fill => {
-  const points = calculateLinearGradient(width, height, fill.gradientTransform);
+const translateGradientLinearFill = (fill: GradientPaint): Fill => {
+  const points = calculateLinearGradient(fill.gradientTransform);
 
   return {
     fillColorGradient: {
       type: 'linear',
-      startX: points.start[0] / width,
-      startY: points.start[1] / height,
-      endX: points.end[0] / width,
-      endY: points.end[1] / height,
+      startX: points.start[0],
+      startY: points.start[1],
+      endX: points.end[0],
+      endY: points.end[1],
+      width: 1,
+      stops: fill.gradientStops.map(stop => ({
+        color: rgbToHex(stop.color),
+        offset: stop.position,
+        opacity: stop.color.a * (fill.opacity ?? 1)
+      }))
+    },
+    fillOpacity: !fill.visible ? 0 : fill.opacity
+  };
+};
+
+const translateGradientRadialFill = (fill: GradientPaint): Fill => {
+  const points = calculateRadialGradient(fill.gradientTransform);
+
+  return {
+    fillColorGradient: {
+      type: 'radial',
+      startX: points.start[0],
+      startY: points.start[1],
+      endX: points.end[0],
+      endY: points.end[1],
       width: 1,
       stops: fill.gradientStops.map(stop => ({
         color: rgbToHex(stop.color),
