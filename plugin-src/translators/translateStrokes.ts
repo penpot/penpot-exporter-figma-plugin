@@ -10,7 +10,7 @@ export const translateStrokes = async (
 ): Promise<Stroke[]> => {
   return await Promise.all(
     nodeStrokes.strokes.map(async (paint, index) => {
-      const fill = await translateFill(paint, 0, 0);
+      const fill = await translateFill(paint);
       const stroke: Stroke = {
         strokeColor: fill?.fillColor,
         strokeOpacity: fill?.fillOpacity,

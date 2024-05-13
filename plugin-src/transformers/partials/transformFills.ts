@@ -6,6 +6,6 @@ export const transformFills = async (
   node: MinimalFillsMixin & DimensionAndPositionMixin
 ): Promise<Partial<ShapeAttributes>> => {
   return {
-    fills: await translateFills(node.fills, node.width, node.height)
+    fills: await translateFills(node.fills)
   };
 };

@@ -49,7 +49,7 @@ const translateStyleTextSegment = async (
   segment: StyleTextSegment
 ): Promise<PenpotTextNode> => {
   return {
-    fills: await translateFills(segment.fills, node.width, node.height),
+    fills: await translateFills(segment.fills),
     text: segment.characters,
     ...transformTextStyle(node, segment)
   };
