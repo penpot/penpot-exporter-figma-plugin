@@ -64,12 +64,6 @@ const transformVectorPath = async (
   baseX: number,
   baseY: number
 ): Promise<PathShape> => {
-  const dimensionAndPosition = transformDimensionAndPositionFromVectorPath(
-    vectorPath,
-    baseX,
-    baseY
-  );
-
   return {
     type: 'path',
     name: 'svg-path',
@@ -77,7 +71,7 @@ const transformVectorPath = async (
     fills: await translateFills(vectorRegion?.fills ?? node.fills),
     ...(await transformStrokes(node)),
     ...transformEffects(node),
-    ...dimensionAndPosition,
+    ...transformDimensionAndPositionFromVectorPath(vectorPath, baseX, baseY),
     ...transformSceneNode(node),
     ...transformBlend(node),
     ...transformProportion(node)
