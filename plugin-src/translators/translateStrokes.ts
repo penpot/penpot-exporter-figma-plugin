@@ -4,25 +4,6 @@ import { Stroke, StrokeAlignment, StrokeCaps } from '@ui/lib/types/utils/stroke'
 
 export const translateStrokes = async (
   node: MinimalStrokesMixin | (MinimalStrokesMixin & IndividualStrokesMixin),
-  hasFillGeometry?: boolean,
-  vectorNetwork?: VectorNetwork
-): Promise<Stroke[]> => {
-  const strokeCaps = (stroke: Partial<Stroke>): Stroke => {
-    if (!hasFillGeometry && vectorNetwork && vectorNetwork.vertices.length > 0) {
-      stroke.strokeCapStart = translateStrokeCap(vectorNetwork.vertices[0]);
-      stroke.strokeCapEnd = translateStrokeCap(
-        vectorNetwork.vertices[vectorNetwork.vertices.length - 1]
-      );
-    }
-
-    return stroke;
-  };
-
-  return await translateMinimalStrokes(node, strokeCaps);
-};
-
-export const translateMinimalStrokes = async (
-  node: MinimalStrokesMixin | (MinimalStrokesMixin & IndividualStrokesMixin),
   strokeCaps: (stroke: Stroke) => Stroke = stroke => stroke
 ): Promise<Stroke[]> => {
   const sharedStrokeProperties: Partial<Stroke> = {
@@ -61,6 +42,27 @@ export const translateStroke = async (
   return stroke;
 };
 
+export const translateStrokeCap = (vertex: VectorVertex): StrokeCaps | undefined => {
+  switch (vertex.strokeCap as StrokeCap | ConnectorStrokeCap) {
+    case 'ROUND':
+      return 'round';
+    case 'ARROW_EQUILATERAL':
+    case 'TRIANGLE_FILLED':
+      return 'triangle-arrow';
+    case 'SQUARE':
+      return 'square';
+    case 'CIRCLE_FILLED':
+      return 'circle-marker';
+    case 'DIAMOND_FILLED':
+      return 'diamond-marker';
+    case 'ARROW_LINES':
+      return 'line-arrow';
+    case 'NONE':
+    default:
+      return;
+  }
+};
+
 const translateStrokeWeight = (
   node: MinimalStrokesMixin | (MinimalStrokesMixin & IndividualStrokesMixin)
 ): number => {
@@ -96,26 +98,5 @@ const translateStrokeAlignment = (
       return 'inner';
     case 'OUTSIDE':
       return 'outer';
-  }
-};
-
-const translateStrokeCap = (vertex: VectorVertex): StrokeCaps | undefined => {
-  switch (vertex.strokeCap as StrokeCap | ConnectorStrokeCap) {
-    case 'ROUND':
-      return 'round';
-    case 'ARROW_EQUILATERAL':
-    case 'TRIANGLE_FILLED':
-      return 'triangle-arrow';
-    case 'SQUARE':
-      return 'square';
-    case 'CIRCLE_FILLED':
-      return 'circle-marker';
-    case 'DIAMOND_FILLED':
-      return 'diamond-marker';
-    case 'ARROW_LINES':
-      return 'line-arrow';
-    case 'NONE':
-    default:
-      return;
   }
 };
