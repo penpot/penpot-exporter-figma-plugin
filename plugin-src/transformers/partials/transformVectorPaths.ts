@@ -175,7 +175,7 @@ function createSVGPathData(vectorNetwork: VectorNetwork, region: Region): Vector
       index === 0
     );
 
-    data += segmentPath + (index === region.segments.size - 1 ? '' : ' ');
+    data += segmentPath + (index === region.segments.length - 1 ? '' : ' ');
   });
 
   if (region.region) {
