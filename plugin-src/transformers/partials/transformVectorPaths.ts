@@ -165,26 +165,24 @@ function splitVectorNetwork(vectorNetwork: VectorNetwork): Region[] {
 }
 
 function createSVGPathData(vectorNetwork: VectorNetwork, region: Region): VectorPath {
-  let path = '';
-  let index = 0;
+  let data = '';
 
-  region.segments.forEach(segment => {
-    path += translateVectorSegmentToSvgPath(
+  region.segments.forEach((segment, index) => {
+    const segmentPath = translateVectorSegmentToSvgPath(
       segment,
       vectorNetwork.vertices[segment.start],
       vectorNetwork.vertices[segment.end],
       index === 0
     );
 
-    path += ' ';
-    index += 1;
+    data += segmentPath + (index === region.segments.size - 1 ? '' : ' ');
   });
 
   if (region.region) {
-    path += 'Z';
+    data += ' Z';
   }
 
-  return { data: path.trim(), windingRule: region.region?.windingRule ?? 'NONE' };
+  return { data, windingRule: region.region?.windingRule ?? 'NONE' };
 }
 
 const translateVectorSegmentToSvgPath = (
@@ -198,10 +196,10 @@ const translateVectorSegmentToSvgPath = (
   const c1 = segment.tangentStart;
   const c2 = segment.tangentEnd;
 
-  if (c1 && c2 && c1.x > 0) {
+  if (c1 && c2 && (c1.x !== 0 || c1.y !== 0 || c2.x !== 0 || c2.y !== 0)) {
     return (
       path +
-      `C ${start.x + c1.x} ${start.y + c1.y}, ${end.x + c2.x} ${end.y + c2.y}, ${end.x} ${end.y}`
+      `C ${start.x + c1.x} ${start.y + c1.y} ${end.x + c2.x} ${end.y + c2.y} ${end.x} ${end.y}`
     );
   }
 
