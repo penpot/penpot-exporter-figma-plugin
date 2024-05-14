@@ -49,31 +49,31 @@ export const transformVectorPathsAsChildren = async (
   baseX: number,
   baseY: number
 ): Promise<Children> => {
-  const regions = splitVectorNetwork(node.vectorNetwork);
+  const partialVectorNetworks = splitVectorNetwork(node.vectorNetwork);
 
   return {
     children: await Promise.all(
-      regions.map(region => {
-        return transformVectorPath(node, region, baseX, baseY);
-      })
+      partialVectorNetworks.map(partialVectorNetwork =>
+        transformVectorPath(node, partialVectorNetwork, baseX, baseY)
+      )
     )
   };
 };
 
 const transformVectorPath = async (
   node: VectorNode,
-  region: PartialVectorNetwork,
+  partialVectorNetwork: PartialVectorNetwork,
   baseX: number,
   baseY: number
 ): Promise<PathShape> => {
-  const vectorPath = translatePartialVectorNetwork(node.vectorNetwork, region);
+  const vectorPath = translatePartialVectorNetwork(node.vectorNetwork, partialVectorNetwork);
 
   return {
     type: 'path',
     name: 'svg-path',
     content: translateVectorPath(vectorPath, baseX + node.x, baseY + node.y),
-    fills: await translateFills(region.region?.fills ?? node.fills),
-    ...(await transformStrokesFromVectorNetwork(node, region)),
+    fills: await translateFills(partialVectorNetwork.region?.fills ?? node.fills),
+    ...(await transformStrokesFromVectorNetwork(node, partialVectorNetwork)),
     ...transformEffects(node),
     ...transformDimensionAndPositionFromVectorPath(vectorPath, baseX, baseY),
     ...transformSceneNode(node),

@@ -2,11 +2,11 @@ import { PartialVectorNetwork } from '.';
 
 export const translatePartialVectorNetwork = (
   vectorNetwork: VectorNetwork,
-  region: PartialVectorNetwork
+  partialVectorNetwork: PartialVectorNetwork
 ): VectorPath => {
   let data = '';
 
-  region.segments.forEach((segment, index) => {
+  partialVectorNetwork.segments.forEach((segment, index) => {
     const segmentPath = translateVectorSegment(
       segment,
       vectorNetwork.vertices[segment.start],
@@ -14,14 +14,14 @@ export const translatePartialVectorNetwork = (
       index === 0
     );
 
-    data += segmentPath + (index === region.segments.length - 1 ? '' : ' ');
+    data += segmentPath + (index === partialVectorNetwork.segments.length - 1 ? '' : ' ');
   });
 
-  if (region.region) {
+  if (partialVectorNetwork.region) {
     data += ' Z';
   }
 
-  return { data, windingRule: region.region?.windingRule ?? 'NONE' };
+  return { data, windingRule: partialVectorNetwork.region?.windingRule ?? 'NONE' };
 };
 
 const translateVectorSegment = (
