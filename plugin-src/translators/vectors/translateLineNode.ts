@@ -16,8 +16,8 @@ export const translateLineNode = (node: LineNode): VectorPaths => {
 
   return [
     {
-      windingRule: 'NONZERO',
-      data: commands.map(({ code, x, y }) => `${code} ${x} ${y}`).join(' ') + ' Z'
+      windingRule: 'NONE',
+      data: commands.reduce((acc, { code, x, y }) => acc + `${code} ${x} ${y}`, '')
     }
   ];
 };
