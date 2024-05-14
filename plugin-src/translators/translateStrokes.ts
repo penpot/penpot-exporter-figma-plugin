@@ -3,53 +3,87 @@ import { translateFill } from '@plugin/translators/fills';
 import { Stroke, StrokeAlignment, StrokeCaps } from '@ui/lib/types/utils/stroke';
 
 export const translateStrokes = async (
-  nodeStrokes: MinimalStrokesMixin,
+  node: MinimalStrokesMixin | (MinimalStrokesMixin & IndividualStrokesMixin),
   hasFillGeometry?: boolean,
-  vectorNetwork?: VectorNetwork,
-  individualStrokes?: IndividualStrokesMixin
+  vectorNetwork?: VectorNetwork
 ): Promise<Stroke[]> => {
+  const strokeCaps = (stroke: Partial<Stroke>): Stroke => {
+    if (!hasFillGeometry && vectorNetwork && vectorNetwork.vertices.length > 0) {
+      stroke.strokeCapStart = translateStrokeCap(vectorNetwork.vertices[0]);
+      stroke.strokeCapEnd = translateStrokeCap(
+        vectorNetwork.vertices[vectorNetwork.vertices.length - 1]
+      );
+    }
+
+    return stroke;
+  };
+
+  return await translateMinimalStrokes(node, strokeCaps);
+};
+
+export const translateMinimalStrokes = async (
+  node: MinimalStrokesMixin | (MinimalStrokesMixin & IndividualStrokesMixin),
+  strokeCaps: (stroke: Stroke) => Stroke = stroke => stroke
+): Promise<Stroke[]> => {
+  const sharedStrokeProperties: Partial<Stroke> = {
+    strokeWidth: translateStrokeWeight(node),
+    strokeAlignment: translateStrokeAlignment(node.strokeAlign),
+    strokeStyle: node.dashPattern.length ? 'dashed' : 'solid'
+  };
+
   return await Promise.all(
-    nodeStrokes.strokes.map(async (paint, index) => {
-      const fill = await translateFill(paint);
-      const stroke: Stroke = {
-        strokeColor: fill?.fillColor,
-        strokeOpacity: fill?.fillOpacity,
-        strokeWidth: translateStrokeWeight(nodeStrokes.strokeWeight, individualStrokes),
-        strokeAlignment: translateStrokeAlignment(nodeStrokes.strokeAlign),
-        strokeStyle: nodeStrokes.dashPattern.length ? 'dashed' : 'solid',
-        strokeImage: fill?.fillImage
-      };
-
-      if (!hasFillGeometry && index === 0 && vectorNetwork && vectorNetwork.vertices.length > 0) {
-        stroke.strokeCapStart = translateStrokeCap(vectorNetwork.vertices[0]);
-        stroke.strokeCapEnd = translateStrokeCap(
-          vectorNetwork.vertices[vectorNetwork.vertices.length - 1]
-        );
-      }
-
-      return stroke;
-    })
+    node.strokes.map(
+      async (paint, index) =>
+        await translateStroke(paint, sharedStrokeProperties, strokeCaps, index === 0)
+    )
   );
 };
 
-const translateStrokeWeight = (
-  strokeWeight: number | typeof figma.mixed,
-  individualStrokes?: IndividualStrokesMixin
-): number => {
-  if (strokeWeight !== figma.mixed) {
-    return strokeWeight;
+export const translateStroke = async (
+  paint: Paint,
+  sharedStrokeProperties: Partial<Stroke>,
+  strokeCaps: (stroke: Stroke) => Stroke,
+  firstStroke: boolean
+): Promise<Stroke> => {
+  const fill = await translateFill(paint);
+
+  let stroke: Stroke = {
+    strokeColor: fill?.fillColor,
+    strokeOpacity: fill?.fillOpacity,
+    strokeImage: fill?.fillImage,
+    ...sharedStrokeProperties
+  };
+
+  if (firstStroke) {
+    stroke = strokeCaps(stroke);
   }
 
-  if (!individualStrokes) {
+  return stroke;
+};
+
+const translateStrokeWeight = (
+  node: MinimalStrokesMixin | (MinimalStrokesMixin & IndividualStrokesMixin)
+): number => {
+  if (node.strokeWeight !== figma.mixed) {
+    return node.strokeWeight;
+  }
+
+  if (!isIndividualStrokes(node)) {
     return 1;
   }
 
   return Math.max(
-    individualStrokes.strokeTopWeight,
-    individualStrokes.strokeRightWeight,
-    individualStrokes.strokeBottomWeight,
-    individualStrokes.strokeLeftWeight
+    node.strokeTopWeight,
+    node.strokeRightWeight,
+    node.strokeBottomWeight,
+    node.strokeLeftWeight
   );
+};
+
+const isIndividualStrokes = (
+  node: MinimalStrokesMixin | IndividualStrokesMixin
+): node is IndividualStrokesMixin => {
+  return 'strokeTopWeight' in node;
 };
 
 const translateStrokeAlignment = (

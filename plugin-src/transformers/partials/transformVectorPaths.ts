@@ -6,7 +6,12 @@ import {
   transformSceneNode,
   transformStrokes
 } from '@plugin/transformers/partials';
-import { createLineGeometry, translateVectorPath, translateVectorPaths } from '@plugin/translators';
+import {
+  createLineGeometry,
+  translateStrokes,
+  translateVectorPath,
+  translateVectorPaths
+} from '@plugin/translators';
 import { translateFills } from '@plugin/translators/fills';
 
 import { PathAttributes } from '@ui/lib/types/shapes/pathShape';
@@ -75,5 +80,16 @@ const transformVectorPath = async (
     ...transformSceneNode(node),
     ...transformBlend(node),
     ...transformProportion(node)
+  };
+};
+
+const foo = async (node: VectorNode) => {
+  return {
+    strokes: await translateStrokes(
+      node,
+      hasFillGeometry(node),
+      node.vectorNetwork,
+      isIndividualStrokes(node) ? node : undefined
+    )
   };
 };

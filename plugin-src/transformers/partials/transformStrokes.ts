@@ -6,12 +6,6 @@ const isVectorLike = (node: GeometryMixin | VectorLikeMixin): node is VectorLike
   return 'vectorNetwork' in node;
 };
 
-const isIndividualStrokes = (
-  node: GeometryMixin | IndividualStrokesMixin
-): node is IndividualStrokesMixin => {
-  return 'strokeTopWeight' in node;
-};
-
 const hasFillGeometry = (node: GeometryMixin): boolean => {
   return node.fillGeometry.length > 0;
 };
@@ -23,8 +17,7 @@ export const transformStrokes = async (
     strokes: await translateStrokes(
       node,
       hasFillGeometry(node),
-      isVectorLike(node) ? node.vectorNetwork : undefined,
-      isIndividualStrokes(node) ? node : undefined
+      isVectorLike(node) ? node.vectorNetwork : undefined
     )
   };
 };
