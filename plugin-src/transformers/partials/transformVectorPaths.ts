@@ -8,15 +8,13 @@ import {
 } from '@plugin/transformers/partials';
 import { translateFills } from '@plugin/translators/fills';
 import {
-  createLineGeometry,
+  PartialVectorNetwork,
+  splitVectorNetwork,
+  translateLineNode,
   translatePartialVectorNetwork,
   translateVectorPath,
   translateVectorPaths
 } from '@plugin/translators/vectors';
-import {
-  PartialVectorNetwork,
-  splitVectorNetwork
-} from '@plugin/translators/vectors/splitVectorNetwork';
 
 import { PathAttributes } from '@ui/lib/types/shapes/pathShape';
 import { PathShape } from '@ui/lib/types/shapes/pathShape';
@@ -30,7 +28,7 @@ const getVectorPaths = (node: VectorNode | StarNode | LineNode | PolygonNode): V
     case 'VECTOR':
       return node.vectorPaths;
     case 'LINE':
-      return createLineGeometry(node);
+      return translateLineNode(node);
   }
 };
 

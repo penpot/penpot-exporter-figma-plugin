@@ -36,30 +36,6 @@ export const translateVectorPath = (path: VectorPath, baseX: number, baseY: numb
   });
 };
 
-export const createLineGeometry = (node: LineNode): VectorPaths => {
-  const commands = [
-    {
-      command: 'moveto',
-      code: 'M',
-      x: 0,
-      y: 0
-    },
-    {
-      command: 'lineto',
-      code: 'L',
-      x: node.width,
-      y: node.height
-    }
-  ];
-
-  return [
-    {
-      windingRule: 'NONZERO',
-      data: commands.map(({ code, x, y }) => `${code} ${x} ${y}`).join(' ') + ' Z'
-    }
-  ];
-};
-
 const translateMoveToCommand = (command: MoveToCommand, baseX: number, baseY: number): Segment => {
   return {
     command: 'move-to',
