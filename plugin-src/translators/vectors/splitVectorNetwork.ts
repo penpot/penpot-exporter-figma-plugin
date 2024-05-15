@@ -26,18 +26,18 @@ export const splitVectorNetwork = (node: VectorLikeMixin): PartialVectorNetwork[
     }
   );
 
-  const openPaths = findOpenPaths(vectorNetwork, visitedSegments);
+  const remainingPaths = findRemainingPaths(vectorNetwork, visitedSegments);
 
-  return [...closedRegions, ...openPaths];
+  return [...closedRegions, ...remainingPaths];
 };
 
-const findOpenPaths = (
+const findRemainingPaths = (
   vectorNetwork: VectorNetwork,
   visitedSegments: Set<number>
 ): PartialVectorNetwork[] => {
   const { segments } = vectorNetwork;
   const visitedVertices = new Set<number>();
-  const openPaths: PartialVectorNetwork[] = [];
+  const remainingPaths: PartialVectorNetwork[] = [];
 
   segments.forEach((segment, segmentIndex) => {
     if (visitedSegments.has(segmentIndex) || visitedVertices.has(segment.start)) return;
@@ -68,8 +68,8 @@ const findOpenPaths = (
       });
     }
 
-    openPaths.push({ vectorPath: undefined, region: undefined, segments: pathSegments });
+    remainingPaths.push({ vectorPath: undefined, region: undefined, segments: pathSegments });
   });
 
-  return openPaths;
+  return remainingPaths;
 };

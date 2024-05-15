@@ -75,7 +75,10 @@ const transformVectorPath = async (
     type: 'path',
     name: 'svg-path',
     content: translateVectorPath(vectorPath, baseX + node.x, baseY + node.y),
-    fills: await translateFills(partialVectorNetwork.region?.fills ?? node.fills),
+    fills:
+      vectorPath.windingRule === 'NONE'
+        ? []
+        : await translateFills(partialVectorNetwork.region?.fills ?? node.fills),
     svgAttrs: {
       fillRule: translateWindingRule(vectorPath.windingRule)
     },
