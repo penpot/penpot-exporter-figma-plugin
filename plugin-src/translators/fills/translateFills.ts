@@ -23,12 +23,13 @@ export const translateFill = async (fill: Paint): Promise<Fill | undefined> => {
 };
 
 export const translateFills = async (
-  fills: readonly Paint[] | typeof figma.mixed
+  fills: readonly Paint[] | typeof figma.mixed | undefined
 ): Promise<Fill[]> => {
-  const figmaFills = fills === figma.mixed ? [] : fills;
+  if (fills === undefined || fills === figma.mixed) return [];
+
   const penpotFills: Fill[] = [];
 
-  for (const fill of figmaFills) {
+  for (const fill of fills) {
     const penpotFill = await translateFill(fill);
     if (penpotFill) {
       // fills are applied in reverse order in Figma, that's why we unshift
