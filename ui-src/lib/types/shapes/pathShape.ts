@@ -41,7 +41,7 @@ type LineTo = {
   };
 };
 
-type ClosePath = {
+export type ClosePath = {
   command: 'close-path' | typeof VECTOR_CLOSE_PATH;
 };
 

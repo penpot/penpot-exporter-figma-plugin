@@ -1,17 +1,20 @@
+import { parseSVG } from 'svg-path-parser';
+
 import {
+  // transformStrokesFromVectorNetwork,
   transformBlend,
   transformDimensionAndPositionFromVectorPath,
   transformEffects,
   transformProportion,
   transformSceneNode,
-  transformStrokesFromVectorNetwork
+  transformStrokesFromVector
 } from '@plugin/transformers/partials';
 import { translateFills } from '@plugin/translators/fills';
 import {
-  PartialVectorNetwork,
-  splitVectorNetwork,
+  // PartialVectorNetwork,
+  // splitVectorNetwork,
+  // translatePartialVectorNetwork,
   translateLineNode,
-  translatePartialVectorNetwork,
   translateVectorPath,
   translateVectorPaths,
   translateWindingRule
@@ -19,7 +22,8 @@ import {
 
 import { PathAttributes } from '@ui/lib/types/shapes/pathShape';
 import { PathShape } from '@ui/lib/types/shapes/pathShape';
-import { Children } from '@ui/lib/types/utils/children';
+
+// import { Children } from '@ui/lib/types/utils/children';
 
 const getVectorPaths = (node: VectorNode | StarNode | LineNode | PolygonNode): VectorPaths => {
   switch (node.type) {
@@ -45,45 +49,68 @@ export const transformVectorPathsAsContent = (
   };
 };
 
-export const transformVectorPathsAsChildren = async (
+// export const transformVectorPathsAsChildren = async (
+//   node: VectorNode,
+//   baseX: number,
+//   baseY: number
+// ): Promise<Children> => {
+//   return {
+//     children: await Promise.all(
+//       node.vectorPaths.map((vectorPath, index) =>
+//         transformVectorPath(
+//           node,
+//           vectorPath,
+//           (node.vectorNetwork.regions ?? [])[index],
+//           baseX,
+//           baseY
+//         )
+//       )
+//     )
+//   };
+
+//   const partialVectorNetworks = splitVectorNetwork(node);
+//   return {
+//     children: await Promise.all(
+//       partialVectorNetworks.map(partialVectorNetwork =>
+//         transformPartialVectorNetwork(node, partialVectorNetwork, baseX, baseY)
+//       )
+//     )
+//   };
+// };
+
+export const transformVectorPaths = async (
   node: VectorNode,
   baseX: number,
   baseY: number
-): Promise<Children> => {
-  const partialVectorNetworks = splitVectorNetwork(node);
-
-  return {
-    children: await Promise.all(
-      partialVectorNetworks.map(partialVectorNetwork =>
-        transformVectorPath(node, partialVectorNetwork, baseX, baseY)
-      )
+): Promise<PathShape[]> => {
+  return await Promise.all(
+    node.vectorPaths.map((vectorPath, index) =>
+      transformVectorPath(node, vectorPath, (node.vectorNetwork.regions ?? [])[index], baseX, baseY)
     )
-  };
+  );
 };
 
 const transformVectorPath = async (
   node: VectorNode,
-  partialVectorNetwork: PartialVectorNetwork,
+  vectorPath: VectorPath,
+  vectorRegion: VectorRegion | undefined,
   baseX: number,
   baseY: number
 ): Promise<PathShape> => {
-  const vectorPath =
-    partialVectorNetwork.vectorPath ??
-    translatePartialVectorNetwork(node.vectorNetwork, partialVectorNetwork);
-  console.log(vectorPath);
+  const normalizedPaths = parseSVG(vectorPath.data);
 
   return {
     type: 'path',
     name: 'svg-path',
-    content: translateVectorPath(vectorPath, baseX + node.x, baseY + node.y),
+    content: translateVectorPath(normalizedPaths, baseX + node.x, baseY + node.y),
     fills:
       vectorPath.windingRule === 'NONE'
         ? []
-        : await translateFills(partialVectorNetwork.region?.fills ?? node.fills),
+        : await translateFills(vectorRegion?.fills ?? node.fills),
     svgAttrs: {
       fillRule: translateWindingRule(vectorPath.windingRule)
     },
-    ...(await transformStrokesFromVectorNetwork(node, partialVectorNetwork)),
+    ...(await transformStrokesFromVector(node, normalizedPaths, vectorRegion)),
     ...transformEffects(node),
     ...transformDimensionAndPositionFromVectorPath(vectorPath, baseX, baseY),
     ...transformSceneNode(node),
@@ -91,3 +118,34 @@ const transformVectorPath = async (
     ...transformProportion(node)
   };
 };
+
+// const transformPartialVectorNetwork = async (
+//   node: VectorNode,
+//   partialVectorNetwork: PartialVectorNetwork,
+//   baseX: number,
+//   baseY: number
+// ): Promise<PathShape> => {
+//   const vectorPath =
+//     partialVectorNetwork.vectorPath ??
+//     translatePartialVectorNetwork(node.vectorNetwork, partialVectorNetwork);
+//   console.log(vectorPath);
+
+//   return {
+//     type: 'path',
+//     name: 'svg-path',
+//     content: translateVectorPath(vectorPath, baseX + node.x, baseY + node.y),
+//     fills:
+//       vectorPath.windingRule === 'NONE'
+//         ? []
+//         : await translateFills(partialVectorNetwork.region?.fills ?? node.fills),
+//     svgAttrs: {
+//       fillRule: translateWindingRule(vectorPath.windingRule)
+//     },
+//     ...(await transformStrokesFromVectorNetwork(node, partialVectorNetwork)),
+//     ...transformEffects(node),
+//     ...transformDimensionAndPositionFromVectorPath(vectorPath, baseX, baseY),
+//     ...transformSceneNode(node),
+//     ...transformBlend(node),
+//     ...transformProportion(node)
+//   };
+// };

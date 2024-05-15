@@ -1,4 +1,4 @@
-import { CurveToCommand, LineToCommand, MoveToCommand, parseSVG } from 'svg-path-parser';
+import { Command, CurveToCommand, LineToCommand, MoveToCommand, parseSVG } from 'svg-path-parser';
 
 import { Segment } from '@ui/lib/types/shapes/pathShape';
 
@@ -10,16 +10,20 @@ export const translateVectorPaths = (
   let segments: Segment[] = [];
 
   for (const path of paths) {
-    segments = [...segments, ...translateVectorPath(path, baseX, baseY)];
+    const normalizedPaths = parseSVG(path.data);
+
+    segments = [...segments, ...translateVectorPath(normalizedPaths, baseX, baseY)];
   }
 
   return segments;
 };
 
-export const translateVectorPath = (path: VectorPath, baseX: number, baseY: number): Segment[] => {
-  const normalizedPaths = parseSVG(path.data);
-
-  return normalizedPaths.map(command => {
+export const translateVectorPath = (
+  commands: Command[],
+  baseX: number,
+  baseY: number
+): Segment[] => {
+  return commands.map(command => {
     switch (command.command) {
       case 'moveto':
         return translateMoveToCommand(command, baseX, baseY);
