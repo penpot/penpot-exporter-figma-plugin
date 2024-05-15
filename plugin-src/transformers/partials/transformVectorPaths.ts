@@ -70,6 +70,7 @@ const transformVectorPath = async (
   const vectorPath =
     partialVectorNetwork.vectorPath ??
     translatePartialVectorNetwork(node.vectorNetwork, partialVectorNetwork);
+  console.log(vectorPath);
 
   return {
     type: 'path',

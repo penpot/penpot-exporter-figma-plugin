@@ -5,24 +5,38 @@ export const translatePartialVectorNetwork = (
   partialVectorNetwork: PartialVectorNetwork
 ): VectorPath => {
   const { segments } = partialVectorNetwork;
+  let isClosed = false;
   let data = '';
+  const visitedVertex = new Set<number>([segments[0].start]);
+  let moveTo = true;
 
   segments.forEach((segment, index) => {
     const segmentPath = translateVectorSegment(
       segment,
       vectorNetwork.vertices[segment.start],
       vectorNetwork.vertices[segment.end],
-      index === 0
+      moveTo
     );
 
-    data += segmentPath + (index === segments.length - 1 ? '' : ' ');
+    data += segmentPath;
+
+    if (visitedVertex.has(segment.end)) {
+      isClosed = true;
+      moveTo = true;
+      data += ' Z';
+    } else {
+      moveTo = false;
+    }
+
+    data += index === segments.length - 1 ? '' : ' ';
+
+    visitedVertex.add(segment.end);
   });
 
-  if (partialVectorNetwork.region) {
-    data += ' Z';
-  }
-
-  return { data, windingRule: partialVectorNetwork.region?.windingRule ?? 'NONE' };
+  return {
+    data,
+    windingRule: partialVectorNetwork.region?.windingRule ?? (isClosed ? 'NONZERO' : 'NONE')
+  };
 };
 
 const translateVectorSegment = (

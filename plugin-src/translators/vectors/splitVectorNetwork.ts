@@ -14,7 +14,7 @@ export const splitVectorNetwork = (node: VectorLikeMixin): PartialVectorNetwork[
       const regionSegments: VectorSegment[] = [];
 
       region.loops.forEach(loop => {
-        for (let index = loop.length - 1; index >= 0; index--) {
+        for (let index = 0; index < loop.length; index++) {
           const segmentIndex = loop[index];
 
           visitedSegments.add(segmentIndex);
@@ -36,40 +36,34 @@ const findRemainingPaths = (
   visitedSegments: Set<number>
 ): PartialVectorNetwork[] => {
   const { segments } = vectorNetwork;
-  const visitedVertices = new Set<number>();
   const remainingPaths: PartialVectorNetwork[] = [];
 
-  segments.forEach((segment, segmentIndex) => {
-    if (visitedSegments.has(segmentIndex) || visitedVertices.has(segment.start)) return;
+  function findConsecutive(
+    segment: VectorSegment,
+    consecutive: VectorSegment[],
+    index: number
+  ): void {
+    visitedSegments.add(index);
+    consecutive.push(segment);
 
-    const pathVertices = new Set<number>();
-    const pathSegments: VectorSegment[] = [];
-    const stack = [segment.start];
-
-    while (stack.length > 0) {
-      const vertex = stack.pop()!;
-
-      if (visitedVertices.has(vertex)) continue;
-
-      visitedVertices.add(vertex);
-      pathVertices.add(vertex);
-
-      segments.forEach((segment, segmentIndex) => {
-        if (
-          visitedSegments.has(segmentIndex) ||
-          (segment.start !== vertex && segment.end !== vertex)
-        )
-          return;
-
-        visitedSegments.add(segmentIndex);
-        pathSegments.push(segment);
-
-        stack.push(segment.start === vertex ? segment.end : segment.start);
-      });
+    const nextSegmentIndex = segments.findIndex(
+      (seg, index) => seg.start === segment.end && !visitedSegments.has(index)
+    );
+    const nextSegment = segments[nextSegmentIndex];
+    if (nextSegment) {
+      findConsecutive(nextSegment, consecutive, nextSegmentIndex);
+    } else {
+      remainingPaths.push({ vectorPath: undefined, region: undefined, segments: consecutive });
     }
+  }
 
-    remainingPaths.push({ vectorPath: undefined, region: undefined, segments: pathSegments });
+  segments.forEach((segment, index) => {
+    if (visitedSegments.has(index)) return;
+
+    const consecutiveSegments: VectorSegment[] = [];
+    findConsecutive(segment, consecutiveSegments, index);
   });
 
+  console.log('remainingPaths', remainingPaths);
   return remainingPaths;
 };

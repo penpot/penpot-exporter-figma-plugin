@@ -16,9 +16,11 @@ export const transformVectorNode = async (
   baseX: number,
   baseY: number
 ): Promise<GroupShape | PathShape> => {
-  if ((node.vectorNetwork.regions ?? []).length === 0) {
-    return transformPathNode(node, baseX, baseY);
-  }
+  // if ((node.vectorNetwork.regions ?? []).length === 0) {
+  //   return transformPathNode(node, baseX, baseY);
+  // }
+
+  console.log(node);
 
   return {
     ...transformGroupNodeLike(node, baseX, baseY),
