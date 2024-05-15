@@ -1,26 +1,30 @@
 export type PartialVectorNetwork = {
+  vectorPath: VectorPath | undefined;
   region: VectorRegion | undefined;
   segments: VectorSegment[];
 };
 
-export const splitVectorNetwork = (vectorNetwork: VectorNetwork): PartialVectorNetwork[] => {
+export const splitVectorNetwork = (node: VectorLikeMixin): PartialVectorNetwork[] => {
+  const { vectorNetwork, vectorPaths } = node;
   const visitedSegments = new Set<number>();
 
-  const closedRegions: PartialVectorNetwork[] = (vectorNetwork.regions ?? []).map(region => {
-    const regionSegments: VectorSegment[] = [];
+  const closedRegions: PartialVectorNetwork[] = (vectorNetwork.regions ?? []).map(
+    (region, index) => {
+      const vectorPath = vectorPaths[index];
+      const regionSegments: VectorSegment[] = [];
 
-    region.loops.forEach(loop => {
-      regionSegments.push(
-        ...loop.map(segmentIndex => {
+      region.loops.forEach(loop => {
+        for (let index = loop.length - 1; index >= 0; index--) {
+          const segmentIndex = loop[index];
+
           visitedSegments.add(segmentIndex);
+          regionSegments.push(vectorNetwork.segments[segmentIndex]);
+        }
+      });
 
-          return vectorNetwork.segments[segmentIndex];
-        })
-      );
-    });
-
-    return { region, segments: regionSegments };
-  });
+      return { vectorPath, region, segments: regionSegments };
+    }
+  );
 
   const openPaths = findOpenPaths(vectorNetwork, visitedSegments);
 
@@ -31,35 +35,40 @@ const findOpenPaths = (
   vectorNetwork: VectorNetwork,
   visitedSegments: Set<number>
 ): PartialVectorNetwork[] => {
+  const { segments } = vectorNetwork;
   const visitedVertices = new Set<number>();
   const openPaths: PartialVectorNetwork[] = [];
 
-  vectorNetwork.segments.forEach((segment, segmentIndex) => {
-    if (!visitedSegments.has(segmentIndex) && !visitedVertices.has(segment.start)) {
-      const pathVertices = new Set<number>();
-      const pathSegments: VectorSegment[] = [];
-      const stack = [segment.start];
+  segments.forEach((segment, segmentIndex) => {
+    if (visitedSegments.has(segmentIndex) || visitedVertices.has(segment.start)) return;
 
-      while (stack.length > 0) {
-        const vertex = stack.pop()!;
+    const pathVertices = new Set<number>();
+    const pathSegments: VectorSegment[] = [];
+    const stack = [segment.start];
 
-        if (!visitedVertices.has(vertex)) {
-          visitedVertices.add(vertex);
-          pathVertices.add(vertex);
+    while (stack.length > 0) {
+      const vertex = stack.pop()!;
 
-          vectorNetwork.segments.forEach((seg, idx) => {
-            if (!visitedSegments.has(idx) && (seg.start === vertex || seg.end === vertex)) {
-              pathSegments.push(seg);
-              stack.push(seg.start === vertex ? seg.end : seg.start);
+      if (visitedVertices.has(vertex)) continue;
 
-              visitedSegments.add(idx);
-            }
-          });
-        }
-      }
+      visitedVertices.add(vertex);
+      pathVertices.add(vertex);
 
-      openPaths.push({ region: undefined, segments: pathSegments });
+      segments.forEach((segment, segmentIndex) => {
+        if (
+          visitedSegments.has(segmentIndex) ||
+          (segment.start !== vertex && segment.end !== vertex)
+        )
+          return;
+
+        visitedSegments.add(segmentIndex);
+        pathSegments.push(segment);
+
+        stack.push(segment.start === vertex ? segment.end : segment.start);
+      });
     }
+
+    openPaths.push({ vectorPath: undefined, region: undefined, segments: pathSegments });
   });
 
   return openPaths;

@@ -4,9 +4,10 @@ export const translatePartialVectorNetwork = (
   vectorNetwork: VectorNetwork,
   partialVectorNetwork: PartialVectorNetwork
 ): VectorPath => {
+  const { segments } = partialVectorNetwork;
   let data = '';
 
-  partialVectorNetwork.segments.forEach((segment, index) => {
+  segments.forEach((segment, index) => {
     const segmentPath = translateVectorSegment(
       segment,
       vectorNetwork.vertices[segment.start],
@@ -14,7 +15,7 @@ export const translatePartialVectorNetwork = (
       index === 0
     );
 
-    data += segmentPath + (index === partialVectorNetwork.segments.length - 1 ? '' : ' ');
+    data += segmentPath + (index === segments.length - 1 ? '' : ' ');
   });
 
   if (partialVectorNetwork.region) {

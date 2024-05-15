@@ -13,7 +13,8 @@ import {
   translateLineNode,
   translatePartialVectorNetwork,
   translateVectorPath,
-  translateVectorPaths
+  translateVectorPaths,
+  translateWindingRule
 } from '@plugin/translators/vectors';
 
 import { PathAttributes } from '@ui/lib/types/shapes/pathShape';
@@ -49,7 +50,7 @@ export const transformVectorPathsAsChildren = async (
   baseX: number,
   baseY: number
 ): Promise<Children> => {
-  const partialVectorNetworks = splitVectorNetwork(node.vectorNetwork);
+  const partialVectorNetworks = splitVectorNetwork(node);
 
   return {
     children: await Promise.all(
@@ -66,13 +67,18 @@ const transformVectorPath = async (
   baseX: number,
   baseY: number
 ): Promise<PathShape> => {
-  const vectorPath = translatePartialVectorNetwork(node.vectorNetwork, partialVectorNetwork);
+  const vectorPath =
+    partialVectorNetwork.vectorPath ??
+    translatePartialVectorNetwork(node.vectorNetwork, partialVectorNetwork);
 
   return {
     type: 'path',
     name: 'svg-path',
     content: translateVectorPath(vectorPath, baseX + node.x, baseY + node.y),
     fills: await translateFills(partialVectorNetwork.region?.fills ?? node.fills),
+    svgAttrs: {
+      fillRule: translateWindingRule(vectorPath.windingRule)
+    },
     ...(await transformStrokesFromVectorNetwork(node, partialVectorNetwork)),
     ...transformEffects(node),
     ...transformDimensionAndPositionFromVectorPath(vectorPath, baseX, baseY),
