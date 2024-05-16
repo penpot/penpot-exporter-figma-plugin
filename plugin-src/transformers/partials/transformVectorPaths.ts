@@ -83,11 +83,26 @@ export const transformVectorPaths = async (
   baseX: number,
   baseY: number
 ): Promise<PathShape[]> => {
-  return await Promise.all(
+  const pathShapes = await Promise.all(
     node.vectorPaths.map((vectorPath, index) =>
       transformVectorPath(node, vectorPath, (node.vectorNetwork.regions ?? [])[index], baseX, baseY)
     )
   );
+
+  const geometryShapes = await Promise.all(
+    node.fillGeometry
+      .filter(
+        geometry =>
+          !node.vectorPaths.find(vectorPath => vectorPath.data === addSpaces(geometry.data))
+      )
+      .map(geometry => transformVectorPath(node, geometry, undefined, baseX, baseY, true))
+  );
+
+  return [...geometryShapes, ...pathShapes];
+};
+
+const addSpaces = (string: string): string => {
+  return string.replace(/([A-Za-z])([0-9])/g, '$1 $2');
 };
 
 const transformVectorPath = async (
@@ -95,7 +110,8 @@ const transformVectorPath = async (
   vectorPath: VectorPath,
   vectorRegion: VectorRegion | undefined,
   baseX: number,
-  baseY: number
+  baseY: number,
+  isGeometry = false
 ): Promise<PathShape> => {
   const normalizedPaths = parseSVG(vectorPath.data);
 
@@ -110,7 +126,9 @@ const transformVectorPath = async (
     svgAttrs: {
       fillRule: translateWindingRule(vectorPath.windingRule)
     },
-    ...(await transformStrokesFromVector(node, normalizedPaths, vectorRegion)),
+    ...(isGeometry
+      ? { strokes: [] }
+      : await transformStrokesFromVector(node, normalizedPaths, vectorRegion)),
     ...transformEffects(node),
     ...transformDimensionAndPositionFromVectorPath(vectorPath, baseX, baseY),
     ...transformSceneNode(node),
