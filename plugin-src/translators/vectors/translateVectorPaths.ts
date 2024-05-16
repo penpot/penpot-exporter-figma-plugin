@@ -12,13 +12,13 @@ export const translateVectorPaths = (
   for (const path of paths) {
     const normalizedPaths = parseSVG(path.data);
 
-    segments = [...segments, ...translateVectorPath(normalizedPaths, baseX, baseY)];
+    segments = [...segments, ...translateCommandsToSegments(normalizedPaths, baseX, baseY)];
   }
 
   return segments;
 };
 
-export const translateVectorPath = (
+export const translateCommandsToSegments = (
   commands: Command[],
   baseX: number,
   baseY: number

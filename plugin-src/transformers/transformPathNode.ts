@@ -11,12 +11,12 @@ import {
 
 import { PathShape } from '@ui/lib/types/shapes/pathShape';
 
-const hasFillGeometry = (node: VectorNode | StarNode | LineNode | PolygonNode): boolean => {
+const hasFillGeometry = (node: StarNode | LineNode | PolygonNode): boolean => {
   return 'fillGeometry' in node && node.fillGeometry.length > 0;
 };
 
 export const transformPathNode = async (
-  node: VectorNode | StarNode | LineNode | PolygonNode,
+  node: StarNode | LineNode | PolygonNode,
   baseX: number,
   baseY: number
 ): Promise<PathShape> => {
