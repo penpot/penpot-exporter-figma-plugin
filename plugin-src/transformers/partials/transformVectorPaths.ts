@@ -36,8 +36,6 @@ export const transformVectorPaths = async (
   baseX: number,
   baseY: number
 ): Promise<PathShape[]> => {
-  console.log(node);
-
   const pathShapes = await Promise.all(
     node.vectorPaths.map((vectorPath, index) =>
       transformVectorPath(node, vectorPath, (node.vectorNetwork.regions ?? [])[index], baseX, baseY)
@@ -48,7 +46,9 @@ export const transformVectorPaths = async (
     node.fillGeometry
       .filter(
         geometry =>
-          !node.vectorPaths.find(vectorPath => vectorPath.data === addSpaces(geometry.data))
+          !node.vectorPaths.find(
+            vectorPath => normalizePath(vectorPath.data) === normalizePath(geometry.data)
+          )
       )
       .map(geometry => transformVectorPath(node, geometry, undefined, baseX, baseY))
   );
@@ -66,8 +66,13 @@ const getVectorPaths = (node: StarNode | LineNode | PolygonNode): VectorPaths =>
   }
 };
 
-const addSpaces = (string: string): string => {
-  return string.replace(/([A-Za-z])([0-9])/g, '$1 $2');
+const normalizePath = (path: string): string => {
+  // Round to 2 decimal places all numbers
+  const str = path.replace(/(\d+\.\d+|\d+)/g, (match: string) => {
+    return parseFloat(match).toFixed(2);
+  });
+  // remove spaces
+  return str.replace(/\s/g, '');
 };
 
 const transformVectorPath = async (
