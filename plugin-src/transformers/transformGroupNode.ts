@@ -1,7 +1,6 @@
 import {
-  transformBlend,
-  transformDimensionAndPosition,
-  transformEffects,
+  // transformBlend,
+  transformDimensionAndPosition, // transformEffects,
   transformSceneNode
 } from '@plugin/transformers/partials';
 import { transformChildren } from '@plugin/transformers/partials';
@@ -28,8 +27,8 @@ export const transformGroupNodeLike = (
     type: 'group',
     name: node.name,
     ...transformDimensionAndPosition(node, baseX, baseY),
-    ...transformEffects(node),
-    ...transformSceneNode(node),
-    ...transformBlend(node)
+    // ...transformEffects(node),
+    ...transformSceneNode(node)
+    // ...transformBlend(node)
   };
 };
