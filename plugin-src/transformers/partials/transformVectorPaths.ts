@@ -37,9 +37,22 @@ export const transformVectorPaths = async (
   baseY: number
 ): Promise<PathShape[]> => {
   const pathShapes = await Promise.all(
-    node.vectorPaths.map((vectorPath, index) =>
-      transformVectorPath(node, vectorPath, (node.vectorNetwork.regions ?? [])[index], baseX, baseY)
-    )
+    node.vectorPaths
+      .filter((vectorPath, index) => {
+        return (
+          nodeHasFills(node, vectorPath, (node.vectorNetwork.regions ?? [])[index]) ||
+          node.strokes.length > 0
+        );
+      })
+      .map((vectorPath, index) =>
+        transformVectorPath(
+          node,
+          vectorPath,
+          (node.vectorNetwork.regions ?? [])[index],
+          baseX,
+          baseY
+        )
+      )
   );
 
   const geometryShapes = await Promise.all(
@@ -73,6 +86,14 @@ const normalizePath = (path: string): string => {
   });
   // remove spaces
   return str.replace(/\s/g, '');
+};
+
+const nodeHasFills = (
+  node: VectorNode,
+  vectorPath: VectorPath,
+  vectorRegion: VectorRegion | undefined
+): boolean => {
+  return !!(vectorPath.windingRule !== 'NONE' && (vectorRegion?.fills || node.fills));
 };
 
 const transformVectorPath = async (
