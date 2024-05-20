@@ -26,7 +26,7 @@ export const transformVectorNode = async (
   }
 
   return {
-    ...transformGroupNodeLike(node, baseX, baseY),
+    ...transformGroupNodeLike(node, baseX, baseY, true),
     children
   };
 };
