@@ -35,6 +35,7 @@ export const transformSceneNode = async (
     case 'LINE':
       return await transformPathNode(node, baseX, baseY);
     case 'BOOLEAN_OPERATION':
+      console.log(node);
       return await transformBooleanNode(node, baseX, baseY);
   }
 
