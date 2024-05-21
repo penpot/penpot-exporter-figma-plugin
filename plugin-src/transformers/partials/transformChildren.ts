@@ -10,11 +10,11 @@ export const transformChildren = async (
   baseY: number = 0
 ): Promise<Children> => {
   return {
-    children: await splitChildrenWithMask(node.children, baseX, baseY)
+    children: await transformChildrenWithMask(node.children, baseX, baseY)
   };
 };
 
-const splitChildrenWithMask = async (
+const transformChildrenWithMask = async (
   children: readonly SceneNode[],
   baseX: number,
   baseY: number
