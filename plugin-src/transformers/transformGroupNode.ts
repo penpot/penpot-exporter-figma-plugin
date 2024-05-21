@@ -15,22 +15,21 @@ export const transformGroupNode = async (
 ): Promise<GroupShape> => {
   return {
     ...transformGroupNodeLike(node, baseX, baseY),
+    ...transformEffects(node),
+    ...transformBlend(node),
     ...(await transformChildren(node, baseX, baseY))
   };
 };
 
 export const transformGroupNodeLike = (
-  node: BaseNodeMixin & DimensionAndPositionMixin & BlendMixin & SceneNodeMixin & MinimalBlendMixin,
+  node: BaseNodeMixin & DimensionAndPositionMixin & SceneNodeMixin,
   baseX: number,
-  baseY: number,
-  isVectorGroup: boolean = false
+  baseY: number
 ): GroupShape => {
   return {
     type: 'group',
     name: node.name,
     ...transformDimensionAndPosition(node, baseX, baseY),
-    ...transformSceneNode(node),
-    ...(isVectorGroup ? {} : transformEffects(node)),
-    ...(isVectorGroup ? {} : transformBlend(node))
+    ...transformSceneNode(node)
   };
 };
