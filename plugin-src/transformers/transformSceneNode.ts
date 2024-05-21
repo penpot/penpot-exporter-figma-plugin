@@ -1,6 +1,7 @@
 import { PenpotNode } from '@ui/lib/types/penpotNode';
 
 import {
+  transformBooleanNode,
   transformEllipseNode,
   transformFrameNode,
   transformGroupNode,
@@ -15,6 +16,7 @@ export const transformSceneNode = async (
   baseX: number = 0,
   baseY: number = 0
 ): Promise<PenpotNode | undefined> => {
+  console.log(node);
   switch (node.type) {
     case 'RECTANGLE':
       return await transformRectangleNode(node, baseX, baseY);
@@ -33,6 +35,8 @@ export const transformSceneNode = async (
     case 'POLYGON':
     case 'LINE':
       return await transformPathNode(node, baseX, baseY);
+    case 'BOOLEAN_OPERATION':
+      return await transformBooleanNode(node, baseX, baseY);
   }
 
   console.error(`Unsupported node type: ${node.type}`);

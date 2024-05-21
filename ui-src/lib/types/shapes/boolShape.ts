@@ -1,12 +1,14 @@
 import { LayoutChildAttributes } from '@ui/lib/types/shapes/layout';
 import { ShapeAttributes, ShapeBaseAttributes } from '@ui/lib/types/shapes/shape';
+import { Children } from '@ui/lib/types/utils/children';
 import { Point } from '@ui/lib/types/utils/point';
 import { Uuid } from '@ui/lib/types/utils/uuid';
 
 export type BoolShape = ShapeBaseAttributes &
   ShapeAttributes &
   BoolAttributes &
-  LayoutChildAttributes;
+  LayoutChildAttributes &
+  Children;
 
 type BoolAttributes = {
   type?: 'bool';
