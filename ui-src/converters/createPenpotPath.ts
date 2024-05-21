@@ -1,6 +1,5 @@
 import { PenpotFile } from '@ui/lib/types/penpotFile';
 import { PathShape } from '@ui/lib/types/shapes/pathShape';
-import { Uuid } from '@ui/lib/types/utils/uuid';
 import {
   translateFillGradients,
   translatePathContent,
@@ -10,8 +9,8 @@ import {
 export const createPenpotPath = (
   file: PenpotFile,
   { type, fills, blendMode, content, ...rest }: PathShape
-): Uuid => {
-  return file.createPath({
+) => {
+  file.createPath({
     fills: translateFillGradients(fills),
     blendMode: translateUiBlendMode(blendMode),
     content: translatePathContent(content),
