@@ -17,7 +17,7 @@ export const transformMaskChildren = async (
       continue;
     }
 
-    if ('isMask' in child && child.isMask) {
+    if (isMask(child)) {
       if (currentGroup?.children?.length) {
         splitChildren.push(currentGroup as GroupShape);
       }
@@ -40,4 +40,8 @@ export const transformMaskChildren = async (
   }
 
   return splitChildren;
+};
+
+const isMask = (node: SceneNode): boolean => {
+  return 'isMask' in node && node.isMask;
 };
