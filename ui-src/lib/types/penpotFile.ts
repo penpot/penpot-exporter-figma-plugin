@@ -29,9 +29,9 @@ export interface PenpotFile {
   // startComponent(component: any): void;
   // finishComponent(): void;
   // createComponentInstance(instance: any): void;
-  lookupShape(shapeId: string): void;
+  // lookupShape(shapeId: string): void;
   // updateObject(id: string, object: any): void;
   // deleteObject(id: string): void;
-  asMap(): unknown;
+  // asMap(): unknown;
   export(): void;
 }
