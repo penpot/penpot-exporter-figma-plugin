@@ -11,8 +11,14 @@ export const transformMaskChildren = async (
   const splitChildren: PenpotNode[] = [];
   let currentGroup: Partial<GroupShape> | null = null;
 
-  for (const child of children) {
-    const transformedChild = await transformSceneNode(child, baseX, baseY);
+  const transformedChildren = await Promise.all(
+    children.map(child => transformSceneNode(child, baseX, baseY))
+  );
+
+  for (let i = 0; i < children.length; i++) {
+    const child = children[i];
+    const transformedChild = transformedChildren[i];
+
     if (!transformedChild) {
       continue;
     }
