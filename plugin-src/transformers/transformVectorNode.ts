@@ -1,9 +1,9 @@
-import { transformVectorPathsAsChildren } from '@plugin/transformers/partials';
+import { transformVectorPaths } from '@plugin/transformers/partials';
 
 import { GroupShape } from '@ui/lib/types/shapes/groupShape';
 import { PathShape } from '@ui/lib/types/shapes/pathShape';
 
-import { transformGroupNodeLike, transformPathNode } from '.';
+import { transformGroupNodeLike } from '.';
 
 /*
  * Vector nodes can have multiple vector paths, each with its own fills.
@@ -16,12 +16,17 @@ export const transformVectorNode = async (
   baseX: number,
   baseY: number
 ): Promise<GroupShape | PathShape> => {
-  if ((node.vectorNetwork.regions ?? []).length === 0) {
-    return transformPathNode(node, baseX, baseY);
+  const children = await transformVectorPaths(node, baseX, baseY);
+
+  if (children.length === 1) {
+    return {
+      ...children[0],
+      name: node.name
+    };
   }
 
   return {
     ...transformGroupNodeLike(node, baseX, baseY),
-    ...(await transformVectorPathsAsChildren(node, baseX, baseY))
+    children
   };
 };

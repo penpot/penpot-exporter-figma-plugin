@@ -1,4 +1,4 @@
-import { CurveToCommand, LineToCommand, MoveToCommand, parseSVG } from 'svg-path-parser';
+import { Command, CurveToCommand, LineToCommand, MoveToCommand, parseSVG } from 'svg-path-parser';
 
 import { Segment } from '@ui/lib/types/shapes/pathShape';
 
@@ -10,16 +10,20 @@ export const translateVectorPaths = (
   let segments: Segment[] = [];
 
   for (const path of paths) {
-    segments = [...segments, ...translateVectorPath(path, baseX, baseY)];
+    const normalizedPaths = parseSVG(path.data);
+
+    segments = [...segments, ...translateCommandsToSegments(normalizedPaths, baseX, baseY)];
   }
 
   return segments;
 };
 
-export const translateVectorPath = (path: VectorPath, baseX: number, baseY: number): Segment[] => {
-  const normalizedPaths = parseSVG(path.data);
-
-  return normalizedPaths.map(command => {
+export const translateCommandsToSegments = (
+  commands: Command[],
+  baseX: number,
+  baseY: number
+): Segment[] => {
+  return commands.map(command => {
     switch (command.command) {
       case 'moveto':
         return translateMoveToCommand(command, baseX, baseY);
@@ -34,30 +38,6 @@ export const translateVectorPath = (path: VectorPath, baseX: number, baseY: numb
         };
     }
   });
-};
-
-export const createLineGeometry = (node: LineNode): VectorPaths => {
-  const commands = [
-    {
-      command: 'moveto',
-      code: 'M',
-      x: 0,
-      y: 0
-    },
-    {
-      command: 'lineto',
-      code: 'L',
-      x: node.width,
-      y: node.height
-    }
-  ];
-
-  return [
-    {
-      windingRule: 'NONZERO',
-      data: commands.map(({ code, x, y }) => `${code} ${x} ${y}`).join(' ') + ' Z'
-    }
-  ];
 };
 
 const translateMoveToCommand = (command: MoveToCommand, baseX: number, baseY: number): Segment => {

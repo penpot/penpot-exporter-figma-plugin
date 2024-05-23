@@ -9,6 +9,9 @@ export type PathShape = ShapeBaseAttributes &
 export type PathAttributes = {
   type?: 'path';
   content: PathContent;
+  svgAttrs?: {
+    fillRule?: FillRules;
+  };
 };
 
 export const VECTOR_LINE_TO: unique symbol = Symbol.for('line-to');
@@ -27,6 +30,8 @@ export type Command =
   | typeof VECTOR_CLOSE_PATH
   | typeof VECTOR_MOVE_TO
   | typeof VECTOR_CURVE_TO;
+
+export type FillRules = 'evenodd' | 'nonzero';
 
 type LineTo = {
   command: 'line-to' | typeof VECTOR_LINE_TO;
