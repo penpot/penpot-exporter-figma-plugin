@@ -1,4 +1,5 @@
 import { LayoutChildAttributes } from '@ui/lib/types/shapes/layout';
+import { PathContent } from '@ui/lib/types/shapes/pathShape';
 import { ShapeAttributes, ShapeBaseAttributes } from '@ui/lib/types/shapes/shape';
 import { Children } from '@ui/lib/types/utils/children';
 import { Point } from '@ui/lib/types/utils/point';
@@ -29,12 +30,10 @@ type BoolAttributes = {
   type?: 'bool';
   shapes?: Uuid[];
   boolType: BoolOperations;
-  boolContent?: BoolContent[];
+  boolContent?: (PathContent & BoolContent)[];
 };
 
-type BoolContent = {
-  command: string; // @TODO: in Penpot this is of type :keyword. check if it makes sense
+export type BoolContent = {
   relative?: boolean;
   prevPos?: Point;
-  params?: { [keyword: string]: number }; // @TODO: in Penpot this is of type :keyword. check if it makes sense
 };
