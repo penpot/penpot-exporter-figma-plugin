@@ -28,7 +28,7 @@ export type BoolShape = ShapeBaseAttributes &
 type BoolAttributes = {
   type?: 'bool';
   shapes?: Uuid[];
-  boolType: BoolOperations; // @TODO: in Penpot this is of type :keyword. check if it makes sense
+  boolType: BoolOperations;
   boolContent?: BoolContent[];
 };
 
