@@ -7,17 +7,30 @@ export const createPenpotComponent = (
   file: PenpotFile,
   { type, children = [], ...rest }: ComponentShape
 ) => {
-  const frameId = createPenpotArtboard(file, {
+
+  const frameId = file.newId();
+  const componentId = file.newId();
+
+  const _frameId = createPenpotArtboard(file, {
+    id: frameId,
     type: 'frame',
     children,
-    ...rest
+    componentFile: file.getId(),
+    componentId: componentId,
+    componentRoot: true,
+    mainInstance: true,
+    ...rest,
   });
 
-  const componentId = file.startComponent({
+  const _componentId = file.startComponent({
     ...rest,
+    id: componentId,
     componentFile: file.getId(),
+    componentId: componentId,
     mainInstancePage: file.getCurrentPageId(),
-    mainInstanceId: frameId
+    mainInstanceId: frameId,
+    componentRoot: true,
+    mainInstance: true,
   });
 
   for (const child of children) {
@@ -25,13 +38,4 @@ export const createPenpotComponent = (
   }
 
   file.finishComponent();
-
-  const newRest = {
-    componentRoot: true,
-    componentId: componentId,
-    componentFile: file.getId(),
-    mainInstance: true
-  };
-
-  file.updateObject(frameId, newRest);
 };
