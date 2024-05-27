@@ -8,22 +8,32 @@ export const transformMaskChildren = async (
   baseY: number
 ): Promise<PenpotNode[]> => {
   const maskIndex = children.findIndex(child => isMaskNode(child) && isMask(child));
+
   if (maskIndex === -1) {
-    return (
-      await Promise.all(children.map(child => transformSceneNode(child, baseX, baseY)))
-    ).filter((child): child is PenpotNode => !!child);
+    return transformChildren(children, baseX, baseY);
   }
 
-  const unmaskedChildren = await transformMaskChildren(children.slice(0, maskIndex), baseX, baseY);
-  const maskedChildren = children.slice(maskIndex);
+  const maskChild = children[maskIndex];
+  const unmaskedChildren = await transformChildren(children.slice(0, maskIndex), baseX, baseY);
+  const maskedChildren = await transformChildren(children.slice(maskIndex), baseX, baseY);
 
   const maskGroup = {
-    ...transformGroupNodeLike(maskedChildren[0], baseX, baseY),
-    children: await transformMaskChildren(maskedChildren, baseX, baseY),
+    ...transformGroupNodeLike(maskChild, baseX, baseY),
+    children: maskedChildren,
     maskedGroup: true
   };
 
   return [...unmaskedChildren, maskGroup];
+};
+
+const transformChildren = async (
+  children: readonly SceneNode[],
+  baseX: number,
+  baseY: number
+): Promise<PenpotNode[]> => {
+  return (await Promise.all(children.map(child => transformSceneNode(child, baseX, baseY)))).filter(
+    (child): child is PenpotNode => !!child
+  );
 };
 
 const isMask = (node: MaskNode): boolean => {
