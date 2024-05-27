@@ -1,3 +1,4 @@
+import { BoolShape } from '@ui/lib/types/shapes/boolShape';
 import { CircleShape } from '@ui/lib/types/shapes/circleShape';
 import { ComponentShape } from '@ui/lib/types/shapes/componentShape';
 import { FrameShape } from '@ui/lib/types/shapes/frameShape';
@@ -13,4 +14,5 @@ export type PenpotNode =
   | RectShape
   | CircleShape
   | TextShape
+  | BoolShape
   | ComponentShape;

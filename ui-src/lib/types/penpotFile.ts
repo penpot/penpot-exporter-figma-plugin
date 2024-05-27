@@ -35,7 +35,7 @@ export interface PenpotFile {
   // deleteObject(id: string): void;
   getId(): Uuid;
   getCurrentPageId(): Uuid;
-  asMap(): unknown;
   newId(): Uuid;
+  // asMap(): unknown;
   export(): void;
 }

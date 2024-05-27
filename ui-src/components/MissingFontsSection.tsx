@@ -19,7 +19,7 @@ export const MissingFontsSection = ({ fonts }: MissingFontsSectionProps) => {
         <span>To export your file with custom fonts, please follow these steps:</span>
         <Stack as="ol" space="xsmall" style={{ paddingLeft: '1rem' }}>
           <li>
-            Upload your local fonts in Penpot.
+            Before exporting the file, upload your custom local fonts in Penpot.
             <br />
             <Link
               href="https://help.penpot.app/user-guide/custom-fonts/"
@@ -29,7 +29,18 @@ export const MissingFontsSection = ({ fonts }: MissingFontsSectionProps) => {
               Learn how to do it.
             </Link>
           </li>
-          <li>Copy and paste the font IDs from Penpot below.</li>
+          <li>
+            Follow this{' '}
+            <Link
+              href="https://github.com/penpot/penpot-exporter-figma-plugin/wiki/Step-by-Step-guide-to-finding-Font-Ids-in-Penpot"
+              target="_blank"
+              rel="noreferrer"
+            >
+              step-by-step guide
+            </Link>{' '}
+            to locate and copy the font IDs from Penpot
+          </li>
+          <li>Return here and paste the font IDs in the section below</li>
         </Stack>
       </Stack>
       {fonts.map(font => (
