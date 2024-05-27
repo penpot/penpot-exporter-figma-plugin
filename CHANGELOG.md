@@ -1,5 +1,33 @@
 # penpot-exporter
 
+## 0.4.0
+
+### Minor Changes
+
+- [#115](https://github.com/penpot/penpot-exporter-figma-plugin/pull/115) [`36afc6d`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/36afc6da5578c826c2d25eb313a96a502fa53a3a) Thanks [@Cenadros](https://github.com/Cenadros)! - Added support for boolean groups
+
+- [#114](https://github.com/penpot/penpot-exporter-figma-plugin/pull/114) [`7610935`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/761093564bf958b18ce70eeb2153739437985c3a) Thanks [@Cenadros](https://github.com/Cenadros)! - Added support for masked groups
+
+- [#103](https://github.com/penpot/penpot-exporter-figma-plugin/pull/103) [`c71eb8e`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/c71eb8e736aa591e69fd33312091ddf4d3910b58) Thanks [@Cenadros](https://github.com/Cenadros)! - Added support for layer blur
+
+- [#105](https://github.com/penpot/penpot-exporter-figma-plugin/pull/105) [`2557cbd`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/2557cbdacc7387d0f7268aa58fa89c9bff99d16a) Thanks [@jordisala1991](https://github.com/jordisala1991)! - Implement Flatten object translation
+
+- [#116](https://github.com/penpot/penpot-exporter-figma-plugin/pull/116) [`aafb9cf`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/aafb9cf3423355b4194e50f58505fe5f8c43bde2) Thanks [@Cenadros](https://github.com/Cenadros)! - Updated copies for custom fonts help
+
+- [#108](https://github.com/penpot/penpot-exporter-figma-plugin/pull/108) [`23e97fb`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/23e97fb3d740e715ccf912f7eb84b92111aba0c6) Thanks [@Cenadros](https://github.com/Cenadros)! - Added support for linear and radial gradients
+
+### Patch Changes
+
+- [#102](https://github.com/penpot/penpot-exporter-figma-plugin/pull/102) [`54df5ea`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/54df5ead1eb33a58cf5f349f45e4806b570634df) Thanks [@Cenadros](https://github.com/Cenadros)! - Fix text image fills
+
+- [#112](https://github.com/penpot/penpot-exporter-figma-plugin/pull/112) [`cc5553c`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/cc5553ce7ceef14cdc74840bd2bd567da5ad9c3c) Thanks [@Cenadros](https://github.com/Cenadros)! - Arrows on complex svgs are now better represented inside Penpot
+
+- [#112](https://github.com/penpot/penpot-exporter-figma-plugin/pull/112) [`cc5553c`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/cc5553ce7ceef14cdc74840bd2bd567da5ad9c3c) Thanks [@Cenadros](https://github.com/Cenadros)! - Fix line node svg path
+
+- [#98](https://github.com/penpot/penpot-exporter-figma-plugin/pull/98) [`8d5c5c1`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/8d5c5c15eb8832417c0c09e7292931d6a27dd32b) Thanks [@Cenadros](https://github.com/Cenadros)! - Recalculate better the plugin height and limit it to a safer value so it does not get out of the screen
+
+- [#105](https://github.com/penpot/penpot-exporter-figma-plugin/pull/105) [`2557cbd`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/2557cbdacc7387d0f7268aa58fa89c9bff99d16a) Thanks [@jordisala1991](https://github.com/jordisala1991)! - Fix complex svgs with multiple different fills
+
 ## 0.3.1
 
 ### Patch Changes
