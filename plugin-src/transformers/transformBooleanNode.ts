@@ -1,7 +1,6 @@
 import {
   transformBlend,
   transformChildren,
-  transformCornerRadius,
   transformDimensionAndPosition,
   transformEffects,
   transformFills,
