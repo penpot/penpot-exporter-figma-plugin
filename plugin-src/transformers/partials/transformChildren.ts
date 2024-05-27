@@ -2,7 +2,7 @@ import { translateMaskChildren, translateNonMaskChildren } from '@plugin/transla
 
 import { Children } from '@ui/lib/types/utils/children';
 
-const isMask = (node: SceneNode): boolean => {
+const nodeActsAsMask = (node: SceneNode): boolean => {
   return 'isMask' in node && node.isMask;
 };
 
@@ -11,12 +11,12 @@ export const transformChildren = async (
   baseX: number = 0,
   baseY: number = 0
 ): Promise<Children> => {
-  const maskIndex = node.children.findIndex(isMask);
+  const maskIndex = node.children.findIndex(nodeActsAsMask);
+  const containsMask = maskIndex !== -1;
 
   return {
-    children:
-      maskIndex !== -1
-        ? await translateMaskChildren(node.children, maskIndex, baseX, baseY)
-        : await translateNonMaskChildren(node.children, baseX, baseY)
+    children: containsMask
+      ? await translateMaskChildren(node.children, maskIndex, baseX, baseY)
+      : await translateNonMaskChildren(node.children, baseX, baseY)
   };
 };
