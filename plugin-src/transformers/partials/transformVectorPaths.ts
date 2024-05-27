@@ -1,17 +1,25 @@
 import SVGPathCommander from 'svg-path-commander';
 import { parseSVG } from 'svg-path-parser';
 
-
-
-import { transformBlend, transformDimensionAndPositionFromVectorPath, transformEffects, transformProportion, transformSceneNode, transformStrokesFromVector } from '@plugin/transformers/partials';
+import {
+  transformBlend,
+  transformDimensionAndPositionFromVectorPath,
+  transformEffects,
+  transformProportion,
+  transformSceneNode,
+  transformStrokesFromVector
+} from '@plugin/transformers/partials';
 import { translateFills } from '@plugin/translators/fills';
-import { translateCommandsToSegments, translateLineNode, translateVectorPaths, translateWindingRule } from '@plugin/translators/vectors';
-
-
+import {
+  translateCommandsToSegments,
+  translateLineNode,
+  translateVectorPaths,
+  translateWindingRule
+} from '@plugin/translators/vectors';
 
 import { PathAttributes } from '@ui/lib/types/shapes/pathShape';
 import { PathShape } from '@ui/lib/types/shapes/pathShape';
-
+import { Point } from '@ui/lib/types/utils/point';
 
 export const transformVectorPathsAsContent = (
   node: StarNode | LineNode | PolygonNode,
@@ -30,6 +38,7 @@ export const transformVectorPaths = async (
   baseX: number,
   baseY: number
 ): Promise<PathShape[]> => {
+  console.log(node);
   const pathShapes = await Promise.all(
     node.vectorPaths
       .filter((vectorPath, index) => {
@@ -51,38 +60,54 @@ export const transformVectorPaths = async (
 
   const geometryShapes = await Promise.all(
     node.fillGeometry
-      .filter(
-        geometry =>
-          !node.vectorPaths.find(vectorPath => {
-            // console.log(vectorPath.data, geometry.data);
-            console.log(
-              SVGPathCommander.optimizePath(SVGPathCommander.normalizePath(vectorPath.data), 2),
-              SVGPathCommander.optimizePath(SVGPathCommander.normalizePath(geometry.data), 2),
-              new SVGPathCommander(vectorPath.data, { round: 'auto' }).optimize().toString() ===
-                new SVGPathCommander(geometry.data, { round: 'auto' }).optimize().toString(),
-              SVGPathCommander.normalizePath(vectorPath.data),
-              SVGPathCommander.normalizePath(geometry.data),
-              normalizePath(vectorPath.data) === normalizePath(geometry.data),
-              Math.abs(
-                SVGPathCommander.getTotalLength(vectorPath.data) -
-                  SVGPathCommander.getTotalLength(geometry.data)
-              ) <= 0.01
-            );
-
-            // compare vertexs of the path
-
-
-            return normalizePath(vectorPath.data) === normalizePath(geometry.data);
-          })
-      )
+      .filter(geometry => !filterMatchingGeometry(node.vectorPaths, geometry))
       .map(geometry => transformVectorPath(node, geometry, undefined, baseX, baseY))
   );
 
   return [...geometryShapes, ...pathShapes];
 };
 
+const filterMatchingGeometry = (vectorPaths: VectorPaths, fillGeometry: VectorPath): boolean => {
+  if (
+    !vectorPaths.find(
+      vectorPath => normalizePath(vectorPath.data) === normalizePath(fillGeometry.data)
+    )
+  ) {
+    return true;
+  }
 
-const compareVertices = (vertices1: Vertex[], vertices2: Vertex[]): boolean => {
+  const geometryLength = SVGPathCommander.getTotalLength(fillGeometry.data);
+  const geometryVertices = getVerticesFromPath(fillGeometry.data);
+
+  return !vectorPaths.some(vectorPath => {
+    const vectorLength = SVGPathCommander.getTotalLength(vectorPath.data);
+    return (
+      Math.abs(geometryLength - vectorLength) <= 0.01 &&
+      compareVertices(getVerticesFromPath(vectorPath.data), geometryVertices)
+    );
+  });
+};
+
+const getVerticesFromPath = (path: string): Point[] => {
+  const commands = parseSVG(path);
+  const points: Point[] = [];
+
+  commands.forEach(command => {
+    switch (command.command) {
+      case 'moveto':
+      case 'lineto':
+      case 'curveto':
+        points.push({ x: command.x, y: command.y });
+        break;
+      case 'closepath':
+        break;
+    }
+  });
+
+  return points;
+};
+
+const compareVertices = (vertices1: Point[], vertices2: Point[]): boolean => {
   if (vertices1.length !== vertices2.length) {
     return false;
   }
@@ -101,7 +126,7 @@ const compareVertices = (vertices1: Vertex[], vertices2: Vertex[]): boolean => {
   }
 
   return true;
-}
+};
 
 const getVectorPaths = (node: StarNode | LineNode | PolygonNode): VectorPaths => {
   switch (node.type) {
