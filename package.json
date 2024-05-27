@@ -28,6 +28,7 @@
     "react-hook-form": "^7.51",
     "romans": "^2.0",
     "slugify": "^1.6",
+    "svg-path-commander": "^2.0.9",
     "svg-path-parser": "^1.1",
     "use-resize-observer": "^9.1"
   },

@@ -1,23 +1,17 @@
+import SVGPathCommander from 'svg-path-commander';
 import { parseSVG } from 'svg-path-parser';
 
-import {
-  transformBlend,
-  transformDimensionAndPositionFromVectorPath,
-  transformEffects,
-  transformProportion,
-  transformSceneNode,
-  transformStrokesFromVector
-} from '@plugin/transformers/partials';
+
+
+import { transformBlend, transformDimensionAndPositionFromVectorPath, transformEffects, transformProportion, transformSceneNode, transformStrokesFromVector } from '@plugin/transformers/partials';
 import { translateFills } from '@plugin/translators/fills';
-import {
-  translateCommandsToSegments,
-  translateLineNode,
-  translateVectorPaths,
-  translateWindingRule
-} from '@plugin/translators/vectors';
+import { translateCommandsToSegments, translateLineNode, translateVectorPaths, translateWindingRule } from '@plugin/translators/vectors';
+
+
 
 import { PathAttributes } from '@ui/lib/types/shapes/pathShape';
 import { PathShape } from '@ui/lib/types/shapes/pathShape';
+
 
 export const transformVectorPathsAsContent = (
   node: StarNode | LineNode | PolygonNode,
@@ -59,15 +53,55 @@ export const transformVectorPaths = async (
     node.fillGeometry
       .filter(
         geometry =>
-          !node.vectorPaths.find(
-            vectorPath => normalizePath(vectorPath.data) === normalizePath(geometry.data)
-          )
+          !node.vectorPaths.find(vectorPath => {
+            // console.log(vectorPath.data, geometry.data);
+            console.log(
+              SVGPathCommander.optimizePath(SVGPathCommander.normalizePath(vectorPath.data), 2),
+              SVGPathCommander.optimizePath(SVGPathCommander.normalizePath(geometry.data), 2),
+              new SVGPathCommander(vectorPath.data, { round: 'auto' }).optimize().toString() ===
+                new SVGPathCommander(geometry.data, { round: 'auto' }).optimize().toString(),
+              SVGPathCommander.normalizePath(vectorPath.data),
+              SVGPathCommander.normalizePath(geometry.data),
+              normalizePath(vectorPath.data) === normalizePath(geometry.data),
+              Math.abs(
+                SVGPathCommander.getTotalLength(vectorPath.data) -
+                  SVGPathCommander.getTotalLength(geometry.data)
+              ) <= 0.01
+            );
+
+            // compare vertexs of the path
+
+
+            return normalizePath(vectorPath.data) === normalizePath(geometry.data);
+          })
       )
       .map(geometry => transformVectorPath(node, geometry, undefined, baseX, baseY))
   );
 
   return [...geometryShapes, ...pathShapes];
 };
+
+
+const compareVertices = (vertices1: Vertex[], vertices2: Vertex[]): boolean => {
+  if (vertices1.length !== vertices2.length) {
+    return false;
+  }
+
+  const set1 = new Set(vertices1.map(v => `${v.x},${v.y}`));
+  const set2 = new Set(vertices2.map(v => `${v.x},${v.y}`));
+
+  if (set1.size !== set2.size) {
+    return false;
+  }
+
+  for (const vertex of set1) {
+    if (!set2.has(vertex)) {
+      return false;
+    }
+  }
+
+  return true;
+}
 
 const getVectorPaths = (node: StarNode | LineNode | PolygonNode): VectorPaths => {
   switch (node.type) {
