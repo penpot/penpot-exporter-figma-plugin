@@ -1,4 +1,4 @@
-import { translateMaskChildren, translateNonMaskChildren } from '@plugin/translators';
+import { translateChildren, translateMaskChildren } from '@plugin/translators';
 
 import { Children } from '@ui/lib/types/utils/children';
 
@@ -17,6 +17,6 @@ export const transformChildren = async (
   return {
     children: containsMask
       ? await translateMaskChildren(node.children, maskIndex, baseX, baseY)
-      : await translateNonMaskChildren(node.children, baseX, baseY)
+      : await translateChildren(node.children, baseX, baseY)
   };
 };

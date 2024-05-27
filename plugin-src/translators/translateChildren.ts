@@ -18,12 +18,8 @@ export const translateMaskChildren = async (
   baseY: number
 ): Promise<PenpotNode[]> => {
   const maskChild = children[maskedIndex];
-  const unmaskedChildren = await translateNonMaskChildren(
-    children.slice(0, maskedIndex),
-    baseX,
-    baseY
-  );
-  const maskedChildren = await translateNonMaskChildren(children.slice(maskedIndex), baseX, baseY);
+  const unmaskedChildren = await translateChildren(children.slice(0, maskedIndex), baseX, baseY);
+  const maskedChildren = await translateChildren(children.slice(maskedIndex), baseX, baseY);
 
   const maskGroup = {
     ...transformGroupNodeLike(maskChild, baseX, baseY),
@@ -34,7 +30,7 @@ export const translateMaskChildren = async (
   return [...unmaskedChildren, maskGroup];
 };
 
-export const translateNonMaskChildren = async (
+export const translateChildren = async (
   children: readonly SceneNode[],
   baseX: number,
   baseY: number
