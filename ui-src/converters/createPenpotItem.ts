@@ -3,6 +3,7 @@ import { PenpotNode } from '@ui/lib/types/penpotNode';
 
 import {
   createPenpotArtboard,
+  createPenpotBool,
   createPenpotCircle,
   createPenpotGroup,
   createPenpotPath,
@@ -24,5 +25,7 @@ export const createPenpotItem = (file: PenpotFile, node: PenpotNode) => {
       return createPenpotPath(file, node);
     case 'text':
       return createPenpotText(file, node);
+    case 'bool':
+      return createPenpotBool(file, node);
   }
 };

@@ -1,4 +1,5 @@
 export * from './createPenpotArtboard';
+export * from './createPenpotBool';
 export * from './createPenpotCircle';
 export * from './createPenpotFile';
 export * from './createPenpotGroup';

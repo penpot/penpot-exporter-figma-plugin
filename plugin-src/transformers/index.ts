@@ -1,3 +1,4 @@
+export * from './transformBooleanNode';
 export * from './transformDocumentNode';
 export * from './transformEllipseNode';
 export * from './transformFrameNode';

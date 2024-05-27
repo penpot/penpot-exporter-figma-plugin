@@ -32,6 +32,6 @@ export interface PenpotFile {
   // lookupShape(shapeId: string): void;
   // updateObject(id: string, object: any): void;
   // deleteObject(id: string): void;
-  asMap(): unknown;
+  // asMap(): unknown;
   export(): void;
 }
