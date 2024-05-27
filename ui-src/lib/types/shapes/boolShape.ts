@@ -30,10 +30,10 @@ type BoolAttributes = {
   type?: 'bool';
   shapes?: Uuid[];
   boolType: BoolOperations;
-  boolContent?: (PathContent & BoolContent)[];
+  boolContent?: BoolContent[];
 };
 
-export type BoolContent = {
+type BoolContent = {
   relative?: boolean;
   prevPos?: Point;
-};
+} & PathContent;
