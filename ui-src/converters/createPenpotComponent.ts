@@ -7,11 +7,10 @@ export const createPenpotComponent = (
   file: PenpotFile,
   { type, children = [], ...rest }: ComponentShape
 ) => {
-
   const frameId = file.newId();
   const componentId = file.newId();
 
-  const _frameId = createPenpotArtboard(file, {
+  createPenpotArtboard(file, {
     id: frameId,
     type: 'frame',
     children,
@@ -19,10 +18,10 @@ export const createPenpotComponent = (
     componentId: componentId,
     componentRoot: true,
     mainInstance: true,
-    ...rest,
+    ...rest
   });
 
-  const _componentId = file.startComponent({
+  file.startComponent({
     ...rest,
     id: componentId,
     componentFile: file.getId(),
@@ -30,7 +29,7 @@ export const createPenpotComponent = (
     mainInstancePage: file.getCurrentPageId(),
     mainInstanceId: frameId,
     componentRoot: true,
-    mainInstance: true,
+    mainInstance: true
   });
 
   for (const child of children) {
