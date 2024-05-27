@@ -1,3 +1,4 @@
+import { PenpotNode } from '@ui/lib/types/penpotNode';
 import { PenpotPageOptions } from '@ui/lib/types/penpotPage';
 import { BoolShape } from '@ui/lib/types/shapes/boolShape';
 import { CircleShape } from '@ui/lib/types/shapes/circleShape';
@@ -30,7 +31,7 @@ export interface PenpotFile {
   startComponent(component: ComponentShape): Uuid;
   finishComponent(): void;
   // createComponentInstance(instance: any): void;
-  // lookupShape(shapeId: string): void;
+  // lookupShape(shapeId: string): PenpotNode;
   // updateObject(id: string, object: any): void;
   // deleteObject(id: string): void;
   getId(): Uuid;

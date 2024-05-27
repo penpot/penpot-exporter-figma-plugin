@@ -1,7 +1,8 @@
+import { components } from '@ui/converters/Components';
 import { PenpotFile } from '@ui/lib/types/penpotFile';
 import { ComponentShape } from '@ui/lib/types/shapes/componentShape';
 
-import { createPenpotArtboard, createPenpotItem } from '.';
+import { createPenpotArtboard } from '.';
 
 export const createPenpotComponent = (
   file: PenpotFile,
@@ -10,31 +11,27 @@ export const createPenpotComponent = (
   const frameId = file.newId();
   const componentId = file.newId();
 
-  createPenpotArtboard(file, {
+  const commonStructure = {
     ...rest,
-    id: frameId,
-    type: 'frame',
     children,
     componentFile: file.getId(),
     componentId: componentId,
     componentRoot: true,
     mainInstance: true
+  };
+
+  createPenpotArtboard(file, {
+    ...commonStructure,
+    id: frameId,
+    mainInstance: true,
+    type: 'frame'
   });
 
-  file.startComponent({
-    ...rest,
+  components.addComponent({
+    ...commonStructure,
     id: componentId,
-    componentFile: file.getId(),
-    componentId: componentId,
-    mainInstancePage: file.getCurrentPageId(),
     mainInstanceId: frameId,
-    componentRoot: true,
-    mainInstance: true
+    mainInstancePage: file.getCurrentPageId(),
+    type
   });
-
-  for (const child of children) {
-    createPenpotItem(file, child);
-  }
-
-  file.finishComponent();
 };
