@@ -1,4 +1,4 @@
-import { translateFills } from '@plugin/translators';
+import { translateFills } from '@plugin/translators/fills';
 import { translateFontId } from '@plugin/translators/text/font';
 import { StyleTextSegment, translateParagraphProperties } from '@plugin/translators/text/paragraph';
 import {
@@ -49,7 +49,7 @@ const translateStyleTextSegment = async (
   segment: StyleTextSegment
 ): Promise<PenpotTextNode> => {
   return {
-    fills: await translateFills(segment.fills, node.width, node.height),
+    fills: await translateFills(segment.fills),
     text: segment.characters,
     ...transformTextStyle(node, segment)
   };

@@ -1,71 +1,48 @@
-import { translateFill } from '@plugin/translators/translateFills';
+import { translateFill } from '@plugin/translators/fills';
 
 import { Stroke, StrokeAlignment, StrokeCaps } from '@ui/lib/types/utils/stroke';
 
 export const translateStrokes = async (
-  nodeStrokes: MinimalStrokesMixin,
-  hasFillGeometry?: boolean,
-  vectorNetwork?: VectorNetwork,
-  individualStrokes?: IndividualStrokesMixin
+  node: MinimalStrokesMixin | (MinimalStrokesMixin & IndividualStrokesMixin),
+  strokeCaps: (stroke: Stroke) => Stroke = stroke => stroke
 ): Promise<Stroke[]> => {
+  const sharedStrokeProperties: Partial<Stroke> = {
+    strokeWidth: translateStrokeWeight(node),
+    strokeAlignment: translateStrokeAlignment(node.strokeAlign),
+    strokeStyle: node.dashPattern.length ? 'dashed' : 'solid'
+  };
+
   return await Promise.all(
-    nodeStrokes.strokes.map(async (paint, index) => {
-      const fill = await translateFill(paint, 0, 0);
-      const stroke: Stroke = {
-        strokeColor: fill?.fillColor,
-        strokeOpacity: fill?.fillOpacity,
-        strokeWidth: translateStrokeWeight(nodeStrokes.strokeWeight, individualStrokes),
-        strokeAlignment: translateStrokeAlignment(nodeStrokes.strokeAlign),
-        strokeStyle: nodeStrokes.dashPattern.length ? 'dashed' : 'solid',
-        strokeImage: fill?.fillImage
-      };
-
-      if (!hasFillGeometry && index === 0 && vectorNetwork && vectorNetwork.vertices.length > 0) {
-        stroke.strokeCapStart = translateStrokeCap(vectorNetwork.vertices[0]);
-        stroke.strokeCapEnd = translateStrokeCap(
-          vectorNetwork.vertices[vectorNetwork.vertices.length - 1]
-        );
-      }
-
-      return stroke;
-    })
+    node.strokes.map(
+      async (paint, index) =>
+        await translateStroke(paint, sharedStrokeProperties, strokeCaps, index === 0)
+    )
   );
 };
 
-const translateStrokeWeight = (
-  strokeWeight: number | typeof figma.mixed,
-  individualStrokes?: IndividualStrokesMixin
-): number => {
-  if (strokeWeight !== figma.mixed) {
-    return strokeWeight;
+export const translateStroke = async (
+  paint: Paint,
+  sharedStrokeProperties: Partial<Stroke>,
+  strokeCaps: (stroke: Stroke) => Stroke,
+  firstStroke: boolean
+): Promise<Stroke> => {
+  const fill = await translateFill(paint);
+
+  let stroke: Stroke = {
+    strokeColor: fill?.fillColor,
+    strokeOpacity: fill?.fillOpacity,
+    strokeImage: fill?.fillImage,
+    ...sharedStrokeProperties
+  };
+
+  if (firstStroke) {
+    stroke = strokeCaps(stroke);
   }
 
-  if (!individualStrokes) {
-    return 1;
-  }
-
-  return Math.max(
-    individualStrokes.strokeTopWeight,
-    individualStrokes.strokeRightWeight,
-    individualStrokes.strokeBottomWeight,
-    individualStrokes.strokeLeftWeight
-  );
+  return stroke;
 };
 
-const translateStrokeAlignment = (
-  strokeAlign: 'CENTER' | 'INSIDE' | 'OUTSIDE'
-): StrokeAlignment => {
-  switch (strokeAlign) {
-    case 'CENTER':
-      return 'center';
-    case 'INSIDE':
-      return 'inner';
-    case 'OUTSIDE':
-      return 'outer';
-  }
-};
-
-const translateStrokeCap = (vertex: VectorVertex): StrokeCaps | undefined => {
+export const translateStrokeCap = (vertex: VectorVertex): StrokeCaps | undefined => {
   switch (vertex.strokeCap as StrokeCap | ConnectorStrokeCap) {
     case 'ROUND':
       return 'round';
@@ -83,5 +60,43 @@ const translateStrokeCap = (vertex: VectorVertex): StrokeCaps | undefined => {
     case 'NONE':
     default:
       return;
+  }
+};
+
+const translateStrokeWeight = (
+  node: MinimalStrokesMixin | (MinimalStrokesMixin & IndividualStrokesMixin)
+): number => {
+  if (node.strokeWeight !== figma.mixed) {
+    return node.strokeWeight;
+  }
+
+  if (!isIndividualStrokes(node)) {
+    return 1;
+  }
+
+  return Math.max(
+    node.strokeTopWeight,
+    node.strokeRightWeight,
+    node.strokeBottomWeight,
+    node.strokeLeftWeight
+  );
+};
+
+const isIndividualStrokes = (
+  node: MinimalStrokesMixin | IndividualStrokesMixin
+): node is IndividualStrokesMixin => {
+  return 'strokeTopWeight' in node;
+};
+
+const translateStrokeAlignment = (
+  strokeAlign: 'CENTER' | 'INSIDE' | 'OUTSIDE'
+): StrokeAlignment => {
+  switch (strokeAlign) {
+    case 'CENTER':
+      return 'center';
+    case 'INSIDE':
+      return 'inner';
+    case 'OUTSIDE':
+      return 'outer';
   }
 };
