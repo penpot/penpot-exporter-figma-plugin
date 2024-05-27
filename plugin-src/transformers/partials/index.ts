@@ -4,7 +4,6 @@ export * from './transformCornerRadius';
 export * from './transformDimensionAndPosition';
 export * from './transformEffects';
 export * from './transformFills';
-export * from './transformMaskChildren';
 export * from './transformProportion';
 export * from './transformSceneNode';
 export * from './transformStrokes';
