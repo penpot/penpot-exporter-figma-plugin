@@ -11,14 +11,14 @@ export const createPenpotComponent = (
   const componentId = file.newId();
 
   createPenpotArtboard(file, {
+    ...rest,
     id: frameId,
     type: 'frame',
     children,
     componentFile: file.getId(),
     componentId: componentId,
     componentRoot: true,
-    mainInstance: true,
-    ...rest
+    mainInstance: true
   });
 
   file.startComponent({
