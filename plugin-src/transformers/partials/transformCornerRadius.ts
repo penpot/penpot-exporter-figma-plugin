@@ -20,7 +20,8 @@ export const transformCornerRadius = (
 
   if (node.cornerRadius !== figma.mixed) {
     return {
-      rx: node.cornerRadius
+      rx: node.cornerRadius,
+      ry: node.cornerRadius
     };
   }
 };
