@@ -6,7 +6,7 @@ import { createPenpotArtboard } from '.';
 
 export const createPenpotComponent = (
   file: PenpotFile,
-  { type, children = [], ...rest }: ComponentShape
+  { type, path, children = [], ...rest }: ComponentShape
 ) => {
   const frameId = file.newId();
   const componentId = file.newId();
@@ -32,6 +32,7 @@ export const createPenpotComponent = (
     id: componentId,
     mainInstanceId: frameId,
     mainInstancePage: file.getCurrentPageId(),
+    path,
     type
   });
 };
