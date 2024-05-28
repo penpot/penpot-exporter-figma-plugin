@@ -1,9 +1,10 @@
 import {
   transformBlend,
-  transformDimensionAndPosition,
+  transformDimension,
   transformEffects,
   transformFills,
   transformProportion,
+  transformRotationAndPosition,
   transformSceneNode,
   transformStrokes,
   transformVectorPathsAsContent
@@ -27,7 +28,8 @@ export const transformPathNode = async (
     ...(await transformStrokes(node)),
     ...transformEffects(node),
     ...transformVectorPathsAsContent(node, baseX, baseY),
-    ...transformDimensionAndPosition(node, baseX, baseY),
+    ...transformDimension(node),
+    ...transformRotationAndPosition(node, baseX, baseY),
     ...transformSceneNode(node),
     ...transformBlend(node),
     ...transformProportion(node)

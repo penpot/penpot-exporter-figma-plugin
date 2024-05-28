@@ -1,10 +1,11 @@
 import {
   transformBlend,
   transformChildren,
-  transformDimensionAndPosition,
+  transformDimension,
   transformEffects,
   transformFills,
   transformProportion,
+  transformRotationAndPosition,
   transformSceneNode,
   transformStrokes
 } from '@plugin/transformers/partials';
@@ -25,7 +26,8 @@ export const transformBooleanNode = async (
     ...(await transformFills(node)),
     ...transformEffects(node),
     ...(await transformStrokes(node)),
-    ...transformDimensionAndPosition(node, baseX, baseY),
+    ...transformDimension(node),
+    ...transformRotationAndPosition(node, baseX, baseY),
     ...transformSceneNode(node),
     ...transformBlend(node),
     ...transformProportion(node)

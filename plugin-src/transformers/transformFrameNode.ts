@@ -2,10 +2,11 @@ import {
   transformBlend,
   transformChildren,
   transformCornerRadius,
-  transformDimensionAndPosition,
+  transformDimension,
   transformEffects,
   transformFills,
   transformProportion,
+  transformRotationAndPosition,
   transformSceneNode,
   transformStrokes
 } from '@plugin/transformers/partials';
@@ -21,6 +22,7 @@ export const transformFrameNode = async (
   baseX: number,
   baseY: number
 ): Promise<FrameShape> => {
+  console.log(node);
   let frameSpecificAttributes: Partial<FrameShape> = {};
 
   if (!isSectionNode(node)) {
@@ -33,7 +35,8 @@ export const transformFrameNode = async (
       ...transformBlend(node),
       ...transformProportion(node),
       ...transformCornerRadius(node),
-      ...transformEffects(node)
+      ...transformEffects(node),
+      ...transformRotationAndPosition(node, baseX, baseY)
     };
   }
 
@@ -41,10 +44,12 @@ export const transformFrameNode = async (
     type: 'frame',
     name: node.name,
     showContent: isSectionNode(node) ? true : !node.clipsContent,
+    x: node.x + baseX,
+    y: node.y + baseY,
     ...(await transformFills(node)),
     ...frameSpecificAttributes,
     ...(await transformChildren(node, baseX + node.x, baseY + node.y)),
-    ...transformDimensionAndPosition(node, baseX, baseY),
+    ...transformDimension(node),
     ...transformSceneNode(node)
   };
 };

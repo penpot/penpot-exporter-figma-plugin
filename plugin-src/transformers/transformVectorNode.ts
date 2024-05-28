@@ -1,4 +1,4 @@
-import { transformVectorPaths } from '@plugin/transformers/partials';
+import { transformRotationAndPosition, transformVectorPaths } from '@plugin/transformers/partials';
 
 import { GroupShape } from '@ui/lib/types/shapes/groupShape';
 import { PathShape } from '@ui/lib/types/shapes/pathShape';
@@ -27,6 +27,7 @@ export const transformVectorNode = async (
 
   return {
     ...transformGroupNodeLike(node, baseX, baseY),
+    ...transformRotationAndPosition(node, baseX, baseY),
     children
   };
 };
