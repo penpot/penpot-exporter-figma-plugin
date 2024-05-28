@@ -14,14 +14,15 @@ import { TextShape } from '@ui/lib/types/shapes/textShape';
 export const transformTextNode = async (
   node: TextNode,
   baseX: number,
-  baseY: number
+  baseY: number,
+  baseRotation: number
 ): Promise<TextShape> => {
   return {
     type: 'text',
     name: node.name,
     ...(await transformText(node)),
     ...transformDimension(node),
-    ...transformRotationAndPosition(node, baseX, baseY),
+    ...transformRotationAndPosition(node, baseX, baseY, baseRotation),
     ...transformEffects(node),
     ...transformSceneNode(node),
     ...transformBlend(node),

@@ -19,7 +19,8 @@ const hasFillGeometry = (node: StarNode | LineNode | PolygonNode): boolean => {
 export const transformPathNode = async (
   node: StarNode | LineNode | PolygonNode,
   baseX: number,
-  baseY: number
+  baseY: number,
+  baseRotation: number
 ): Promise<PathShape> => {
   return {
     type: 'path',
@@ -29,7 +30,7 @@ export const transformPathNode = async (
     ...transformEffects(node),
     ...transformVectorPathsAsContent(node, baseX, baseY),
     ...transformDimension(node),
-    ...transformRotationAndPosition(node, baseX, baseY),
+    ...transformRotationAndPosition(node, baseX, baseY, baseRotation),
     ...transformSceneNode(node),
     ...transformBlend(node),
     ...transformProportion(node)

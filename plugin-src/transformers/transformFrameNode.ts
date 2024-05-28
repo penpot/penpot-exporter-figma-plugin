@@ -20,7 +20,8 @@ const isSectionNode = (node: FrameNode | SectionNode): node is SectionNode => {
 export const transformFrameNode = async (
   node: FrameNode | SectionNode,
   baseX: number,
-  baseY: number
+  baseY: number,
+  baseRotation: number
 ): Promise<FrameShape> => {
   console.log(node);
   let frameSpecificAttributes: Partial<FrameShape> = {};
@@ -36,7 +37,7 @@ export const transformFrameNode = async (
       ...transformProportion(node),
       ...transformCornerRadius(node),
       ...transformEffects(node),
-      ...transformRotationAndPosition(node, baseX, baseY)
+      ...transformRotationAndPosition(node, baseX, baseY, baseRotation)
     };
   }
 
@@ -48,7 +49,12 @@ export const transformFrameNode = async (
     y: node.y + baseY,
     ...(await transformFills(node)),
     ...frameSpecificAttributes,
-    ...(await transformChildren(node, baseX + node.x, baseY + node.y)),
+    ...(await transformChildren(
+      node,
+      frameSpecificAttributes?.x ?? baseX + node.x,
+      frameSpecificAttributes?.y ?? baseY + node.y,
+      baseRotation + (!isSectionNode(node) ? node.rotation : 0)
+    )),
     ...transformDimension(node),
     ...transformSceneNode(node)
   };

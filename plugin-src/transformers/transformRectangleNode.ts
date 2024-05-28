@@ -15,12 +15,13 @@ import { RectShape } from '@ui/lib/types/shapes/rectShape';
 export const transformRectangleNode = async (
   node: RectangleNode,
   baseX: number,
-  baseY: number
+  baseY: number,
+  baseRotation: number
 ): Promise<RectShape> => {
   return {
     type: 'rect',
     name: node.name,
-    ...transformRotationAndPosition(node, baseX, baseY),
+    ...transformRotationAndPosition(node, baseX, baseY, baseRotation),
     ...(await transformFills(node)),
     ...transformEffects(node),
     ...(await transformStrokes(node)),

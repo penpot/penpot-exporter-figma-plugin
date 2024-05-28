@@ -14,7 +14,8 @@ import { transformGroupNodeLike } from '.';
 export const transformVectorNode = async (
   node: VectorNode,
   baseX: number,
-  baseY: number
+  baseY: number,
+  baseRotation: number
 ): Promise<GroupShape | PathShape> => {
   const children = await transformVectorPaths(node, baseX, baseY);
 
@@ -27,7 +28,7 @@ export const transformVectorNode = async (
 
   return {
     ...transformGroupNodeLike(node, baseX, baseY),
-    ...transformRotationAndPosition(node, baseX, baseY),
+    ...transformRotationAndPosition(node, baseX, baseY, baseRotation),
     children
   };
 };

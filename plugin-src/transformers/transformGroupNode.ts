@@ -12,14 +12,15 @@ import { GroupShape } from '@ui/lib/types/shapes/groupShape';
 export const transformGroupNode = async (
   node: GroupNode,
   baseX: number,
-  baseY: number
+  baseY: number,
+  baseRotation: number
 ): Promise<GroupShape> => {
   return {
     ...transformGroupNodeLike(node, baseX, baseY),
     ...transformEffects(node),
     ...transformBlend(node),
-    ...(await transformChildren(node, baseX, baseY)),
-    ...transformRotationAndPosition(node, baseX, baseY)
+    ...(await transformChildren(node, baseX, baseY, baseRotation)),
+    ...transformRotationAndPosition(node, baseX, baseY, baseRotation)
   };
 };
 

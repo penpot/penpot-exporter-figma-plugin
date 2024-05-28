@@ -4,17 +4,19 @@ import { Point } from '@ui/lib/types/utils/point';
 export const transformRotationAndPosition = (
   node: LayoutMixin,
   baseX: number,
-  baseY: number
+  baseY: number,
+  baseRotation: number
 ): Pick<ShapeBaseAttributes, 'transform' | 'transformInverse' | 'rotation'> &
   Pick<ShapeGeomAttributes, 'x' | 'y'> => {
+  const rotation = node.rotation + baseRotation;
   const x = node.x + baseX;
   const y = node.y + baseY;
 
-  if (node.rotation === 0 || !node.absoluteBoundingBox) {
+  if (rotation === 0 || !node.absoluteBoundingBox) {
     return {
       x,
       y,
-      rotation: 0,
+      rotation,
       transform: undefined,
       transformInverse: undefined
     };
@@ -24,7 +26,7 @@ export const transformRotationAndPosition = (
 
   return {
     ...point,
-    rotation: -node.rotation < 0 ? -node.rotation + 360 : -node.rotation,
+    rotation: -rotation < 0 ? -rotation + 360 : -rotation,
     transform: {
       a: node.absoluteTransform[0][0],
       b: node.absoluteTransform[1][0],
