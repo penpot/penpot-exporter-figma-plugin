@@ -1,0 +1,32 @@
+.stack {
+  --direction: column;
+  --spacing: 1.5rem;
+
+  display: flex;
+  flex-direction: var(--direction);
+  gap: var(--spacing);
+
+  .stack-row {
+    --direction: row;
+
+    & > * {
+      flex: 1;
+    }
+  }
+
+  .stack-small {
+    --spacing: 1rem;
+  }
+
+  .stack-xsmall {
+    --spacing: 0.5rem;
+  }
+
+  .stack-2xsmall {
+    --spacing: 0.25rem;
+  }
+
+  .stack-center {
+    align-items: center;
+  }
+}

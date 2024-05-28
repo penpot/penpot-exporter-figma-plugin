@@ -1,4 +1,6 @@
-import { ShapeGeomAttributes } from '@ui/lib/types/shape/shapeGeomAttributes';
+import { getBoundingBox } from '@plugin/utils';
+
+import { ShapeGeomAttributes } from '@ui/lib/types/shapes/shape';
 
 export const transformDimensionAndPosition = (
   node: DimensionAndPositionMixin,
@@ -10,5 +12,20 @@ export const transformDimensionAndPosition = (
     y: node.y + baseY,
     width: node.width,
     height: node.height
+  };
+};
+
+export const transformDimensionAndPositionFromVectorPath = (
+  vectorPath: VectorPath,
+  baseX: number,
+  baseY: number
+): ShapeGeomAttributes => {
+  const boundingBox = getBoundingBox(vectorPath);
+
+  return {
+    x: boundingBox.x1 + baseX,
+    y: boundingBox.y1 + baseY,
+    width: boundingBox.x2 - boundingBox.x1,
+    height: boundingBox.y2 - boundingBox.y1
   };
 };

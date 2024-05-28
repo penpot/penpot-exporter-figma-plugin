@@ -1,11 +1,11 @@
-import { PenpotFile } from '@ui/lib/penpot';
+import { PenpotFile } from '@ui/lib/types/penpotFile';
 import { PenpotNode } from '@ui/lib/types/penpotNode';
 
 import {
   createPenpotArtboard,
+  createPenpotBool,
   createPenpotCircle,
   createPenpotGroup,
-  createPenpotImage,
   createPenpotPath,
   createPenpotRectangle,
   createPenpotText
@@ -21,11 +21,11 @@ export const createPenpotItem = (file: PenpotFile, node: PenpotNode) => {
       return createPenpotArtboard(file, node);
     case 'group':
       return createPenpotGroup(file, node);
-    case 'image':
-      return createPenpotImage(file, node);
     case 'path':
       return createPenpotPath(file, node);
     case 'text':
       return createPenpotText(file, node);
+    case 'bool':
+      return createPenpotBool(file, node);
   }
 };

@@ -1,70 +1,29 @@
 import {
   transformBlend,
   transformDimensionAndPosition,
-  transformSceneNode
+  transformEffects,
+  transformProportion,
+  transformSceneNode,
+  transformStrokes,
+  transformText
 } from '@plugin/transformers/partials';
-import {
-  translateFills,
-  translateTextDecoration,
-  translateTextTransform
-} from '@plugin/translators';
 
-import { TextNode as PenpotTextNode } from '@ui/lib/types/text/textContent';
-import { TextShape } from '@ui/lib/types/text/textShape';
+import { TextShape } from '@ui/lib/types/shapes/textShape';
 
-export const transformTextNode = (node: TextNode, baseX: number, baseY: number): TextShape => {
-  const styledTextSegments = node.getStyledTextSegments([
-    'fontName',
-    'fontSize',
-    'fontWeight',
-    'lineHeight',
-    'letterSpacing',
-    'textCase',
-    'textDecoration',
-    'fills'
-  ]);
-
-  const children: PenpotTextNode[] = styledTextSegments.map(segment => {
-    figma.ui.postMessage({ type: 'FONT_NAME', data: segment.fontName.family });
-
-    return {
-      text: segment.characters,
-      fills: translateFills(segment.fills, node.width, node.height),
-      fontFamily: segment.fontName.family,
-      fontSize: segment.fontSize.toString(),
-      fontStyle: segment.fontName.style,
-      fontWeight: segment.fontWeight.toString(),
-      textDecoration: translateTextDecoration(segment),
-      textTransform: translateTextTransform(segment)
-    };
-  });
-
+export const transformTextNode = async (
+  node: TextNode,
+  baseX: number,
+  baseY: number
+): Promise<TextShape> => {
   return {
     type: 'text',
     name: node.name,
-    content: {
-      type: 'root',
-      children: [
-        {
-          type: 'paragraph-set',
-          children: [
-            {
-              type: 'paragraph',
-              fills: translateFills(node.fills, node.width, node.height),
-              fontFamily: children[0].fontFamily,
-              fontSize: children[0].fontSize,
-              fontStyle: children[0].fontStyle,
-              fontWeight: children[0].fontWeight,
-              textDecoration: children[0].textDecoration,
-              textTransform: children[0].textTransform,
-              children: children
-            }
-          ]
-        }
-      ]
-    },
+    ...(await transformText(node)),
     ...transformDimensionAndPosition(node, baseX, baseY),
+    ...transformEffects(node),
     ...transformSceneNode(node),
-    ...transformBlend(node)
+    ...transformBlend(node),
+    ...transformProportion(node),
+    ...(await transformStrokes(node))
   };
 };

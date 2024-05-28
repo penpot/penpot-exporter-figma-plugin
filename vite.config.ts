@@ -6,17 +6,21 @@ import tsconfigPaths from 'vite-tsconfig-paths';
 
 export default defineConfig({
   root: './ui-src',
-  plugins: [svgr(), react(), viteSingleFile(), tsconfigPaths()],
+  plugins: [svgr(), react(), viteSingleFile({ removeViteModuleLoader: true }), tsconfigPaths()],
+  resolve: {
+    alias: {
+      'react': 'preact/compat',
+      'react-dom': 'preact/compat',
+      '!../css/base.css': '../css/base.css'
+    }
+  },
   build: {
+    emptyOutDir: false,
     target: 'esnext',
-    assetsInlineLimit: 100000000,
-    chunkSizeWarningLimit: 100000000,
-    cssCodeSplit: false,
+    reportCompressedSize: false,
     outDir: '../dist',
     rollupOptions: {
-      output: {
-        inlineDynamicImports: true
-      }
+      external: ['!../css/base.css']
     }
   }
 });

@@ -1,6 +1,7 @@
 module.exports = {
   root: true,
   parserOptions: {
+    project: './tsconfig.base.json',
     parser: '@typescript-eslint/parser',
     ecmaVersion: 'latest',
     sourceType: 'module'
@@ -20,6 +21,9 @@ module.exports = {
     }
   },
   rules: {
-    '@typescript-eslint/no-unused-vars': ['error', { ignoreRestSiblings: true }]
+    '@typescript-eslint/no-unused-vars': [
+      'error',
+      { ignoreRestSiblings: true, argsIgnorePattern: '^_' }
+    ]
   }
 };

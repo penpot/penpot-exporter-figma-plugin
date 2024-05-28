@@ -1,20 +1,24 @@
 import {
   transformBlend,
+  transformCornerRadius,
   transformDimensionAndPosition,
-  transformSceneNode
+  transformEffects,
+  transformFills,
+  transformProportion,
+  transformSceneNode,
+  transformStrokes
 } from '@plugin/transformers/partials';
-import { translateFills, translateStrokes } from '@plugin/translators';
 import { matrixInvert } from '@plugin/utils/matrixInvert';
 
-import { RectShape } from '@ui/lib/types/rect/rectShape';
+import { RectShape } from '@ui/lib/types/shapes/rectShape';
 
 // import { Point } from '@ui/lib/types/utils/point';
 
-export const transformRectangleNode = (
+export const transformRectangleNode = async (
   node: RectangleNode,
   baseX: number,
   baseY: number
-): RectShape => {
+): Promise<RectShape> => {
   const absoluteTransformInverse = matrixInvert([
     [node.absoluteTransform[0][0], node.absoluteTransform[0][1]],
     [node.absoluteTransform[1][0], node.absoluteTransform[1][1]]
@@ -27,8 +31,14 @@ export const transformRectangleNode = (
   return {
     type: 'rect',
     name: node.name,
-    fills: translateFills(node.fills, node.width, node.height),
-    strokes: translateStrokes(node),
+    ...(await transformFills(node)),
+    ...transformEffects(node),
+    ...(await transformStrokes(node)),
+    ...transformDimensionAndPosition(node, baseX, baseY),
+    ...transformSceneNode(node),
+    ...transformBlend(node),
+    ...transformProportion(node),
+    ...transformCornerRadius(node),
     transform: {
       a: node.absoluteTransform[0][0],
       b: node.absoluteTransform[1][0],
@@ -47,10 +57,7 @@ export const transformRectangleNode = (
           f: 0
         }
       : undefined,
-    rotation: -node.rotation < 0 ? -node.rotation + 360 : -node.rotation,
-    ...transformDimensionAndPosition(node, baseX, baseY),
-    ...transformSceneNode(node),
-    ...transformBlend(node)
+    rotation: -node.rotation < 0 ? -node.rotation + 360 : -node.rotation
   };
 };
 

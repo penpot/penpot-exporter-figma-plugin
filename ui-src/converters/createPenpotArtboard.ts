@@ -1,15 +1,16 @@
-import { PenpotFile } from '@ui/lib/penpot';
-import { FRAME_TYPE } from '@ui/lib/types/frame/frameAttributes';
-import { FrameShape } from '@ui/lib/types/frame/frameShape';
+import { PenpotFile } from '@ui/lib/types/penpotFile';
+import { FrameShape } from '@ui/lib/types/shapes/frameShape';
+import { translateFillGradients, translateUiBlendMode } from '@ui/translators';
 
 import { createPenpotItem } from '.';
 
 export const createPenpotArtboard = (
   file: PenpotFile,
-  { type, children = [], ...rest }: FrameShape
+  { type, fills, blendMode, children = [], ...rest }: FrameShape
 ) => {
   file.addArtboard({
-    type: FRAME_TYPE,
+    fills: translateFillGradients(fills),
+    blendMode: translateUiBlendMode(blendMode),
     ...rest
   });
 

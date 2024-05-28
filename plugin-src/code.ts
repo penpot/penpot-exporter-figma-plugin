@@ -1,19 +1,34 @@
-import {
-  handleCancelMessage,
-  handleExportMessage,
-  handleResizeMessage
-} from '@plugin/messageHandlers';
+import { findAllTextNodes } from './findAllTextnodes';
+import { handleExportMessage } from './handleExportMessage';
+import { registerChange } from './registerChange';
 
-figma.showUI(__html__, { themeColors: true, height: 200, width: 300 });
+const BASE_HEIGHT = 135;
+const BASE_WIDTH = 290;
 
-figma.ui.onmessage = async msg => {
-  if (msg.type === 'export') {
-    await handleExportMessage();
+figma.showUI(__html__, { themeColors: true, width: BASE_WIDTH, height: BASE_HEIGHT });
+
+figma.ui.onmessage = message => {
+  if (message.type === 'ready') {
+    findAllTextNodes();
   }
-  if (msg.type === 'cancel') {
-    handleCancelMessage();
+
+  if (message.type === 'export') {
+    handleExportMessage(message.data as Record<string, string>);
   }
-  if (msg.type === 'resize') {
-    handleResizeMessage(msg.width, msg.height);
+
+  if (message.type === 'cancel') {
+    figma.closePlugin();
+  }
+
+  if (message.type === 'reload') {
+    findAllTextNodes();
+  }
+
+  if (message.type === 'resize') {
+    figma.ui.resize(BASE_WIDTH, message.height);
   }
 };
+
+figma.on('currentpagechange', () => {
+  figma.currentPage.once('nodechange', registerChange);
+});
