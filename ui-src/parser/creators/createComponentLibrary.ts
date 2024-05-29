@@ -5,7 +5,7 @@ import { components } from '@ui/parser/libraries';
 import { createItems } from '.';
 
 export const createComponentLibrary = (file: PenpotFile) => {
-  components.getComponents().forEach(({ children = [], ...rest }: ComponentShape) => {
+  components.get().forEach(({ children = [], ...rest }: ComponentShape) => {
     file.startComponent(rest);
 
     createItems(file, children);

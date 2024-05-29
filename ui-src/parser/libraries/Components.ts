@@ -3,15 +3,15 @@ import { ComponentShape } from '@ui/lib/types/shapes/componentShape';
 class Components {
   private components: ComponentShape[] = [];
 
-  public addComponent(component: ComponentShape) {
+  public add(component: ComponentShape) {
     this.components.push(component);
   }
 
-  public getComponents() {
+  public get() {
     return this.components;
   }
 
-  public clearComponents() {
+  public clear() {
     this.components = [];
   }
 }
