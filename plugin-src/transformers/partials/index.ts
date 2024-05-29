@@ -5,6 +5,7 @@ export * from './transformDimensionAndPosition';
 export * from './transformEffects';
 export * from './transformFills';
 export * from './transformProportion';
+export * from './transformRotationAndPosition';
 export * from './transformSceneNode';
 export * from './transformStrokes';
 export * from './transformText';

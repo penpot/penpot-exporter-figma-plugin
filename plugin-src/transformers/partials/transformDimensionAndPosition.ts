@@ -2,6 +2,15 @@ import { getBoundingBox } from '@plugin/utils';
 
 import { ShapeGeomAttributes } from '@ui/lib/types/shapes/shape';
 
+export const transformDimension = (
+  node: DimensionAndPositionMixin
+): Pick<ShapeGeomAttributes, 'width' | 'height'> => {
+  return {
+    width: node.width,
+    height: node.height
+  };
+};
+
 export const transformDimensionAndPosition = (
   node: DimensionAndPositionMixin,
   baseX: number,
