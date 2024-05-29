@@ -1,9 +1,8 @@
 import {
   transformBlend,
-  transformDimension,
+  transformDimensionAndPosition,
   transformEffects,
   transformProportion,
-  transformRotationAndPosition,
   transformSceneNode,
   transformStrokes,
   transformText
@@ -20,8 +19,7 @@ export const transformTextNode = async (
     type: 'text',
     name: node.name,
     ...(await transformText(node)),
-    ...transformDimension(node),
-    ...transformRotationAndPosition(node, baseX, baseY),
+    ...transformDimensionAndPosition(node, baseX, baseY),
     ...transformEffects(node),
     ...transformSceneNode(node),
     ...transformBlend(node),
