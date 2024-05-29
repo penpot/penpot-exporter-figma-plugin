@@ -39,6 +39,7 @@ export const transformFrameNode = async (
 
   return {
     type: 'frame',
+    figmaId: node.id,
     name: node.name,
     showContent: isSectionNode(node) ? true : !node.clipsContent,
     ...(await transformFills(node)),

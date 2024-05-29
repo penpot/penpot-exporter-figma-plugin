@@ -19,6 +19,7 @@ export const transformBooleanNode = async (
 ): Promise<BoolShape> => {
   return {
     type: 'bool',
+    figmaId: node.id,
     name: node.name,
     boolType: translateBoolType(node.booleanOperation),
     ...(await transformChildren(node, baseX, baseY)),

@@ -18,6 +18,7 @@ export const transformEllipseNode = async (
 ): Promise<CircleShape> => {
   return {
     type: 'circle',
+    figmaId: node.id,
     name: node.name,
     ...(await transformFills(node)),
     ...transformEffects(node),

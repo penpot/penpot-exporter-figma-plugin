@@ -13,6 +13,7 @@ import { Uuid } from '@ui/lib/types/utils/uuid';
 
 export type ShapeBaseAttributes = {
   id?: Uuid;
+  figmaId?: string; // @TODO: move to any other place
   name?: string;
   type?:
     | 'frame'

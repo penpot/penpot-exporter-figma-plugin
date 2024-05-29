@@ -8,6 +8,7 @@ export type ComponentRoot = {
 
 export type ComponentInstance = ShapeGeomAttributes &
   Children & {
+    mainComponentFigmaId: string;
     figmaId: string;
     type: 'instance';
   };

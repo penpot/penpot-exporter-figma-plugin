@@ -28,6 +28,7 @@ export const transformGroupNodeLike = (
 ): GroupShape => {
   return {
     type: 'group',
+    figmaId: node.id,
     name: node.name,
     ...transformDimensionAndPosition(node, baseX, baseY),
     ...transformSceneNode(node)

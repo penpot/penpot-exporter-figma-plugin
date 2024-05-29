@@ -22,6 +22,7 @@ export const transformPathNode = async (
 ): Promise<PathShape> => {
   return {
     type: 'path',
+    figmaId: node.id,
     name: node.name,
     ...(hasFillGeometry(node) ? await transformFills(node) : []),
     ...(await transformStrokes(node)),

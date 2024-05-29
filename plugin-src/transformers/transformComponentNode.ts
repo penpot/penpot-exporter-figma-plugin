@@ -20,6 +20,7 @@ export const transformComponentNode = async (
 ): Promise<ComponentRoot> => {
   componentsLibrary.register(node.id, {
     type: 'component',
+    figmaId: node.id, // @TODO: check if this is needed
     name: node.name,
     path: '',
     ...(await transformFills(node)),

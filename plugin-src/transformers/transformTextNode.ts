@@ -17,6 +17,7 @@ export const transformTextNode = async (
 ): Promise<TextShape> => {
   return {
     type: 'text',
+    figmaId: node.id,
     name: node.name,
     ...(await transformText(node)),
     ...transformDimensionAndPosition(node, baseX, baseY),

@@ -19,6 +19,7 @@ export const transformRectangleNode = async (
 ): Promise<RectShape> => {
   return {
     type: 'rect',
+    figmaId: node.id,
     name: node.name,
     ...(await transformFills(node)),
     ...transformEffects(node),

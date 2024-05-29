@@ -6,9 +6,9 @@ import { createArtboard } from '.';
 
 export const createComponentInstance = (
   file: PenpotFile,
-  { type, figmaId, ...rest }: ComponentInstance
+  { type, mainComponentFigmaId, ...rest }: ComponentInstance
 ) => {
-  const uiComponent = uiComponents.get(figmaId);
+  const uiComponent = uiComponents.get(mainComponentFigmaId);
   if (!uiComponent) {
     return;
   }

@@ -17,7 +17,8 @@ export const transformInstanceNode = async (
 
   return {
     type: 'instance',
-    figmaId: mainComponent.id,
+    figmaId: node.id,
+    mainComponentFigmaId: mainComponent.id,
     ...transformDimensionAndPosition(node, baseX, baseY),
     ...(await transformChildren(node, baseX + node.x, baseY + node.y))
   };
