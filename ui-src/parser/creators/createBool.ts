@@ -3,7 +3,7 @@ import { BoolShape } from '@ui/lib/types/shapes/boolShape';
 import { createPenpotItem } from '@ui/parser/creators/createPenpotItem';
 import { symbolBlendMode, symbolBoolType, symbolFillGradients } from '@ui/parser/creators/symbols';
 
-export const createPenpotBool = (
+export const createBool = (
   file: PenpotFile,
   { type, fills, boolType, blendMode, children = [], ...rest }: BoolShape
 ) => {

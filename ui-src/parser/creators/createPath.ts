@@ -6,7 +6,7 @@ import {
   symbolPathContent
 } from '@ui/parser/creators/symbols';
 
-export const createPenpotPath = (
+export const createPath = (
   file: PenpotFile,
   { type, fills, blendMode, content, ...rest }: PathShape
 ) => {

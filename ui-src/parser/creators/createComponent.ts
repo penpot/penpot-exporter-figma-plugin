@@ -2,9 +2,9 @@ import { PenpotFile } from '@ui/lib/types/penpotFile';
 import { ComponentShape } from '@ui/lib/types/shapes/componentShape';
 import { components } from '@ui/parser/libraries';
 
-import { createPenpotArtboard } from '.';
+import { createArtboard } from '.';
 
-export const createPenpotComponent = (
+export const createComponent = (
   file: PenpotFile,
   { type, path, children = [], ...rest }: ComponentShape
 ) => {
@@ -20,7 +20,7 @@ export const createPenpotComponent = (
     mainInstance: true
   };
 
-  createPenpotArtboard(file, {
+  createArtboard(file, {
     ...commonStructure,
     id: frameId,
     mainInstance: true,

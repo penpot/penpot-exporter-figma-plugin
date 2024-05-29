@@ -2,33 +2,33 @@ import { PenpotFile } from '@ui/lib/types/penpotFile';
 import { PenpotNode } from '@ui/lib/types/penpotNode';
 
 import {
-  createPenpotArtboard,
-  createPenpotBool,
-  createPenpotCircle,
-  createPenpotComponent,
-  createPenpotGroup,
-  createPenpotPath,
-  createPenpotRectangle,
-  createPenpotText
+  createArtboard,
+  createBool,
+  createCircle,
+  createComponent,
+  createGroup,
+  createPath,
+  createRectangle,
+  createText
 } from '.';
 
 export const createPenpotItem = (file: PenpotFile, node: PenpotNode) => {
   switch (node.type) {
     case 'rect':
-      return createPenpotRectangle(file, node);
+      return createRectangle(file, node);
     case 'circle':
-      return createPenpotCircle(file, node);
+      return createCircle(file, node);
     case 'frame':
-      return createPenpotArtboard(file, node);
+      return createArtboard(file, node);
     case 'group':
-      return createPenpotGroup(file, node);
+      return createGroup(file, node);
     case 'path':
-      return createPenpotPath(file, node);
+      return createPath(file, node);
     case 'text':
-      return createPenpotText(file, node);
+      return createText(file, node);
     case 'bool':
-      return createPenpotBool(file, node);
+      return createBool(file, node);
     case 'component':
-      return createPenpotComponent(file, node);
+      return createComponent(file, node);
   }
 };

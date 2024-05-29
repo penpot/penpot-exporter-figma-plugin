@@ -4,7 +4,7 @@ import { symbolBlendMode, symbolFillGradients } from '@ui/parser/creators/symbol
 
 import { createPenpotItem } from '.';
 
-export const createPenpotArtboard = (
+export const createArtboard = (
   file: PenpotFile,
   { type, fills, blendMode, children = [], ...rest }: FrameShape
 ) => {

@@ -4,7 +4,7 @@ import { symbolBlendMode } from '@ui/parser/creators/symbols';
 
 import { createPenpotItem } from '.';
 
-export const createPenpotGroup = (
+export const createGroup = (
   file: PenpotFile,
   { type, blendMode, children = [], ...rest }: GroupShape
 ) => {
