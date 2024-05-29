@@ -18,6 +18,8 @@ export const transformSceneNode = async (
   baseX: number = 0,
   baseY: number = 0
 ): Promise<PenpotNode | undefined> => {
+  console.log(node);
+
   switch (node.type) {
     case 'RECTANGLE':
       return await transformRectangleNode(node, baseX, baseY);
