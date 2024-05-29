@@ -6,11 +6,11 @@ import { ComponentRoot } from '@ui/types';
 
 import { createArtboard } from '.';
 
-export const createComponent = (file: PenpotFile, componentRelationship: ComponentRoot) => {
+export const createComponent = (file: PenpotFile, { figmaId }: ComponentRoot) => {
   const frameId = file.newId();
   const componentId = file.newId();
 
-  const component = componentsLibrary.get(componentRelationship.figmaId);
+  const component = componentsLibrary.get(figmaId);
   if (!component) {
     return;
   }
@@ -25,10 +25,10 @@ export const createComponent = (file: PenpotFile, componentRelationship: Compone
     type: 'frame'
   });
 
-  uiComponents.register(componentRelationship.figmaId, {
+  uiComponents.register(figmaId, {
     componentId,
     mainInstancePage: file.getCurrentPageId(),
-    componentFigmaId: componentRelationship.figmaId,
+    componentFigmaId: figmaId,
     mainInstanceId: frameId
   });
 };
