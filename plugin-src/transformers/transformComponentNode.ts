@@ -1,5 +1,7 @@
+import { componentsLibrary } from '@plugin/ComponentLibrary';
 import {
   transformBlend,
+  transformChildren,
   transformCornerRadius,
   transformDimensionAndPosition,
   transformEffects,
@@ -8,16 +10,15 @@ import {
   transformSceneNode,
   transformStrokes
 } from '@plugin/transformers/partials';
-import { transformChildren } from '@plugin/transformers/partials';
 
-import { ComponentShape } from '@ui/lib/types/shapes/componentShape';
+import { ComponentRoot } from '@ui/types';
 
 export const transformComponentNode = async (
   node: ComponentNode,
   baseX: number,
   baseY: number
-): Promise<ComponentShape> => {
-  return {
+): Promise<ComponentRoot> => {
+  componentsLibrary.register(node.id, {
     type: 'component',
     name: node.name,
     path: '',
@@ -30,5 +31,10 @@ export const transformComponentNode = async (
     ...transformCornerRadius(node),
     ...(await transformChildren(node, baseX + node.x, baseY + node.y)),
     ...transformDimensionAndPosition(node, baseX, baseY)
+  });
+
+  return {
+    figmaId: node.id,
+    type: 'component'
   };
 };

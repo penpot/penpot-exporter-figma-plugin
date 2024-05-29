@@ -1,12 +1,29 @@
+import { componentsLibrary } from '@plugin/ComponentLibrary';
+
 import { PenpotFile } from '@ui/lib/types/penpotFile';
-import { ComponentShape } from '@ui/lib/types/shapes/componentShape';
-import { components } from '@ui/parser/libraries';
+import { uiComponents } from '@ui/parser/libraries';
 
 import { createItems } from '.';
 
 export const createComponentLibrary = (file: PenpotFile) => {
-  components.get().forEach(({ children = [], ...rest }: ComponentShape) => {
-    file.startComponent(rest);
+  uiComponents.all().forEach(uiComponent => {
+    const component = componentsLibrary.get(uiComponent.componentFigmaId);
+    if (!component) {
+      return;
+    }
+
+    const { children = [], ...rest } = component;
+
+    file.startComponent({
+      ...rest,
+      id: uiComponent.componentId,
+      componentId: uiComponent.componentId,
+      mainInstancePage: uiComponent.mainInstancePage,
+      mainInstanceId: uiComponent.mainInstanceId,
+      componentRoot: true,
+      mainInstance: true,
+      componentFile: file.getId()
+    });
 
     createItems(file, children);
 
