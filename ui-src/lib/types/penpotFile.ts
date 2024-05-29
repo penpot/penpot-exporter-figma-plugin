@@ -1,4 +1,3 @@
-import { PenpotNode } from '@ui/lib/types/penpotNode';
 import { PenpotPageOptions } from '@ui/lib/types/penpotPage';
 import { BoolShape } from '@ui/lib/types/shapes/boolShape';
 import { CircleShape } from '@ui/lib/types/shapes/circleShape';
