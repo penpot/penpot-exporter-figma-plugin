@@ -1,6 +1,6 @@
 import { PenpotFile } from '@ui/lib/types/penpotFile';
 import { BoolShape } from '@ui/lib/types/shapes/boolShape';
-import { createPenpotItem } from '@ui/parser/creators/createPenpotItem';
+import { createItem } from '@ui/parser/creators/createItem';
 import { symbolBlendMode, symbolBoolType, symbolFillGradients } from '@ui/parser/creators/symbols';
 
 export const createBool = (
@@ -15,7 +15,7 @@ export const createBool = (
   });
 
   for (const child of children) {
-    createPenpotItem(file, child);
+    createItem(file, child);
   }
 
   file.closeBool();

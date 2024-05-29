@@ -2,7 +2,7 @@ import { PenpotFile } from '@ui/lib/types/penpotFile';
 import { GroupShape } from '@ui/lib/types/shapes/groupShape';
 import { symbolBlendMode } from '@ui/parser/creators/symbols';
 
-import { createPenpotItem } from '.';
+import { createItem } from '.';
 
 export const createGroup = (
   file: PenpotFile,
@@ -14,7 +14,7 @@ export const createGroup = (
   });
 
   for (const child of children) {
-    createPenpotItem(file, child);
+    createItem(file, child);
   }
 
   file.closeGroup();

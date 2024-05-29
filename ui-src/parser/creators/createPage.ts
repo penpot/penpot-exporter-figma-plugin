@@ -1,13 +1,13 @@
 import { PenpotFile } from '@ui/lib/types/penpotFile';
 import { PenpotPage } from '@ui/lib/types/penpotPage';
 
-import { createPenpotItem } from '.';
+import { createItem } from '.';
 
-export const createPage = (file: PenpotFile, node: PenpotPage) => {
-  file.addPage(node.name, node.options);
+export const createPage = (file: PenpotFile, { name, options, children = [] }: PenpotPage) => {
+  file.addPage(name, options);
 
-  for (const child of node.children ?? []) {
-    createPenpotItem(file, child);
+  for (const child of children) {
+    createItem(file, child);
   }
 
   file.closePage();

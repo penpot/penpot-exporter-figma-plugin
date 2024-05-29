@@ -2,7 +2,7 @@ import { PenpotFile } from '@ui/lib/types/penpotFile';
 import { FrameShape } from '@ui/lib/types/shapes/frameShape';
 import { symbolBlendMode, symbolFillGradients } from '@ui/parser/creators/symbols';
 
-import { createPenpotItem } from '.';
+import { createItem } from '.';
 
 export const createArtboard = (
   file: PenpotFile,
@@ -15,7 +15,7 @@ export const createArtboard = (
   });
 
   for (const child of children) {
-    createPenpotItem(file, child);
+    createItem(file, child);
   }
 
   file.closeArtboard();

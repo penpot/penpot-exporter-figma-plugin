@@ -12,7 +12,7 @@ import {
   createText
 } from '.';
 
-export const createPenpotItem = (file: PenpotFile, node: PenpotNode) => {
+export const createItem = (file: PenpotFile, node: PenpotNode) => {
   switch (node.type) {
     case 'rect':
       return createRectangle(file, node);
