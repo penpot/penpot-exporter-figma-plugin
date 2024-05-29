@@ -3,8 +3,8 @@ import { useEffect, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 
 import { Stack } from '@ui/components/Stack';
-import { createPenpotFile } from '@ui/converters';
 import { PenpotDocument } from '@ui/lib/types/penpotDocument';
+import { parse } from '@ui/parser';
 
 import { MissingFontsSection } from './MissingFontsSection';
 
@@ -22,7 +22,7 @@ export const PenpotExporter = () => {
   const onMessage = (event: MessageEvent<{ pluginMessage: { type: string; data: unknown } }>) => {
     if (event.data.pluginMessage?.type == 'PENPOT_DOCUMENT') {
       const document = event.data.pluginMessage.data as PenpotDocument;
-      const file = createPenpotFile(document);
+      const file = parse(document);
 
       file.export();
 

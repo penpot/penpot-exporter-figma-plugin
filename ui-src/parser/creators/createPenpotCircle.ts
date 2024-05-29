@@ -1,15 +1,15 @@
 import { PenpotFile } from '@ui/lib/types/penpotFile';
 import { CircleShape } from '@ui/lib/types/shapes/circleShape';
 
-import { translateFillGradients, translateUiBlendMode } from '../translators';
+import { symbolBlendMode, symbolFillGradients } from './symbols';
 
 export const createPenpotCircle = (
   file: PenpotFile,
   { type, fills, blendMode, ...rest }: CircleShape
 ) => {
   file.createCircle({
-    fills: translateFillGradients(fills),
-    blendMode: translateUiBlendMode(blendMode),
+    fills: symbolFillGradients(fills),
+    blendMode: symbolBlendMode(blendMode),
     ...rest
   });
 };

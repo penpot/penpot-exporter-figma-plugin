@@ -18,7 +18,7 @@ import {
   BlendMode
 } from '@ui/lib/types/utils/blendModes';
 
-export const translateUiBlendMode = (blendMode?: BlendMode): BlendMode | undefined => {
+export const symbolBlendMode = (blendMode?: BlendMode): BlendMode | undefined => {
   if (!blendMode) return;
 
   switch (blendMode) {

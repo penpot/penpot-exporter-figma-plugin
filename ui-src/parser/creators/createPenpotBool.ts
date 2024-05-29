@@ -1,16 +1,16 @@
-import { createPenpotItem } from '@ui/converters/createPenpotItem';
 import { PenpotFile } from '@ui/lib/types/penpotFile';
 import { BoolShape } from '@ui/lib/types/shapes/boolShape';
-import { translateFillGradients, translateUiBlendMode, translateUiBoolType } from '@ui/translators';
+import { createPenpotItem } from '@ui/parser/creators/createPenpotItem';
+import { symbolBlendMode, symbolBoolType, symbolFillGradients } from '@ui/parser/creators/symbols';
 
 export const createPenpotBool = (
   file: PenpotFile,
   { type, fills, boolType, blendMode, children = [], ...rest }: BoolShape
 ) => {
   file.addBool({
-    fills: translateFillGradients(fills),
-    blendMode: translateUiBlendMode(blendMode),
-    boolType: translateUiBoolType(boolType),
+    fills: symbolFillGradients(fills),
+    blendMode: symbolBlendMode(blendMode),
+    boolType: symbolBoolType(boolType),
     ...rest
   });
 
