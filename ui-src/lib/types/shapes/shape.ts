@@ -24,7 +24,8 @@ export type ShapeBaseAttributes = {
     | 'circle'
     | 'svg-raw'
     | 'image'
-    | 'component';
+    | 'component'
+    | 'instance';
   selrect?: Selrect;
   points?: Point[];
   transform?: Matrix;
