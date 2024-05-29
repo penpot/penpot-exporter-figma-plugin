@@ -27,7 +27,7 @@ export const createComponent = (
     type: 'frame'
   });
 
-  components.addComponent({
+  components.add({
     ...commonStructure,
     id: componentId,
     mainInstanceId: frameId,

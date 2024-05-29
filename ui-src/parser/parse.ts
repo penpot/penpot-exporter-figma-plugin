@@ -4,7 +4,7 @@ import { createComponentLibrary, createPage } from '@ui/parser/creators';
 import { components } from '@ui/parser/libraries';
 
 export const parse = (node: PenpotDocument) => {
-  components.clearComponents();
+  components.clear();
 
   const file = createFile(node.name);
 
