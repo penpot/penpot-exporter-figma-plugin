@@ -3,7 +3,7 @@ import { Uuid } from '@ui/lib/types/utils/uuid';
 class IdLibrary {
   private idMap: Map<string, Uuid> = new Map();
 
-  public clear() {
+  public init() {
     this.idMap.clear();
   }
   public get(figmaId: string): Uuid | undefined {
@@ -12,6 +12,10 @@ class IdLibrary {
 
   public register(figmaId: string, id: Uuid) {
     this.idMap.set(figmaId, id);
+  }
+
+  public all() {
+    return this.idMap;
   }
 }
 
