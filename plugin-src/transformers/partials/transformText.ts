@@ -22,19 +22,21 @@ export const transformText = async (node: TextNode): Promise<Partial<TextShape>>
     content: {
       type: 'root',
       verticalAlign: translateVerticalAlign(node.textAlignVertical),
-      children: [
-        {
-          type: 'paragraph-set',
-          children: [
+      children: styledTextSegments.length
+        ? [
             {
-              type: 'paragraph',
-              children: await translateStyleTextSegments(node, styledTextSegments),
-              ...(styledTextSegments.length ? transformTextStyle(node, styledTextSegments[0]) : {}),
-              ...(await transformFills(node))
+              type: 'paragraph-set',
+              children: [
+                {
+                  type: 'paragraph',
+                  children: await translateStyleTextSegments(node, styledTextSegments),
+                  ...transformTextStyle(node, styledTextSegments[0]),
+                  ...(await transformFills(node))
+                }
+              ]
             }
           ]
-        }
-      ]
+        : undefined
     },
     growType: translateGrowType(node)
   };

@@ -1,5 +1,13 @@
 # penpot-exporter
 
+## 0.4.1
+
+### Patch Changes
+
+- [#120](https://github.com/penpot/penpot-exporter-figma-plugin/pull/120) [`044b092`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/044b09207b48aa3b2ac8dcb86f6c6d04db88b645) Thanks [@jordisala1991](https://github.com/jordisala1991)! - Fix text layers without text content
+
+- [#118](https://github.com/penpot/penpot-exporter-figma-plugin/pull/118) [`35d9d47`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/35d9d47e2afb0fa3db09a51803de5549230ba2c4) Thanks [@Cenadros](https://github.com/Cenadros)! - Fix frames fills and blendModes
+
 ## 0.4.0
 
 ### Minor Changes
