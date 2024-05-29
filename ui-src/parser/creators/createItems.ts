@@ -12,7 +12,13 @@ import {
   createText
 } from '.';
 
-export const createItem = (file: PenpotFile, node: PenpotNode) => {
+export const createItems = (file: PenpotFile, nodes: PenpotNode[]) => {
+  for (const node of nodes) {
+    createItem(file, node);
+  }
+};
+
+const createItem = (file: PenpotFile, node: PenpotNode) => {
   switch (node.type) {
     case 'rect':
       return createRectangle(file, node);

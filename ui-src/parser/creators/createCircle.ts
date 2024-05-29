@@ -1,7 +1,6 @@
 import { PenpotFile } from '@ui/lib/types/penpotFile';
 import { CircleShape } from '@ui/lib/types/shapes/circleShape';
-
-import { symbolBlendMode, symbolFillGradients } from './symbols';
+import { symbolBlendMode, symbolFillGradients } from '@ui/parser/creators/symbols';
 
 export const createCircle = (
   file: PenpotFile,

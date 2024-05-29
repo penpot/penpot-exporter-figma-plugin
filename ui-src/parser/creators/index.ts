@@ -4,7 +4,7 @@ export * from './createBool';
 export * from './createCircle';
 export * from './createComponent';
 export * from './createGroup';
-export * from './createItem';
+export * from './createItems';
 export * from './createPage';
 export * from './createPath';
 export * from './createRectangle';
