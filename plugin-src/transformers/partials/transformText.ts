@@ -2,9 +2,11 @@ import { transformFills } from '@plugin/transformers/partials';
 import { transformTextStyle, translateStyleTextSegments } from '@plugin/translators/text';
 import { translateGrowType, translateVerticalAlign } from '@plugin/translators/text/properties';
 
-import { TextShape } from '@ui/lib/types/shapes/textShape';
+import { TextAttributes, TextShape } from '@ui/lib/types/shapes/textShape';
 
-export const transformText = async (node: TextNode): Promise<Partial<TextShape>> => {
+export const transformText = async (
+  node: TextNode
+): Promise<TextAttributes & Pick<TextShape, 'growType'>> => {
   const styledTextSegments = node.getStyledTextSegments([
     'fontName',
     'fontSize',

@@ -4,7 +4,7 @@ import { ShapeAttributes } from '@ui/lib/types/shapes/shape';
 
 export const transformFills = async (
   node: MinimalFillsMixin & DimensionAndPositionMixin
-): Promise<Partial<ShapeAttributes>> => {
+): Promise<Pick<ShapeAttributes, 'fills'>> => {
   return {
     fills: await translateFills(node.fills)
   };

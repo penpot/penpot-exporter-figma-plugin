@@ -26,10 +26,7 @@ export const translateStyleTextSegments = async (
   return translateParagraphProperties(node, partials);
 };
 
-export const transformTextStyle = (
-  node: TextNode,
-  segment: StyleTextSegment
-): Partial<TextStyle> => {
+export const transformTextStyle = (node: TextNode, segment: StyleTextSegment): TextStyle => {
   return {
     ...translateFontId(segment.fontName, segment.fontWeight),
     fontFamily: segment.fontName.family,

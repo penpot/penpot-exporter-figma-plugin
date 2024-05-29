@@ -6,7 +6,7 @@ export const translateStrokes = async (
   node: MinimalStrokesMixin | (MinimalStrokesMixin & IndividualStrokesMixin),
   strokeCaps: (stroke: Stroke) => Stroke = stroke => stroke
 ): Promise<Stroke[]> => {
-  const sharedStrokeProperties: Partial<Stroke> = {
+  const sharedStrokeProperties: Stroke = {
     strokeWidth: translateStrokeWeight(node),
     strokeAlignment: translateStrokeAlignment(node.strokeAlign),
     strokeStyle: node.dashPattern.length ? 'dashed' : 'solid'
@@ -22,7 +22,7 @@ export const translateStrokes = async (
 
 export const translateStroke = async (
   paint: Paint,
-  sharedStrokeProperties: Partial<Stroke>,
+  sharedStrokeProperties: Stroke,
   strokeCaps: (stroke: Stroke) => Stroke,
   firstStroke: boolean
 ): Promise<Stroke> => {
