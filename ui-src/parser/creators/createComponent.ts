@@ -1,38 +1,34 @@
+import { componentsLibrary } from '@plugin/ComponentLibrary';
+
 import { PenpotFile } from '@ui/lib/types/penpotFile';
-import { ComponentShape } from '@ui/lib/types/shapes/componentShape';
-import { components } from '@ui/parser/libraries';
+import { uiComponents } from '@ui/parser/libraries';
+import { ComponentRoot } from '@ui/types';
 
 import { createArtboard } from '.';
 
-export const createComponent = (
-  file: PenpotFile,
-  { type, path, children = [], ...rest }: ComponentShape
-) => {
+export const createComponent = (file: PenpotFile, { figmaId }: ComponentRoot) => {
   const frameId = file.newId();
   const componentId = file.newId();
 
-  const commonStructure = {
-    ...rest,
-    children,
+  const component = componentsLibrary.get(figmaId);
+  if (!component) {
+    return;
+  }
+
+  createArtboard(file, {
+    ...component,
     componentFile: file.getId(),
     componentId: componentId,
     componentRoot: true,
-    mainInstance: true
-  };
-
-  createArtboard(file, {
-    ...commonStructure,
-    id: frameId,
     mainInstance: true,
+    id: frameId,
     type: 'frame'
   });
 
-  components.add({
-    ...commonStructure,
-    id: componentId,
-    mainInstanceId: frameId,
+  uiComponents.register(figmaId, {
+    componentId,
     mainInstancePage: file.getCurrentPageId(),
-    path,
-    type
+    componentFigmaId: figmaId,
+    mainInstanceId: frameId
   });
 };

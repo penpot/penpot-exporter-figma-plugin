@@ -1,5 +1,5 @@
 import { PenpotFile } from '@ui/lib/types/penpotFile';
-import { PenpotNode } from '@ui/lib/types/penpotNode';
+import { PenpotNode } from '@ui/types';
 
 import {
   createArtboard,

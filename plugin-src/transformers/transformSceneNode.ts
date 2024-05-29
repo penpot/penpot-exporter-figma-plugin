@@ -1,4 +1,4 @@
-import { PenpotNode } from '@ui/lib/types/penpotNode';
+import { PenpotNode } from '@ui/types';
 
 import {
   transformBooleanNode,
