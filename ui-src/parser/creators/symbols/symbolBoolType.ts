@@ -6,7 +6,7 @@ import {
   BoolOperations
 } from '@ui/lib/types/shapes/boolShape';
 
-export const translateUiBoolType = (booleanOperation: BoolOperations): BoolOperations => {
+export const symbolBoolType = (booleanOperation: BoolOperations): BoolOperations => {
   switch (booleanOperation) {
     case 'union':
       return BOOL_UNION;

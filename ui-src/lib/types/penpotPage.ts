@@ -1,13 +1,11 @@
+import { Children } from '@ui/lib/types/utils/children';
 import { SavedGrids } from '@ui/lib/types/utils/grid';
 import { Uuid } from '@ui/lib/types/utils/uuid';
 
-import { PenpotNode } from './penpotNode';
-
 export type PenpotPage = {
   name: string;
-  children?: PenpotNode[];
   options?: PenpotPageOptions;
-};
+} & Children;
 
 export type PenpotPageOptions = {
   background?: string; // hex color

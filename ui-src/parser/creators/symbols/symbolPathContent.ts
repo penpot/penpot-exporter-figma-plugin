@@ -8,10 +8,10 @@ import {
   VECTOR_MOVE_TO
 } from '@ui/lib/types/shapes/pathShape';
 
-export const translatePathContent = (content: PathContent): PathContent =>
+export const symbolPathContent = (content: PathContent): PathContent =>
   content
     .map(({ command: stringCommand, ...rest }) => {
-      const command = translatePathCommand(stringCommand);
+      const command = symbolPathCommand(stringCommand);
 
       if (!command) return;
 
@@ -22,7 +22,7 @@ export const translatePathContent = (content: PathContent): PathContent =>
     })
     .filter((command): command is Segment => !!command);
 
-const translatePathCommand = (command: Command): Command | undefined => {
+const symbolPathCommand = (command: Command): Command | undefined => {
   switch (command) {
     case 'line-to':
       return VECTOR_LINE_TO;

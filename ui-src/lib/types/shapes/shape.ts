@@ -14,7 +14,17 @@ import { Uuid } from '@ui/lib/types/utils/uuid';
 export type ShapeBaseAttributes = {
   id?: Uuid;
   name?: string;
-  type?: 'frame' | 'group' | 'bool' | 'rect' | 'path' | 'text' | 'circle' | 'svg-raw' | 'image';
+  type?:
+    | 'frame'
+    | 'group'
+    | 'bool'
+    | 'rect'
+    | 'path'
+    | 'text'
+    | 'circle'
+    | 'svg-raw'
+    | 'image'
+    | 'component';
   selrect?: Selrect;
   points?: Point[];
   transform?: Matrix;

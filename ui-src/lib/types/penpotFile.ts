@@ -1,6 +1,7 @@
 import { PenpotPageOptions } from '@ui/lib/types/penpotPage';
 import { BoolShape } from '@ui/lib/types/shapes/boolShape';
 import { CircleShape } from '@ui/lib/types/shapes/circleShape';
+import { ComponentShape } from '@ui/lib/types/shapes/componentShape';
 import { FrameShape } from '@ui/lib/types/shapes/frameShape';
 import { GroupShape } from '@ui/lib/types/shapes/groupShape';
 import { PathShape } from '@ui/lib/types/shapes/pathShape';
@@ -26,12 +27,15 @@ export interface PenpotFile {
   // deleteLibraryColor(color: any): void;
   // addLibraryTypography(typography: any): void;
   // deleteLibraryTypography(typography: any): void;
-  // startComponent(component: any): void;
-  // finishComponent(): void;
+  startComponent(component: ComponentShape): Uuid;
+  finishComponent(): void;
   // createComponentInstance(instance: any): void;
-  // lookupShape(shapeId: string): void;
+  // lookupShape(shapeId: string): PenpotNode;
   // updateObject(id: string, object: any): void;
   // deleteObject(id: string): void;
+  getId(): Uuid;
+  getCurrentPageId(): Uuid;
+  newId(): Uuid;
   // asMap(): unknown;
   export(): void;
 }

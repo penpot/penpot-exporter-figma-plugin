@@ -1,14 +1,14 @@
 import { PenpotFile } from '@ui/lib/types/penpotFile';
 import { RectShape } from '@ui/lib/types/shapes/rectShape';
-import { translateFillGradients, translateUiBlendMode } from '@ui/translators';
+import { symbolBlendMode, symbolFillGradients } from '@ui/parser/creators/symbols';
 
-export const createPenpotRectangle = (
+export const createRectangle = (
   file: PenpotFile,
   { type, fills, blendMode, ...rest }: RectShape
 ) => {
   file.createRect({
-    fills: translateFillGradients(fills),
-    blendMode: translateUiBlendMode(blendMode),
+    fills: symbolFillGradients(fills),
+    blendMode: symbolBlendMode(blendMode),
     ...rest
   });
 };
