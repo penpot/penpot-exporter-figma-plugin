@@ -15,7 +15,7 @@ const hasFillGeometry = (node: GeometryMixin): boolean => {
 
 export const transformStrokes = async (
   node: GeometryMixin | (GeometryMixin & IndividualStrokesMixin)
-): Promise<Partial<ShapeAttributes>> => {
+): Promise<Pick<ShapeAttributes, 'strokes'>> => {
   const vectorNetwork = isVectorLike(node) ? node.vectorNetwork : undefined;
 
   const strokeCaps = (stroke: Stroke) => {
@@ -38,7 +38,7 @@ export const transformStrokesFromVector = async (
   node: VectorNode,
   vector: Command[],
   vectorRegion: VectorRegion | undefined
-): Promise<Partial<ShapeAttributes>> => {
+): Promise<Pick<ShapeAttributes, 'strokes'>> => {
   const strokeCaps = (stroke: Stroke) => {
     if (vectorRegion !== undefined) return stroke;
 

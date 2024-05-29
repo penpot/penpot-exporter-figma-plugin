@@ -12,7 +12,7 @@ export type TextShape = ShapeBaseAttributes &
   TextAttributes &
   LayoutChildAttributes;
 
-type TextAttributes = {
+export type TextAttributes = {
   type?: 'text';
   content?: TextContent;
 };
