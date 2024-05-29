@@ -3,8 +3,8 @@ import { useEffect, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 
 import { Stack } from '@ui/components/Stack';
-import { PenpotDocument } from '@ui/lib/types/penpotDocument';
 import { parse } from '@ui/parser';
+import { PenpotDocument } from '@ui/types';
 
 import { MissingFontsSection } from './MissingFontsSection';
 
