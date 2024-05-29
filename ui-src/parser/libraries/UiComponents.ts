@@ -17,6 +17,7 @@ class UiComponents {
   public get(id: string): UiComponent | undefined {
     return this.components[id];
   }
+
   public all(): UiComponent[] {
     return Object.values(this.components);
   }
