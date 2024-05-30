@@ -7,10 +7,15 @@ import { ComponentRoot } from '@ui/types';
 import { createArtboard } from '.';
 
 export const createComponent = (file: PenpotFile, { figmaId }: ComponentRoot) => {
-  const componentId = file.newId();
   const component = componentsLibrary.get(figmaId);
   if (!component) {
     return;
+  }
+
+  let componentId = file.newId();
+  const uiComponent = uiComponents.get(figmaId);
+  if (uiComponent) {
+    componentId = uiComponent.componentId;
   }
 
   const frameId = createArtboard(file, {
