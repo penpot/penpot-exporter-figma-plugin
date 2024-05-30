@@ -6,16 +6,13 @@ class IdLibrary {
   public init() {
     this.idMap.clear();
   }
+
   public get(figmaId: string): Uuid | undefined {
     return this.idMap.get(figmaId);
   }
 
   public register(figmaId: string, id: Uuid) {
     this.idMap.set(figmaId, id);
-  }
-
-  public all() {
-    return this.idMap;
   }
 }
 
