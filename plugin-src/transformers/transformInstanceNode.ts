@@ -29,7 +29,7 @@ export const transformInstanceNode = async (
   return {
     type: 'instance',
     mainComponentFigmaId: mainComponent.id,
-    isComponentRoot: node.parent === null || node.parent.type !== 'COMPONENT', // @TODO: check multiple hierarchy
+    isComponentRoot: isComponentRoot(node),
     ...transformFigmaIds(node),
     ...(await transformFills(node)),
     ...transformEffects(node),
@@ -41,4 +41,15 @@ export const transformInstanceNode = async (
     ...transformDimensionAndPosition(node, baseX, baseY),
     ...(await transformChildren(node, baseX + node.x, baseY + node.y))
   };
+};
+
+const isComponentRoot = (node: InstanceNode): boolean => {
+  let parent = node.parent;
+  while (parent !== null) {
+    if (parent.type === 'COMPONENT' || parent.type === 'INSTANCE') {
+      return false;
+    }
+    parent = parent.parent;
+  }
+  return true;
 };
