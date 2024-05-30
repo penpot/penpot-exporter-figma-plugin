@@ -2,6 +2,7 @@ import {
   transformBlend,
   transformDimensionAndPosition,
   transformEffects,
+  transformFigmaIds,
   transformFills,
   transformProportion,
   transformSceneNode,
@@ -23,6 +24,7 @@ export const transformPathNode = async (
   return {
     type: 'path',
     name: node.name,
+    ...transformFigmaIds(node),
     ...(hasFillGeometry(node) ? await transformFills(node) : []),
     ...(await transformStrokes(node)),
     ...transformEffects(node),

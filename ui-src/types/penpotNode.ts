@@ -5,7 +5,7 @@ import { GroupShape } from '@ui/lib/types/shapes/groupShape';
 import { PathShape } from '@ui/lib/types/shapes/pathShape';
 import { RectShape } from '@ui/lib/types/shapes/rectShape';
 import { TextShape } from '@ui/lib/types/shapes/textShape';
-import { ComponentRoot } from '@ui/types';
+import { ComponentInstance, ComponentRoot } from '@ui/types';
 
 export type PenpotNode =
   | FrameShape
@@ -15,4 +15,5 @@ export type PenpotNode =
   | CircleShape
   | TextShape
   | BoolShape
+  | ComponentInstance
   | ComponentRoot;

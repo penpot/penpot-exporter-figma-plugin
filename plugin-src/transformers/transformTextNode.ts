@@ -2,6 +2,7 @@ import {
   transformBlend,
   transformDimensionAndPosition,
   transformEffects,
+  transformFigmaIds,
   transformProportion,
   transformSceneNode,
   transformStrokes,
@@ -18,6 +19,7 @@ export const transformTextNode = async (
   return {
     type: 'text',
     name: node.name,
+    ...transformFigmaIds(node),
     ...(await transformText(node)),
     ...transformDimensionAndPosition(node, baseX, baseY),
     ...transformEffects(node),

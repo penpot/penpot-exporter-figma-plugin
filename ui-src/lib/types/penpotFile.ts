@@ -29,7 +29,6 @@ export interface PenpotFile {
   // deleteLibraryTypography(typography: any): void;
   startComponent(component: ComponentShape): Uuid;
   finishComponent(): void;
-  // createComponentInstance(instance: any): void;
   // lookupShape(shapeId: string): PenpotNode;
   // updateObject(id: string, object: any): void;
   // deleteObject(id: string): void;

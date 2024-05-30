@@ -6,6 +6,7 @@ import {
   transformEllipseNode,
   transformFrameNode,
   transformGroupNode,
+  transformInstanceNode,
   transformPathNode,
   transformRectangleNode,
   transformTextNode,
@@ -39,6 +40,8 @@ export const transformSceneNode = async (
       return await transformBooleanNode(node, baseX, baseY);
     case 'COMPONENT':
       return await transformComponentNode(node, baseX, baseY);
+    case 'INSTANCE':
+      return await transformInstanceNode(node, baseX, baseY);
   }
 
   console.error(`Unsupported node type: ${node.type}`);

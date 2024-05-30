@@ -13,6 +13,8 @@ import { Uuid } from '@ui/lib/types/utils/uuid';
 
 export type ShapeBaseAttributes = {
   id?: Uuid;
+  figmaId?: string; // @TODO: move to any other place
+  figmaRelatedId?: string; // @TODO: move to any other place
   name?: string;
   type?:
     | 'frame'
@@ -24,7 +26,8 @@ export type ShapeBaseAttributes = {
     | 'circle'
     | 'svg-raw'
     | 'image'
-    | 'component';
+    | 'component'
+    | 'instance';
   selrect?: Selrect;
   points?: Point[];
   transform?: Matrix;

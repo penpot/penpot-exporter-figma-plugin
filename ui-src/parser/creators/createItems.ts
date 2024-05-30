@@ -6,6 +6,7 @@ import {
   createBool,
   createCircle,
   createComponent,
+  createComponentInstance,
   createGroup,
   createPath,
   createRectangle,
@@ -36,5 +37,7 @@ const createItem = (file: PenpotFile, node: PenpotNode) => {
       return createBool(file, node);
     case 'component':
       return createComponent(file, node);
+    case 'instance':
+      return createComponentInstance(file, node);
   }
 };

@@ -1,3 +1,4 @@
+import { LayoutAttributes, LayoutChildAttributes } from '@ui/lib/types/shapes/layout';
 import {
   ShapeAttributes,
   ShapeBaseAttributes,
@@ -10,6 +11,8 @@ export type ComponentShape = ShapeBaseAttributes &
   ShapeAttributes &
   ShapeGeomAttributes &
   ComponentAttributes &
+  LayoutAttributes &
+  LayoutChildAttributes &
   Children;
 
 export type ComponentAttributes = {

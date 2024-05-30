@@ -3,6 +3,7 @@ import {
   transformCornerRadius,
   transformDimension,
   transformEffects,
+  transformFigmaIds,
   transformFills,
   transformProportion,
   transformRotationAndPosition,
@@ -20,6 +21,7 @@ export const transformRectangleNode = async (
   return {
     type: 'rect',
     name: node.name,
+    ...transformFigmaIds(node),
     ...(await transformFills(node)),
     ...transformEffects(node),
     ...(await transformStrokes(node)),
