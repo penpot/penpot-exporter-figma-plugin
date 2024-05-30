@@ -4,7 +4,6 @@ import { translatePageFill } from '@plugin/translators/fills';
 import { PenpotPage } from '@ui/lib/types/penpotPage';
 
 export const transformPageNode = async (node: PageNode): Promise<PenpotPage> => {
-  console.log(node);
   return {
     name: node.name,
     options: {

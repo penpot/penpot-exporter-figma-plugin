@@ -6,7 +6,14 @@ import { createArtboard } from '.';
 
 export const createComponentInstance = (
   file: PenpotFile,
-  { type, mainComponentFigmaId, ...rest }: ComponentInstance
+  {
+    type,
+    mainComponentFigmaId,
+    figmaId,
+    figmaRelatedId,
+    isComponentRoot,
+    ...rest
+  }: ComponentInstance
 ) => {
   const uiComponent = uiComponents.get(mainComponentFigmaId);
   if (!uiComponent) {
@@ -15,10 +22,11 @@ export const createComponentInstance = (
 
   createArtboard(file, {
     ...rest,
+    showContent: true,
+    shapeRef: uiComponent.mainInstanceId,
     componentFile: file.getId(),
+    componentRoot: isComponentRoot,
     componentId: uiComponent.componentId,
-    componentRoot: true,
-    mainInstance: false,
     type: 'frame'
   });
 };

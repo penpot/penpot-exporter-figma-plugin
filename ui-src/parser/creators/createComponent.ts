@@ -7,23 +7,25 @@ import { ComponentRoot } from '@ui/types';
 import { createArtboard } from '.';
 
 export const createComponent = (file: PenpotFile, { figmaId }: ComponentRoot) => {
-  const frameId = file.newId();
   const componentId = file.newId();
-
   const component = componentsLibrary.get(figmaId);
   if (!component) {
     return;
   }
 
-  createArtboard(file, {
+  const frameId = createArtboard(file, {
     ...component,
+    showContent: true,
     componentFile: file.getId(),
     componentId: componentId,
     componentRoot: true,
     mainInstance: true,
-    id: frameId,
     type: 'frame'
   });
+
+  if (!frameId) {
+    return;
+  }
 
   uiComponents.register(figmaId, {
     componentId,

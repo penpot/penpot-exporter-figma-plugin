@@ -3,6 +3,7 @@ import {
   transformChildren,
   transformDimensionAndPosition,
   transformEffects,
+  transformFigmaIds,
   transformFills,
   transformProportion,
   transformSceneNode,
@@ -19,9 +20,9 @@ export const transformBooleanNode = async (
 ): Promise<BoolShape> => {
   return {
     type: 'bool',
-    figmaId: node.id,
     name: node.name,
     boolType: translateBoolType(node.booleanOperation),
+    ...transformFigmaIds(node),
     ...(await transformChildren(node, baseX, baseY)),
     ...(await transformFills(node)),
     ...transformEffects(node),

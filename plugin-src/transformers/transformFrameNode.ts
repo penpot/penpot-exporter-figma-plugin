@@ -4,6 +4,7 @@ import {
   transformCornerRadius,
   transformDimensionAndPosition,
   transformEffects,
+  transformFigmaIds,
   transformFills,
   transformProportion,
   transformSceneNode,
@@ -39,9 +40,9 @@ export const transformFrameNode = async (
 
   return {
     type: 'frame',
-    figmaId: node.id,
     name: node.name,
     showContent: isSectionNode(node) ? true : !node.clipsContent,
+    ...transformFigmaIds(node),
     ...(await transformFills(node)),
     ...frameSpecificAttributes,
     ...(await transformChildren(node, baseX + node.x, baseY + node.y)),

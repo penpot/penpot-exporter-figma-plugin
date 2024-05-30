@@ -2,6 +2,7 @@ import {
   transformBlend,
   transformDimension,
   transformEffects,
+  transformFigmaIds,
   transformFills,
   transformProportion,
   transformRotationAndPosition,
@@ -18,8 +19,8 @@ export const transformEllipseNode = async (
 ): Promise<CircleShape> => {
   return {
     type: 'circle',
-    figmaId: node.id,
     name: node.name,
+    ...transformFigmaIds(node),
     ...(await transformFills(node)),
     ...transformEffects(node),
     ...(await transformStrokes(node)),

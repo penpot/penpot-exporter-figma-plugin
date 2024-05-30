@@ -2,6 +2,7 @@ import {
   transformBlend,
   transformDimensionAndPosition,
   transformEffects,
+  transformFigmaIds,
   transformSceneNode
 } from '@plugin/transformers/partials';
 import { transformChildren } from '@plugin/transformers/partials';
@@ -14,6 +15,7 @@ export const transformGroupNode = async (
   baseY: number
 ): Promise<GroupShape> => {
   return {
+    ...transformFigmaIds(node),
     ...transformGroupNodeLike(node, baseX, baseY),
     ...transformEffects(node),
     ...transformBlend(node),
@@ -28,7 +30,6 @@ export const transformGroupNodeLike = (
 ): GroupShape => {
   return {
     type: 'group',
-    figmaId: node.id,
     name: node.name,
     ...transformDimensionAndPosition(node, baseX, baseY),
     ...transformSceneNode(node)

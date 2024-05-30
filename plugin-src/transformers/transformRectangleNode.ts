@@ -3,6 +3,7 @@ import {
   transformCornerRadius,
   transformDimension,
   transformEffects,
+  transformFigmaIds,
   transformFills,
   transformProportion,
   transformRotationAndPosition,
@@ -19,8 +20,8 @@ export const transformRectangleNode = async (
 ): Promise<RectShape> => {
   return {
     type: 'rect',
-    figmaId: node.id,
     name: node.name,
+    ...transformFigmaIds(node),
     ...(await transformFills(node)),
     ...transformEffects(node),
     ...(await transformStrokes(node)),

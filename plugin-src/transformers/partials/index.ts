@@ -3,6 +3,7 @@ export * from './transformChildren';
 export * from './transformCornerRadius';
 export * from './transformDimensionAndPosition';
 export * from './transformEffects';
+export * from './transformFigmaIds';
 export * from './transformFills';
 export * from './transformProportion';
 export * from './transformRotationAndPosition';

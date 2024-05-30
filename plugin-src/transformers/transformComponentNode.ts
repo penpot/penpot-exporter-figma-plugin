@@ -5,6 +5,7 @@ import {
   transformCornerRadius,
   transformDimensionAndPosition,
   transformEffects,
+  transformFigmaIds,
   transformFills,
   transformProportion,
   transformSceneNode,
@@ -20,9 +21,9 @@ export const transformComponentNode = async (
 ): Promise<ComponentRoot> => {
   componentsLibrary.register(node.id, {
     type: 'component',
-    figmaId: node.id, // @TODO: check if this is needed
     name: node.name,
     path: '',
+    ...transformFigmaIds(node),
     ...(await transformFills(node)),
     ...transformEffects(node),
     ...(await transformStrokes(node)),
