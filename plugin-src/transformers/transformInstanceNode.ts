@@ -20,9 +20,18 @@ export const transformInstanceNode = async (
 ): Promise<ComponentInstance | undefined> => {
   const mainComponent = await node.getMainComponentAsync();
 
-  // If the component does not have parent it means that it comes from an external
-  // design system, for now we do not support that kind of instances.
-  if (!mainComponent || mainComponent.parent === null) {
+  /**
+   * We do not want to process component instances in the following scenarios:
+   *
+   * 1. If the component does not have a main component.
+   * 2. If the component does not have parent (it comes from an external design system).
+   * 3. If the component is inside a component set, (it is a variant component).
+   */
+  if (
+    !mainComponent ||
+    mainComponent.parent === null ||
+    mainComponent.parent.type === 'COMPONENT_SET'
+  ) {
     return;
   }
 
