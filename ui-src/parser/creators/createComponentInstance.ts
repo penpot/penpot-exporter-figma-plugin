@@ -17,6 +17,7 @@ export const createComponentInstance = (
   }: ComponentInstance
 ) => {
   let uiComponent = uiComponents.get(mainComponentFigmaId);
+
   if (!uiComponent) {
     const mainInstanceId = parseFigmaId(file, mainComponentFigmaId);
     if (!mainInstanceId) {
@@ -26,7 +27,6 @@ export const createComponentInstance = (
     uiComponent = {
       componentId: file.newId(),
       componentFigmaId: mainComponentFigmaId,
-      mainInstancePage: file.getCurrentPageId(),
       mainInstanceId
     };
     uiComponents.register(mainComponentFigmaId, uiComponent);

@@ -12,17 +12,14 @@ export const createComponent = (file: PenpotFile, { figmaId }: ComponentRoot) =>
     return;
   }
 
-  let componentId = file.newId();
   const uiComponent = uiComponents.get(figmaId);
-  if (uiComponent) {
-    componentId = uiComponent.componentId;
-  }
+  const componentId = uiComponent?.componentId ?? file.newId();
 
   const frameId = createArtboard(file, {
     ...component,
     showContent: true,
     componentFile: file.getId(),
-    componentId: componentId,
+    componentId,
     componentRoot: true,
     mainInstance: true,
     type: 'frame'

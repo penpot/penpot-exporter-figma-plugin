@@ -2,7 +2,7 @@ import { Uuid } from '@ui/lib/types/utils/uuid';
 
 type UiComponent = {
   componentId: Uuid;
-  mainInstancePage: Uuid;
+  mainInstancePage?: Uuid;
   mainInstanceId: Uuid;
   componentFigmaId: string;
 };
