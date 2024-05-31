@@ -4,11 +4,6 @@ import { translatePageFill } from '@plugin/translators/fills';
 import { PenpotPage } from '@ui/lib/types/penpotPage';
 
 export const transformPageNode = async (node: PageNode): Promise<PenpotPage> => {
-  figma.ui.postMessage({
-    type: 'PROGRESS_NODE',
-    data: node.name
-  });
-
   return {
     name: node.name,
     options: {
