@@ -1,27 +1,23 @@
+import { isGoogleFont } from '@plugin/translators/text/font/gfonts';
+import { isLocalFont } from '@plugin/translators/text/font/local';
+import { sleep } from '@plugin/utils';
+
 import { registerChange } from './registerChange';
-import { isGoogleFont } from './translators/text/font/gfonts';
-import { isLocalFont } from './translators/text/font/local';
 
 export const findAllTextNodes = async () => {
-  await figma.loadAllPagesAsync();
-
-  const nodes = figma.root.findAllWithCriteria({
-    types: ['TEXT']
-  });
-
   const fonts = new Set<string>();
 
-  nodes.forEach(node => {
-    const styledTextSegments = node.getStyledTextSegments(['fontName']);
+  for (const page of figma.root.children) {
+    await page.loadAsync();
 
-    styledTextSegments.forEach(segment => {
-      if (isGoogleFont(segment.fontName) || isLocalFont(segment.fontName)) {
-        return;
+    for (const node of page.children) {
+      if (node.type === 'TEXT') {
+        extractMissingFonts(node, fonts);
       }
 
-      fonts.add(segment.fontName.family);
-    });
-  });
+      sleep(0);
+    }
+  }
 
   figma.ui.postMessage({
     type: 'CUSTOM_FONTS',
@@ -29,4 +25,16 @@ export const findAllTextNodes = async () => {
   });
 
   figma.currentPage.once('nodechange', registerChange);
+};
+
+const extractMissingFonts = (node: TextNode, fonts: Set<string>) => {
+  const styledTextSegments = node.getStyledTextSegments(['fontName']);
+
+  styledTextSegments.forEach(segment => {
+    if (isGoogleFont(segment.fontName) || isLocalFont(segment.fontName)) {
+      return;
+    }
+
+    fonts.add(segment.fontName.family);
+  });
 };

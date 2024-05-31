@@ -6,6 +6,7 @@ import { Stack } from '@ui/components/Stack';
 import { parse } from '@ui/parser';
 import { PenpotDocument } from '@ui/types';
 
+import { ExporterProgress } from './ExporterProgress';
 import { MissingFontsSection } from './MissingFontsSection';
 
 type FormValues = Record<string, string>;
@@ -95,16 +96,20 @@ export const PenpotExporter = () => {
   return (
     <FormProvider {...methods}>
       <form onSubmit={methods.handleSubmit(exportPenpot)}>
-        <Stack space="medium">
+        <Stack>
           <MissingFontsSection fonts={missingFonts} />
-          <Stack space="xsmall" direction="row">
-            <Button type="submit" loading={exporting} fullWidth>
-              Export to Penpot
-            </Button>
-            <Button secondary onClick={cancel} fullWidth>
-              Cancel
-            </Button>
-          </Stack>
+          {exporting ? (
+            <ExporterProgress />
+          ) : (
+            <Stack space="xsmall" direction="row">
+              <Button type="submit" fullWidth>
+                Export to Penpot
+              </Button>
+              <Button secondary onClick={cancel} fullWidth>
+                Cancel
+              </Button>
+            </Stack>
+          )}
         </Stack>
       </form>
     </FormProvider>

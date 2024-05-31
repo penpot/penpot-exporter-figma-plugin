@@ -22,7 +22,7 @@ export const App = () => {
 
   return (
     <Wrapper ref={ref} overflowing={(height ?? 0) > MAX_HEIGHT}>
-      <Stack space="medium">
+      <Stack>
         <Penpot
           style={{
             alignSelf: 'center',

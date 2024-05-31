@@ -1,4 +1,5 @@
 import { transformGroupNodeLike, transformSceneNode } from '@plugin/transformers';
+import { sleep } from '@plugin/utils';
 
 import { PenpotNode } from '@ui/types';
 
@@ -32,10 +33,18 @@ export const translateMaskChildren = async (
 
 export const translateChildren = async (
   children: readonly SceneNode[],
-  baseX: number,
-  baseY: number
+  baseX: number = 0,
+  baseY: number = 0
 ): Promise<PenpotNode[]> => {
-  return (await Promise.all(children.map(child => transformSceneNode(child, baseX, baseY)))).filter(
-    (child): child is PenpotNode => !!child
-  );
+  const transformedChildren: PenpotNode[] = [];
+
+  for (const child of children) {
+    const penpotNode = await transformSceneNode(child, baseX, baseY);
+
+    if (penpotNode) transformedChildren.push(penpotNode);
+
+    await sleep(0);
+  }
+
+  return transformedChildren;
 };
