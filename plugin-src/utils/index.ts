@@ -6,3 +6,4 @@ export * from './detectMimeType';
 export * from './getBoundingBox';
 export * from './matrixInvert';
 export * from './rgbToHex';
+export * from './sleep';

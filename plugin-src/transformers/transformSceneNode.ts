@@ -18,31 +18,52 @@ export const transformSceneNode = async (
   baseX: number = 0,
   baseY: number = 0
 ): Promise<PenpotNode | undefined> => {
+  let penpotNode: PenpotNode | undefined;
+
+  figma.ui.postMessage({
+    type: 'PROGRESS_NODE',
+    data: node.name
+  });
+
   switch (node.type) {
     case 'RECTANGLE':
-      return await transformRectangleNode(node, baseX, baseY);
+      penpotNode = await transformRectangleNode(node, baseX, baseY);
+      break;
     case 'ELLIPSE':
-      return await transformEllipseNode(node, baseX, baseY);
+      penpotNode = await transformEllipseNode(node, baseX, baseY);
+      break;
     case 'SECTION':
     case 'FRAME':
-      return await transformFrameNode(node, baseX, baseY);
+      penpotNode = await transformFrameNode(node, baseX, baseY);
+      break;
     case 'GROUP':
-      return await transformGroupNode(node, baseX, baseY);
+      penpotNode = await transformGroupNode(node, baseX, baseY);
+      break;
     case 'TEXT':
-      return await transformTextNode(node, baseX, baseY);
+      penpotNode = await transformTextNode(node, baseX, baseY);
+      break;
     case 'VECTOR':
-      return await transformVectorNode(node, baseX, baseY);
+      penpotNode = await transformVectorNode(node, baseX, baseY);
+      break;
     case 'STAR':
     case 'POLYGON':
     case 'LINE':
-      return await transformPathNode(node, baseX, baseY);
+      penpotNode = await transformPathNode(node, baseX, baseY);
+      break;
     case 'BOOLEAN_OPERATION':
-      return await transformBooleanNode(node, baseX, baseY);
+      penpotNode = await transformBooleanNode(node, baseX, baseY);
+      break;
     case 'COMPONENT':
-      return await transformComponentNode(node, baseX, baseY);
+      penpotNode = await transformComponentNode(node, baseX, baseY);
+      break;
     case 'INSTANCE':
-      return await transformInstanceNode(node, baseX, baseY);
+      penpotNode = await transformInstanceNode(node, baseX, baseY);
+      break;
   }
 
-  console.error(`Unsupported node type: ${node.type}`);
+  if (penpotNode === undefined) {
+    console.error(`Unsupported node type: ${node.type}`);
+  }
+
+  return penpotNode;
 };
