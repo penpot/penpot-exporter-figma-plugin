@@ -70,9 +70,9 @@ export const PenpotExporter = () => {
     };
   }, []);
 
-  if (loading) {
-    return <LoadingIndicator />;
-  }
+  if (loading) return <LoadingIndicator />;
+
+  if (exporting) return <ExporterProgress />;
 
   if (needsReload) {
     return (
@@ -98,18 +98,14 @@ export const PenpotExporter = () => {
       <form onSubmit={methods.handleSubmit(exportPenpot)}>
         <Stack>
           <MissingFontsSection fonts={missingFonts} />
-          {exporting ? (
-            <ExporterProgress />
-          ) : (
-            <Stack space="xsmall" direction="row">
-              <Button type="submit" fullWidth>
-                Export to Penpot
-              </Button>
-              <Button secondary onClick={cancel} fullWidth>
-                Cancel
-              </Button>
-            </Stack>
-          )}
+          <Stack space="xsmall" direction="row">
+            <Button type="submit" fullWidth>
+              Export to Penpot
+            </Button>
+            <Button secondary onClick={cancel} fullWidth>
+              Cancel
+            </Button>
+          </Stack>
         </Stack>
       </form>
     </FormProvider>
