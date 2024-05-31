@@ -25,18 +25,14 @@ export const transformInstanceNode = async (
    *
    * 1. If the component does not have a main component.
    * 2. If the component does not have parent (it comes from an external design system).
-   * 3. If the component is inside a component set, (it is a variant component).
    */
-  if (
-    !mainComponent ||
-    mainComponent.parent === null ||
-    mainComponent.parent.type === 'COMPONENT_SET'
-  ) {
+  if (!mainComponent || mainComponent.parent === null) {
     return;
   }
 
   return {
     type: 'instance',
+    name: node.name,
     mainComponentFigmaId: mainComponent.id,
     isComponentRoot: isComponentRoot(node),
     ...transformFigmaIds(node),

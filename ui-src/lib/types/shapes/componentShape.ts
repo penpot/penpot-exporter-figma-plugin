@@ -18,7 +18,7 @@ export type ComponentShape = ShapeBaseAttributes &
 export type ComponentAttributes = {
   type?: 'component';
   name: string;
-  path: '';
+  path: string;
   mainInstanceId?: Uuid;
   mainInstancePage?: Uuid;
 };
