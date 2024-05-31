@@ -22,7 +22,7 @@ export const transformComponentNode = async (
   componentsLibrary.register(node.id, {
     type: 'component',
     name: node.name,
-    path: '',
+    path: node.parent?.type === 'COMPONENT_SET' ? node.parent.name : '',
     ...transformFigmaIds(node),
     ...(await transformFills(node)),
     ...transformEffects(node),

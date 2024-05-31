@@ -1,5 +1,5 @@
 import { LayoutAttributes, LayoutChildAttributes } from '@ui/lib/types/shapes/layout';
-import { ShapeGeomAttributes } from '@ui/lib/types/shapes/shape';
+import { ShapeAttributes, ShapeGeomAttributes } from '@ui/lib/types/shapes/shape';
 import { Children } from '@ui/lib/types/utils/children';
 
 export type ComponentRoot = {
@@ -8,6 +8,7 @@ export type ComponentRoot = {
 };
 
 export type ComponentInstance = ShapeGeomAttributes &
+  ShapeAttributes &
   LayoutAttributes &
   LayoutChildAttributes &
   Children & {

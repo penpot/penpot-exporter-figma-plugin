@@ -13,12 +13,12 @@ import {
 
 import { FrameShape } from '@ui/lib/types/shapes/frameShape';
 
-const isSectionNode = (node: FrameNode | SectionNode): node is SectionNode => {
+const isSectionNode = (node: FrameNode | SectionNode | ComponentSetNode): node is SectionNode => {
   return node.type === 'SECTION';
 };
 
 export const transformFrameNode = async (
-  node: FrameNode | SectionNode,
+  node: FrameNode | SectionNode | ComponentSetNode,
   baseX: number,
   baseY: number
 ): Promise<FrameShape> => {
