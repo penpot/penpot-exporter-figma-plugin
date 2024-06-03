@@ -21,6 +21,8 @@ import {
 export const symbolBlendMode = (blendMode?: BlendMode): BlendMode | undefined => {
   if (!blendMode) return;
 
+  if (typeof blendMode !== 'string') return blendMode;
+
   switch (blendMode) {
     case 'normal':
       return BLEND_MODE_NORMAL;
@@ -54,7 +56,5 @@ export const symbolBlendMode = (blendMode?: BlendMode): BlendMode | undefined =>
       return BLEND_MODE_COLOR;
     case 'luminosity':
       return BLEND_MODE_LUMINOSITY;
-    default:
-      return BLEND_MODE_NORMAL;
   }
 };

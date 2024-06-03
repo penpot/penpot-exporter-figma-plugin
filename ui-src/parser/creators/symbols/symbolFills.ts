@@ -20,7 +20,11 @@ export const symbolFills = (fills?: Fill[]): Fill[] | undefined => {
   });
 };
 
-const symbolFillGradient = ({ type, ...rest }: Gradient): Gradient | undefined => {
+const symbolFillGradient = (fillGradient: Gradient): Gradient => {
+  if (typeof fillGradient.type !== 'string') return fillGradient;
+
+  const { type, ...rest } = fillGradient;
+
   switch (type) {
     case 'linear':
       return {
@@ -33,11 +37,13 @@ const symbolFillGradient = ({ type, ...rest }: Gradient): Gradient | undefined =
         ...rest
       };
   }
-
-  console.error(`Unsupported gradient type: ${String(type)}`);
 };
 
-const symbolFillImage = ({ imageHash, ...rest }: ImageColor): ImageColor | undefined => {
+const symbolFillImage = (fillImage: ImageColor): ImageColor | undefined => {
+  if (fillImage.dataUri) return fillImage;
+
+  const { imageHash, ...rest } = fillImage;
+
   if (!imageHash) return;
 
   const imageColor = imagesLibrary.get(imageHash);

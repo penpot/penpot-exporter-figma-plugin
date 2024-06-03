@@ -7,6 +7,8 @@ import {
 } from '@ui/lib/types/shapes/boolShape';
 
 export const symbolBoolType = (booleanOperation: BoolOperations): BoolOperations => {
+  if (typeof booleanOperation !== 'string') return booleanOperation;
+
   switch (booleanOperation) {
     case 'union':
       return BOOL_UNION;
@@ -17,6 +19,4 @@ export const symbolBoolType = (booleanOperation: BoolOperations): BoolOperations
     case 'intersection':
       return BOOL_INTERSECTION;
   }
-
-  throw new Error(`Unsupported boolean operation: ${String(booleanOperation)}`);
 };
