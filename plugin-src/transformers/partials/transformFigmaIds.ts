@@ -9,6 +9,16 @@ export const transformFigmaIds = (
   };
 };
 
+export const transformMaskFigmaIds = (
+  node: SceneNode
+): Pick<ShapeBaseAttributes, 'figmaId' | 'figmaRelatedId'> => {
+  const transformedIds = transformFigmaIds(node);
+  return {
+    figmaId: `M${transformedIds.figmaId}`,
+    figmaRelatedId: transformedIds.figmaRelatedId ? `M${transformedIds.figmaRelatedId}` : undefined
+  };
+};
+
 const getRelatedNodeId = (nodeId: string): string | undefined => {
   const ids = nodeId.split(';');
 
