@@ -9,20 +9,18 @@ import {
 } from '@ui/lib/types/shapes/pathShape';
 
 export const symbolPathContent = (content: PathContent): PathContent =>
-  content
-    .map(({ command: stringCommand, ...rest }) => {
-      const command = symbolPathCommand(stringCommand);
+  content.map(({ command: stringCommand, ...rest }) => {
+    const command = symbolPathCommand(stringCommand);
 
-      if (!command) return;
+    return {
+      command,
+      ...rest
+    } as Segment;
+  });
 
-      return {
-        command,
-        ...rest
-      } as Segment;
-    })
-    .filter((command): command is Segment => !!command);
+const symbolPathCommand = (command: Command): Command => {
+  if (typeof command !== 'string') return command;
 
-const symbolPathCommand = (command: Command): Command | undefined => {
   switch (command) {
     case 'line-to':
       return VECTOR_LINE_TO;
@@ -33,6 +31,4 @@ const symbolPathCommand = (command: Command): Command | undefined => {
     case 'curve-to':
       return VECTOR_CURVE_TO;
   }
-
-  console.error(`Unsupported svg command type: ${String(command)}`);
 };
