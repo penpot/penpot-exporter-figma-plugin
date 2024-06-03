@@ -17,7 +17,7 @@ export const translateImageFill = async (fill: ImagePaint): Promise<Fill | undef
 const translateImage = async (imageHash: string | null): Promise<ImageColor | undefined> => {
   if (!imageHash) return;
 
-  const imageColor = imagesLibrary.get(imageHash) ?? (await calculateAndRegister(imageHash));
+  const imageColor = imagesLibrary.get(imageHash) ?? (await generateAndRegister(imageHash));
 
   if (!imageColor) return;
 
@@ -29,7 +29,7 @@ const translateImage = async (imageHash: string | null): Promise<ImageColor | un
   };
 };
 
-const calculateAndRegister = async (imageHash: string) => {
+const generateAndRegister = async (imageHash: string) => {
   const image = figma.getImageByHash(imageHash);
 
   if (!image) return;
