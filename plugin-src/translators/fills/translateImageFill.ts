@@ -1,4 +1,7 @@
+import { fromByteArray } from 'base64-js';
+
 import { imagesLibrary } from '@plugin/ImageLibrary';
+import { detectMimeType } from '@plugin/utils';
 
 import { Fill } from '@ui/lib/types/utils/fill';
 import { ImageColor } from '@ui/lib/types/utils/imageColor';
@@ -35,11 +38,15 @@ const generateAndRegister = async (imageHash: string) => {
 
   const bytes = await image.getBytesAsync();
   const { width, height } = await image.getSizeAsync();
+  const b64 = fromByteArray(bytes);
+  const mtype = detectMimeType(b64);
+  const dataUri = `data:${mtype};base64,${b64}`;
 
   const imageColor: ImageColor = {
     width,
     height,
-    bytes,
+    mtype,
+    dataUri,
     keepAspectRatio: true,
     id: '00000000-0000-0000-0000-000000000000'
   };

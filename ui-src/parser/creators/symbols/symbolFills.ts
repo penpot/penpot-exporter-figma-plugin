@@ -1,7 +1,4 @@
-import { fromByteArray } from 'base64-js';
-
 import { imagesLibrary } from '@plugin/ImageLibrary';
-import { detectMimeType } from '@plugin/utils';
 
 import { Fill } from '@ui/lib/types/utils/fill';
 import { Gradient, LINEAR_TYPE, RADIAL_TYPE } from '@ui/lib/types/utils/gradient';
@@ -45,20 +42,16 @@ const symbolFillGradient = (fillGradient: Gradient): Gradient => {
 const symbolFillImage = (fillImage: ImageColor): ImageColor | undefined => {
   if (fillImage.dataUri) return fillImage;
 
-  const { imageHash, bytes, ...rest } = fillImage;
+  const { imageHash, ...rest } = fillImage;
 
   if (!imageHash) return;
 
   const imageColor = imagesLibrary.get(imageHash);
 
-  if (!imageColor || !imageColor.bytes) return;
-
-  const b64 = fromByteArray(imageColor.bytes);
-  const mtype = detectMimeType(b64);
+  if (!imageColor) return;
 
   return {
     ...rest,
-    mtype,
-    dataUri: `data:${mtype};base64,${b64}`
+    dataUri: imageColor?.dataUri
   };
 };
