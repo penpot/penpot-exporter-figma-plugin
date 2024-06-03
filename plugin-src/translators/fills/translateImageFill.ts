@@ -1,3 +1,4 @@
+import { imagesLibrary } from '@plugin/ImageLibrary';
 import { detectMimeType } from '@plugin/utils';
 
 import { Fill } from '@ui/lib/types/utils/fill';
@@ -9,28 +10,36 @@ export const translateImageFill = async (fill: ImagePaint): Promise<Fill | undef
 
   return {
     fillOpacity: !fill.visible ? 0 : fill.opacity,
-    fillImage: fillImage
+    fillImage
   };
 };
 
 const translateImage = async (imageHash: string | null): Promise<ImageColor | undefined> => {
   if (!imageHash) return;
 
+  const libraryImage = imagesLibrary.get(imageHash);
+
+  if (libraryImage) return libraryImage;
+
   const image = figma.getImageByHash(imageHash);
+
   if (!image) return;
 
-  const bytes = await image.getBytesAsync();
-  const size = await image.getSizeAsync();
-  const b64 = figma.base64Encode(bytes);
-  const mimeType = detectMimeType(b64);
-  const dataUri = `data:${mimeType};base64,${b64}`;
+  const { width, height } = await image.getSizeAsync();
+  const b64 = figma.base64Encode(await image.getBytesAsync());
+  const mtype = detectMimeType(b64);
+  const dataUri = `data:${mtype};base64,${b64}`;
 
-  return {
-    width: size.width,
-    height: size.height,
-    mtype: mimeType,
+  const imageColor = {
+    width,
+    height,
+    mtype,
+    dataUri,
     keepAspectRatio: true,
-    dataUri: dataUri,
     id: '00000000-0000-0000-0000-000000000000'
   };
+
+  imagesLibrary.register(imageHash, imageColor);
+
+  return imageColor;
 };
