@@ -2,7 +2,7 @@ import { PenpotFile } from '@ui/lib/types/penpotFile';
 import { FrameShape } from '@ui/lib/types/shapes/frameShape';
 import { Uuid } from '@ui/lib/types/utils/uuid';
 import { parseFigmaId } from '@ui/parser';
-import { symbolBlendMode, symbolFillGradients } from '@ui/parser/creators/symbols';
+import { symbolBlendMode, symbolFills } from '@ui/parser/creators/symbols';
 
 import { createItems } from '.';
 
@@ -15,7 +15,7 @@ export const createArtboard = (
   file.addArtboard({
     id,
     shapeRef: shapeRef ?? parseFigmaId(file, figmaRelatedId, true),
-    fills: symbolFillGradients(fills),
+    fills: symbolFills(fills),
     blendMode: symbolBlendMode(blendMode),
     ...rest
   });

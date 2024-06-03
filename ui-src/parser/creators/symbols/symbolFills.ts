@@ -2,8 +2,9 @@ import { imagesLibrary } from '@plugin/ImageLibrary';
 
 import { Fill } from '@ui/lib/types/utils/fill';
 import { Gradient, LINEAR_TYPE, RADIAL_TYPE } from '@ui/lib/types/utils/gradient';
+import { ImageColor } from '@ui/lib/types/utils/imageColor';
 
-export const symbolFillGradients = (fills?: Fill[]): Fill[] | undefined => {
+export const symbolFills = (fills?: Fill[]): Fill[] | undefined => {
   if (!fills) return;
 
   return fills.map(fill => {
@@ -11,14 +12,8 @@ export const symbolFillGradients = (fills?: Fill[]): Fill[] | undefined => {
       fill.fillColorGradient = symbolFillGradient(fill.fillColorGradient);
     }
 
-    if (fill.fillImage?.imageHash) {
-      const imageColor = imagesLibrary.get(fill.fillImage?.imageHash);
-      const { imageHash, ...rest } = fill.fillImage;
-
-      fill.fillImage = {
-        ...rest,
-        dataUri: imageColor?.dataUri
-      };
+    if (fill.fillImage) {
+      fill.fillImage = symbolFillImage(fill.fillImage);
     }
 
     return fill;
@@ -40,4 +35,17 @@ const symbolFillGradient = ({ type, ...rest }: Gradient): Gradient | undefined =
   }
 
   console.error(`Unsupported gradient type: ${String(type)}`);
+};
+
+const symbolFillImage = ({ imageHash, ...rest }: ImageColor): ImageColor | undefined => {
+  if (!imageHash) return;
+
+  const imageColor = imagesLibrary.get(imageHash);
+
+  if (!imageColor) return;
+
+  return {
+    ...rest,
+    dataUri: imageColor?.dataUri
+  };
 };
