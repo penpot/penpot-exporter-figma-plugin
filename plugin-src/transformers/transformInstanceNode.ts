@@ -20,6 +20,10 @@ export const transformInstanceNode = async (
 ): Promise<ComponentInstance | undefined> => {
   const mainComponent = await node.getMainComponentAsync();
 
+  if (node.name === 'dropdown') {
+    console.log(node, mainComponent);
+  }
+
   /**
    * We do not want to process component instances in the following scenarios:
    *
@@ -28,6 +32,16 @@ export const transformInstanceNode = async (
    * 3. If th component does not have a parent. (it's been removed)
    */
   if (!mainComponent || mainComponent.remote || mainComponent.parent === null) {
+    return;
+  }
+
+  /**
+   * Main component can be in a ComponentSet removed from the page or external design system.
+   */
+  if (
+    mainComponent.parent?.type === 'COMPONENT_SET' &&
+    (mainComponent.parent.parent === null || mainComponent.parent.remote)
+  ) {
     return;
   }
 
