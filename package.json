@@ -23,6 +23,7 @@
   "license": "MPL2.0",
   "dependencies": {
     "@create-figma-plugin/ui": "^3.2",
+    "base64-js": "^1.5",
     "classnames": "^2.5",
     "preact": "^10.21",
     "react-hook-form": "^7.51",

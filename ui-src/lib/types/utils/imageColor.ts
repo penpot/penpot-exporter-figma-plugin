@@ -9,4 +9,5 @@ export type ImageColor = {
   keepAspectRatio?: boolean;
   dataUri?: string;
   imageHash?: string; // @TODO: move to any other place
+  bytes?: Uint8Array; // @TODO: move to any other place
 };
