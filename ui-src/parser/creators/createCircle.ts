@@ -1,7 +1,7 @@
 import { PenpotFile } from '@ui/lib/types/penpotFile';
 import { CircleShape } from '@ui/lib/types/shapes/circleShape';
 import { parseFigmaId } from '@ui/parser';
-import { symbolBlendMode, symbolFillGradients } from '@ui/parser/creators/symbols';
+import { symbolBlendMode, symbolFills } from '@ui/parser/creators/symbols';
 
 export const createCircle = (
   file: PenpotFile,
@@ -10,7 +10,7 @@ export const createCircle = (
   file.createCircle({
     id: parseFigmaId(file, figmaId),
     shapeRef: parseFigmaId(file, figmaRelatedId, true),
-    fills: symbolFillGradients(fills),
+    fills: symbolFills(fills),
     blendMode: symbolBlendMode(blendMode),
     ...rest
   });

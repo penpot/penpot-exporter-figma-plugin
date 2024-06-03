@@ -1,6 +1,7 @@
 import { componentsLibrary } from '@plugin/ComponentLibrary';
 
 import { PenpotFile } from '@ui/lib/types/penpotFile';
+import { symbolBlendMode, symbolFills } from '@ui/parser/creators/symbols';
 import { uiComponents } from '@ui/parser/libraries';
 
 import { createItems } from '.';
@@ -12,10 +13,12 @@ export const createComponentLibrary = (file: PenpotFile) => {
       return;
     }
 
-    const { children = [], ...rest } = component;
+    const { children = [], fills, blendMode, ...rest } = component;
 
     file.startComponent({
       ...rest,
+      fills: symbolFills(fills),
+      blendMode: symbolBlendMode(blendMode),
       id: uiComponent.componentId,
       componentId: uiComponent.componentId,
       mainInstancePage: uiComponent.mainInstancePage,

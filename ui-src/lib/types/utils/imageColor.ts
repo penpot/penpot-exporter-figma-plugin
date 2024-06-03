@@ -1,6 +1,5 @@
 import { Uuid } from './uuid';
 
-//@TODO: check how this exports the image through a dataUri
 export type ImageColor = {
   name?: string;
   width: number;
@@ -9,4 +8,5 @@ export type ImageColor = {
   id?: Uuid;
   keepAspectRatio?: boolean;
   dataUri?: string;
+  imageHash?: string; // @TODO: move to any other place
 };

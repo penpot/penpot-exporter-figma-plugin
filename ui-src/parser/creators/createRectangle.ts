@@ -1,7 +1,7 @@
 import { PenpotFile } from '@ui/lib/types/penpotFile';
 import { RectShape } from '@ui/lib/types/shapes/rectShape';
 import { parseFigmaId } from '@ui/parser';
-import { symbolBlendMode, symbolFillGradients } from '@ui/parser/creators/symbols';
+import { symbolBlendMode, symbolFills } from '@ui/parser/creators/symbols';
 
 export const createRectangle = (
   file: PenpotFile,
@@ -10,7 +10,7 @@ export const createRectangle = (
   file.createRect({
     id: parseFigmaId(file, figmaId),
     shapeRef: parseFigmaId(file, figmaRelatedId, true),
-    fills: symbolFillGradients(fills),
+    fills: symbolFills(fills),
     blendMode: symbolBlendMode(blendMode),
     ...rest
   });

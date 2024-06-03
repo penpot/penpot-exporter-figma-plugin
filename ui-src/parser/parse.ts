@@ -1,4 +1,5 @@
 import { componentsLibrary } from '@plugin/ComponentLibrary';
+import { imagesLibrary } from '@plugin/ImageLibrary';
 
 import { createFile } from '@ui/lib/penpot';
 import { createComponentLibrary, createPage } from '@ui/parser/creators';
@@ -7,8 +8,10 @@ import { PenpotDocument } from '@ui/types';
 
 import { idLibrary } from '.';
 
-export const parse = ({ name, children = [], components }: PenpotDocument) => {
+export const parse = ({ name, children = [], components, images }: PenpotDocument) => {
   componentsLibrary.init(components);
+  imagesLibrary.init(images);
+
   uiComponents.init();
   idLibrary.init();
 
