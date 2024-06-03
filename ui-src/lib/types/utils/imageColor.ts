@@ -9,4 +9,5 @@ export type ImageColor = {
   id?: Uuid;
   keepAspectRatio?: boolean;
   dataUri?: string;
+  imageHash?: string;
 };

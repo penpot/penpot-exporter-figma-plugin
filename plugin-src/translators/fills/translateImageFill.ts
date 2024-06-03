@@ -17,20 +17,30 @@ export const translateImageFill = async (fill: ImagePaint): Promise<Fill | undef
 const translateImage = async (imageHash: string | null): Promise<ImageColor | undefined> => {
   if (!imageHash) return;
 
-  const libraryImage = imagesLibrary.get(imageHash);
+  const imageColor = imagesLibrary.get(imageHash) ?? (await calculateAndRegister(imageHash));
 
-  if (libraryImage) return libraryImage;
+  if (!imageColor) return;
 
+  const { dataUri, ...rest } = imageColor;
+
+  return {
+    ...rest,
+    imageHash
+  };
+};
+
+const calculateAndRegister = async (imageHash: string) => {
   const image = figma.getImageByHash(imageHash);
 
   if (!image) return;
 
+  const bytes = await image.getBytesAsync();
   const { width, height } = await image.getSizeAsync();
-  const b64 = figma.base64Encode(await image.getBytesAsync());
+  const b64 = figma.base64Encode(bytes);
   const mtype = detectMimeType(b64);
   const dataUri = `data:${mtype};base64,${b64}`;
 
-  const imageColor = {
+  const imageColor: ImageColor = {
     width,
     height,
     mtype,
