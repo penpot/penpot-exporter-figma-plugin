@@ -20,10 +20,6 @@ export const transformInstanceNode = async (
 ): Promise<ComponentInstance | undefined> => {
   const mainComponent = await node.getMainComponentAsync();
 
-  if (node.name === 'dropdown') {
-    console.log(node, mainComponent);
-  }
-
   /**
    * We do not want to process component instances in the following scenarios:
    *
