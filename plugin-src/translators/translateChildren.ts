@@ -1,4 +1,5 @@
 import { transformGroupNodeLike, transformSceneNode } from '@plugin/transformers';
+import { transformFigmaIds } from '@plugin/transformers/partials';
 import { sleep } from '@plugin/utils';
 
 import { PenpotNode } from '@ui/types';
@@ -23,6 +24,7 @@ export const translateMaskChildren = async (
   const maskedChildren = await translateChildren(children.slice(maskIndex), baseX, baseY);
 
   const maskGroup = {
+    ...transformFigmaIds(maskChild, true),
     ...transformGroupNodeLike(maskChild, baseX, baseY),
     children: maskedChildren,
     maskedGroup: true

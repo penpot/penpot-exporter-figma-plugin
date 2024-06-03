@@ -1,11 +1,16 @@
 import { ShapeBaseAttributes } from '@ui/lib/types/shapes/shape';
 
 export const transformFigmaIds = (
-  node: SceneNode
+  node: SceneNode,
+  isMasked: boolean = false
 ): Pick<ShapeBaseAttributes, 'figmaId' | 'figmaRelatedId'> => {
+  const id = normalizeNodeId(node.id);
+  const relatedId = getRelatedNodeId(node.id);
+  const prefix = isMasked ? 'M' : '';
+
   return {
-    figmaId: normalizeNodeId(node.id),
-    figmaRelatedId: getRelatedNodeId(node.id)
+    figmaId: `${prefix}${id}`,
+    figmaRelatedId: relatedId ? `${prefix}${relatedId}` : undefined
   };
 };
 
