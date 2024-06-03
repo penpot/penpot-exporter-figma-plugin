@@ -20,14 +20,14 @@ export const transformInstanceNode = async (
 ): Promise<ComponentInstance | undefined> => {
   const mainComponent = await node.getMainComponentAsync();
 
-  if (!mainComponent || !isNodeProcessable(node, mainComponent)) {
+  if (!isNodeProcessable(node, mainComponent)) {
     return;
   }
 
   return {
     type: 'instance',
     name: node.name,
-    mainComponentFigmaId: mainComponent.id,
+    mainComponentFigmaId: mainComponent?.id ?? '',
     isComponentRoot: isComponentRoot(node),
     ...transformFigmaIds(node),
     ...(await transformFills(node)),
@@ -42,7 +42,7 @@ export const transformInstanceNode = async (
   };
 };
 
-const isNodeProcessable = (node: SceneNode, mainComponent: ComponentNode | undefined): boolean => {
+const isNodeProcessable = (node: SceneNode, mainComponent: ComponentNode | null): boolean => {
   /**
    * We do not want to process component instances in the following scenarios:
    *
