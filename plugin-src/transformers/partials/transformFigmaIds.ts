@@ -15,7 +15,7 @@ export const transformMaskFigmaIds = (
   const transformedIds = transformFigmaIds(node);
   return {
     figmaId: `M${transformedIds.figmaId}`,
-    figmaRelatedId: transformedIds.figmaRelatedId ? `M{transformedIds.figmaRelatedId}` : undefined
+    figmaRelatedId: transformedIds.figmaRelatedId ? `M${transformedIds.figmaRelatedId}` : undefined
   };
 };
 
