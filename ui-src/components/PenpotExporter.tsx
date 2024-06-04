@@ -16,18 +16,19 @@ export const PenpotExporter = () => {
   const [needsReload, setNeedsReload] = useState(false);
   const [loading, setLoading] = useState(true);
   const [exporting, setExporting] = useState(false);
+  const [downloading, setDownloading] = useState(false);
   const methods = useForm<FormValues>();
 
   methods.getValues();
 
   const onMessage = (event: MessageEvent<{ pluginMessage: { type: string; data: unknown } }>) => {
     if (event.data.pluginMessage?.type == 'PENPOT_DOCUMENT') {
+      setDownloading(true);
+
       const document = event.data.pluginMessage.data as PenpotDocument;
       const file = parse(document);
 
       file.export();
-
-      setExporting(false);
     } else if (event.data.pluginMessage?.type == 'CUSTOM_FONTS') {
       setMissingFonts(event.data.pluginMessage.data as string[]);
       setLoading(false);
@@ -72,7 +73,7 @@ export const PenpotExporter = () => {
 
   if (loading) return <LoadingIndicator />;
 
-  if (exporting) return <ExporterProgress />;
+  if (exporting) return <ExporterProgress downloading={downloading} />;
 
   if (needsReload) {
     return (
