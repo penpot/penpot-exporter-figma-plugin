@@ -19,33 +19,38 @@ export type UseFigmaHook = {
 };
 
 type PluginMessage =
-  | PenpotDocument
-  | CustomFonts
-  | ChangesDetected
-  | ProgressNode
-  | ProgressTotalPages
-  | ProgressProcessedPages;
+  | PenpotDocumentMessage
+  | CustomFontsMessage
+  | ChangesDetectedMessage
+  | ProgressNodeMessage
+  | ProgressTotalPagesMessage
+  | ProgressProcessedPagesMessage;
 
-type CustomFonts = {
+type PenpotDocumentMessage = {
+  type: 'PENPOT_DOCUMENT';
+  data: PenpotDocument;
+};
+
+type CustomFontsMessage = {
   type: 'CUSTOM_FONTS';
   data: string[];
 };
 
-type ChangesDetected = {
+type ChangesDetectedMessage = {
   type: 'CHANGES_DETECTED';
 };
 
-type ProgressNode = {
+type ProgressNodeMessage = {
   type: 'PROGRESS_NODE';
   data: string;
 };
 
-type ProgressTotalPages = {
+type ProgressTotalPagesMessage = {
   type: 'PROGRESS_TOTAL_PAGES';
   data: number;
 };
 
-type ProgressProcessedPages = {
+type ProgressProcessedPagesMessage = {
   type: 'PROGRESS_PROCESSED_PAGES';
   data: number;
 };
@@ -67,19 +72,19 @@ export const useFigma = (): UseFigmaHook => {
   const onMessage = (event: MessageEvent<{ pluginMessage?: PluginMessage }>) => {
     if (!event.data.pluginMessage) return;
 
-    const { type, data } = event.data.pluginMessage;
+    const { pluginMessage } = event.data;
 
-    switch (type) {
+    switch (pluginMessage.type) {
       case 'PENPOT_DOCUMENT': {
         setDownloading(true);
 
-        const file = parse(data as PenpotDocument);
+        const file = parse(pluginMessage.data);
 
         file.export();
         break;
       }
       case 'CUSTOM_FONTS': {
-        setMissingFonts(data as string[]);
+        setMissingFonts(pluginMessage.data);
         setLoading(false);
         setNeedsReload(false);
         break;
@@ -89,16 +94,16 @@ export const useFigma = (): UseFigmaHook => {
         break;
       }
       case 'PROGRESS_NODE': {
-        setCurrentNode(data as string);
+        setCurrentNode(pluginMessage.data);
         break;
       }
       case 'PROGRESS_TOTAL_PAGES': {
-        setTotalPages(data as number);
+        setTotalPages(pluginMessage.data);
         setProcessedPages(0);
         break;
       }
       case 'PROGRESS_PROCESSED_PAGES': {
-        setProcessedPages(data as number);
+        setProcessedPages(pluginMessage.data);
         break;
       }
     }
