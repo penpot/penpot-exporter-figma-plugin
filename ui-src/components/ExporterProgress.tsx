@@ -1,35 +1,11 @@
 import { LoadingIndicator } from '@create-figma-plugin/ui';
-import { useEffect, useState } from 'react';
+
+import { useFigma } from '@ui/context';
 
 import { Stack } from './Stack';
 
-type ExporterProgressProps = {
-  downloading: boolean;
-};
-
-export const ExporterProgress = ({ downloading }: ExporterProgressProps) => {
-  const [currentNode, setCurrentNode] = useState<string | undefined>();
-  const [totalPages, setTotalPages] = useState<number | undefined>();
-  const [processedPages, setProcessedPages] = useState<number | undefined>();
-
-  const onMessage = (event: MessageEvent<{ pluginMessage: { type: string; data: unknown } }>) => {
-    if (event.data.pluginMessage?.type === 'PROGRESS_NODE') {
-      setCurrentNode(event.data.pluginMessage.data as string);
-    } else if (event.data.pluginMessage?.type === 'PROGRESS_TOTAL_PAGES') {
-      setTotalPages(event.data.pluginMessage.data as number);
-      setProcessedPages(0);
-    } else if (event.data.pluginMessage?.type === 'PROGRESS_PROCESSED_PAGES') {
-      setProcessedPages(event.data.pluginMessage.data as number);
-    }
-  };
-
-  useEffect(() => {
-    window.addEventListener('message', onMessage);
-
-    return () => {
-      window.removeEventListener('message', onMessage);
-    };
-  }, []);
+export const ExporterProgress = () => {
+  const { currentNode, totalPages, processedPages, downloading } = useFigma();
 
   const truncateText = (text: string, maxChars: number) => {
     if (text.length <= maxChars) {
