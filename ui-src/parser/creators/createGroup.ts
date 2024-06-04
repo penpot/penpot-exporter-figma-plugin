@@ -7,7 +7,8 @@ import { createItems } from '.';
 
 export const createGroup = (
   file: PenpotFile,
-  { type, blendMode, children = [], figmaId, figmaRelatedId, ...rest }: GroupShape
+  { type, blendMode, children = [], figmaId, figmaRelatedId, ...rest }: GroupShape,
+  remote: boolean = false
 ) => {
   file.addGroup({
     id: parseFigmaId(file, figmaId),
@@ -16,7 +17,7 @@ export const createGroup = (
     ...rest
   });
 
-  createItems(file, children);
+  createItems(file, children, remote);
 
   file.closeGroup();
 };

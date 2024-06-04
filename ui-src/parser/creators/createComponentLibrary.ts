@@ -1,15 +1,19 @@
 import { componentsLibrary } from '@plugin/ComponentLibrary';
+import { remoteComponentsLibrary } from '@plugin/RemoteComponentLibrary';
 
 import { PenpotFile } from '@ui/lib/types/penpotFile';
 import { symbolBlendMode, symbolFills } from '@ui/parser/creators/symbols';
-import { uiComponents } from '@ui/parser/libraries';
+import { remoteUiComponents, uiComponents } from '@ui/parser/libraries';
 
 import { createItems } from '.';
 
-export const createComponentLibrary = (file: PenpotFile) => {
-  uiComponents.all().forEach(uiComponent => {
-    const component = componentsLibrary.get(uiComponent.componentFigmaId);
-    if (!component) {
+export const createComponentLibrary = (file: PenpotFile, remote: boolean = false) => {
+  const uiLibrary = remote ? remoteUiComponents : uiComponents;
+  const library = remote ? remoteComponentsLibrary : componentsLibrary;
+
+  uiLibrary.all().forEach(uiComponent => {
+    const component = library.get(uiComponent.componentFigmaId);
+    if (!component || component.type !== 'component') {
       return;
     }
 
@@ -28,7 +32,7 @@ export const createComponentLibrary = (file: PenpotFile) => {
       componentFile: file.getId()
     });
 
-    createItems(file, children);
+    createItems(file, children, remote);
 
     file.finishComponent();
   });

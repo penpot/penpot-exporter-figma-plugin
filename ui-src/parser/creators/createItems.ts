@@ -13,31 +13,31 @@ import {
   createText
 } from '.';
 
-export const createItems = (file: PenpotFile, nodes: PenpotNode[]) => {
+export const createItems = (file: PenpotFile, nodes: PenpotNode[], remote: boolean = false) => {
   for (const node of nodes) {
-    createItem(file, node);
+    createItem(file, node, remote);
   }
 };
 
-const createItem = (file: PenpotFile, node: PenpotNode) => {
+export const createItem = (file: PenpotFile, node: PenpotNode, remote: boolean = false) => {
   switch (node.type) {
     case 'rect':
       return createRectangle(file, node);
     case 'circle':
       return createCircle(file, node);
     case 'frame':
-      return createArtboard(file, node);
+      return createArtboard(file, node, remote);
     case 'group':
-      return createGroup(file, node);
+      return createGroup(file, node, remote);
     case 'path':
       return createPath(file, node);
     case 'text':
       return createText(file, node);
     case 'bool':
-      return createBool(file, node);
+      return createBool(file, node, remote);
     case 'component':
-      return createComponent(file, node);
+      return createComponent(file, node, remote);
     case 'instance':
-      return createComponentInstance(file, node);
+      return createComponentInstance(file, node, remote);
   }
 };

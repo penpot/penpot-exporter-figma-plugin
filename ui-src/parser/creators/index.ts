@@ -9,4 +9,5 @@ export * from './createItems';
 export * from './createPage';
 export * from './createPath';
 export * from './createRectangle';
+export * from './createRemoteComponents';
 export * from './createText';

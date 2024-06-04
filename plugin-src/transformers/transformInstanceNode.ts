@@ -10,18 +10,33 @@ import {
   transformSceneNode,
   transformStrokes
 } from '@plugin/transformers/partials';
+import { transformComponentNode } from '@plugin/transformers/transformComponentNode';
+import { transformFrameNode } from '@plugin/transformers/transformFrameNode';
 
 import { ComponentInstance } from '@ui/types';
 
 export const transformInstanceNode = async (
   node: InstanceNode,
   baseX: number,
-  baseY: number
+  baseY: number,
+  remote: boolean = false
 ): Promise<ComponentInstance | undefined> => {
   const mainComponent = await node.getMainComponentAsync();
 
-  if (mainComponent === null || isUnprocessableComponent(mainComponent)) {
+  if (mainComponent === null) {
     return;
+  }
+
+  const isRemoteComponent = isUnprocessableComponent(mainComponent);
+
+  if (isRemoteComponent) {
+    if (mainComponent.parent?.type === 'COMPONENT_SET') {
+      await transformFrameNode(mainComponent.parent, baseX, baseY, true);
+    }
+
+    if (mainComponent.remote || mainComponent.parent === null) {
+      await transformComponentNode(mainComponent, baseX, baseY, true);
+    }
   }
 
   return {
@@ -29,6 +44,7 @@ export const transformInstanceNode = async (
     name: node.name,
     mainComponentFigmaId: mainComponent.id,
     isComponentRoot: isComponentRoot(node),
+    isRemoteComponent,
     ...transformFigmaIds(node),
     ...(await transformFills(node)),
     ...transformEffects(node),
@@ -38,7 +54,7 @@ export const transformInstanceNode = async (
     ...transformProportion(node),
     ...transformCornerRadius(node),
     ...transformDimensionAndPosition(node, baseX, baseY),
-    ...(await transformChildren(node, baseX + node.x, baseY + node.y))
+    ...(await transformChildren(node, baseX + node.x, baseY + node.y, remote || isRemoteComponent))
   };
 };
 

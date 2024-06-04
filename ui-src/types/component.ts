@@ -16,5 +16,6 @@ export type ComponentInstance = ShapeGeomAttributes &
     figmaId?: string;
     figmaRelatedId?: string;
     isComponentRoot: boolean;
+    isRemoteComponent: boolean;
     type: 'instance';
   };

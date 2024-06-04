@@ -1,4 +1,5 @@
 import { componentsLibrary } from '@plugin/ComponentLibrary';
+import { remoteComponentsLibrary } from '@plugin/RemoteComponentLibrary';
 import {
   transformBlend,
   transformChildren,
@@ -12,14 +13,26 @@ import {
   transformStrokes
 } from '@plugin/transformers/partials';
 
+import { ComponentShape } from '@ui/lib/types/shapes/componentShape';
 import { ComponentRoot } from '@ui/types';
 
 export const transformComponentNode = async (
   node: ComponentNode,
   baseX: number,
-  baseY: number
+  baseY: number,
+  remote: boolean = false
 ): Promise<ComponentRoot> => {
-  componentsLibrary.register(node.id, {
+  const library = remote ? remoteComponentsLibrary : componentsLibrary;
+  const componentRoot = {
+    figmaId: node.id,
+    type: 'component'
+  } as ComponentRoot;
+
+  if (library.get(node.id)) {
+    return componentRoot;
+  }
+
+  let component = {
     type: 'component',
     name: node.name,
     path: node.parent?.type === 'COMPONENT_SET' ? node.parent.name : '',
@@ -31,12 +44,17 @@ export const transformComponentNode = async (
     ...transformBlend(node),
     ...transformProportion(node),
     ...transformCornerRadius(node),
-    ...(await transformChildren(node, baseX + node.x, baseY + node.y)),
     ...transformDimensionAndPosition(node, baseX, baseY)
-  });
+  } as ComponentShape;
 
-  return {
-    figmaId: node.id,
-    type: 'component'
+  library.register(node.id, component);
+
+  component = {
+    ...component,
+    ...(await transformChildren(node, baseX + node.x, baseY + node.y, remote))
   };
+
+  library.register(node.id, component);
+
+  return componentRoot;
 };

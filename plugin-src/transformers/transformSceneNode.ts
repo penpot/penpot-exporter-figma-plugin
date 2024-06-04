@@ -16,7 +16,8 @@ import {
 export const transformSceneNode = async (
   node: SceneNode,
   baseX: number = 0,
-  baseY: number = 0
+  baseY: number = 0,
+  remote: boolean = false
 ): Promise<PenpotNode | undefined> => {
   let penpotNode: PenpotNode | undefined;
 
@@ -35,10 +36,10 @@ export const transformSceneNode = async (
     case 'SECTION':
     case 'FRAME':
     case 'COMPONENT_SET':
-      penpotNode = await transformFrameNode(node, baseX, baseY);
+      penpotNode = await transformFrameNode(node, baseX, baseY, remote);
       break;
     case 'GROUP':
-      penpotNode = await transformGroupNode(node, baseX, baseY);
+      penpotNode = await transformGroupNode(node, baseX, baseY, remote);
       break;
     case 'TEXT':
       penpotNode = await transformTextNode(node, baseX, baseY);
@@ -52,10 +53,10 @@ export const transformSceneNode = async (
       penpotNode = await transformPathNode(node, baseX, baseY);
       break;
     case 'BOOLEAN_OPERATION':
-      penpotNode = await transformBooleanNode(node, baseX, baseY);
+      penpotNode = await transformBooleanNode(node, baseX, baseY, remote);
       break;
     case 'COMPONENT':
-      penpotNode = await transformComponentNode(node, baseX, baseY);
+      penpotNode = await transformComponentNode(node, baseX, baseY, remote);
       break;
     case 'INSTANCE':
       penpotNode = await transformInstanceNode(node, baseX, baseY);

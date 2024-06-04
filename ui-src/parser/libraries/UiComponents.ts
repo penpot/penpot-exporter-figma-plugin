@@ -7,7 +7,7 @@ type UiComponent = {
   componentFigmaId: string;
 };
 
-class UiComponents {
+export class UiComponents {
   private components: Record<string, UiComponent> = {};
 
   public register(id: string, component: UiComponent) {

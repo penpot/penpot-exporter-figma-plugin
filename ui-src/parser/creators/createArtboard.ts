@@ -8,7 +8,8 @@ import { createItems } from '.';
 
 export const createArtboard = (
   file: PenpotFile,
-  { type, fills, blendMode, children = [], figmaId, figmaRelatedId, shapeRef, ...rest }: FrameShape
+  { type, fills, blendMode, children = [], figmaId, figmaRelatedId, shapeRef, ...rest }: FrameShape,
+  remote: boolean = false
 ): Uuid | undefined => {
   const id = parseFigmaId(file, figmaId);
 
@@ -20,7 +21,7 @@ export const createArtboard = (
     ...rest
   });
 
-  createItems(file, children);
+  createItems(file, children, remote);
 
   file.closeArtboard();
 

@@ -1,5 +1,6 @@
 import { componentsLibrary } from '@plugin/ComponentLibrary';
 import { imagesLibrary } from '@plugin/ImageLibrary';
+import { remoteComponentsLibrary } from '@plugin/RemoteComponentLibrary';
 
 import { PenpotDocument } from '@ui/types';
 
@@ -29,6 +30,7 @@ export const transformDocumentNode = async (node: DocumentNode): Promise<PenpotD
     name: node.name,
     children,
     components: componentsLibrary.all(),
+    remoteComponents: remoteComponentsLibrary.all(),
     images: imagesLibrary.all()
   };
 };

@@ -1,6 +1,6 @@
 import { PenpotFile } from '@ui/lib/types/penpotFile';
 import { parseFigmaId } from '@ui/parser';
-import { uiComponents } from '@ui/parser/libraries';
+import { remoteUiComponents, uiComponents } from '@ui/parser/libraries';
 import { ComponentInstance } from '@ui/types';
 
 import { createArtboard } from '.';
@@ -13,10 +13,13 @@ export const createComponentInstance = (
     figmaId,
     figmaRelatedId,
     isComponentRoot,
+    isRemoteComponent,
     ...rest
-  }: ComponentInstance
+  }: ComponentInstance,
+  remote: boolean = false
 ) => {
-  let uiComponent = uiComponents.get(mainComponentFigmaId);
+  const uiLibrary = remote || isRemoteComponent ? remoteUiComponents : uiComponents;
+  let uiComponent = uiLibrary.get(mainComponentFigmaId);
 
   if (!uiComponent) {
     const mainInstanceId = parseFigmaId(file, mainComponentFigmaId);
@@ -29,16 +32,20 @@ export const createComponentInstance = (
       componentFigmaId: mainComponentFigmaId,
       mainInstanceId
     };
-    uiComponents.register(mainComponentFigmaId, uiComponent);
+    uiLibrary.register(mainComponentFigmaId, uiComponent);
   }
 
-  createArtboard(file, {
-    ...rest,
-    showContent: true,
-    shapeRef: uiComponent.mainInstanceId,
-    componentFile: file.getId(),
-    componentRoot: isComponentRoot,
-    componentId: uiComponent.componentId,
-    type: 'frame'
-  });
+  createArtboard(
+    file,
+    {
+      ...rest,
+      showContent: true,
+      shapeRef: uiComponent.mainInstanceId,
+      componentFile: file.getId(),
+      componentRoot: isComponentRoot,
+      componentId: uiComponent.componentId,
+      type: 'frame'
+    },
+    remote
+  );
 };

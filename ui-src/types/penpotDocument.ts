@@ -6,5 +6,6 @@ export type PenpotDocument = {
   name: string;
   children?: PenpotPage[];
   components: Record<string, ComponentShape>;
+  remoteComponents: Record<string, ComponentShape>;
   images: Record<string, ImageColor>;
 };

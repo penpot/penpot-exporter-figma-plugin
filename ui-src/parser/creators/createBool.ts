@@ -7,7 +7,8 @@ import { createItems } from '.';
 
 export const createBool = (
   file: PenpotFile,
-  { type, fills, boolType, blendMode, figmaId, figmaRelatedId, children = [], ...rest }: BoolShape
+  { type, fills, boolType, blendMode, figmaId, figmaRelatedId, children = [], ...rest }: BoolShape,
+  remote: boolean = false
 ) => {
   file.addBool({
     id: parseFigmaId(file, figmaId),
@@ -18,7 +19,7 @@ export const createBool = (
     ...rest
   });
 
-  createItems(file, children);
+  createItems(file, children, remote);
 
   file.closeBool();
 };

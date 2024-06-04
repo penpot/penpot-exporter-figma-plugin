@@ -1,3 +1,4 @@
+import { remoteComponentsLibrary } from '@plugin/RemoteComponentLibrary';
 import {
   transformBlend,
   transformChildren,
@@ -20,8 +21,15 @@ const isSectionNode = (node: FrameNode | SectionNode | ComponentSetNode): node i
 export const transformFrameNode = async (
   node: FrameNode | SectionNode | ComponentSetNode,
   baseX: number,
-  baseY: number
+  baseY: number,
+  remote: boolean = false
 ): Promise<FrameShape> => {
+  if (node.type === 'COMPONENT_SET' && remote) {
+    if (remoteComponentsLibrary.get(node.id)) {
+      return remoteComponentsLibrary.get(node.id) as FrameShape;
+    }
+  }
+
   let frameSpecificAttributes: Partial<FrameShape> = {};
 
   if (!isSectionNode(node)) {
@@ -38,15 +46,27 @@ export const transformFrameNode = async (
     };
   }
 
-  return {
+  let frame = {
     type: 'frame',
     name: node.name,
     showContent: isSectionNode(node) ? true : !node.clipsContent,
     ...transformFigmaIds(node),
     ...(await transformFills(node)),
     ...frameSpecificAttributes,
-    ...(await transformChildren(node, baseX + node.x, baseY + node.y)),
     ...transformDimensionAndPosition(node, baseX, baseY),
     ...transformSceneNode(node)
+  } as FrameShape;
+
+  if (node.type === 'COMPONENT_SET' && remote) {
+    remoteComponentsLibrary.register(node.id, frame);
+  }
+
+  frame = {
+    ...frame,
+    ...(await transformChildren(node, baseX + node.x, baseY + node.y, remote))
   };
+
+  remoteComponentsLibrary.register(node.id, frame);
+
+  return frame;
 };

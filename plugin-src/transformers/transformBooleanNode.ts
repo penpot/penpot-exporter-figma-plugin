@@ -16,14 +16,15 @@ import { BoolShape } from '@ui/lib/types/shapes/boolShape';
 export const transformBooleanNode = async (
   node: BooleanOperationNode,
   baseX: number,
-  baseY: number
+  baseY: number,
+  remote: boolean = false
 ): Promise<BoolShape> => {
   return {
     type: 'bool',
     name: node.name,
     boolType: translateBoolType(node.booleanOperation),
     ...transformFigmaIds(node),
-    ...(await transformChildren(node, baseX, baseY)),
+    ...(await transformChildren(node, baseX, baseY, remote)),
     ...(await transformFills(node)),
     ...transformEffects(node),
     ...(await transformStrokes(node)),
