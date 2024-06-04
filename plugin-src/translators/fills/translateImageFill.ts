@@ -1,3 +1,5 @@
+import { fromByteArray } from 'base64-js';
+
 import { imagesLibrary } from '@plugin/ImageLibrary';
 import { detectMimeType } from '@plugin/utils';
 
@@ -36,7 +38,7 @@ const generateAndRegister = async (imageHash: string) => {
 
   const bytes = await image.getBytesAsync();
   const { width, height } = await image.getSizeAsync();
-  const b64 = figma.base64Encode(bytes);
+  const b64 = fromByteArray(bytes);
   const mtype = detectMimeType(b64);
   const dataUri = `data:${mtype};base64,${b64}`;
 
