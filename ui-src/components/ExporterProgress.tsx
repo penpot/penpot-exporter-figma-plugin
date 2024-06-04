@@ -3,7 +3,11 @@ import { useEffect, useState } from 'react';
 
 import { Stack } from './Stack';
 
-export const ExporterProgress = () => {
+type ExporterProgressProps = {
+  downloading: boolean;
+};
+
+export const ExporterProgress = ({ downloading }: ExporterProgressProps) => {
   const [currentNode, setCurrentNode] = useState<string | undefined>();
   const [totalPages, setTotalPages] = useState<number | undefined>();
   const [processedPages, setProcessedPages] = useState<number | undefined>();
@@ -13,6 +17,7 @@ export const ExporterProgress = () => {
       setCurrentNode(event.data.pluginMessage.data as string);
     } else if (event.data.pluginMessage?.type === 'PROGRESS_TOTAL_PAGES') {
       setTotalPages(event.data.pluginMessage.data as number);
+      setProcessedPages(0);
     } else if (event.data.pluginMessage?.type === 'PROGRESS_PROCESSED_PAGES') {
       setProcessedPages(event.data.pluginMessage.data as number);
     }
@@ -38,15 +43,25 @@ export const ExporterProgress = () => {
     <Stack space="small" horizontalAlign="center">
       <LoadingIndicator />
       <span style={{ textAlign: 'center' }}>
-        {processedPages} of {totalPages} pages exported 💪
-        {currentNode ? (
+        {!downloading ? (
           <>
-            <br />
-            Currently exporting layer
-            <br />
-            {'“' + truncateText(currentNode, 40) + '”'}
+            {processedPages} of {totalPages} pages exported 💪
+            {currentNode ? (
+              <>
+                <br />
+                Currently exporting layer
+                <br />
+                {'“' + truncateText(currentNode, 35) + '”'}
+              </>
+            ) : undefined}
           </>
-        ) : undefined}
+        ) : (
+          <>
+            Generating Penpot file 🚀
+            <br />
+            Please wait, this process might take a while...
+          </>
+        )}
       </span>
     </Stack>
   );
