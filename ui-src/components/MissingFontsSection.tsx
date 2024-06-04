@@ -1,20 +1,20 @@
 import { Banner, IconInfo32, Link, Textbox } from '@create-figma-plugin/ui';
 import { Controller, useFormContext } from 'react-hook-form';
 
+import { useFigma } from '@ui/context';
+
 import { Stack } from './Stack';
 
-type MissingFontsSectionProps = {
-  fonts?: string[];
-};
+export const MissingFontsSection = () => {
+  const { missingFonts } = useFigma();
 
-export const MissingFontsSection = ({ fonts }: MissingFontsSectionProps) => {
-  if (!fonts || !fonts.length) return null;
+  if (!missingFonts || !missingFonts.length) return null;
 
   return (
     <Stack space="small">
       <Stack space="xsmall">
         <Banner icon={<IconInfo32 />}>
-          {fonts.length} custom font{fonts.length > 1 ? 's' : ''} detected
+          {missingFonts.length} custom font{missingFonts.length > 1 ? 's' : ''} detected
         </Banner>
         <span>To export your file with custom fonts, please follow these steps:</span>
         <Stack as="ol" space="xsmall" style={{ paddingLeft: '1rem' }}>
@@ -43,7 +43,7 @@ export const MissingFontsSection = ({ fonts }: MissingFontsSectionProps) => {
           <li>Return here and paste the font IDs in the section below</li>
         </Stack>
       </Stack>
-      {fonts.map(font => (
+      {missingFonts.map(font => (
         <Stack space="2xsmall" key={font}>
           <ControlledTextbox name={font} placeholder="Paste font ID from Penpot" />
           <span>{font}</span>
