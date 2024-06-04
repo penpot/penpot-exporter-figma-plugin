@@ -2,14 +2,14 @@ import { Button } from '@create-figma-plugin/ui';
 import { FormProvider, useForm } from 'react-hook-form';
 
 import { Stack } from '@ui/components/Stack';
-import { useFigma } from '@ui/context';
+import { useFigmaContext } from '@ui/context';
 
 import { MissingFontsSection } from './MissingFontsSection';
 
 export type FormValues = Record<string, string>;
 
 export const ExportForm = () => {
-  const { cancel, exportPenpot } = useFigma();
+  const { cancel, exportPenpot } = useFigmaContext();
   const methods = useForm<FormValues>();
 
   return (

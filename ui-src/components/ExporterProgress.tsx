@@ -1,11 +1,11 @@
 import { LoadingIndicator } from '@create-figma-plugin/ui';
 
-import { useFigma } from '@ui/context';
+import { useFigmaContext } from '@ui/context';
 
 import { Stack } from './Stack';
 
 export const ExporterProgress = () => {
-  const { currentNode, totalPages, processedPages, downloading } = useFigma();
+  const { currentNode, totalPages, processedPages, downloading } = useFigmaContext();
 
   const truncateText = (text: string, maxChars: number) => {
     if (text.length <= maxChars) {
