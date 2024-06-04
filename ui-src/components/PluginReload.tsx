@@ -1,10 +1,10 @@
 import { Banner, Button, IconInfo32 } from '@create-figma-plugin/ui';
 
 import { Stack } from '@ui/components/Stack';
-import { useFigma } from '@ui/context';
+import { useFigmaContext } from '@ui/context';
 
 export const PluginReload = () => {
-  const { reload, cancel } = useFigma();
+  const { reload, cancel } = useFigmaContext();
 
   return (
     <Stack space="small">

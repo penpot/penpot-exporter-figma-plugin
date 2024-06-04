@@ -1,12 +1,12 @@
 import { Banner, IconInfo32, Link, Textbox } from '@create-figma-plugin/ui';
 import { Controller, useFormContext } from 'react-hook-form';
 
-import { useFigma } from '@ui/context';
+import { useFigmaContext } from '@ui/context';
 
 import { Stack } from './Stack';
 
 export const MissingFontsSection = () => {
-  const { missingFonts } = useFigma();
+  const { missingFonts } = useFigmaContext();
 
   if (!missingFonts || !missingFonts.length) return null;
 

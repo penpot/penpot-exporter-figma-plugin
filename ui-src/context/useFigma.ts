@@ -50,7 +50,7 @@ type ProgressProcessedPages = {
   data: number;
 };
 
-const useFigma = (): UseFigmaHook => {
+export const useFigma = (): UseFigmaHook => {
   const [missingFonts, setMissingFonts] = useState<string[]>();
   const [needsReload, setNeedsReload] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -143,5 +143,3 @@ const useFigma = (): UseFigmaHook => {
     exportPenpot
   };
 };
-
-export { useFigma };
