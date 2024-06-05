@@ -1,3 +1,4 @@
+import { remoteComponentLibrary } from '@plugin/RemoteComponentLibrary';
 import {
   transformBlend,
   transformChildren,
@@ -20,8 +21,15 @@ export const transformInstanceNode = async (
 ): Promise<ComponentInstance | undefined> => {
   const mainComponent = await node.getMainComponentAsync();
 
-  if (mainComponent === null || isUnprocessableComponent(mainComponent)) {
+  if (mainComponent === null) {
     return;
+  }
+
+  if (
+    isExternalComponent(mainComponent) &&
+    remoteComponentLibrary.get(mainComponent.id) === undefined
+  ) {
+    remoteComponentLibrary.register(mainComponent.id, mainComponent);
   }
 
   return {
@@ -49,7 +57,7 @@ export const transformInstanceNode = async (
  * 2. If the component does not have a parent. (it's been removed)
  * 3. Main component can be in a ComponentSet (the same logic applies to the parent).
  */
-const isUnprocessableComponent = (mainComponent: ComponentNode): boolean => {
+const isExternalComponent = (mainComponent: ComponentNode): boolean => {
   return (
     mainComponent.remote ||
     mainComponent.parent === null ||

@@ -1,5 +1,7 @@
 import { componentsLibrary } from '@plugin/ComponentLibrary';
 import { imagesLibrary } from '@plugin/ImageLibrary';
+import { remoteComponentLibrary } from '@plugin/RemoteComponentLibrary';
+import { translateChildren } from '@plugin/translators';
 import { sleep } from '@plugin/utils';
 
 import { PenpotDocument } from '@ui/types';
@@ -27,6 +29,13 @@ export const transformDocumentNode = async (node: DocumentNode): Promise<PenpotD
 
     await sleep(0);
   }
+
+  // REMOTE NODE PROCESSING
+  const remoteNodes = remoteComponentLibrary.getNodes();
+  children.push({
+    name: 'Remote Components',
+    children: await translateChildren(remoteNodes)
+  });
 
   return {
     name: node.name,
