@@ -11,21 +11,17 @@ import {
 
 import { TextShape } from '@ui/lib/types/shapes/textShape';
 
-export const transformTextNode = async (
-  node: TextNode,
-  baseX: number,
-  baseY: number
-): Promise<TextShape> => {
+export const transformTextNode = (node: TextNode, baseX: number, baseY: number): TextShape => {
   return {
     type: 'text',
     name: node.name,
     ...transformFigmaIds(node),
-    ...(await transformText(node)),
+    ...transformText(node),
     ...transformDimensionAndPosition(node, baseX, baseY),
     ...transformEffects(node),
     ...transformSceneNode(node),
     ...transformBlend(node),
     ...transformProportion(node),
-    ...(await transformStrokes(node))
+    ...transformStrokes(node)
   };
 };

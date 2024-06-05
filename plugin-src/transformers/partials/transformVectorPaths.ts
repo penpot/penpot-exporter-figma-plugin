@@ -31,40 +31,30 @@ export const transformVectorPathsAsContent = (
   };
 };
 
-export const transformVectorPaths = async (
+export const transformVectorPaths = (
   node: VectorNode,
   baseX: number,
   baseY: number
-): Promise<PathShape[]> => {
-  const pathShapes = await Promise.all(
-    node.vectorPaths
-      .filter((vectorPath, index) => {
-        return (
-          nodeHasFills(node, vectorPath, (node.vectorNetwork.regions ?? [])[index]) ||
-          node.strokes.length > 0
-        );
-      })
-      .map((vectorPath, index) =>
-        transformVectorPath(
-          node,
-          vectorPath,
-          (node.vectorNetwork.regions ?? [])[index],
-          baseX,
-          baseY
-        )
-      )
-  );
+): PathShape[] => {
+  const pathShapes = node.vectorPaths
+    .filter((vectorPath, index) => {
+      return (
+        nodeHasFills(node, vectorPath, (node.vectorNetwork.regions ?? [])[index]) ||
+        node.strokes.length > 0
+      );
+    })
+    .map((vectorPath, index) =>
+      transformVectorPath(node, vectorPath, (node.vectorNetwork.regions ?? [])[index], baseX, baseY)
+    );
 
-  const geometryShapes = await Promise.all(
-    node.fillGeometry
-      .filter(
-        geometry =>
-          !node.vectorPaths.find(
-            vectorPath => normalizePath(vectorPath.data) === normalizePath(geometry.data)
-          )
-      )
-      .map(geometry => transformVectorPath(node, geometry, undefined, baseX, baseY))
-  );
+  const geometryShapes = node.fillGeometry
+    .filter(
+      geometry =>
+        !node.vectorPaths.find(
+          vectorPath => normalizePath(vectorPath.data) === normalizePath(geometry.data)
+        )
+    )
+    .map(geometry => transformVectorPath(node, geometry, undefined, baseX, baseY));
 
   return [...geometryShapes, ...pathShapes];
 };
@@ -96,13 +86,13 @@ const nodeHasFills = (
   return !!(vectorPath.windingRule !== 'NONE' && (vectorRegion?.fills || node.fills));
 };
 
-const transformVectorPath = async (
+const transformVectorPath = (
   node: VectorNode,
   vectorPath: VectorPath,
   vectorRegion: VectorRegion | undefined,
   baseX: number,
   baseY: number
-): Promise<PathShape> => {
+): PathShape => {
   const normalizedPaths = parseSVG(vectorPath.data);
 
   return {
@@ -110,13 +100,11 @@ const transformVectorPath = async (
     name: 'svg-path',
     content: translateCommandsToSegments(normalizedPaths, baseX + node.x, baseY + node.y),
     fills:
-      vectorPath.windingRule === 'NONE'
-        ? []
-        : await translateFills(vectorRegion?.fills ?? node.fills),
+      vectorPath.windingRule === 'NONE' ? [] : translateFills(vectorRegion?.fills ?? node.fills),
     svgAttrs: {
       fillRule: translateWindingRule(vectorPath.windingRule)
     },
-    ...(await transformStrokesFromVector(node, normalizedPaths, vectorRegion)),
+    ...transformStrokesFromVector(node, normalizedPaths, vectorRegion),
     ...transformEffects(node),
     ...transformDimensionAndPositionFromVectorPath(vectorPath, baseX, baseY),
     ...transformSceneNode(node),

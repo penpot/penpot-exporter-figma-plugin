@@ -2,31 +2,28 @@ import { translateFill } from '@plugin/translators/fills';
 
 import { Stroke, StrokeAlignment, StrokeCaps } from '@ui/lib/types/utils/stroke';
 
-export const translateStrokes = async (
+export const translateStrokes = (
   node: MinimalStrokesMixin | (MinimalStrokesMixin & IndividualStrokesMixin),
   strokeCaps: (stroke: Stroke) => Stroke = stroke => stroke
-): Promise<Stroke[]> => {
+): Stroke[] => {
   const sharedStrokeProperties: Stroke = {
     strokeWidth: translateStrokeWeight(node),
     strokeAlignment: translateStrokeAlignment(node.strokeAlign),
     strokeStyle: node.dashPattern.length ? 'dashed' : 'solid'
   };
 
-  return await Promise.all(
-    node.strokes.map(
-      async (paint, index) =>
-        await translateStroke(paint, sharedStrokeProperties, strokeCaps, index === 0)
-    )
+  return node.strokes.map((paint, index) =>
+    translateStroke(paint, sharedStrokeProperties, strokeCaps, index === 0)
   );
 };
 
-export const translateStroke = async (
+export const translateStroke = (
   paint: Paint,
   sharedStrokeProperties: Stroke,
   strokeCaps: (stroke: Stroke) => Stroke,
   firstStroke: boolean
-): Promise<Stroke> => {
-  const fill = await translateFill(paint);
+): Stroke => {
+  const fill = translateFill(paint);
 
   let stroke: Stroke = {
     strokeColor: fill?.fillColor,

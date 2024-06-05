@@ -8,5 +8,9 @@ export type ImageColor = {
   id?: Uuid;
   keepAspectRatio?: boolean;
   dataUri?: string;
-  imageHash?: string; // @TODO: move to any other place
+};
+
+// @TODO: move to any other place
+export type PartialImageColor = {
+  imageHash: string;
 };

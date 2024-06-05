@@ -69,7 +69,7 @@ export const useFigma = (): UseFigmaHook => {
     parent.postMessage({ pluginMessage: { type, data } }, '*');
   };
 
-  const onMessage = (event: MessageEvent<{ pluginMessage?: PluginMessage }>) => {
+  const onMessage = async (event: MessageEvent<{ pluginMessage?: PluginMessage }>) => {
     if (!event.data.pluginMessage) return;
 
     const { pluginMessage } = event.data;
@@ -78,7 +78,7 @@ export const useFigma = (): UseFigmaHook => {
       case 'PENPOT_DOCUMENT': {
         setDownloading(true);
 
-        const file = parse(pluginMessage.data);
+        const file = await parse(pluginMessage.data);
 
         file.export();
         break;

@@ -27,10 +27,10 @@ export const transformSceneNode = async (
 
   switch (node.type) {
     case 'RECTANGLE':
-      penpotNode = await transformRectangleNode(node, baseX, baseY);
+      penpotNode = transformRectangleNode(node, baseX, baseY);
       break;
     case 'ELLIPSE':
-      penpotNode = await transformEllipseNode(node, baseX, baseY);
+      penpotNode = transformEllipseNode(node, baseX, baseY);
       break;
     case 'SECTION':
     case 'FRAME':
@@ -41,15 +41,15 @@ export const transformSceneNode = async (
       penpotNode = await transformGroupNode(node, baseX, baseY);
       break;
     case 'TEXT':
-      penpotNode = await transformTextNode(node, baseX, baseY);
+      penpotNode = transformTextNode(node, baseX, baseY);
       break;
     case 'VECTOR':
-      penpotNode = await transformVectorNode(node, baseX, baseY);
+      penpotNode = transformVectorNode(node, baseX, baseY);
       break;
     case 'STAR':
     case 'POLYGON':
     case 'LINE':
-      penpotNode = await transformPathNode(node, baseX, baseY);
+      penpotNode = transformPathNode(node, baseX, baseY);
       break;
     case 'BOOLEAN_OPERATION':
       penpotNode = await transformBooleanNode(node, baseX, baseY);

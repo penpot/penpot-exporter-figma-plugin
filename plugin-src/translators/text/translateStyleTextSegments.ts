@@ -12,16 +12,14 @@ import {
 
 import { TextNode as PenpotTextNode, TextStyle } from '@ui/lib/types/shapes/textShape';
 
-export const translateStyleTextSegments = async (
+export const translateStyleTextSegments = (
   node: TextNode,
   segments: StyleTextSegment[]
-): Promise<PenpotTextNode[]> => {
-  const partials = await Promise.all(
-    segments.map(async segment => ({
-      textNode: await translateStyleTextSegment(node, segment),
-      segment
-    }))
-  );
+): PenpotTextNode[] => {
+  const partials = segments.map(segment => ({
+    textNode: translateStyleTextSegment(node, segment),
+    segment
+  }));
 
   return translateParagraphProperties(node, partials);
 };
@@ -41,12 +39,9 @@ export const transformTextStyle = (node: TextNode, segment: StyleTextSegment): T
   };
 };
 
-const translateStyleTextSegment = async (
-  node: TextNode,
-  segment: StyleTextSegment
-): Promise<PenpotTextNode> => {
+const translateStyleTextSegment = (node: TextNode, segment: StyleTextSegment): PenpotTextNode => {
   return {
-    fills: await translateFills(segment.fills),
+    fills: translateFills(segment.fills),
     text: segment.characters,
     ...transformTextStyle(node, segment)
   };

@@ -1,5 +1,5 @@
 import { Gradient } from './gradient';
-import { ImageColor } from './imageColor';
+import { ImageColor, PartialImageColor } from './imageColor';
 import { Uuid } from './uuid';
 
 export type Stroke = {
@@ -13,7 +13,7 @@ export type Stroke = {
   strokeCapStart?: StrokeCaps;
   strokeCapEnd?: StrokeCaps;
   strokeColorGradient?: Gradient;
-  strokeImage?: ImageColor;
+  strokeImage?: ImageColor | PartialImageColor;
 };
 
 export type StrokeAlignment = 'center' | 'inner' | 'outer';
