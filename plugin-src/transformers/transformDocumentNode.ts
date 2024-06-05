@@ -32,10 +32,12 @@ export const transformDocumentNode = async (node: DocumentNode): Promise<PenpotD
 
   // REMOTE NODE PROCESSING
   const remoteNodes = remoteComponentLibrary.getNodes();
-  children.push({
-    name: 'External Components',
-    children: await translateChildren(remoteNodes)
-  });
+  if (remoteNodes.length > 0) {
+    children.push({
+      name: 'External Components',
+      children: await translateChildren(remoteNodes)
+    });
+  }
 
   return {
     name: node.name,
