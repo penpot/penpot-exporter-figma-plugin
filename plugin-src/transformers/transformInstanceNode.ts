@@ -48,20 +48,17 @@ export const transformInstanceNode = async (
 };
 
 const registerExternalComponents = async (mainComponent: ComponentNode): Promise<void> => {
-  if (remoteComponentLibrary.get(mainComponent.id) !== undefined) {
+  let component: ComponentSetNode | ComponentNode = mainComponent;
+
+  if (component.parent?.type === 'COMPONENT_SET') {
+    component = component.parent;
+  }
+
+  if (remoteComponentLibrary.get(component.id) !== undefined) {
     return;
   }
 
-  remoteComponentLibrary.register(mainComponent.id, mainComponent);
-
-  for (const child of mainComponent.children) {
-    if (child.type === 'INSTANCE') {
-      const main = await child.getMainComponentAsync();
-      if (main !== null) {
-        await registerExternalComponents(main);
-      }
-    }
-  }
+  remoteComponentLibrary.register(component.id, component);
 };
 
 const isExternalComponent = (mainComponent: ComponentNode): boolean => {
