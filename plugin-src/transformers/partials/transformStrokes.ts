@@ -13,9 +13,9 @@ const hasFillGeometry = (node: GeometryMixin): boolean => {
   return node.fillGeometry.length > 0;
 };
 
-export const transformStrokes = async (
+export const transformStrokes = (
   node: GeometryMixin | (GeometryMixin & IndividualStrokesMixin)
-): Promise<Pick<ShapeAttributes, 'strokes'>> => {
+): Pick<ShapeAttributes, 'strokes'> => {
   const vectorNetwork = isVectorLike(node) ? node.vectorNetwork : undefined;
 
   const strokeCaps = (stroke: Stroke) => {
@@ -30,15 +30,15 @@ export const transformStrokes = async (
   };
 
   return {
-    strokes: await translateStrokes(node, strokeCaps)
+    strokes: translateStrokes(node, strokeCaps)
   };
 };
 
-export const transformStrokesFromVector = async (
+export const transformStrokesFromVector = (
   node: VectorNode,
   vector: Command[],
   vectorRegion: VectorRegion | undefined
-): Promise<Pick<ShapeAttributes, 'strokes'>> => {
+): Pick<ShapeAttributes, 'strokes'> => {
   const strokeCaps = (stroke: Stroke) => {
     if (vectorRegion !== undefined) return stroke;
 
@@ -54,7 +54,7 @@ export const transformStrokesFromVector = async (
   };
 
   return {
-    strokes: await translateStrokes(node, strokeCaps)
+    strokes: translateStrokes(node, strokeCaps)
   };
 };
 

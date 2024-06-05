@@ -30,9 +30,9 @@ export const transformInstanceNode = async (
     mainComponentFigmaId: mainComponent.id,
     isComponentRoot: isComponentRoot(node),
     ...transformFigmaIds(node),
-    ...(await transformFills(node)),
+    ...transformFills(node),
     ...transformEffects(node),
-    ...(await transformStrokes(node)),
+    ...transformStrokes(node),
     ...transformSceneNode(node),
     ...transformBlend(node),
     ...transformProportion(node),
@@ -60,11 +60,14 @@ const isUnprocessableComponent = (mainComponent: ComponentNode): boolean => {
 
 const isComponentRoot = (node: InstanceNode): boolean => {
   let parent = node.parent;
+
   while (parent !== null) {
     if (parent.type === 'COMPONENT' || parent.type === 'INSTANCE') {
       return false;
     }
+
     parent = parent.parent;
   }
+
   return true;
 };

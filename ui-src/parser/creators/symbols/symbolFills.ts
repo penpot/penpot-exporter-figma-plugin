@@ -1,8 +1,7 @@
-import { imagesLibrary } from '@plugin/ImageLibrary';
-
 import { Fill } from '@ui/lib/types/utils/fill';
 import { Gradient, LINEAR_TYPE, RADIAL_TYPE } from '@ui/lib/types/utils/gradient';
-import { ImageColor } from '@ui/lib/types/utils/imageColor';
+import { ImageColor, PartialImageColor } from '@ui/lib/types/utils/imageColor';
+import { uiImages } from '@ui/parser/libraries';
 
 export const symbolFills = (fills?: Fill[]): Fill[] | undefined => {
   if (!fills) return;
@@ -39,19 +38,16 @@ const symbolFillGradient = (fillGradient: Gradient): Gradient => {
   }
 };
 
-const symbolFillImage = (fillImage: ImageColor): ImageColor | undefined => {
-  if (fillImage.dataUri) return fillImage;
+export const symbolFillImage = (
+  fillImage: ImageColor | PartialImageColor
+): ImageColor | undefined => {
+  if (!isPartialFillColor(fillImage)) return fillImage;
 
-  const { imageHash, ...rest } = fillImage;
+  return uiImages.get(fillImage.imageHash);
+};
 
-  if (!imageHash) return;
-
-  const imageColor = imagesLibrary.get(imageHash);
-
-  if (!imageColor) return;
-
-  return {
-    ...rest,
-    dataUri: imageColor?.dataUri
-  };
+const isPartialFillColor = (
+  imageColor: ImageColor | PartialImageColor
+): imageColor is PartialImageColor => {
+  return 'imageHash' in imageColor;
 };
