@@ -1,5 +1,4 @@
 import { componentsLibrary } from '@plugin/ComponentLibrary';
-import { imagesLibrary } from '@plugin/ImageLibrary';
 
 import { createFile } from '@ui/lib/penpot';
 import { createComponentLibrary, createPage } from '@ui/parser/creators';
@@ -10,7 +9,6 @@ import { idLibrary, parseImage } from '.';
 
 export const parse = async ({ name, children = [], components, images }: PenpotDocument) => {
   componentsLibrary.init(components);
-  imagesLibrary.init(images);
 
   for (const [key, bytes] of Object.entries(images)) {
     if (!bytes) continue;
