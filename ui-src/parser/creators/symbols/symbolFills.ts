@@ -43,11 +43,7 @@ export const symbolFillImage = (
 ): ImageColor | undefined => {
   if (!isPartialFillColor(fillImage)) return fillImage;
 
-  const { imageHash } = fillImage;
-
-  if (!imageHash) return;
-
-  return uiImages.get(imageHash);
+  return uiImages.get(fillImage.imageHash);
 };
 
 const isPartialFillColor = (
