@@ -16,17 +16,17 @@ const hasFillGeometry = (node: StarNode | LineNode | PolygonNode): boolean => {
   return 'fillGeometry' in node && node.fillGeometry.length > 0;
 };
 
-export const transformPathNode = async (
+export const transformPathNode = (
   node: StarNode | LineNode | PolygonNode,
   baseX: number,
   baseY: number
-): Promise<PathShape> => {
+): PathShape => {
   return {
     type: 'path',
     name: node.name,
     ...transformFigmaIds(node),
-    ...(hasFillGeometry(node) ? await transformFills(node) : []),
-    ...(await transformStrokes(node)),
+    ...(hasFillGeometry(node) ? transformFills(node) : []),
+    ...transformStrokes(node),
     ...transformEffects(node),
     ...transformVectorPathsAsContent(node, baseX, baseY),
     ...transformDimensionAndPosition(node, baseX, baseY),

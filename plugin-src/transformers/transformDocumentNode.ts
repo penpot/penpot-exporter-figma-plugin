@@ -37,10 +37,20 @@ export const transformDocumentNode = async (node: DocumentNode): Promise<PenpotD
     });
   }
 
+  const images: Record<string, Uint8Array> = {};
+
+  for (const [key, image] of Object.entries(imagesLibrary.all())) {
+    const bytes = await image?.getBytesAsync();
+
+    if (!bytes) continue;
+
+    images[key] = bytes;
+  }
+
   return {
     name: node.name,
     children,
     components: componentsLibrary.all(),
-    images: imagesLibrary.all()
+    images
   };
 };

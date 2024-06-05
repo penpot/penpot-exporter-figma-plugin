@@ -7,7 +7,7 @@ import { rgbToHex } from '@plugin/utils';
 
 import { Fill } from '@ui/lib/types/utils/fill';
 
-export const translateFill = async (fill: Paint): Promise<Fill | undefined> => {
+export const translateFill = (fill: Paint): Fill | undefined => {
   switch (fill.type) {
     case 'SOLID':
       return translateSolidFill(fill);
@@ -16,21 +16,22 @@ export const translateFill = async (fill: Paint): Promise<Fill | undefined> => {
     case 'GRADIENT_RADIAL':
       return translateGradientRadialFill(fill);
     case 'IMAGE':
-      return await translateImageFill(fill);
+      return translateImageFill(fill);
   }
 
   console.error(`Unsupported fill type: ${fill.type}`);
 };
 
-export const translateFills = async (
+export const translateFills = (
   fills: readonly Paint[] | typeof figma.mixed | undefined
-): Promise<Fill[]> => {
+): Fill[] => {
   if (fills === undefined || fills === figma.mixed) return [];
 
   const penpotFills: Fill[] = [];
 
   for (const fill of fills) {
-    const penpotFill = await translateFill(fill);
+    const penpotFill = translateFill(fill);
+
     if (penpotFill) {
       // fills are applied in reverse order in Figma, that's why we unshift
       penpotFills.unshift(penpotFill);

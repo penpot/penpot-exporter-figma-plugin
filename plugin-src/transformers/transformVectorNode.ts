@@ -11,12 +11,12 @@ import { transformGroupNodeLike } from '.';
  * If there are no regions on the vector network, we treat it like a normal `PathShape`.
  * If there are regions, we treat the vector node as a `GroupShape` with multiple `PathShape` children.
  */
-export const transformVectorNode = async (
+export const transformVectorNode = (
   node: VectorNode,
   baseX: number,
   baseY: number
-): Promise<GroupShape | PathShape> => {
-  const children = await transformVectorPaths(node, baseX, baseY);
+): GroupShape | PathShape => {
+  const children = transformVectorPaths(node, baseX, baseY);
 
   if (children.length === 1) {
     return {

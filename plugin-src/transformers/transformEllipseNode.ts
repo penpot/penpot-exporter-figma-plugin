@@ -12,18 +12,18 @@ import {
 
 import { CircleShape } from '@ui/lib/types/shapes/circleShape';
 
-export const transformEllipseNode = async (
+export const transformEllipseNode = (
   node: EllipseNode,
   baseX: number,
   baseY: number
-): Promise<CircleShape> => {
+): CircleShape => {
   return {
     type: 'circle',
     name: node.name,
     ...transformFigmaIds(node),
-    ...(await transformFills(node)),
+    ...transformFills(node),
     ...transformEffects(node),
-    ...(await transformStrokes(node)),
+    ...transformStrokes(node),
     ...transformDimension(node),
     ...transformRotationAndPosition(node, baseX, baseY),
     ...transformSceneNode(node),

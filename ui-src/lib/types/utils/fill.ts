@@ -1,5 +1,5 @@
 import { Gradient } from './gradient';
-import { ImageColor } from './imageColor';
+import { ImageColor, PartialImageColor } from './imageColor';
 import { Uuid } from './uuid';
 
 export type Fill = {
@@ -8,5 +8,5 @@ export type Fill = {
   fillColorGradient?: Gradient;
   fillColorRefFile?: Uuid;
   fillColorRefId?: Uuid;
-  fillImage?: ImageColor;
+  fillImage?: ImageColor | PartialImageColor; // @TODO: move to any other place
 };
