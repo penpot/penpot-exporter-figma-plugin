@@ -20,7 +20,7 @@ export const createComponent = (
     return;
   }
 
-  const uiComponent = uiComponents.get(figmaId);
+  const uiComponent = uiLibrary.get(figmaId);
   const componentId = uiComponent?.componentId ?? file.newId();
 
   const frameId = createArtboard(
