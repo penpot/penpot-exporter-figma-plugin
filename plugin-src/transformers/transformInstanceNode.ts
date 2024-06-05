@@ -21,15 +21,12 @@ export const transformInstanceNode = async (
 ): Promise<ComponentInstance | undefined> => {
   const mainComponent = await node.getMainComponentAsync();
 
-  if (mainComponent === null || isUnprocessableComponent(mainComponent)) {
+  if (mainComponent === null) {
     return;
   }
 
-  if (
-    isExternalComponent(mainComponent) &&
-    remoteComponentLibrary.get(mainComponent.id) === undefined
-  ) {
-    remoteComponentLibrary.register(mainComponent.id, mainComponent);
+  if (isExternalComponent(mainComponent) || isUnprocessableComponent(mainComponent)) {
+    await registerExternalComponents(mainComponent);
   }
 
   return {
@@ -48,6 +45,23 @@ export const transformInstanceNode = async (
     ...transformDimensionAndPosition(node, baseX, baseY),
     ...(await transformChildren(node, baseX + node.x, baseY + node.y))
   };
+};
+
+const registerExternalComponents = async (mainComponent: ComponentNode): Promise<void> => {
+  if (remoteComponentLibrary.get(mainComponent.id) !== undefined) {
+    return;
+  }
+
+  remoteComponentLibrary.register(mainComponent.id, mainComponent);
+
+  for (const child of mainComponent.children) {
+    if (child.type === 'INSTANCE') {
+      const main = await child.getMainComponentAsync();
+      if (main !== null) {
+        await registerExternalComponents(main);
+      }
+    }
+  }
 };
 
 const isExternalComponent = (mainComponent: ComponentNode): boolean => {
