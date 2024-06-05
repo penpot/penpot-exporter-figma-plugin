@@ -1,7 +1,7 @@
 import { componentsLibrary } from '@plugin/ComponentLibrary';
 import { imagesLibrary } from '@plugin/ImageLibrary';
-import { sleep } from '@plugin/utils';
 import { remoteComponentsLibrary } from '@plugin/RemoteComponentLibrary';
+import { sleep } from '@plugin/utils';
 
 import { PenpotDocument } from '@ui/types';
 
