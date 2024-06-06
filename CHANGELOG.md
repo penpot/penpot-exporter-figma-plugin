@@ -1,5 +1,37 @@
 # penpot-exporter
 
+## 0.5.0
+
+### Minor Changes
+
+- [#106](https://github.com/penpot/penpot-exporter-figma-plugin/pull/106) [`32aafbc`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/32aafbcf9dd263fcdccc5a875249d487b0567209) Thanks [@jordisala1991](https://github.com/jordisala1991)! - Implement root component translation
+
+- [#140](https://github.com/penpot/penpot-exporter-figma-plugin/pull/140) [`be5ff3b`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/be5ff3be8e64109ab7b28428b668040e820b9da0) Thanks [@Cenadros](https://github.com/Cenadros)! - Remote components processing
+
+- [#122](https://github.com/penpot/penpot-exporter-figma-plugin/pull/122) [`5d7263b`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/5d7263bdbf1d73ec8bd836c05cad5cc7d96fa1f9) Thanks [@jordisala1991](https://github.com/jordisala1991)! - Translate rotations for ellipses and rectangles
+
+- [#141](https://github.com/penpot/penpot-exporter-figma-plugin/pull/141) [`3094f05`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/3094f05e98e5fd3b3d141d7cc957e6755073b897) Thanks [@jordisala1991](https://github.com/jordisala1991)! - Optimize images before generating zip file
+
+- [#126](https://github.com/penpot/penpot-exporter-figma-plugin/pull/126) [`88b3e5f`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/88b3e5f69c9d8e7513a2dd76626c99a5e74b17c3) Thanks [@jordisala1991](https://github.com/jordisala1991)! - Add progress bar during the export
+
+- [#142](https://github.com/penpot/penpot-exporter-figma-plugin/pull/142) [`02fa336`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/02fa3363f55d406f40df71a23ee62f8f08d07633) Thanks [@Cenadros](https://github.com/Cenadros)! - Constraints translation
+
+- [#128](https://github.com/penpot/penpot-exporter-figma-plugin/pull/128) [`f8e6b6e`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/f8e6b6ecd9ca3216ab977ee4bbc37c64fc9db249) Thanks [@Cenadros](https://github.com/Cenadros)! - Component set
+
+- [#124](https://github.com/penpot/penpot-exporter-figma-plugin/pull/124) [`7b31929`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/7b3192936e1902409d7f7723189e4eed3d820b97) Thanks [@Cenadros](https://github.com/Cenadros)! - Implement component instances translation
+
+- [#126](https://github.com/penpot/penpot-exporter-figma-plugin/pull/126) [`88b3e5f`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/88b3e5f69c9d8e7513a2dd76626c99a5e74b17c3) Thanks [@jordisala1991](https://github.com/jordisala1991)! - Improve performance so the interface of figma feels more responsive during the export process
+
+- [#136](https://github.com/penpot/penpot-exporter-figma-plugin/pull/136) [`7895daa`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/7895daaea8d33071b813e8bbd81c837a683f3264) Thanks [@jordisala1991](https://github.com/jordisala1991)! - Add loader when generating really large files after the page processing loader
+
+### Patch Changes
+
+- [#129](https://github.com/penpot/penpot-exporter-figma-plugin/pull/129) [`92167ac`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/92167aca42a20c42c2344c2c0c3a7affe9f8c940) Thanks [@Cenadros](https://github.com/Cenadros)! - Fix masks not working in components
+
+- [#135](https://github.com/penpot/penpot-exporter-figma-plugin/pull/135) [`8a86304`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/8a86304fead857456606e900f79f2259052dfae7) Thanks [@jordisala1991](https://github.com/jordisala1991)! - Improve image processing speed
+
+- [#133](https://github.com/penpot/penpot-exporter-figma-plugin/pull/133) [`f726dc9`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/f726dc9cec05daf433750c2056d7303a341bb925) Thanks [@jordisala1991](https://github.com/jordisala1991)! - Optimize image exporting when there are multiple copies of the same image in the file
+
 ## 0.4.1
 
 ### Patch Changes
