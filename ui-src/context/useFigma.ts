@@ -79,8 +79,13 @@ export const useFigma = (): UseFigmaHook => {
         setDownloading(true);
 
         const file = await parse(pluginMessage.data);
+        const blob = await file.export();
 
-        file.export();
+        download(blob, `${pluginMessage.data.name}.zip`);
+
+        setExporting(false);
+        setDownloading(false);
+
         break;
       }
       case 'CUSTOM_FONTS': {
@@ -107,6 +112,16 @@ export const useFigma = (): UseFigmaHook => {
         break;
       }
     }
+  };
+
+  const download = (blob: Blob, name: string) => {
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+
+    a.href = url;
+    a.download = name;
+
+    a.click();
   };
 
   const reload = () => {
