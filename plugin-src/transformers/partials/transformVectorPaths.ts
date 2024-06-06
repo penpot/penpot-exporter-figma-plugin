@@ -16,8 +16,7 @@ import {
   translateWindingRule
 } from '@plugin/translators/vectors';
 
-import { PathAttributes } from '@ui/lib/types/shapes/pathShape';
-import { PathShape } from '@ui/lib/types/shapes/pathShape';
+import { PathAttributes, PathShape } from '@ui/lib/types/shapes/pathShape';
 
 export const transformVectorPathsAsContent = (
   node: StarNode | LineNode | PolygonNode,
@@ -104,6 +103,8 @@ const transformVectorPath = (
     svgAttrs: {
       fillRule: translateWindingRule(vectorPath.windingRule)
     },
+    constraintsH: 'scale',
+    constraintsV: 'scale',
     ...transformStrokesFromVector(node, normalizedPaths, vectorRegion),
     ...transformEffects(node),
     ...transformDimensionAndPositionFromVectorPath(vectorPath, baseX, baseY),

@@ -1,5 +1,6 @@
 import {
   transformBlend,
+  transformConstraints,
   transformDimensionAndPosition,
   transformEffects,
   transformFigmaIds,
@@ -32,6 +33,7 @@ export const transformPathNode = (
     ...transformDimensionAndPosition(node, baseX, baseY),
     ...transformSceneNode(node),
     ...transformBlend(node),
-    ...transformProportion(node)
+    ...transformProportion(node),
+    ...transformConstraints(node)
   };
 };

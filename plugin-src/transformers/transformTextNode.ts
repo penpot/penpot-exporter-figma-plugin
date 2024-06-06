@@ -1,5 +1,6 @@
 import {
   transformBlend,
+  transformConstraints,
   transformDimensionAndPosition,
   transformEffects,
   transformFigmaIds,
@@ -22,6 +23,7 @@ export const transformTextNode = (node: TextNode, baseX: number, baseY: number):
     ...transformSceneNode(node),
     ...transformBlend(node),
     ...transformProportion(node),
-    ...transformStrokes(node)
+    ...transformStrokes(node),
+    ...transformConstraints(node)
   };
 };

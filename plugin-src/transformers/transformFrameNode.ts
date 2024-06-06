@@ -1,6 +1,7 @@
 import {
   transformBlend,
   transformChildren,
+  transformConstraints,
   transformCornerRadius,
   transformDimensionAndPosition,
   transformEffects,
@@ -34,7 +35,8 @@ export const transformFrameNode = async (
       ...transformBlend(node),
       ...transformProportion(node),
       ...transformCornerRadius(node),
-      ...transformEffects(node)
+      ...transformEffects(node),
+      ...transformConstraints(node)
     };
   }
 
