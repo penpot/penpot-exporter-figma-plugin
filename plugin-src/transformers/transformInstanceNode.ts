@@ -21,11 +21,11 @@ export const transformInstanceNode = async (
 ): Promise<ComponentInstance | undefined> => {
   const mainComponent = await node.getMainComponentAsync();
 
-  if (mainComponent === null) {
+  if (mainComponent === null || isUnprocessableComponent(mainComponent)) {
     return;
   }
 
-  if (isExternalComponent(mainComponent) || isUnprocessableComponent(mainComponent)) {
+  if (isExternalComponent(mainComponent)) {
     await registerExternalComponents(mainComponent);
   }
 
