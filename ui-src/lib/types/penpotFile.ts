@@ -36,5 +36,5 @@ export interface PenpotFile {
   getCurrentPageId(): Uuid;
   newId(): Uuid;
   // asMap(): unknown;
-  export(): void;
+  export(): Promise<Blob>;
 }
