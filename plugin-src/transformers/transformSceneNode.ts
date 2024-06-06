@@ -21,7 +21,7 @@ export const transformSceneNode = async (
   let penpotNode: PenpotNode | undefined;
 
   figma.ui.postMessage({
-    type: 'PROGRESS_NODE',
+    type: 'PROGRESS_CURRENT_ITEM',
     data: node.name
   });
 

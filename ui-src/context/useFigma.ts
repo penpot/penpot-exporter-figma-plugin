@@ -2,89 +2,54 @@ import { useEffect, useState } from 'react';
 
 import { FormValues } from '@ui/components/ExportForm';
 import { parse } from '@ui/parser';
-import { PenpotDocument } from '@ui/types';
+
+import { MessageData } from '.';
 
 export type UseFigmaHook = {
   missingFonts: string[] | undefined;
   needsReload: boolean;
   loading: boolean;
   exporting: boolean;
-  downloading: boolean;
-  currentNode: string | undefined;
-  totalPages: number | undefined;
-  processedPages: number | undefined;
+  step: Steps | undefined;
+  currentItem: string | undefined;
+  totalItems: number;
+  processedItems: number;
   reload: () => void;
   cancel: () => void;
   exportPenpot: (data: FormValues) => void;
 };
 
-type PluginMessage =
-  | PenpotDocumentMessage
-  | CustomFontsMessage
-  | ChangesDetectedMessage
-  | ProgressNodeMessage
-  | ProgressTotalPagesMessage
-  | ProgressProcessedPagesMessage;
-
-type PenpotDocumentMessage = {
-  type: 'PENPOT_DOCUMENT';
-  data: PenpotDocument;
-};
-
-type CustomFontsMessage = {
-  type: 'CUSTOM_FONTS';
-  data: string[];
-};
-
-type ChangesDetectedMessage = {
-  type: 'CHANGES_DETECTED';
-};
-
-type ProgressNodeMessage = {
-  type: 'PROGRESS_NODE';
-  data: string;
-};
-
-type ProgressTotalPagesMessage = {
-  type: 'PROGRESS_TOTAL_PAGES';
-  data: number;
-};
-
-type ProgressProcessedPagesMessage = {
-  type: 'PROGRESS_PROCESSED_PAGES';
-  data: number;
-};
+export type Steps = 'processing' | 'remote' | 'images' | 'optimization' | 'downloading';
 
 export const useFigma = (): UseFigmaHook => {
   const [missingFonts, setMissingFonts] = useState<string[]>();
   const [needsReload, setNeedsReload] = useState(false);
   const [loading, setLoading] = useState(true);
   const [exporting, setExporting] = useState(false);
-  const [downloading, setDownloading] = useState(false);
-  const [currentNode, setCurrentNode] = useState<string | undefined>();
-  const [totalPages, setTotalPages] = useState<number | undefined>();
-  const [processedPages, setProcessedPages] = useState<number | undefined>();
+
+  const [step, setStep] = useState<Steps>();
+  const [currentItem, setCurrentItem] = useState<string | undefined>();
+  const [totalItems, setTotalItems] = useState<number>(0);
+  const [processedItems, setProcessedItems] = useState<number>(0);
 
   const postMessage = (type: string, data?: unknown) => {
     parent.postMessage({ pluginMessage: { type, data } }, '*');
   };
 
-  const onMessage = async (event: MessageEvent<{ pluginMessage?: PluginMessage }>) => {
+  const onMessage = async (event: MessageEvent<MessageData>) => {
     if (!event.data.pluginMessage) return;
 
     const { pluginMessage } = event.data;
 
     switch (pluginMessage.type) {
       case 'PENPOT_DOCUMENT': {
-        setDownloading(true);
-
         const file = await parse(pluginMessage.data);
         const blob = await file.export();
 
         download(blob, `${pluginMessage.data.name}.zip`);
 
         setExporting(false);
-        setDownloading(false);
+        setStep(undefined);
 
         break;
       }
@@ -98,17 +63,21 @@ export const useFigma = (): UseFigmaHook => {
         setNeedsReload(true);
         break;
       }
-      case 'PROGRESS_NODE': {
-        setCurrentNode(pluginMessage.data);
+      case 'PROGRESS_STEP': {
+        setStep(pluginMessage.data);
+        setProcessedItems(0);
         break;
       }
-      case 'PROGRESS_TOTAL_PAGES': {
-        setTotalPages(pluginMessage.data);
-        setProcessedPages(0);
+      case 'PROGRESS_CURRENT_ITEM': {
+        setCurrentItem(pluginMessage.data);
         break;
       }
-      case 'PROGRESS_PROCESSED_PAGES': {
-        setProcessedPages(pluginMessage.data);
+      case 'PROGRESS_TOTAL_ITEMS': {
+        setTotalItems(pluginMessage.data);
+        break;
+      }
+      case 'PROGRESS_PROCESSED_ITEMS': {
+        setProcessedItems(pluginMessage.data);
         break;
       }
     }
@@ -135,6 +104,8 @@ export const useFigma = (): UseFigmaHook => {
 
   const exportPenpot = (data: FormValues) => {
     setExporting(true);
+    setStep('processing');
+    setProcessedItems(0);
 
     postMessage('export', data);
   };
@@ -154,10 +125,10 @@ export const useFigma = (): UseFigmaHook => {
     needsReload,
     loading,
     exporting,
-    downloading,
-    currentNode,
-    totalPages,
-    processedPages,
+    step,
+    currentItem,
+    totalItems,
+    processedItems,
     reload,
     cancel,
     exportPenpot

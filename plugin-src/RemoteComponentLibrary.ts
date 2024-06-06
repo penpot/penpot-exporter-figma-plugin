@@ -25,6 +25,10 @@ class RemoteComponentsLibrary {
   public remaining(): number {
     return this.queue.length;
   }
+
+  public total(): number {
+    return Object.keys(this.components).length;
+  }
 }
 
 export const remoteComponentLibrary = new RemoteComponentsLibrary();

@@ -54,13 +54,29 @@ export const translateChildren = async (
 
 export const translateRemoteChildren = async (): Promise<PenpotNode[]> => {
   const transformedChildren: PenpotNode[] = [];
+  let currentRemote = 1;
+
+  figma.ui.postMessage({
+    type: 'PROGRESS_STEP',
+    data: 'remote'
+  });
 
   while (remoteComponentLibrary.remaining() > 0) {
+    figma.ui.postMessage({
+      type: 'PROGRESS_TOTAL_ITEMS',
+      data: remoteComponentLibrary.total()
+    });
+
     const child = remoteComponentLibrary.next();
 
     const penpotNode = await transformSceneNode(child);
 
     if (penpotNode) transformedChildren.push(penpotNode);
+
+    figma.ui.postMessage({
+      type: 'PROGRESS_PROCESSED_ITEMS',
+      data: currentRemote++
+    });
 
     await sleep(0);
   }
