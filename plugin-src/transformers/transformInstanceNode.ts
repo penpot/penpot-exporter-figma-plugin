@@ -2,6 +2,7 @@ import { remoteComponentLibrary } from '@plugin/RemoteComponentLibrary';
 import {
   transformBlend,
   transformChildren,
+  transformConstraints,
   transformCornerRadius,
   transformDimensionAndPosition,
   transformEffects,
@@ -44,6 +45,7 @@ export const transformInstanceNode = async (
     ...transformProportion(node),
     ...transformCornerRadius(node),
     ...transformDimensionAndPosition(node, baseX, baseY),
+    ...transformConstraints(node),
     ...(await transformChildren(node, baseX + node.x, baseY + node.y))
   };
 };

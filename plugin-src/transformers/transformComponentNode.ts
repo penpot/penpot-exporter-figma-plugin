@@ -2,6 +2,7 @@ import { componentsLibrary } from '@plugin/ComponentLibrary';
 import {
   transformBlend,
   transformChildren,
+  transformConstraints,
   transformCornerRadius,
   transformDimensionAndPosition,
   transformEffects,
@@ -33,7 +34,8 @@ export const transformComponentNode = async (
     ...transformProportion(node),
     ...transformCornerRadius(node),
     ...(await transformChildren(node, baseX + node.x, baseY + node.y)),
-    ...transformDimensionAndPosition(node, baseX, baseY)
+    ...transformDimensionAndPosition(node, baseX, baseY),
+    ...transformConstraints(node)
   });
 
   return {
