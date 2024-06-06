@@ -1,7 +1,6 @@
 import {
   transformBlend,
   transformChildren,
-  transformConstraints,
   transformDimensionAndPosition,
   transformEffects,
   transformFigmaIds,
