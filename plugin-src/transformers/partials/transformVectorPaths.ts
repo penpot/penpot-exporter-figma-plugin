@@ -2,7 +2,6 @@ import { parseSVG } from 'svg-path-parser';
 
 import {
   transformBlend,
-  transformConstraints,
   transformDimensionAndPositionFromVectorPath,
   transformEffects,
   transformProportion,
@@ -17,8 +16,7 @@ import {
   translateWindingRule
 } from '@plugin/translators/vectors';
 
-import { PathAttributes } from '@ui/lib/types/shapes/pathShape';
-import { PathShape } from '@ui/lib/types/shapes/pathShape';
+import { PathAttributes, PathShape } from '@ui/lib/types/shapes/pathShape';
 
 export const transformVectorPathsAsContent = (
   node: StarNode | LineNode | PolygonNode,
