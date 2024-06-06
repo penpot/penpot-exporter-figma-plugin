@@ -105,12 +105,13 @@ const transformVectorPath = (
     svgAttrs: {
       fillRule: translateWindingRule(vectorPath.windingRule)
     },
+    constraintsH: 'scale',
+    constraintsV: 'scale',
     ...transformStrokesFromVector(node, normalizedPaths, vectorRegion),
     ...transformEffects(node),
     ...transformDimensionAndPositionFromVectorPath(vectorPath, baseX, baseY),
     ...transformSceneNode(node),
     ...transformBlend(node),
-    ...transformProportion(node),
-    ...transformConstraints(node)
+    ...transformProportion(node)
   };
 };

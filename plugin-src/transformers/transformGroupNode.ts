@@ -31,8 +31,6 @@ export const transformGroupNodeLike = (
   return {
     type: 'group',
     name: node.name,
-    constraintsH: 'scale',
-    constraintsV: 'scale',
     ...transformDimensionAndPosition(node, baseX, baseY),
     ...transformSceneNode(node)
   };
