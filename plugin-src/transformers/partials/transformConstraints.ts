@@ -1,4 +1,4 @@
-import { translateConstraint } from '@plugin/translators';
+import { translateConstraintH, translateConstraintV } from '@plugin/translators';
 
 import { ShapeAttributes } from '@ui/lib/types/shapes/shape';
 
@@ -6,7 +6,7 @@ export const transformConstraints = (
   node: ConstraintMixin
 ): Pick<ShapeAttributes, 'constraintsH' | 'constraintsV'> => {
   return {
-    constraintsH: translateConstraint(node.constraints.horizontal),
-    constraintsV: translateConstraint(node.constraints.vertical)
+    constraintsH: translateConstraintH(node.constraints.horizontal),
+    constraintsV: translateConstraintV(node.constraints.vertical)
   };
 };

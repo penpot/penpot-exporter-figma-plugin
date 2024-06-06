@@ -56,8 +56,8 @@ export type ShapeAttributes = {
   hideFillOnExport?: boolean;
   proportion?: number;
   proportionLock?: boolean;
-  constraintsH?: Constraint;
-  constraintsV?: Constraint;
+  constraintsH?: ConstraintH;
+  constraintsV?: ConstraintV;
   fixedScroll?: boolean;
   rx?: number;
   ry?: number;
@@ -85,4 +85,5 @@ export type ShapeGeomAttributes = {
 
 export type GrowType = 'auto-width' | 'auto-height' | 'fixed';
 
-export type Constraint = 'left' | 'right' | 'leftright' | 'center' | 'scale';
+export type ConstraintH = 'left' | 'right' | 'leftright' | 'center' | 'scale';
+export type ConstraintV = 'top' | 'bottom' | 'topbottom' | 'center' | 'scale';
