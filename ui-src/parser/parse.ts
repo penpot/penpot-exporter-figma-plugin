@@ -1,5 +1,6 @@
 import { componentsLibrary } from '@plugin/ComponentLibrary';
-import { sleep } from '@plugin/utils';
+// @TODO: Direct import on purpose, to avoid problems with the tsc linting
+import { sleep } from '@plugin/utils/sleep';
 
 import { sendMessage } from '@ui/context';
 import { createFile } from '@ui/lib/penpot';
