@@ -1,3 +1,4 @@
+import { remoteComponentLibrary } from '@plugin/RemoteComponentLibrary';
 import {
   transformBlend,
   transformChildren,
@@ -24,11 +25,16 @@ export const transformInstanceNode = async (
     return;
   }
 
+  if (isExternalComponent(mainComponent)) {
+    await registerExternalComponents(mainComponent);
+  }
+
   return {
     type: 'instance',
     name: node.name,
     mainComponentFigmaId: mainComponent.id,
     isComponentRoot: isComponentRoot(node),
+    showContent: !node.clipsContent,
     ...transformFigmaIds(node),
     ...transformFills(node),
     ...transformEffects(node),
@@ -42,19 +48,39 @@ export const transformInstanceNode = async (
   };
 };
 
+const registerExternalComponents = async (mainComponent: ComponentNode): Promise<void> => {
+  let component: ComponentSetNode | ComponentNode = mainComponent;
+
+  if (component.parent?.type === 'COMPONENT_SET') {
+    component = component.parent;
+  }
+
+  if (remoteComponentLibrary.get(component.id) !== undefined) {
+    return;
+  }
+
+  remoteComponentLibrary.register(component.id, component);
+};
+
+const isExternalComponent = (mainComponent: ComponentNode): boolean => {
+  return (
+    mainComponent.remote ||
+    (mainComponent.parent?.type === 'COMPONENT_SET' && mainComponent.parent.remote)
+  );
+};
+
 /**
  * We do not want to process component instances in the following scenarios:
  *
- * 1. If the component comes from an external design system.
- * 2. If the component does not have a parent. (it's been removed)
- * 3. Main component can be in a ComponentSet (the same logic applies to the parent).
+ * 1. If the component does not have a parent. (it's been removed)
+ * 2. Main component can be in a ComponentSet (the same logic applies to the parent).
  */
 const isUnprocessableComponent = (mainComponent: ComponentNode): boolean => {
   return (
-    mainComponent.remote ||
-    mainComponent.parent === null ||
+    (mainComponent.parent === null && !mainComponent.remote) ||
     (mainComponent.parent?.type === 'COMPONENT_SET' &&
-      (mainComponent.parent.parent === null || mainComponent.parent.remote))
+      mainComponent.parent.parent === null &&
+      !mainComponent.parent.remote)
   );
 };
 

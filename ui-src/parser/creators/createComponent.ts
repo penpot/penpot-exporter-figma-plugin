@@ -17,7 +17,6 @@ export const createComponent = (file: PenpotFile, { figmaId }: ComponentRoot) =>
 
   const frameId = createArtboard(file, {
     ...component,
-    showContent: true,
     componentFile: file.getId(),
     componentId,
     componentRoot: true,

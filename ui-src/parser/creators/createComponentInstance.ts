@@ -34,7 +34,6 @@ export const createComponentInstance = (
 
   createArtboard(file, {
     ...rest,
-    showContent: true,
     shapeRef: uiComponent.mainInstanceId,
     componentFile: file.getId(),
     componentRoot: isComponentRoot,

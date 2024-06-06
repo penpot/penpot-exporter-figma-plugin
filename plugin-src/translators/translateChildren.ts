@@ -1,3 +1,4 @@
+import { remoteComponentLibrary } from '@plugin/RemoteComponentLibrary';
 import { transformGroupNodeLike, transformSceneNode } from '@plugin/transformers';
 import { transformMaskFigmaIds } from '@plugin/transformers/partials';
 import { sleep } from '@plugin/utils';
@@ -42,6 +43,22 @@ export const translateChildren = async (
 
   for (const child of children) {
     const penpotNode = await transformSceneNode(child, baseX, baseY);
+
+    if (penpotNode) transformedChildren.push(penpotNode);
+
+    await sleep(0);
+  }
+
+  return transformedChildren;
+};
+
+export const translateRemoteChildren = async (): Promise<PenpotNode[]> => {
+  const transformedChildren: PenpotNode[] = [];
+
+  while (remoteComponentLibrary.remaining() > 0) {
+    const child = remoteComponentLibrary.next();
+
+    const penpotNode = await transformSceneNode(child);
 
     if (penpotNode) transformedChildren.push(penpotNode);
 
