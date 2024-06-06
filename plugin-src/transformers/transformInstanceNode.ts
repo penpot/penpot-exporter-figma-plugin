@@ -21,11 +21,11 @@ export const transformInstanceNode = async (
 ): Promise<ComponentInstance | undefined> => {
   const mainComponent = await node.getMainComponentAsync();
 
-  if (mainComponent === null || isUnprocessableComponent(mainComponent)) {
+  if (mainComponent === null) {
     return;
   }
 
-  if (isExternalComponent(mainComponent)) {
+  if (isExternalComponent(mainComponent) || isUnprocessableComponent(mainComponent)) {
     await registerExternalComponents(mainComponent);
   }
 
@@ -34,6 +34,7 @@ export const transformInstanceNode = async (
     name: node.name,
     mainComponentFigmaId: mainComponent.id,
     isComponentRoot: isComponentRoot(node),
+    showContent: !node.clipsContent,
     ...transformFigmaIds(node),
     ...transformFills(node),
     ...transformEffects(node),

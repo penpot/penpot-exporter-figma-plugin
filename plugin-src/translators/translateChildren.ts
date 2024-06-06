@@ -55,8 +55,8 @@ export const translateChildren = async (
 export const translateRemoteChildren = async (): Promise<PenpotNode[]> => {
   const transformedChildren: PenpotNode[] = [];
 
-  while (remoteComponentLibrary.length() > 0) {
-    const child = remoteComponentLibrary.pop();
+  while (remoteComponentLibrary.remaining() > 0) {
+    const child = remoteComponentLibrary.next();
 
     const penpotNode = await transformSceneNode(child);
 

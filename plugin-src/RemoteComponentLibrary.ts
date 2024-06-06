@@ -1,10 +1,10 @@
 class RemoteComponentsLibrary {
   private components: Record<string, ComponentNode | ComponentSetNode> = {};
-  private keys: string[] = [];
+  private queue: string[] = [];
 
   public register(id: string, component: ComponentNode | ComponentSetNode) {
     if (!Object.prototype.hasOwnProperty.call(this.components, id)) {
-      this.keys.push(id);
+      this.queue.push(id);
     }
 
     this.components[id] = component;
@@ -14,19 +14,16 @@ class RemoteComponentsLibrary {
     return this.components[id];
   }
 
-  public pop(): ComponentNode | ComponentSetNode {
-    const lastKey = this.keys.pop();
+  public next(): ComponentNode | ComponentSetNode {
+    const lastKey = this.queue.pop();
 
     if (!lastKey) throw new Error('No components to pop');
 
-    const value = this.components[lastKey];
-    delete this.components[lastKey];
-
-    return value;
+    return this.components[lastKey];
   }
 
-  public length(): number {
-    return this.keys.length;
+  public remaining(): number {
+    return this.queue.length;
   }
 }
 

@@ -23,6 +23,7 @@ export const transformComponentNode = async (
     type: 'component',
     name: node.name,
     path: node.parent?.type === 'COMPONENT_SET' ? node.parent.name : '',
+    showContent: !node.clipsContent,
     ...transformFigmaIds(node),
     ...transformFills(node),
     ...transformEffects(node),
