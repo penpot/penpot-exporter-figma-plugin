@@ -1,5 +1,11 @@
 # penpot-exporter
 
+## 0.6.0
+
+### Minor Changes
+
+- [#147](https://github.com/penpot/penpot-exporter-figma-plugin/pull/147) [`e2d7a31`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/e2d7a3131275246b7ed2fa3d95a4494e84245eb8) Thanks [@jordisala1991](https://github.com/jordisala1991)! - Release on a new home, thanks to @micahchoo
+
 ## 0.5.0
 
 ### Minor Changes
