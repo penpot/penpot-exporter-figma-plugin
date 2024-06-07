@@ -1,6 +1,6 @@
 {
   "name": "Penpot Exporter",
-  "id": "1362760353975083275",
+  "id": "1219369440655168734",
   "api": "1.0.0",
   "main": "dist/code.js",
   "ui": "dist/index.html",
