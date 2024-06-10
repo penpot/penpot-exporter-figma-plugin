@@ -3,5 +3,6 @@ export * from './translateBlurEffects';
 export * from './translateBoolType';
 export * from './translateChildren';
 export * from './translateConstraints';
+export * from './translateLayout';
 export * from './translateShadowEffects';
 export * from './translateStrokes';

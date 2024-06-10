@@ -56,7 +56,7 @@ export type LayoutChildAttributes = {
   layoutItemZIndex?: number;
 };
 
-type JustifyAlignContent =
+export type JustifyAlignContent =
   | 'start'
   | 'center'
   | 'end'
@@ -65,30 +65,38 @@ type JustifyAlignContent =
   | 'space-evenly'
   | 'stretch';
 
-type JustifyAlignItems = 'start' | 'end' | 'center' | 'stretch';
+export type JustifyAlignItems = 'start' | 'end' | 'center' | 'stretch';
+
+export type LayoutFlexDir =
+  | 'row'
+  | 'reverse-row'
+  | 'row-reverse'
+  | 'column'
+  | 'reverse-column'
+  | 'column-reverse';
+
+export type LayoutGap = {
+  rowGap?: number;
+  columnGap?: number;
+};
+
+export type LayoutWrapType = 'wrap' | 'nowrap' | 'no-wrap';
+
+export type LayoutPadding = {
+  p1?: number;
+  p2?: number;
+  p3?: number;
+  p4?: number;
+};
 
 export type LayoutAttributes = {
   layout?: 'flex' | 'grid';
-  layoutFlexDir?:
-    | 'row'
-    | 'reverse-row'
-    | 'row-reverse'
-    | 'column'
-    | 'reverse-column'
-    | 'column-reverse';
-  layoutGap?: {
-    rowGap?: number;
-    columnGap?: number;
-  };
+  layoutFlexDir?: LayoutFlexDir;
+  layoutGap?: LayoutGap;
   layoutGapType?: 'simple' | 'multiple';
-  layoutWrapType?: 'wrap' | 'nowrap' | 'no-wrap';
+  layoutWrapType?: LayoutWrapType;
   layoutPaddingType?: 'simple' | 'multiple';
-  layoutPadding?: {
-    p1?: number;
-    p2?: number;
-    p3?: number;
-    p4?: number;
-  };
+  layoutPadding?: LayoutPadding;
   layoutJustifyContent?: JustifyAlignContent;
   layoutJustifyItems?: JustifyAlignItems;
   layoutAlignContent?: JustifyAlignContent;
