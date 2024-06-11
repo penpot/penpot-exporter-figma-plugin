@@ -17,9 +17,9 @@ type FigmaLayoutSizing = 'FIXED' | 'HUG' | 'FILL';
 export const translateLayoutFlexDir = (layoutMode: FigmaLayoutMode): LayoutFlexDir | undefined => {
   switch (layoutMode) {
     case 'HORIZONTAL':
-      return 'row';
+      return 'row-reverse';
     case 'VERTICAL':
-      return 'column';
+      return 'column-reverse';
     default:
       return;
   }

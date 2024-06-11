@@ -27,12 +27,8 @@ export const transformFrameNode = async (
   baseY: number
 ): Promise<FrameShape> => {
   let frameSpecificAttributes: Partial<FrameShape> = {};
-  let reverseChildrenOrder = false;
 
   if (!isSectionNode(node)) {
-    if (node.layoutMode !== 'NONE') {
-      reverseChildrenOrder = true;
-    }
     // Figma API does not expose strokes, blend modes, corner radius, or constraint proportions for sections,
     // they plan to add it in the future. Refactor this when available.
     frameSpecificAttributes = {
@@ -57,7 +53,7 @@ export const transformFrameNode = async (
     ...transformFigmaIds(node),
     ...transformFills(node),
     ...frameSpecificAttributes,
-    ...(await transformChildren(node, baseX + node.x, baseY + node.y, reverseChildrenOrder)),
+    ...(await transformChildren(node, baseX + node.x, baseY + node.y)),
     ...transformDimensionAndPosition(node, baseX, baseY),
     ...transformSceneNode(node)
   };
