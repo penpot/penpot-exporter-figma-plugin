@@ -5,6 +5,6 @@ export const transformSceneNode = (
 ): Pick<ShapeAttributes, 'blocked' | 'hidden'> => {
   return {
     blocked: node.locked,
-    hidden: false // @TODO: check this. it won't export if we hide it
+    hidden: !node.visible
   };
 };
