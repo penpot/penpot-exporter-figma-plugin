@@ -28,10 +28,10 @@ export const transformAutoLayout = (node: BaseFrameMixin): LayoutAttributes => {
 
 export const transformLayoutSizing = (
   node: LayoutMixin
-): Pick<LayoutChildAttributes, 'layoutItemHSizing' | 'layoutItemVSizing'> => {
+): Pick<LayoutChildAttributes, 'layoutItemH-Sizing' | 'layoutItemV-Sizing'> => {
   return {
-    layoutItemHSizing: translateLayoutSizing(node.layoutSizingHorizontal),
-    layoutItemVSizing: translateLayoutSizing(node.layoutSizingVertical)
+    'layoutItemH-Sizing': translateLayoutSizing(node.layoutSizingHorizontal),
+    'layoutItemV-Sizing': translateLayoutSizing(node.layoutSizingVertical)
   };
 };
 

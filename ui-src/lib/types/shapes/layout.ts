@@ -19,24 +19,24 @@ export type LayoutSizing =
   | typeof ITEM_SIZING_AUTO;
 
 export type LayoutChildAttributes = {
-  layoutItemMarginType?:
+  'layoutItemMarginType'?:
     | 'simple'
     | 'multiple'
     | typeof ITEM_MARGIN_SIMPLE_TYPE
     | typeof ITEM_MARGIN_MULTIPLE_TYPE;
-  layoutItemMargin?: {
+  'layoutItemMargin'?: {
     m1?: number;
     m2?: number;
     m3?: number;
     m4?: number;
   };
-  layoutItemMaxH?: number;
-  layoutItemMinH?: number;
-  layoutItemMaxW?: number;
-  layoutItemMinW?: number;
-  layoutItemHSizing?: LayoutSizing;
-  layoutItemVSizing?: LayoutSizing;
-  layoutItemAlignSelf?:
+  'layoutItemMaxH'?: number;
+  'layoutItemMinH'?: number;
+  'layoutItemMaxW'?: number;
+  'layoutItemMinW'?: number;
+  'layoutItemH-Sizing'?: LayoutSizing;
+  'layoutItemV-Sizing'?: LayoutSizing;
+  'layoutItemAlignSelf'?:
     | 'start'
     | 'end'
     | 'center'
@@ -45,8 +45,8 @@ export type LayoutChildAttributes = {
     | typeof ITEM_ALIGN_SELF_END
     | typeof ITEM_ALIGN_SELF_CENTER
     | typeof ITEM_ALIGN_SELF_STRETCH;
-  layoutItemAbsolute?: boolean;
-  layoutItemZIndex?: number;
+  'layoutItemAbsolute'?: boolean;
+  'layoutItemZIndex'?: number;
 };
 
 export type JustifyAlignContent =
