@@ -1,5 +1,11 @@
 # penpot-exporter
 
+## 0.6.1
+
+### Patch Changes
+
+- [#152](https://github.com/penpot/penpot-exporter-figma-plugin/pull/152) [`559a758`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/559a758d2176e6343c42f0b6727c91f3614c76de) Thanks [@jordisala1991](https://github.com/jordisala1991)! - Fix node visibility and opacity
+
 ## 0.6.0
 
 ### Minor Changes
