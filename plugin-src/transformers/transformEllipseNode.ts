@@ -1,4 +1,5 @@
 import {
+  transformAutoLayoutPosition,
   transformBlend,
   transformConstraints,
   transformDimension,
@@ -32,6 +33,7 @@ export const transformEllipseNode = (
     ...transformBlend(node),
     ...transformProportion(node),
     ...transformLayoutSizing(node),
+    ...transformAutoLayoutPosition(node),
     ...transformConstraints(node)
   };
 };

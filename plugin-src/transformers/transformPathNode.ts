@@ -1,4 +1,5 @@
 import {
+  transformAutoLayoutPosition,
   transformBlend,
   transformConstraints,
   transformDimensionAndPosition,
@@ -36,6 +37,7 @@ export const transformPathNode = (
     ...transformBlend(node),
     ...transformProportion(node),
     ...transformLayoutSizing(node),
+    ...transformAutoLayoutPosition(node),
     ...transformConstraints(node)
   };
 };

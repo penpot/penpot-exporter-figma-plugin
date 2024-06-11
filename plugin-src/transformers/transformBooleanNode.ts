@@ -1,4 +1,5 @@
 import {
+  transformAutoLayoutPosition,
   transformBlend,
   transformChildren,
   transformDimensionAndPosition,
@@ -32,6 +33,7 @@ export const transformBooleanNode = async (
     ...transformSceneNode(node),
     ...transformBlend(node),
     ...transformProportion(node),
-    ...transformLayoutSizing(node)
+    ...transformLayoutSizing(node),
+    ...transformAutoLayoutPosition(node)
   };
 };

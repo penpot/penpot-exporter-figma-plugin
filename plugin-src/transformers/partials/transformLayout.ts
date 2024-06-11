@@ -34,3 +34,11 @@ export const transformLayoutSizing = (
     layoutItemVSizing: translateLayoutSizing(node.layoutSizingVertical)
   };
 };
+
+export const transformAutoLayoutPosition = (
+  node: AutoLayoutChildrenMixin
+): Pick<LayoutChildAttributes, 'layoutItemAbsolute'> => {
+  return {
+    layoutItemAbsolute: node.layoutPositioning === 'ABSOLUTE'
+  };
+};

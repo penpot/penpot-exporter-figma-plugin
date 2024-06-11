@@ -1,4 +1,5 @@
 import {
+  transformAutoLayoutPosition,
   transformBlend,
   transformConstraints,
   transformDimensionAndPosition,
@@ -25,6 +26,7 @@ export const transformTextNode = (node: TextNode, baseX: number, baseY: number):
     ...transformBlend(node),
     ...transformProportion(node),
     ...transformLayoutSizing(node),
+    ...transformAutoLayoutPosition(node),
     ...transformStrokes(node),
     ...transformConstraints(node)
   };
