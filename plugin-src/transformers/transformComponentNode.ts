@@ -8,6 +8,7 @@ import {
   transformEffects,
   transformFigmaIds,
   transformFills,
+  transformLayoutSizing,
   transformProportion,
   transformSceneNode,
   transformStrokes
@@ -32,6 +33,7 @@ export const transformComponentNode = async (
     ...transformSceneNode(node),
     ...transformBlend(node),
     ...transformProportion(node),
+    ...transformLayoutSizing(node),
     ...transformCornerRadius(node),
     ...(await transformChildren(node, baseX + node.x, baseY + node.y)),
     ...transformDimensionAndPosition(node, baseX, baseY),

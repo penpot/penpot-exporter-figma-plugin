@@ -4,6 +4,7 @@ import {
   transformBlend,
   transformDimensionAndPositionFromVectorPath,
   transformEffects,
+  transformLayoutSizing,
   transformProportion,
   transformSceneNode,
   transformStrokesFromVector
@@ -110,6 +111,7 @@ const transformVectorPath = (
     ...transformDimensionAndPositionFromVectorPath(vectorPath, baseX, baseY),
     ...transformSceneNode(node),
     ...transformBlend(node),
-    ...transformProportion(node)
+    ...transformProportion(node),
+    ...transformLayoutSizing(node)
   };
 };

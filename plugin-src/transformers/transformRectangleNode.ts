@@ -6,6 +6,7 @@ import {
   transformEffects,
   transformFigmaIds,
   transformFills,
+  transformLayoutSizing,
   transformProportion,
   transformRotationAndPosition,
   transformSceneNode,
@@ -31,6 +32,7 @@ export const transformRectangleNode = (
     ...transformSceneNode(node),
     ...transformBlend(node),
     ...transformProportion(node),
+    ...transformLayoutSizing(node),
     ...transformCornerRadius(node),
     ...transformConstraints(node)
   };

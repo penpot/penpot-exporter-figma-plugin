@@ -5,6 +5,7 @@ import {
   transformEffects,
   transformFigmaIds,
   transformFills,
+  transformLayoutSizing,
   transformProportion,
   transformSceneNode,
   transformStrokes,
@@ -34,6 +35,7 @@ export const transformPathNode = (
     ...transformSceneNode(node),
     ...transformBlend(node),
     ...transformProportion(node),
+    ...transformLayoutSizing(node),
     ...transformConstraints(node)
   };
 };

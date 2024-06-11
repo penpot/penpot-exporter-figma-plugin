@@ -2,16 +2,21 @@ import { Uuid } from '@ui/lib/types/utils/uuid';
 
 export const ITEM_MARGIN_SIMPLE_TYPE: unique symbol = Symbol.for('simple');
 export const ITEM_MARGIN_MULTIPLE_TYPE: unique symbol = Symbol.for('multiple');
-export const ITEM_HSIZING_FILL: unique symbol = Symbol.for('fill');
-export const ITEM_HSIZING_FIX: unique symbol = Symbol.for('fix');
-export const ITEM_HSIZING_AUTO: unique symbol = Symbol.for('auto');
-export const ITEM_VSIZING_FILL: unique symbol = Symbol.for('fill');
-export const ITEM_VSIZING_FIX: unique symbol = Symbol.for('fix');
-export const ITEM_VSIZING_AUTO: unique symbol = Symbol.for('auto');
+export const ITEM_SIZING_FILL: unique symbol = Symbol.for('fill');
+export const ITEM_SIZING_FIX: unique symbol = Symbol.for('fix');
+export const ITEM_SIZING_AUTO: unique symbol = Symbol.for('auto');
 export const ITEM_ALIGN_SELF_START: unique symbol = Symbol.for('start');
 export const ITEM_ALIGN_SELF_END: unique symbol = Symbol.for('end');
 export const ITEM_ALIGN_SELF_CENTER: unique symbol = Symbol.for('center');
 export const ITEM_ALIGN_SELF_STRETCH: unique symbol = Symbol.for('stretch');
+
+export type LayoutSizing =
+  | 'fill'
+  | 'fix'
+  | 'auto'
+  | typeof ITEM_SIZING_FILL
+  | typeof ITEM_SIZING_FIX
+  | typeof ITEM_SIZING_AUTO;
 
 export type LayoutChildAttributes = {
   layoutItemMarginType?:
@@ -29,20 +34,8 @@ export type LayoutChildAttributes = {
   layoutItemMinH?: number;
   layoutItemMaxW?: number;
   layoutItemMinW?: number;
-  layoutItemHSizing?:
-    | 'fill'
-    | 'fix'
-    | 'auto'
-    | typeof ITEM_HSIZING_FILL
-    | typeof ITEM_HSIZING_FIX
-    | typeof ITEM_HSIZING_AUTO;
-  layoutItemVSizing?:
-    | 'fill'
-    | 'fix'
-    | 'auto'
-    | typeof ITEM_VSIZING_FILL
-    | typeof ITEM_VSIZING_FIX
-    | typeof ITEM_VSIZING_AUTO;
+  layoutItemHSizing?: LayoutSizing;
+  layoutItemVSizing?: LayoutSizing;
   layoutItemAlignSelf?:
     | 'start'
     | 'end'
