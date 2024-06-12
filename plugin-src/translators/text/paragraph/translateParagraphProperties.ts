@@ -45,7 +45,7 @@ const splitTextNodeByEOL = (node: PenpotTextNode): PenpotTextNode[] => {
 
   return split.map(text => ({
     ...node,
-    text: text
+    text: text.replace(/\u2028/g, '\n')
   }));
 };
 
