@@ -25,7 +25,18 @@ export const translateLayoutFlexDir = (layoutMode: FigmaLayoutMode): LayoutFlexD
   }
 };
 
-export const translateLayoutGap = (layoutMode: FigmaLayoutMode, itemSpacing: number): LayoutGap => {
+export const translateLayoutGap = (
+  layoutMode: FigmaLayoutMode,
+  itemSpacing: number,
+  auto: boolean = false
+): LayoutGap => {
+  if (auto) {
+    return {
+      rowGap: 0,
+      columnGap: 0
+    };
+  }
+
   return {
     rowGap: layoutMode === 'VERTICAL' ? itemSpacing : 0,
     columnGap: layoutMode === 'HORIZONTAL' ? itemSpacing : 0
