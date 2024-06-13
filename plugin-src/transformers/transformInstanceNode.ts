@@ -27,7 +27,7 @@ export const transformInstanceNode = async (
   }
 
   if (isExternalComponent(mainComponent)) {
-    await registerExternalComponents(mainComponent);
+    registerExternalComponents(mainComponent);
   }
 
   return {
@@ -50,7 +50,7 @@ export const transformInstanceNode = async (
   };
 };
 
-const registerExternalComponents = async (mainComponent: ComponentNode): Promise<void> => {
+const registerExternalComponents = (mainComponent: ComponentNode): void => {
   let component: ComponentSetNode | ComponentNode = mainComponent;
 
   if (component.parent?.type === 'COMPONENT_SET') {
