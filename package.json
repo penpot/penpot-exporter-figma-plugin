@@ -49,7 +49,7 @@
     "eslint-plugin-prettier": "^5.1",
     "eslint-plugin-react": "^7.34",
     "prettier": "^3.2",
-    "stylelint": "^16.5",
+    "stylelint": "^16.6",
     "stylelint-config-standard": "^36.0",
     "typescript": "^5.4",
     "vite": "^5.2",
