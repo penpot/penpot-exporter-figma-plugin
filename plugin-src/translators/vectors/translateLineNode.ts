@@ -9,8 +9,8 @@ export const translateLineNode = (node: LineNode): VectorPaths => {
     {
       command: 'lineto',
       code: 'L',
-      x: node.width,
-      y: node.height
+      x: node.absoluteBoundingBox?.width,
+      y: node.absoluteBoundingBox?.height
     }
   ];
 
