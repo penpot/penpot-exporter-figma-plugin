@@ -7,6 +7,7 @@ import {
   transformFrameNode,
   transformGroupNode,
   transformInstanceNode,
+  transformLineNode,
   transformPathNode,
   transformRectangleNode,
   transformTextNode,
@@ -46,9 +47,11 @@ export const transformSceneNode = async (
     case 'VECTOR':
       penpotNode = transformVectorNode(node, baseX, baseY);
       break;
+    case 'LINE':
+      penpotNode = transformLineNode(node, baseX, baseY);
+      break;
     case 'STAR':
     case 'POLYGON':
-    case 'LINE':
       penpotNode = transformPathNode(node, baseX, baseY);
       break;
     case 'BOOLEAN_OPERATION':

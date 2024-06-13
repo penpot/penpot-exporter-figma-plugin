@@ -1,4 +1,5 @@
 export * from './applyMatrixToPoint';
+export * from './applyRotationToPoint';
 export * from './calculateAdjustment';
 export * from './calculateLinearGradient';
 export * from './calculateRadialGradient';
