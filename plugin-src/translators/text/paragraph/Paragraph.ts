@@ -63,7 +63,9 @@ export class Paragraph {
     return false;
   }
 
-  private segmentIndent(indent: number): PenpotTextNode {
+  private segmentIndent(indent: number): PenpotTextNode | undefined {
+    if (indent === 0) return;
+
     return {
       text: ' '.repeat(indent),
       fontId: 'sourcesanspro',
