@@ -3,6 +3,7 @@ import {
   transformConstraints,
   transformEffects,
   transformFigmaIds,
+  transformLayoutAttributes,
   transformPosition,
   transformProportion,
   transformSceneNode,
@@ -30,6 +31,7 @@ export const transformLineNode = (node: LineNode, baseX: number, baseY: number):
     ...transformSceneNode(node),
     ...transformBlend(node),
     ...transformProportion(node),
+    ...transformLayoutAttributes(node),
     ...transformConstraints(node)
   };
 };
