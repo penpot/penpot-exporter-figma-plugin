@@ -5,10 +5,11 @@ import { ShapeBaseAttributes, ShapeGeomAttributes } from '@ui/lib/types/shapes/s
 export const transformRotationAndPosition = (
   node: LayoutMixin,
   baseX: number,
-  baseY: number
+  baseY: number,
+  baseRotation: number
 ): Pick<ShapeBaseAttributes, 'transform' | 'transformInverse' | 'rotation'> &
   Pick<ShapeGeomAttributes, 'x' | 'y'> => {
-  const rotation = node.rotation;
+  const rotation = node.rotation + baseRotation;
   const x = node.x + baseX;
   const y = node.y + baseY;
 
@@ -27,6 +28,8 @@ export const transformRotationAndPosition = (
     node.absoluteTransform,
     node.absoluteBoundingBox
   );
+
+  console.log(node.id, node.name, node.absoluteTransform);
 
   return {
     ...referencePoint,

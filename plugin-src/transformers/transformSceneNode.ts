@@ -17,7 +17,8 @@ import {
 export const transformSceneNode = async (
   node: SceneNode,
   baseX: number = 0,
-  baseY: number = 0
+  baseY: number = 0,
+  baseRotation: number = 0
 ): Promise<PenpotNode | undefined> => {
   let penpotNode: PenpotNode | undefined;
 
@@ -28,15 +29,15 @@ export const transformSceneNode = async (
 
   switch (node.type) {
     case 'RECTANGLE':
-      penpotNode = transformRectangleNode(node, baseX, baseY);
+      penpotNode = transformRectangleNode(node, baseX, baseY, baseRotation);
       break;
     case 'ELLIPSE':
-      penpotNode = transformEllipseNode(node, baseX, baseY);
+      penpotNode = transformEllipseNode(node, baseX, baseY, baseRotation);
       break;
     case 'SECTION':
     case 'FRAME':
     case 'COMPONENT_SET':
-      penpotNode = await transformFrameNode(node, baseX, baseY);
+      penpotNode = await transformFrameNode(node, baseX, baseY, baseRotation);
       break;
     case 'GROUP':
       penpotNode = await transformGroupNode(node, baseX, baseY);
@@ -48,7 +49,7 @@ export const transformSceneNode = async (
       penpotNode = transformVectorNode(node, baseX, baseY);
       break;
     case 'LINE':
-      penpotNode = transformLineNode(node, baseX, baseY);
+      penpotNode = transformLineNode(node, baseX, baseY, baseRotation);
       break;
     case 'STAR':
     case 'POLYGON':

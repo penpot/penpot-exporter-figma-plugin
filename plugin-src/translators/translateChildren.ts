@@ -18,11 +18,22 @@ export const translateMaskChildren = async (
   children: readonly SceneNode[],
   maskIndex: number,
   baseX: number,
-  baseY: number
+  baseY: number,
+  baseRotation: number
 ): Promise<PenpotNode[]> => {
   const maskChild = children[maskIndex];
-  const unmaskedChildren = await translateChildren(children.slice(0, maskIndex), baseX, baseY);
-  const maskedChildren = await translateChildren(children.slice(maskIndex), baseX, baseY);
+  const unmaskedChildren = await translateChildren(
+    children.slice(0, maskIndex),
+    baseX,
+    baseY,
+    baseRotation
+  );
+  const maskedChildren = await translateChildren(
+    children.slice(maskIndex),
+    baseX,
+    baseY,
+    baseRotation
+  );
 
   const maskGroup = {
     ...transformMaskFigmaIds(maskChild),
@@ -37,12 +48,13 @@ export const translateMaskChildren = async (
 export const translateChildren = async (
   children: readonly SceneNode[],
   baseX: number = 0,
-  baseY: number = 0
+  baseY: number = 0,
+  baseRotation: number = 0
 ): Promise<PenpotNode[]> => {
   const transformedChildren: PenpotNode[] = [];
 
   for (const child of children) {
-    const penpotNode = await transformSceneNode(child, baseX, baseY);
+    const penpotNode = await transformSceneNode(child, baseX, baseY, baseRotation);
 
     if (penpotNode) transformedChildren.push(penpotNode);
 

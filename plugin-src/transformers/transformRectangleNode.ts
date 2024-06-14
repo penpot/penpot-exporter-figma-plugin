@@ -18,7 +18,8 @@ import { RectShape } from '@ui/lib/types/shapes/rectShape';
 export const transformRectangleNode = (
   node: RectangleNode,
   baseX: number,
-  baseY: number
+  baseY: number,
+  baseRotation: number
 ): RectShape => {
   return {
     type: 'rect',
@@ -28,7 +29,7 @@ export const transformRectangleNode = (
     ...transformEffects(node),
     ...transformStrokes(node),
     ...transformDimension(node),
-    ...transformRotationAndPosition(node, baseX, baseY),
+    ...transformRotationAndPosition(node, baseX, baseY, baseRotation),
     ...transformSceneNode(node),
     ...transformBlend(node),
     ...transformProportion(node),
