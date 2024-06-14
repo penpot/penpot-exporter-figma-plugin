@@ -1,4 +1,4 @@
-import { applyRotationToPoint } from '@plugin/utils';
+import { applyInverseRotation, hasRotation } from '@plugin/utils';
 
 import { ShapeBaseAttributes, ShapeGeomAttributes } from '@ui/lib/types/shapes/shape';
 
@@ -12,7 +12,7 @@ export const transformRotationAndPosition = (
   const x = node.x + baseX;
   const y = node.y + baseY;
 
-  if (rotation === 0 || !node.absoluteBoundingBox) {
+  if (!hasRotation(rotation) || !node.absoluteBoundingBox) {
     return {
       x,
       y,
@@ -22,10 +22,14 @@ export const transformRotationAndPosition = (
     };
   }
 
-  const point = applyRotationToPoint({ x, y }, node.absoluteTransform, node.absoluteBoundingBox);
+  const referencePoint = applyInverseRotation(
+    { x, y },
+    node.absoluteTransform,
+    node.absoluteBoundingBox
+  );
 
   return {
-    ...point,
+    ...referencePoint,
     rotation: -rotation < 0 ? -rotation + 360 : -rotation,
     transform: {
       a: node.absoluteTransform[0][0],
