@@ -11,6 +11,17 @@ export const transformDimension = (
   };
 };
 
+export const transformPosition = (
+  node: DimensionAndPositionMixin,
+  baseX: number,
+  baseY: number
+): Pick<ShapeGeomAttributes, 'x' | 'y'> => {
+  return {
+    x: node.x + baseX,
+    y: node.y + baseY
+  };
+};
+
 export const transformDimensionAndPosition = (
   node: DimensionAndPositionMixin,
   baseX: number,

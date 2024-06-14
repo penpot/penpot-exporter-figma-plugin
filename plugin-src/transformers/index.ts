@@ -5,6 +5,7 @@ export * from './transformEllipseNode';
 export * from './transformFrameNode';
 export * from './transformGroupNode';
 export * from './transformInstanceNode';
+export * from './transformLineNode';
 export * from './transformPageNode';
 export * from './transformPathNode';
 export * from './transformRectangleNode';

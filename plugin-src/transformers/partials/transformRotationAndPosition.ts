@@ -1,5 +1,6 @@
+import { applyInverseRotation, hasRotation } from '@plugin/utils';
+
 import { ShapeBaseAttributes, ShapeGeomAttributes } from '@ui/lib/types/shapes/shape';
-import { Point } from '@ui/lib/types/utils/point';
 
 export const transformRotationAndPosition = (
   node: LayoutMixin,
@@ -11,7 +12,7 @@ export const transformRotationAndPosition = (
   const x = node.x + baseX;
   const y = node.y + baseY;
 
-  if (rotation === 0 || !node.absoluteBoundingBox) {
+  if (!hasRotation(rotation) || !node.absoluteBoundingBox) {
     return {
       x,
       y,
@@ -21,10 +22,14 @@ export const transformRotationAndPosition = (
     };
   }
 
-  const point = getRotatedPoint({ x, y }, node.absoluteTransform, node.absoluteBoundingBox);
+  const referencePoint = applyInverseRotation(
+    { x, y },
+    node.absoluteTransform,
+    node.absoluteBoundingBox
+  );
 
   return {
-    ...point,
+    ...referencePoint,
     rotation: -rotation < 0 ? -rotation + 360 : -rotation,
     transform: {
       a: node.absoluteTransform[0][0],
@@ -42,27 +47,5 @@ export const transformRotationAndPosition = (
       e: 0,
       f: 0
     }
-  };
-};
-
-const getRotatedPoint = (point: Point, transform: Transform, boundingBox: Rect): Point => {
-  const centerPoint = {
-    x: boundingBox.x + boundingBox.width / 2,
-    y: boundingBox.y + boundingBox.height / 2
-  };
-
-  const relativePoint = {
-    x: point.x - centerPoint.x,
-    y: point.y - centerPoint.y
-  };
-
-  const rotatedPoint = {
-    x: relativePoint.x * transform[0][0] + relativePoint.y * transform[1][0],
-    y: relativePoint.x * transform[0][1] + relativePoint.y * transform[1][1]
-  };
-
-  return {
-    x: centerPoint.x + rotatedPoint.x,
-    y: centerPoint.y + rotatedPoint.y
   };
 };

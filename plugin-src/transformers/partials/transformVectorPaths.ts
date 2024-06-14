@@ -10,26 +10,9 @@ import {
   transformStrokesFromVector
 } from '@plugin/transformers/partials';
 import { translateFills } from '@plugin/translators/fills';
-import {
-  translateCommandsToSegments,
-  translateLineNode,
-  translateVectorPaths,
-  translateWindingRule
-} from '@plugin/translators/vectors';
+import { translateCommandsToSegments, translateWindingRule } from '@plugin/translators/vectors';
 
-import { PathAttributes, PathShape } from '@ui/lib/types/shapes/pathShape';
-
-export const transformVectorPathsAsContent = (
-  node: StarNode | LineNode | PolygonNode,
-  baseX: number,
-  baseY: number
-): PathAttributes => {
-  const vectorPaths = getVectorPaths(node);
-
-  return {
-    content: translateVectorPaths(vectorPaths, baseX + node.x, baseY + node.y)
-  };
-};
+import { PathShape } from '@ui/lib/types/shapes/pathShape';
 
 export const transformVectorPaths = (
   node: VectorNode,
@@ -59,21 +42,12 @@ export const transformVectorPaths = (
   return [...geometryShapes, ...pathShapes];
 };
 
-const getVectorPaths = (node: StarNode | LineNode | PolygonNode): VectorPaths => {
-  switch (node.type) {
-    case 'STAR':
-    case 'POLYGON':
-      return node.fillGeometry;
-    case 'LINE':
-      return translateLineNode(node);
-  }
-};
-
 const normalizePath = (path: string): string => {
   // Round to 2 decimal places all numbers
   const str = path.replace(/(\d+\.\d+|\d+)/g, (match: string) => {
     return parseFloat(match).toFixed(2);
   });
+
   // remove spaces
   return str.replace(/\s/g, '');
 };
