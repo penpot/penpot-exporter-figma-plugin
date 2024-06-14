@@ -42,3 +42,11 @@ export const transformLayoutAttributes = (
     'layoutItemAbsolute': node.layoutPositioning === 'ABSOLUTE'
   };
 };
+
+export const transformLayoutItemZIndex = (
+  zIndex: number
+): Pick<LayoutChildAttributes, 'layoutItemZ-Index'> => {
+  return {
+    'layoutItemZ-Index': zIndex
+  };
+};

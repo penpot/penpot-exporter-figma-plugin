@@ -10,6 +10,7 @@ import {
   transformFigmaIds,
   transformFills,
   transformLayoutAttributes,
+  transformLayoutItemZIndex,
   transformProportion,
   transformSceneNode,
   transformStrokes
@@ -20,7 +21,8 @@ import { ComponentInstance } from '@ui/types';
 export const transformInstanceNode = async (
   node: InstanceNode,
   baseX: number,
-  baseY: number
+  baseY: number,
+  zIndex: number
 ): Promise<ComponentInstance | undefined> => {
   const mainComponent = await node.getMainComponentAsync();
 
@@ -38,6 +40,7 @@ export const transformInstanceNode = async (
     mainComponentFigmaId: mainComponent.id,
     isComponentRoot: isComponentRoot(node),
     showContent: !node.clipsContent,
+    ...transformLayoutItemZIndex(zIndex),
     ...transformFigmaIds(node),
     ...transformFills(node),
     ...transformEffects(node),
@@ -50,7 +53,7 @@ export const transformInstanceNode = async (
     ...transformDimensionAndPosition(node, baseX, baseY),
     ...transformConstraints(node),
     ...transformAutoLayout(node),
-    ...(await transformChildren(node, baseX + node.x, baseY + node.y))
+    ...(await transformChildren(node, baseX + node.x, baseY + node.y, zIndex))
   };
 };
 

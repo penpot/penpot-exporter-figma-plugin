@@ -5,6 +5,7 @@ import {
   transformDimensionAndPositionFromVectorPath,
   transformEffects,
   transformLayoutAttributes,
+  transformLayoutItemZIndex,
   transformProportion,
   transformSceneNode,
   transformStrokesFromVector
@@ -34,7 +35,8 @@ export const transformVectorPathsAsContent = (
 export const transformVectorPaths = (
   node: VectorNode,
   baseX: number,
-  baseY: number
+  baseY: number,
+  zIndex: number
 ): PathShape[] => {
   const pathShapes = node.vectorPaths
     .filter((vectorPath, index) => {
@@ -44,7 +46,14 @@ export const transformVectorPaths = (
       );
     })
     .map((vectorPath, index) =>
-      transformVectorPath(node, vectorPath, (node.vectorNetwork.regions ?? [])[index], baseX, baseY)
+      transformVectorPath(
+        node,
+        vectorPath,
+        (node.vectorNetwork.regions ?? [])[index],
+        baseX,
+        baseY,
+        zIndex
+      )
     );
 
   const geometryShapes = node.fillGeometry
@@ -54,7 +63,7 @@ export const transformVectorPaths = (
           vectorPath => normalizePath(vectorPath.data) === normalizePath(geometry.data)
         )
     )
-    .map(geometry => transformVectorPath(node, geometry, undefined, baseX, baseY));
+    .map(geometry => transformVectorPath(node, geometry, undefined, baseX, baseY, zIndex));
 
   return [...geometryShapes, ...pathShapes];
 };
@@ -91,7 +100,8 @@ const transformVectorPath = (
   vectorPath: VectorPath,
   vectorRegion: VectorRegion | undefined,
   baseX: number,
-  baseY: number
+  baseY: number,
+  zIndex: number
 ): PathShape => {
   const normalizedPaths = parseSVG(vectorPath.data);
 
@@ -106,6 +116,7 @@ const transformVectorPath = (
     },
     constraintsH: 'scale',
     constraintsV: 'scale',
+    ...transformLayoutItemZIndex(zIndex),
     ...transformStrokesFromVector(node, normalizedPaths, vectorRegion),
     ...transformEffects(node),
     ...transformDimensionAndPositionFromVectorPath(vectorPath, baseX, baseY),

@@ -1,6 +1,6 @@
 import { remoteComponentLibrary } from '@plugin/RemoteComponentLibrary';
 import { transformGroupNodeLike, transformSceneNode } from '@plugin/transformers';
-import { transformMaskFigmaIds } from '@plugin/transformers/partials';
+import { transformLayoutItemZIndex, transformMaskFigmaIds } from '@plugin/transformers/partials';
 import { sleep } from '@plugin/utils';
 
 import { PenpotNode } from '@ui/types';
@@ -18,15 +18,26 @@ export const translateMaskChildren = async (
   children: readonly SceneNode[],
   maskIndex: number,
   baseX: number,
-  baseY: number
+  baseY: number,
+  zIndex: number,
+  itemReverseZIndex: boolean = false
 ): Promise<PenpotNode[]> => {
   const maskChild = children[maskIndex];
-  const unmaskedChildren = await translateChildren(children.slice(0, maskIndex), baseX, baseY);
+  const unmaskedChildren = await translateChildren(
+    children.slice(0, maskIndex),
+    baseX,
+    baseY,
+    zIndex,
+    itemReverseZIndex
+  );
   const maskedChildren = await translateChildren(children.slice(maskIndex), baseX, baseY);
+
+  const lastZIndex = itemReverseZIndex ? zIndex - unmaskedChildren.length - 1 : zIndex;
 
   const maskGroup = {
     ...transformMaskFigmaIds(maskChild),
-    ...transformGroupNodeLike(maskChild, baseX, baseY),
+    ...transformGroupNodeLike(maskChild, baseX, baseY, zIndex),
+    ...transformLayoutItemZIndex(lastZIndex),
     children: maskedChildren,
     maskedGroup: true
   };
@@ -37,12 +48,19 @@ export const translateMaskChildren = async (
 export const translateChildren = async (
   children: readonly SceneNode[],
   baseX: number = 0,
-  baseY: number = 0
+  baseY: number = 0,
+  zIndex: number = 0,
+  itemReverseZIndex: boolean = false
 ): Promise<PenpotNode[]> => {
   const transformedChildren: PenpotNode[] = [];
 
   for (const child of children) {
-    const penpotNode = await transformSceneNode(child, baseX, baseY);
+    const penpotNode = await transformSceneNode(
+      child,
+      baseX,
+      baseY,
+      itemReverseZIndex ? zIndex-- : zIndex
+    );
 
     if (penpotNode) transformedChildren.push(penpotNode);
 

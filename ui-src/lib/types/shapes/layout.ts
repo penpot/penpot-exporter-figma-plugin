@@ -46,7 +46,7 @@ export type LayoutChildAttributes = {
     | typeof ITEM_ALIGN_SELF_CENTER
     | typeof ITEM_ALIGN_SELF_STRETCH;
   'layoutItemAbsolute'?: boolean;
-  'layoutItemZIndex'?: number;
+  'layoutItemZ-Index'?: number;
 };
 
 export type JustifyAlignContent =

@@ -5,6 +5,7 @@ import {
   transformEffects,
   transformFigmaIds,
   transformLayoutAttributes,
+  transformLayoutItemZIndex,
   transformProportion,
   transformSceneNode,
   transformStrokes,
@@ -13,10 +14,16 @@ import {
 
 import { TextShape } from '@ui/lib/types/shapes/textShape';
 
-export const transformTextNode = (node: TextNode, baseX: number, baseY: number): TextShape => {
+export const transformTextNode = (
+  node: TextNode,
+  baseX: number,
+  baseY: number,
+  zIndex: number
+): TextShape => {
   return {
     type: 'text',
     name: node.name,
+    ...transformLayoutItemZIndex(zIndex),
     ...transformFigmaIds(node),
     ...transformText(node),
     ...transformDimensionAndPosition(node, baseX, baseY),

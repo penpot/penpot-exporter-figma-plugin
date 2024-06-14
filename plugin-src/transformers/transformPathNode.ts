@@ -6,6 +6,7 @@ import {
   transformFigmaIds,
   transformFills,
   transformLayoutAttributes,
+  transformLayoutItemZIndex,
   transformProportion,
   transformSceneNode,
   transformStrokes,
@@ -21,11 +22,13 @@ const hasFillGeometry = (node: StarNode | LineNode | PolygonNode): boolean => {
 export const transformPathNode = (
   node: StarNode | LineNode | PolygonNode,
   baseX: number,
-  baseY: number
+  baseY: number,
+  zIndex: number
 ): PathShape => {
   return {
     type: 'path',
     name: node.name,
+    ...transformLayoutItemZIndex(zIndex),
     ...transformFigmaIds(node),
     ...(hasFillGeometry(node) ? transformFills(node) : []),
     ...transformStrokes(node),
