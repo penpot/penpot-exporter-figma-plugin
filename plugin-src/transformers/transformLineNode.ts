@@ -4,7 +4,6 @@ import {
   transformEffects,
   transformFigmaIds,
   transformLayoutAttributes,
-  transformPosition,
   transformProportion,
   transformSceneNode,
   transformStrokes
@@ -19,20 +18,14 @@ import { PathShape } from '@ui/lib/types/shapes/pathShape';
  *
  * To represent the line rotated we do take into account the rotation of the line, but only in its content.
  */
-export const transformLineNode = (
-  node: LineNode,
-  baseX: number,
-  baseY: number,
-  baseRotation: number
-): PathShape => {
+export const transformLineNode = (node: LineNode, baseRotation: number): PathShape => {
   return {
     type: 'path',
     name: node.name,
-    content: translateLineNode(node, baseX, baseY, baseRotation),
+    content: translateLineNode(node, baseRotation),
     ...transformFigmaIds(node),
     ...transformStrokes(node),
     ...transformEffects(node),
-    ...transformPosition(node, baseX, baseY),
     ...transformSceneNode(node),
     ...transformBlend(node),
     ...transformProportion(node),

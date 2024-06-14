@@ -6,13 +6,10 @@ import { Segment } from '@ui/lib/types/shapes/pathShape';
 
 import { translateCommandsToSegments } from '.';
 
-export const translateLineNode = (
-  node: LineNode,
-  baseX: number,
-  baseY: number,
-  baseRotation: number
-): Segment[] => {
+export const translateLineNode = (node: LineNode, baseRotation: number): Segment[] => {
   const rotation = node.rotation + baseRotation;
+  const x = node.absoluteTransform[0][2];
+  const y = node.absoluteTransform[1][2];
 
   if (!hasRotation(rotation) || !node.absoluteBoundingBox) {
     return translateCommandsToSegments(
@@ -30,19 +27,13 @@ export const translateLineNode = (
           code: 'L'
         }
       ],
-      baseX + node.x,
-      baseY + node.y
+      x,
+      y
     );
   }
 
   const referencePoint = applyInverseRotation(
-    { x: node.x, y: node.y },
-    node.absoluteTransform,
-    node.absoluteBoundingBox
-  );
-
-  const startPoint = applyRotation(
-    { x: referencePoint.x, y: referencePoint.y },
+    { x, y },
     node.absoluteTransform,
     node.absoluteBoundingBox
   );
@@ -55,8 +46,8 @@ export const translateLineNode = (
 
   const commands: Command[] = [
     {
-      x: startPoint.x,
-      y: startPoint.y,
+      x,
+      y,
       command: 'moveto',
       code: 'M'
     },
@@ -68,5 +59,5 @@ export const translateLineNode = (
     }
   ];
 
-  return translateCommandsToSegments(commands, baseX, baseY);
+  return translateCommandsToSegments(commands);
 };

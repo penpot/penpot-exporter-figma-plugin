@@ -8,8 +8,6 @@ const nodeActsAsMask = (node: SceneNode): boolean => {
 
 export const transformChildren = async (
   node: ChildrenMixin,
-  baseX: number = 0,
-  baseY: number = 0,
   baseRotation: number = 0
 ): Promise<Children> => {
   const maskIndex = node.children.findIndex(nodeActsAsMask);
@@ -17,7 +15,7 @@ export const transformChildren = async (
 
   return {
     children: containsMask
-      ? await translateMaskChildren(node.children, maskIndex, baseX, baseY, baseRotation)
-      : await translateChildren(node.children, baseX, baseY, baseRotation)
+      ? await translateMaskChildren(node.children, maskIndex, baseRotation)
+      : await translateChildren(node.children, baseRotation)
   };
 };

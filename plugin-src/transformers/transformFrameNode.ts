@@ -24,21 +24,14 @@ const isSectionNode = (node: FrameNode | SectionNode | ComponentSetNode): node i
 
 export const transformFrameNode = async (
   node: FrameNode | SectionNode | ComponentSetNode,
-  baseX: number,
-  baseY: number,
   baseRotation: number
 ): Promise<FrameShape> => {
   let frameSpecificAttributes: Partial<FrameShape> = {};
-  let referencePoint: Point = { x: node.x + baseX, y: node.y + baseY };
+  let referencePoint: Point = { x: node.absoluteTransform[0][2], y: node.absoluteTransform[1][2] };
   let rotation = baseRotation;
 
   if (!isSectionNode(node)) {
-    const { x, y, ...transformAndRotation } = transformRotationAndPosition(
-      node,
-      baseX,
-      baseY,
-      baseRotation
-    );
+    const { x, y, ...transformAndRotation } = transformRotationAndPosition(node, baseRotation);
 
     referencePoint = { x, y };
     rotation += node.rotation;
@@ -60,24 +53,16 @@ export const transformFrameNode = async (
     };
   }
 
-  console.log(
-    node.id,
-    node.name,
-    { x: node.x, y: node.y },
-    { x: node.absoluteBoundingBox?.x, y: node.absoluteBoundingBox?.y },
-    referencePoint
-  );
-
   return {
     type: 'frame',
     name: node.name,
     showContent: isSectionNode(node) ? true : !node.clipsContent,
-    ...referencePoint,
     ...transformFigmaIds(node),
     ...transformFills(node),
+    ...referencePoint,
     ...frameSpecificAttributes,
     ...transformDimension(node),
-    ...(await transformChildren(node, referencePoint.x, referencePoint.y, rotation)),
+    ...(await transformChildren(node, rotation)),
     ...transformSceneNode(node)
   };
 };

@@ -17,10 +17,9 @@ import { transformGroupNodeLike } from '.';
  */
 export const transformVectorNode = (
   node: VectorNode,
-  baseX: number,
-  baseY: number
+  baseRotation: number
 ): GroupShape | PathShape => {
-  const children = transformVectorPaths(node, baseX, baseY);
+  const children = transformVectorPaths(node);
 
   if (children.length === 1) {
     return {
@@ -32,7 +31,7 @@ export const transformVectorNode = (
   }
 
   return {
-    ...transformGroupNodeLike(node, baseX, baseY),
+    ...transformGroupNodeLike(node, baseRotation),
     ...transformFigmaIds(node),
     ...transformConstraints(node),
     children

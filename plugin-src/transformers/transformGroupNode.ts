@@ -1,8 +1,9 @@
 import {
   transformBlend,
-  transformDimensionAndPosition,
+  transformDimension,
   transformEffects,
   transformFigmaIds,
+  transformRotationAndPosition,
   transformSceneNode
 } from '@plugin/transformers/partials';
 import { transformChildren } from '@plugin/transformers/partials';
@@ -11,27 +12,26 @@ import { GroupShape } from '@ui/lib/types/shapes/groupShape';
 
 export const transformGroupNode = async (
   node: GroupNode,
-  baseX: number,
-  baseY: number
+  baseRotation: number
 ): Promise<GroupShape> => {
   return {
     ...transformFigmaIds(node),
-    ...transformGroupNodeLike(node, baseX, baseY),
+    ...transformGroupNodeLike(node, baseRotation),
     ...transformEffects(node),
     ...transformBlend(node),
-    ...(await transformChildren(node, baseX, baseY))
+    ...(await transformChildren(node, baseRotation))
   };
 };
 
 export const transformGroupNodeLike = (
-  node: BaseNodeMixin & DimensionAndPositionMixin & SceneNodeMixin,
-  baseX: number,
-  baseY: number
+  node: BaseNodeMixin & LayoutMixin & SceneNodeMixin,
+  baseRotation: number
 ): GroupShape => {
   return {
     type: 'group',
     name: node.name,
-    ...transformDimensionAndPosition(node, baseX, baseY),
+    ...transformDimension(node),
+    ...transformRotationAndPosition(node, baseRotation),
     ...transformSceneNode(node)
   };
 };

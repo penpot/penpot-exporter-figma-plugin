@@ -13,13 +13,13 @@ import {
 
 import { TextShape } from '@ui/lib/types/shapes/textShape';
 
-export const transformTextNode = (node: TextNode, baseX: number, baseY: number): TextShape => {
+export const transformTextNode = (node: TextNode): TextShape => {
   return {
     type: 'text',
     name: node.name,
     ...transformFigmaIds(node),
     ...transformText(node),
-    ...transformDimensionAndPosition(node, baseX, baseY),
+    ...transformDimensionAndPosition(node),
     ...transformEffects(node),
     ...transformSceneNode(node),
     ...transformBlend(node),
