@@ -1,12 +1,12 @@
 import {
-  transformAutoLayoutPosition,
   transformBlend,
   transformChildren,
   transformDimensionAndPosition,
   transformEffects,
   transformFigmaIds,
   transformFills,
-  transformLayoutSizing,
+  transformLayoutAttributes,
+  transformLayoutItemZIndex,
   transformProportion,
   transformSceneNode,
   transformStrokes
@@ -18,12 +18,14 @@ import { BoolShape } from '@ui/lib/types/shapes/boolShape';
 export const transformBooleanNode = async (
   node: BooleanOperationNode,
   baseX: number,
-  baseY: number
+  baseY: number,
+  zIndex: number
 ): Promise<BoolShape> => {
   return {
     type: 'bool',
     name: node.name,
     boolType: translateBoolType(node.booleanOperation),
+    ...transformLayoutItemZIndex(zIndex),
     ...transformFigmaIds(node),
     ...(await transformChildren(node, baseX, baseY)),
     ...transformFills(node),
@@ -33,7 +35,6 @@ export const transformBooleanNode = async (
     ...transformSceneNode(node),
     ...transformBlend(node),
     ...transformProportion(node),
-    ...transformLayoutSizing(node),
-    ...transformAutoLayoutPosition(node)
+    ...transformLayoutAttributes(node)
   };
 };

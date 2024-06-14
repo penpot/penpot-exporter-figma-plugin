@@ -1,7 +1,6 @@
 import { remoteComponentLibrary } from '@plugin/RemoteComponentLibrary';
 import {
   transformAutoLayout,
-  transformAutoLayoutPosition,
   transformBlend,
   transformChildren,
   transformConstraints,
@@ -10,7 +9,8 @@ import {
   transformEffects,
   transformFigmaIds,
   transformFills,
-  transformLayoutSizing,
+  transformLayoutAttributes,
+  transformLayoutItemZIndex,
   transformProportion,
   transformSceneNode,
   transformStrokes
@@ -21,7 +21,8 @@ import { ComponentInstance } from '@ui/types';
 export const transformInstanceNode = async (
   node: InstanceNode,
   baseX: number,
-  baseY: number
+  baseY: number,
+  zIndex: number
 ): Promise<ComponentInstance | undefined> => {
   const mainComponent = await node.getMainComponentAsync();
 
@@ -39,6 +40,7 @@ export const transformInstanceNode = async (
     mainComponentFigmaId: mainComponent.id,
     isComponentRoot: isComponentRoot(node),
     showContent: !node.clipsContent,
+    ...transformLayoutItemZIndex(zIndex),
     ...transformFigmaIds(node),
     ...transformFills(node),
     ...transformEffects(node),
@@ -46,13 +48,12 @@ export const transformInstanceNode = async (
     ...transformSceneNode(node),
     ...transformBlend(node),
     ...transformProportion(node),
-    ...transformLayoutSizing(node),
-    ...transformAutoLayoutPosition(node),
+    ...transformLayoutAttributes(node),
     ...transformCornerRadius(node),
     ...transformDimensionAndPosition(node, baseX, baseY),
     ...transformConstraints(node),
     ...transformAutoLayout(node),
-    ...(await transformChildren(node, baseX + node.x, baseY + node.y))
+    ...(await transformChildren(node, baseX + node.x, baseY + node.y, zIndex))
   };
 };
 

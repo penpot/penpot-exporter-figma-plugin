@@ -1,7 +1,6 @@
 import { componentsLibrary } from '@plugin/ComponentLibrary';
 import {
   transformAutoLayout,
-  transformAutoLayoutPosition,
   transformBlend,
   transformChildren,
   transformConstraints,
@@ -10,7 +9,8 @@ import {
   transformEffects,
   transformFigmaIds,
   transformFills,
-  transformLayoutSizing,
+  transformLayoutAttributes,
+  transformLayoutItemZIndex,
   transformProportion,
   transformSceneNode,
   transformStrokes
@@ -21,13 +21,15 @@ import { ComponentRoot } from '@ui/types';
 export const transformComponentNode = async (
   node: ComponentNode,
   baseX: number,
-  baseY: number
+  baseY: number,
+  zIndex: number
 ): Promise<ComponentRoot> => {
   componentsLibrary.register(node.id, {
     type: 'component',
     name: node.name,
     path: node.parent?.type === 'COMPONENT_SET' ? node.parent.name : '',
     showContent: !node.clipsContent,
+    ...transformLayoutItemZIndex(zIndex),
     ...transformFigmaIds(node),
     ...transformFills(node),
     ...transformEffects(node),
@@ -35,10 +37,9 @@ export const transformComponentNode = async (
     ...transformSceneNode(node),
     ...transformBlend(node),
     ...transformProportion(node),
-    ...transformLayoutSizing(node),
-    ...transformAutoLayoutPosition(node),
+    ...transformLayoutAttributes(node),
     ...transformCornerRadius(node),
-    ...(await transformChildren(node, baseX + node.x, baseY + node.y)),
+    ...(await transformChildren(node, baseX + node.x, baseY + node.y, zIndex)),
     ...transformDimensionAndPosition(node, baseX, baseY),
     ...transformConstraints(node),
     ...transformAutoLayout(node)

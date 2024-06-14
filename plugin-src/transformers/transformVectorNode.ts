@@ -1,6 +1,7 @@
 import {
   transformConstraints,
   transformFigmaIds,
+  transformLayoutItemZIndex,
   transformVectorPaths
 } from '@plugin/transformers/partials';
 
@@ -18,21 +19,23 @@ import { transformGroupNodeLike } from '.';
 export const transformVectorNode = (
   node: VectorNode,
   baseX: number,
-  baseY: number
+  baseY: number,
+  zIndex: number
 ): GroupShape | PathShape => {
-  const children = transformVectorPaths(node, baseX, baseY);
+  const children = transformVectorPaths(node, baseX, baseY, zIndex);
 
   if (children.length === 1) {
     return {
       ...children[0],
       name: node.name,
+      ...transformLayoutItemZIndex(zIndex),
       ...transformFigmaIds(node),
       ...transformConstraints(node)
     };
   }
 
   return {
-    ...transformGroupNodeLike(node, baseX, baseY),
+    ...transformGroupNodeLike(node, baseX, baseY, zIndex),
     ...transformFigmaIds(node),
     ...transformConstraints(node),
     children

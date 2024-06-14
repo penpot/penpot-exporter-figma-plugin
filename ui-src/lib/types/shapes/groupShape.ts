@@ -1,3 +1,4 @@
+import { LayoutChildAttributes } from '@ui/lib/types/shapes/layout';
 import {
   ShapeAttributes,
   ShapeBaseAttributes,
@@ -10,7 +11,8 @@ export type GroupShape = ShapeBaseAttributes &
   ShapeGeomAttributes &
   ShapeAttributes &
   GroupAttributes &
-  Children;
+  Children &
+  LayoutChildAttributes;
 
 type GroupAttributes = {
   type?: 'group';

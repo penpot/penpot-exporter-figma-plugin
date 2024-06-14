@@ -1,12 +1,12 @@
 import {
-  transformAutoLayoutPosition,
   transformBlend,
   transformConstraints,
   transformDimension,
   transformEffects,
   transformFigmaIds,
   transformFills,
-  transformLayoutSizing,
+  transformLayoutAttributes,
+  transformLayoutItemZIndex,
   transformProportion,
   transformRotationAndPosition,
   transformSceneNode,
@@ -18,11 +18,13 @@ import { CircleShape } from '@ui/lib/types/shapes/circleShape';
 export const transformEllipseNode = (
   node: EllipseNode,
   baseX: number,
-  baseY: number
+  baseY: number,
+  zIndex: number
 ): CircleShape => {
   return {
     type: 'circle',
     name: node.name,
+    ...transformLayoutItemZIndex(zIndex),
     ...transformFigmaIds(node),
     ...transformFills(node),
     ...transformEffects(node),
@@ -32,8 +34,7 @@ export const transformEllipseNode = (
     ...transformSceneNode(node),
     ...transformBlend(node),
     ...transformProportion(node),
-    ...transformLayoutSizing(node),
-    ...transformAutoLayoutPosition(node),
+    ...transformLayoutAttributes(node),
     ...transformConstraints(node)
   };
 };

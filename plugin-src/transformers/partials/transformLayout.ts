@@ -30,19 +30,23 @@ export const transformAutoLayout = (node: BaseFrameMixin): LayoutAttributes => {
   };
 };
 
-export const transformLayoutSizing = (
+export const transformLayoutAttributes = (
   node: LayoutMixin
-): Pick<LayoutChildAttributes, 'layoutItemH-Sizing' | 'layoutItemV-Sizing'> => {
+): Pick<
+  LayoutChildAttributes,
+  'layoutItemH-Sizing' | 'layoutItemV-Sizing' | 'layoutItemAbsolute'
+> => {
   return {
     'layoutItemH-Sizing': translateLayoutSizing(node.layoutSizingHorizontal),
-    'layoutItemV-Sizing': translateLayoutSizing(node.layoutSizingVertical)
+    'layoutItemV-Sizing': translateLayoutSizing(node.layoutSizingVertical),
+    'layoutItemAbsolute': node.layoutPositioning === 'ABSOLUTE'
   };
 };
 
-export const transformAutoLayoutPosition = (
-  node: AutoLayoutChildrenMixin
-): Pick<LayoutChildAttributes, 'layoutItemAbsolute'> => {
+export const transformLayoutItemZIndex = (
+  zIndex: number
+): Pick<LayoutChildAttributes, 'layoutItemZ-Index'> => {
   return {
-    layoutItemAbsolute: node.layoutPositioning === 'ABSOLUTE'
+    'layoutItemZ-Index': zIndex
   };
 };

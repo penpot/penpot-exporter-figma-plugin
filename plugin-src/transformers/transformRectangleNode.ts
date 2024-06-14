@@ -1,5 +1,4 @@
 import {
-  transformAutoLayoutPosition,
   transformBlend,
   transformConstraints,
   transformCornerRadius,
@@ -7,7 +6,8 @@ import {
   transformEffects,
   transformFigmaIds,
   transformFills,
-  transformLayoutSizing,
+  transformLayoutAttributes,
+  transformLayoutItemZIndex,
   transformProportion,
   transformRotationAndPosition,
   transformSceneNode,
@@ -19,11 +19,13 @@ import { RectShape } from '@ui/lib/types/shapes/rectShape';
 export const transformRectangleNode = (
   node: RectangleNode,
   baseX: number,
-  baseY: number
+  baseY: number,
+  zIndex: number
 ): RectShape => {
   return {
     type: 'rect',
     name: node.name,
+    ...transformLayoutItemZIndex(zIndex),
     ...transformFigmaIds(node),
     ...transformFills(node),
     ...transformEffects(node),
@@ -33,8 +35,7 @@ export const transformRectangleNode = (
     ...transformSceneNode(node),
     ...transformBlend(node),
     ...transformProportion(node),
-    ...transformLayoutSizing(node),
-    ...transformAutoLayoutPosition(node),
+    ...transformLayoutAttributes(node),
     ...transformCornerRadius(node),
     ...transformConstraints(node)
   };

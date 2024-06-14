@@ -1,12 +1,12 @@
 import {
-  transformAutoLayoutPosition,
   transformBlend,
   transformConstraints,
   transformDimensionAndPosition,
   transformEffects,
   transformFigmaIds,
   transformFills,
-  transformLayoutSizing,
+  transformLayoutAttributes,
+  transformLayoutItemZIndex,
   transformProportion,
   transformSceneNode,
   transformStrokes,
@@ -22,11 +22,13 @@ const hasFillGeometry = (node: StarNode | LineNode | PolygonNode): boolean => {
 export const transformPathNode = (
   node: StarNode | LineNode | PolygonNode,
   baseX: number,
-  baseY: number
+  baseY: number,
+  zIndex: number
 ): PathShape => {
   return {
     type: 'path',
     name: node.name,
+    ...transformLayoutItemZIndex(zIndex),
     ...transformFigmaIds(node),
     ...(hasFillGeometry(node) ? transformFills(node) : []),
     ...transformStrokes(node),
@@ -36,8 +38,7 @@ export const transformPathNode = (
     ...transformSceneNode(node),
     ...transformBlend(node),
     ...transformProportion(node),
-    ...transformLayoutSizing(node),
-    ...transformAutoLayoutPosition(node),
+    ...transformLayoutAttributes(node),
     ...transformConstraints(node)
   };
 };

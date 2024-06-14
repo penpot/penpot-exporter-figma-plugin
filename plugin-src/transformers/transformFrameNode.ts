@@ -1,6 +1,5 @@
 import {
   transformAutoLayout,
-  transformAutoLayoutPosition,
   transformBlend,
   transformChildren,
   transformConstraints,
@@ -9,7 +8,8 @@ import {
   transformEffects,
   transformFigmaIds,
   transformFills,
-  transformLayoutSizing,
+  transformLayoutAttributes,
+  transformLayoutItemZIndex,
   transformProportion,
   transformSceneNode,
   transformStrokes
@@ -24,7 +24,8 @@ const isSectionNode = (node: FrameNode | SectionNode | ComponentSetNode): node i
 export const transformFrameNode = async (
   node: FrameNode | SectionNode | ComponentSetNode,
   baseX: number,
-  baseY: number
+  baseY: number,
+  zIndex: number
 ): Promise<FrameShape> => {
   let frameSpecificAttributes: Partial<FrameShape> = {};
 
@@ -37,8 +38,7 @@ export const transformFrameNode = async (
       // @see: https://forum.figma.com/t/add-a-blendmode-property-for-sectionnode/58560
       ...transformBlend(node),
       ...transformProportion(node),
-      ...transformLayoutSizing(node),
-      ...transformAutoLayoutPosition(node),
+      ...transformLayoutAttributes(node),
       ...transformCornerRadius(node),
       ...transformEffects(node),
       ...transformConstraints(node),
@@ -50,10 +50,11 @@ export const transformFrameNode = async (
     type: 'frame',
     name: node.name,
     showContent: isSectionNode(node) ? true : !node.clipsContent,
+    ...transformLayoutItemZIndex(zIndex),
     ...transformFigmaIds(node),
     ...transformFills(node),
     ...frameSpecificAttributes,
-    ...(await transformChildren(node, baseX + node.x, baseY + node.y)),
+    ...(await transformChildren(node, baseX + node.x, baseY + node.y, zIndex)),
     ...transformDimensionAndPosition(node, baseX, baseY),
     ...transformSceneNode(node)
   };
