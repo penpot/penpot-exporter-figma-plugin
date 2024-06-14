@@ -1,4 +1,5 @@
 import {
+  transformAutoLayout,
   transformBlend,
   transformChildren,
   transformConstraints,
@@ -7,6 +8,7 @@ import {
   transformEffects,
   transformFigmaIds,
   transformFills,
+  transformLayoutAttributes,
   transformProportion,
   transformSceneNode,
   transformStrokes
@@ -34,9 +36,11 @@ export const transformFrameNode = async (
       // @see: https://forum.figma.com/t/add-a-blendmode-property-for-sectionnode/58560
       ...transformBlend(node),
       ...transformProportion(node),
+      ...transformLayoutAttributes(node),
       ...transformCornerRadius(node),
       ...transformEffects(node),
-      ...transformConstraints(node)
+      ...transformConstraints(node),
+      ...transformAutoLayout(node)
     };
   }
 

@@ -5,6 +5,7 @@ import {
   transformEffects,
   transformFigmaIds,
   transformFills,
+  transformLayoutAttributes,
   transformProportion,
   transformSceneNode,
   transformStrokes
@@ -30,6 +31,7 @@ export const transformBooleanNode = async (
     ...transformDimensionAndPosition(node, baseX, baseY),
     ...transformSceneNode(node),
     ...transformBlend(node),
-    ...transformProportion(node)
+    ...transformProportion(node),
+    ...transformLayoutAttributes(node)
   };
 };

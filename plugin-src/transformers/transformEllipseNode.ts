@@ -5,6 +5,7 @@ import {
   transformEffects,
   transformFigmaIds,
   transformFills,
+  transformLayoutAttributes,
   transformProportion,
   transformRotationAndPosition,
   transformSceneNode,
@@ -30,6 +31,7 @@ export const transformEllipseNode = (
     ...transformSceneNode(node),
     ...transformBlend(node),
     ...transformProportion(node),
+    ...transformLayoutAttributes(node),
     ...transformConstraints(node)
   };
 };

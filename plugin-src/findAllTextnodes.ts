@@ -15,7 +15,7 @@ export const findAllTextNodes = async () => {
         extractMissingFonts(node, fonts);
       }
 
-      sleep(0);
+      await sleep(0);
     }
   }
 
