@@ -6,6 +6,7 @@ export * from './transformDimensionAndPosition';
 export * from './transformEffects';
 export * from './transformFigmaIds';
 export * from './transformFills';
+export * from './transformLayout';
 export * from './transformProportion';
 export * from './transformRotationAndPosition';
 export * from './transformSceneNode';
