@@ -1,11 +1,10 @@
 import { parseSVG } from 'svg-path-parser';
 
 import {
-  transformAutoLayoutPosition,
   transformBlend,
   transformDimensionAndPositionFromVectorPath,
   transformEffects,
-  transformLayoutSizing,
+  transformLayoutAttributes,
   transformProportion,
   transformSceneNode,
   transformStrokesFromVector
@@ -113,7 +112,6 @@ const transformVectorPath = (
     ...transformSceneNode(node),
     ...transformBlend(node),
     ...transformProportion(node),
-    ...transformLayoutSizing(node),
-    ...transformAutoLayoutPosition(node)
+    ...transformLayoutAttributes(node)
   };
 };

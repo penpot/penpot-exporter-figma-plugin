@@ -1,12 +1,11 @@
 import {
-  transformAutoLayoutPosition,
   transformBlend,
   transformChildren,
   transformDimensionAndPosition,
   transformEffects,
   transformFigmaIds,
   transformFills,
-  transformLayoutSizing,
+  transformLayoutAttributes,
   transformProportion,
   transformSceneNode,
   transformStrokes
@@ -33,7 +32,6 @@ export const transformBooleanNode = async (
     ...transformSceneNode(node),
     ...transformBlend(node),
     ...transformProportion(node),
-    ...transformLayoutSizing(node),
-    ...transformAutoLayoutPosition(node)
+    ...transformLayoutAttributes(node)
   };
 };

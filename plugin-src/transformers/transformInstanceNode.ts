@@ -1,7 +1,6 @@
 import { remoteComponentLibrary } from '@plugin/RemoteComponentLibrary';
 import {
   transformAutoLayout,
-  transformAutoLayoutPosition,
   transformBlend,
   transformChildren,
   transformConstraints,
@@ -10,7 +9,7 @@ import {
   transformEffects,
   transformFigmaIds,
   transformFills,
-  transformLayoutSizing,
+  transformLayoutAttributes,
   transformProportion,
   transformSceneNode,
   transformStrokes
@@ -46,8 +45,7 @@ export const transformInstanceNode = async (
     ...transformSceneNode(node),
     ...transformBlend(node),
     ...transformProportion(node),
-    ...transformLayoutSizing(node),
-    ...transformAutoLayoutPosition(node),
+    ...transformLayoutAttributes(node),
     ...transformCornerRadius(node),
     ...transformDimensionAndPosition(node, baseX, baseY),
     ...transformConstraints(node),

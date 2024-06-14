@@ -1,12 +1,11 @@
 import {
-  transformAutoLayoutPosition,
   transformBlend,
   transformConstraints,
   transformDimension,
   transformEffects,
   transformFigmaIds,
   transformFills,
-  transformLayoutSizing,
+  transformLayoutAttributes,
   transformProportion,
   transformRotationAndPosition,
   transformSceneNode,
@@ -32,8 +31,7 @@ export const transformEllipseNode = (
     ...transformSceneNode(node),
     ...transformBlend(node),
     ...transformProportion(node),
-    ...transformLayoutSizing(node),
-    ...transformAutoLayoutPosition(node),
+    ...transformLayoutAttributes(node),
     ...transformConstraints(node)
   };
 };

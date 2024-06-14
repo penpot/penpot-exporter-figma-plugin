@@ -1,12 +1,11 @@
 import {
-  transformAutoLayoutPosition,
   transformBlend,
   transformConstraints,
   transformDimensionAndPosition,
   transformEffects,
   transformFigmaIds,
   transformFills,
-  transformLayoutSizing,
+  transformLayoutAttributes,
   transformProportion,
   transformSceneNode,
   transformStrokes,
@@ -36,8 +35,7 @@ export const transformPathNode = (
     ...transformSceneNode(node),
     ...transformBlend(node),
     ...transformProportion(node),
-    ...transformLayoutSizing(node),
-    ...transformAutoLayoutPosition(node),
+    ...transformLayoutAttributes(node),
     ...transformConstraints(node)
   };
 };

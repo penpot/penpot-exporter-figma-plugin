@@ -1,7 +1,6 @@
 import { componentsLibrary } from '@plugin/ComponentLibrary';
 import {
   transformAutoLayout,
-  transformAutoLayoutPosition,
   transformBlend,
   transformChildren,
   transformConstraints,
@@ -10,7 +9,7 @@ import {
   transformEffects,
   transformFigmaIds,
   transformFills,
-  transformLayoutSizing,
+  transformLayoutAttributes,
   transformProportion,
   transformSceneNode,
   transformStrokes
@@ -35,8 +34,7 @@ export const transformComponentNode = async (
     ...transformSceneNode(node),
     ...transformBlend(node),
     ...transformProportion(node),
-    ...transformLayoutSizing(node),
-    ...transformAutoLayoutPosition(node),
+    ...transformLayoutAttributes(node),
     ...transformCornerRadius(node),
     ...(await transformChildren(node, baseX + node.x, baseY + node.y)),
     ...transformDimensionAndPosition(node, baseX, baseY),
