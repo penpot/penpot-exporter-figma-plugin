@@ -5,12 +5,13 @@ import {
   transformChildren,
   transformConstraints,
   transformCornerRadius,
-  transformDimensionAndPosition,
+  transformDimension,
   transformEffects,
   transformFigmaIds,
   transformFills,
   transformLayoutAttributes,
   transformProportion,
+  transformRotationAndPosition,
   transformSceneNode,
   transformStrokes
 } from '@plugin/transformers/partials';
@@ -19,8 +20,7 @@ import { ComponentRoot } from '@ui/types';
 
 export const transformComponentNode = async (
   node: ComponentNode,
-  baseX: number,
-  baseY: number
+  baseRotation: number
 ): Promise<ComponentRoot> => {
   componentsLibrary.register(node.id, {
     type: 'component',
@@ -36,8 +36,9 @@ export const transformComponentNode = async (
     ...transformProportion(node),
     ...transformLayoutAttributes(node),
     ...transformCornerRadius(node),
-    ...(await transformChildren(node, baseX + node.x, baseY + node.y)),
-    ...transformDimensionAndPosition(node, baseX, baseY),
+    ...(await transformChildren(node, node.rotation + baseRotation)),
+    ...transformDimension(node),
+    ...transformRotationAndPosition(node, baseRotation),
     ...transformConstraints(node),
     ...transformAutoLayout(node)
   });

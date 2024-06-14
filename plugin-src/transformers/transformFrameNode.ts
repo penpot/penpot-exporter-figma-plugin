@@ -4,17 +4,19 @@ import {
   transformChildren,
   transformConstraints,
   transformCornerRadius,
-  transformDimensionAndPosition,
+  transformDimension,
   transformEffects,
   transformFigmaIds,
   transformFills,
   transformLayoutAttributes,
   transformProportion,
+  transformRotationAndPosition,
   transformSceneNode,
   transformStrokes
 } from '@plugin/transformers/partials';
 
 import { FrameShape } from '@ui/lib/types/shapes/frameShape';
+import { Point } from '@ui/lib/types/utils/point';
 
 const isSectionNode = (node: FrameNode | SectionNode | ComponentSetNode): node is SectionNode => {
   return node.type === 'SECTION';
@@ -22,12 +24,18 @@ const isSectionNode = (node: FrameNode | SectionNode | ComponentSetNode): node i
 
 export const transformFrameNode = async (
   node: FrameNode | SectionNode | ComponentSetNode,
-  baseX: number,
-  baseY: number
+  baseRotation: number
 ): Promise<FrameShape> => {
   let frameSpecificAttributes: Partial<FrameShape> = {};
+  let referencePoint: Point = { x: node.absoluteTransform[0][2], y: node.absoluteTransform[1][2] };
+  let rotation = baseRotation;
 
   if (!isSectionNode(node)) {
+    const { x, y, ...transformAndRotation } = transformRotationAndPosition(node, baseRotation);
+
+    referencePoint = { x, y };
+    rotation += node.rotation;
+
     // Figma API does not expose strokes, blend modes, corner radius, or constraint proportions for sections,
     // they plan to add it in the future. Refactor this when available.
     frameSpecificAttributes = {
@@ -40,7 +48,8 @@ export const transformFrameNode = async (
       ...transformCornerRadius(node),
       ...transformEffects(node),
       ...transformConstraints(node),
-      ...transformAutoLayout(node)
+      ...transformAutoLayout(node),
+      ...transformAndRotation
     };
   }
 
@@ -50,9 +59,10 @@ export const transformFrameNode = async (
     showContent: isSectionNode(node) ? true : !node.clipsContent,
     ...transformFigmaIds(node),
     ...transformFills(node),
+    ...referencePoint,
     ...frameSpecificAttributes,
-    ...(await transformChildren(node, baseX + node.x, baseY + node.y)),
-    ...transformDimensionAndPosition(node, baseX, baseY),
+    ...transformDimension(node),
+    ...(await transformChildren(node, rotation)),
     ...transformSceneNode(node)
   };
 };

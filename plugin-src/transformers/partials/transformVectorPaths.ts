@@ -2,7 +2,6 @@ import { parseSVG } from 'svg-path-parser';
 
 import {
   transformBlend,
-  transformDimensionAndPositionFromVectorPath,
   transformEffects,
   transformLayoutAttributes,
   transformProportion,
@@ -14,11 +13,7 @@ import { translateCommandsToSegments, translateWindingRule } from '@plugin/trans
 
 import { PathShape } from '@ui/lib/types/shapes/pathShape';
 
-export const transformVectorPaths = (
-  node: VectorNode,
-  baseX: number,
-  baseY: number
-): PathShape[] => {
+export const transformVectorPaths = (node: VectorNode): PathShape[] => {
   const pathShapes = node.vectorPaths
     .filter((vectorPath, index) => {
       return (
@@ -27,7 +22,7 @@ export const transformVectorPaths = (
       );
     })
     .map((vectorPath, index) =>
-      transformVectorPath(node, vectorPath, (node.vectorNetwork.regions ?? [])[index], baseX, baseY)
+      transformVectorPath(node, vectorPath, (node.vectorNetwork.regions ?? [])[index])
     );
 
   const geometryShapes = node.fillGeometry
@@ -37,7 +32,7 @@ export const transformVectorPaths = (
           vectorPath => normalizePath(vectorPath.data) === normalizePath(geometry.data)
         )
     )
-    .map(geometry => transformVectorPath(node, geometry, undefined, baseX, baseY));
+    .map(geometry => transformVectorPath(node, geometry, undefined));
 
   return [...geometryShapes, ...pathShapes];
 };
@@ -63,16 +58,18 @@ const nodeHasFills = (
 const transformVectorPath = (
   node: VectorNode,
   vectorPath: VectorPath,
-  vectorRegion: VectorRegion | undefined,
-  baseX: number,
-  baseY: number
+  vectorRegion: VectorRegion | undefined
 ): PathShape => {
   const normalizedPaths = parseSVG(vectorPath.data);
 
   return {
     type: 'path',
     name: 'svg-path',
-    content: translateCommandsToSegments(normalizedPaths, baseX + node.x, baseY + node.y),
+    content: translateCommandsToSegments(
+      normalizedPaths,
+      node.absoluteTransform[0][2],
+      node.absoluteTransform[1][2]
+    ),
     fills:
       vectorPath.windingRule === 'NONE' ? [] : translateFills(vectorRegion?.fills ?? node.fills),
     svgAttrs: {
@@ -82,7 +79,6 @@ const transformVectorPath = (
     constraintsV: 'scale',
     ...transformStrokesFromVector(node, normalizedPaths, vectorRegion),
     ...transformEffects(node),
-    ...transformDimensionAndPositionFromVectorPath(vectorPath, baseX, baseY),
     ...transformSceneNode(node),
     ...transformBlend(node),
     ...transformProportion(node),

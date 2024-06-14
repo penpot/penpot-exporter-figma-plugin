@@ -4,8 +4,8 @@ import { Segment } from '@ui/lib/types/shapes/pathShape';
 
 export const translateCommandsToSegments = (
   commands: Command[],
-  baseX: number,
-  baseY: number
+  baseX: number = 0,
+  baseY: number = 0
 ): Segment[] => {
   return commands.map(command => {
     switch (command.command) {

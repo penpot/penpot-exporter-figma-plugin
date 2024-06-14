@@ -5,12 +5,13 @@ import {
   transformChildren,
   transformConstraints,
   transformCornerRadius,
-  transformDimensionAndPosition,
+  transformDimension,
   transformEffects,
   transformFigmaIds,
   transformFills,
   transformLayoutAttributes,
   transformProportion,
+  transformRotationAndPosition,
   transformSceneNode,
   transformStrokes
 } from '@plugin/transformers/partials';
@@ -19,8 +20,7 @@ import { ComponentInstance } from '@ui/types';
 
 export const transformInstanceNode = async (
   node: InstanceNode,
-  baseX: number,
-  baseY: number
+  baseRotation: number
 ): Promise<ComponentInstance | undefined> => {
   const mainComponent = await node.getMainComponentAsync();
 
@@ -47,10 +47,11 @@ export const transformInstanceNode = async (
     ...transformProportion(node),
     ...transformLayoutAttributes(node),
     ...transformCornerRadius(node),
-    ...transformDimensionAndPosition(node, baseX, baseY),
+    ...transformDimension(node),
+    ...transformRotationAndPosition(node, baseRotation),
     ...transformConstraints(node),
     ...transformAutoLayout(node),
-    ...(await transformChildren(node, baseX + node.x, baseY + node.y))
+    ...(await transformChildren(node, node.rotation + baseRotation))
   };
 };
 
