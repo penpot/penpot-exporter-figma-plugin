@@ -1,11 +1,12 @@
 import {
   transformBlend,
   transformConstraints,
-  transformDimensionAndPosition,
+  transformDimension,
   transformEffects,
   transformFigmaIds,
   transformLayoutAttributes,
   transformProportion,
+  transformRotationAndPosition,
   transformSceneNode,
   transformStrokes,
   transformText
@@ -13,13 +14,14 @@ import {
 
 import { TextShape } from '@ui/lib/types/shapes/textShape';
 
-export const transformTextNode = (node: TextNode): TextShape => {
+export const transformTextNode = (node: TextNode, baseRotation: number): TextShape => {
   return {
     type: 'text',
     name: node.name,
     ...transformFigmaIds(node),
     ...transformText(node),
-    ...transformDimensionAndPosition(node),
+    ...transformDimension(node),
+    ...transformRotationAndPosition(node, baseRotation),
     ...transformEffects(node),
     ...transformSceneNode(node),
     ...transformBlend(node),

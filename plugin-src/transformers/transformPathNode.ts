@@ -9,19 +9,18 @@ import {
   transformSceneNode,
   transformStrokes
 } from '@plugin/transformers/partials';
-import { translateVectorPaths } from '@plugin/translators/vectors';
+import { translatePathNode } from '@plugin/translators/vectors';
 
 import { PathShape } from '@ui/lib/types/shapes/pathShape';
 
-export const transformPathNode = (node: StarNode | PolygonNode): PathShape => {
+export const transformPathNode = (
+  node: StarNode | PolygonNode,
+  baseRotation: number
+): PathShape => {
   return {
     type: 'path',
     name: node.name,
-    content: translateVectorPaths(
-      node.fillGeometry,
-      node.absoluteTransform[0][2],
-      node.absoluteTransform[1][2]
-    ),
+    content: translatePathNode(node, baseRotation),
     ...transformFigmaIds(node),
     ...transformFills(node),
     ...transformStrokes(node),

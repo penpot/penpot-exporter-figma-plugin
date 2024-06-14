@@ -41,7 +41,7 @@ export const transformSceneNode = async (
       penpotNode = await transformGroupNode(node, baseRotation);
       break;
     case 'TEXT':
-      penpotNode = transformTextNode(node);
+      penpotNode = transformTextNode(node, baseRotation);
       break;
     case 'VECTOR':
       penpotNode = transformVectorNode(node, baseRotation);
@@ -51,7 +51,7 @@ export const transformSceneNode = async (
       break;
     case 'STAR':
     case 'POLYGON':
-      penpotNode = transformPathNode(node);
+      penpotNode = transformPathNode(node, baseRotation);
       break;
     case 'BOOLEAN_OPERATION':
       penpotNode = await transformBooleanNode(node, baseRotation);
