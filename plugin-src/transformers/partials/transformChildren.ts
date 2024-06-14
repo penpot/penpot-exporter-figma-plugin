@@ -13,6 +13,7 @@ export const transformChildren = async (
 ): Promise<Children> => {
   const maskIndex = node.children.findIndex(nodeActsAsMask);
   const containsMask = maskIndex !== -1;
+
   return {
     children: containsMask
       ? await translateMaskChildren(node.children, maskIndex, baseX, baseY)
