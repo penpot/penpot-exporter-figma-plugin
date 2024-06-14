@@ -9,6 +9,7 @@ import { Point } from '@ui/lib/types/utils/point';
 import { Selrect } from '@ui/lib/types/utils/selrect';
 import { Shadow } from '@ui/lib/types/utils/shadow';
 import { Stroke } from '@ui/lib/types/utils/stroke';
+import { SyncGroups } from '@ui/lib/types/utils/syncGroups';
 import { Uuid } from '@ui/lib/types/utils/uuid';
 
 export type ShapeBaseAttributes = {
@@ -74,6 +75,7 @@ export type ShapeAttributes = {
   shadow?: Shadow[];
   blur?: Blur;
   growType?: GrowType;
+  touched: SyncGroups[];
 };
 
 export type ShapeGeomAttributes = {

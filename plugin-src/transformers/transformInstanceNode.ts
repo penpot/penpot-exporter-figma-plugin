@@ -1,3 +1,4 @@
+import { overridesLibrary } from '@plugin/OverridesLibrary';
 import { remoteComponentLibrary } from '@plugin/RemoteComponentLibrary';
 import {
   transformAutoLayout,
@@ -30,6 +31,12 @@ export const transformInstanceNode = async (
 
   if (isExternalComponent(mainComponent)) {
     registerExternalComponents(mainComponent);
+  }
+
+  if (node.overrides.length > 0) {
+    node.overrides.forEach(override =>
+      overridesLibrary.register(override.id, override.overriddenFields)
+    );
   }
 
   return {
