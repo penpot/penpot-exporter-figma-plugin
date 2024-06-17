@@ -90,24 +90,28 @@ const getComponentTextPropertyOverrides = (
   node: InstanceNode,
   primaryComponent: ComponentNode | ComponentSetNode
 ): ComponentTextPropertyOverride[] => {
-  const componentPropertyDefinitions = Object.entries(
-    primaryComponent.componentPropertyDefinitions
-  ).filter(([, value]) => value.type === 'TEXT');
+  try {
+    const componentPropertyDefinitions = Object.entries(
+      primaryComponent.componentPropertyDefinitions
+    ).filter(([, value]) => value.type === 'TEXT');
 
-  const instanceComponentProperties = new Map(
-    Object.entries(node.componentProperties).filter(([, value]) => value.type === 'TEXT')
-  );
+    const instanceComponentProperties = new Map(
+      Object.entries(node.componentProperties).filter(([, value]) => value.type === 'TEXT')
+    );
 
-  return componentPropertyDefinitions
-    .map(([key, value]) => {
-      const nodeValue = instanceComponentProperties.get(key);
-      return {
-        id: key,
-        ...value,
-        value: nodeValue ? nodeValue.value : value.defaultValue
-      } as ComponentTextPropertyOverride;
-    })
-    .filter(({ value, defaultValue }) => value !== defaultValue);
+    return componentPropertyDefinitions
+      .map(([key, value]) => {
+        const nodeValue = instanceComponentProperties.get(key);
+        return {
+          id: key,
+          ...value,
+          value: nodeValue ? nodeValue.value : value.defaultValue
+        } as ComponentTextPropertyOverride;
+      })
+      .filter(({ value, defaultValue }) => value !== defaultValue);
+  } catch (error) {
+    return [];
+  }
 };
 
 const registerTextVariableOverrides = (
