@@ -5,6 +5,7 @@ import {
   transformFigmaIds,
   transformFills,
   transformLayoutAttributes,
+  transformOverrides,
   transformProportion,
   transformSceneNode,
   transformStrokes
@@ -29,6 +30,7 @@ export const transformPathNode = (
     ...transformBlend(node),
     ...transformProportion(node),
     ...transformLayoutAttributes(node),
-    ...transformConstraints(node)
+    ...transformConstraints(node),
+    ...transformOverrides(node)
   };
 };

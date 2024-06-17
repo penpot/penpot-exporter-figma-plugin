@@ -1,3 +1,4 @@
+import { overridesLibrary } from '@plugin/OverridesLibrary';
 import { remoteComponentLibrary } from '@plugin/RemoteComponentLibrary';
 import {
   transformAutoLayout,
@@ -10,6 +11,7 @@ import {
   transformFigmaIds,
   transformFills,
   transformLayoutAttributes,
+  transformOverrides,
   transformProportion,
   transformRotationAndPosition,
   transformSceneNode,
@@ -32,6 +34,12 @@ export const transformInstanceNode = async (
     registerExternalComponents(mainComponent);
   }
 
+  if (node.overrides.length > 0) {
+    node.overrides.forEach(override =>
+      overridesLibrary.register(override.id, override.overriddenFields)
+    );
+  }
+
   return {
     type: 'instance',
     name: node.name,
@@ -51,7 +59,8 @@ export const transformInstanceNode = async (
     ...transformRotationAndPosition(node, baseRotation),
     ...transformConstraints(node),
     ...transformAutoLayout(node),
-    ...(await transformChildren(node, node.rotation + baseRotation))
+    ...(await transformChildren(node, node.rotation + baseRotation)),
+    ...transformOverrides(node)
   };
 };
 
