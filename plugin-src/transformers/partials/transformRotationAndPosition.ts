@@ -1,6 +1,20 @@
+import { translateRotation, translateZeroRotation } from '@plugin/translators';
 import { applyInverseRotation, hasRotation } from '@plugin/utils';
 
 import { ShapeBaseAttributes, ShapeGeomAttributes } from '@ui/lib/types/shapes/shape';
+
+export const transformRotation = (
+  node: LayoutMixin,
+  baseRotation: number
+): Pick<ShapeBaseAttributes, 'transform' | 'transformInverse' | 'rotation'> => {
+  const rotation = node.rotation + baseRotation;
+
+  if (!hasRotation(rotation)) {
+    return translateZeroRotation();
+  }
+
+  return translateRotation(node.absoluteTransform, rotation);
+};
 
 export const transformRotationAndPosition = (
   node: LayoutMixin,
@@ -15,9 +29,7 @@ export const transformRotationAndPosition = (
     return {
       x,
       y,
-      rotation,
-      transform: undefined,
-      transformInverse: undefined
+      ...translateZeroRotation()
     };
   }
 
@@ -29,22 +41,6 @@ export const transformRotationAndPosition = (
 
   return {
     ...referencePoint,
-    rotation: -rotation < 0 ? -rotation + 360 : -rotation,
-    transform: {
-      a: node.absoluteTransform[0][0],
-      b: node.absoluteTransform[1][0],
-      c: node.absoluteTransform[0][1],
-      d: node.absoluteTransform[1][1],
-      e: 0,
-      f: 0
-    },
-    transformInverse: {
-      a: node.absoluteTransform[0][0],
-      b: node.absoluteTransform[0][1],
-      c: node.absoluteTransform[1][0],
-      d: node.absoluteTransform[1][1],
-      e: 0,
-      f: 0
-    }
+    ...translateRotation(node.absoluteTransform, rotation)
   };
 };

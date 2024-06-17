@@ -1,3 +1,4 @@
+import { ClosePath, Segment } from '@ui/lib/types/shapes/pathShape';
 import { Point } from '@ui/lib/types/utils/point';
 
 const ROTATION_TOLERANCE = 0.000001;
@@ -14,6 +15,23 @@ export const applyRotation = (point: Point, transform: Transform, boundingBox: R
     x: centerPoint.x + rotatedPoint.x,
     y: centerPoint.y + rotatedPoint.y
   };
+};
+
+export const applyRotationToSegment = (
+  segment: Exclude<Segment, ClosePath>,
+  transform: Transform,
+  boundingBox: Rect
+): Segment => {
+  const referencePoint = applyRotation(
+    { x: segment.params.x, y: segment.params.y },
+    transform,
+    boundingBox
+  );
+
+  segment.params.x = referencePoint.x;
+  segment.params.y = referencePoint.y;
+
+  return segment;
 };
 
 export const applyInverseRotation = (

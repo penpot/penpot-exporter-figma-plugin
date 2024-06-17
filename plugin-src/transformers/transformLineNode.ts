@@ -8,9 +8,10 @@ import {
   transformSceneNode,
   transformStrokes
 } from '@plugin/transformers/partials';
-import { translateLineNode } from '@plugin/translators/vectors';
+import { translateCommands } from '@plugin/translators/vectors';
 
 import { PathShape } from '@ui/lib/types/shapes/pathShape';
+import { Segment } from '@ui/lib/types/shapes/pathShape';
 
 /**
  * In order to match the normal representation of a line in Penpot, we will assume that
@@ -32,4 +33,25 @@ export const transformLineNode = (node: LineNode, baseRotation: number): PathSha
     ...transformLayoutAttributes(node),
     ...transformConstraints(node)
   };
+};
+
+const translateLineNode = (node: LineNode, baseRotation: number): Segment[] => {
+  return translateCommands(
+    node,
+    [
+      {
+        x: 0,
+        y: 0,
+        command: 'moveto',
+        code: 'M'
+      },
+      {
+        x: node.width,
+        y: 0,
+        command: 'lineto',
+        code: 'L'
+      }
+    ],
+    baseRotation
+  );
 };
