@@ -13,8 +13,8 @@ export const translateGoogleFont = (fontName: FontName, fontWeight: number): Fon
   if (googleFont === undefined) return;
 
   return {
-    fontId: `gfont-${slugify(fontName.family.toLowerCase())}`,
-    fontVariantId: translateFontVariantId(googleFont, fontName, fontWeight)
+    'font-id': `gfont-${slugify(fontName.family.toLowerCase())}`,
+    'font-variant-id': translateFontVariantId(googleFont, fontName, fontWeight)
   };
 };
 

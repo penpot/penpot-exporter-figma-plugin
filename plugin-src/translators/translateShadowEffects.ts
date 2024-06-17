@@ -8,13 +8,13 @@ export const translateShadowEffect = (effect: Effect): Shadow | undefined => {
   }
 
   return {
-    style: translateShadowType(effect),
-    offsetX: effect.offset.x,
-    offsetY: effect.offset.y,
-    blur: effect.radius,
-    spread: effect.spread ?? 0,
-    hidden: !effect.visible,
-    color: {
+    'style': translateShadowType(effect),
+    'offset-x': effect.offset.x,
+    'offset-y': effect.offset.y,
+    'blur': effect.radius,
+    'spread': effect.spread ?? 0,
+    'hidden': !effect.visible,
+    'color': {
       color: rgbToHex(effect.color),
       opacity: effect.color.a
     }

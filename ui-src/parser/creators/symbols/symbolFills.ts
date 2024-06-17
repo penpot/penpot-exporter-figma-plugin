@@ -7,12 +7,12 @@ export const symbolFills = (fills?: Fill[]): Fill[] | undefined => {
   if (!fills) return;
 
   return fills.map(fill => {
-    if (fill.fillColorGradient) {
-      fill.fillColorGradient = symbolFillGradient(fill.fillColorGradient);
+    if (fill['fill-color-gradient']) {
+      fill['fill-color-gradient'] = symbolFillGradient(fill['fill-color-gradient']);
     }
 
-    if (fill.fillImage) {
-      fill.fillImage = symbolFillImage(fill.fillImage);
+    if (fill['fill-image']) {
+      fill['fill-image'] = symbolFillImage(fill['fill-image']);
     }
 
     return fill;

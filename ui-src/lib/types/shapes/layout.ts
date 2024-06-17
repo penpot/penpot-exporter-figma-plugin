@@ -19,24 +19,24 @@ export type LayoutSizing =
   | typeof ITEM_SIZING_AUTO;
 
 export type LayoutChildAttributes = {
-  'layoutItemMarginType'?:
+  'layout-item-margin-type'?:
     | 'simple'
     | 'multiple'
     | typeof ITEM_MARGIN_SIMPLE_TYPE
     | typeof ITEM_MARGIN_MULTIPLE_TYPE;
-  'layoutItemMargin'?: {
+  'layout-item-margin'?: {
     m1?: number;
     m2?: number;
     m3?: number;
     m4?: number;
   };
-  'layoutItemMaxH'?: number;
-  'layoutItemMinH'?: number;
-  'layoutItemMaxW'?: number;
-  'layoutItemMinW'?: number;
-  'layoutItemH-Sizing'?: LayoutSizing;
-  'layoutItemV-Sizing'?: LayoutSizing;
-  'layoutItemAlignSelf'?:
+  'layout-item-max-h'?: number;
+  'layout-item-min-h'?: number;
+  'layout-item-max-w'?: number;
+  'layout-item-min-w'?: number;
+  'layout-item-h-sizing'?: LayoutSizing;
+  'layout-item-v-sizing'?: LayoutSizing;
+  'layout-item-align-self'?:
     | 'start'
     | 'end'
     | 'center'
@@ -45,8 +45,8 @@ export type LayoutChildAttributes = {
     | typeof ITEM_ALIGN_SELF_END
     | typeof ITEM_ALIGN_SELF_CENTER
     | typeof ITEM_ALIGN_SELF_STRETCH;
-  'layoutItemAbsolute'?: boolean;
-  'layoutItemZIndex'?: number;
+  'layout-item-absolute'?: boolean;
+  'layout-item-z-Index'?: number;
 };
 
 export type JustifyAlignContent =
@@ -69,8 +69,8 @@ export type LayoutFlexDir =
   | 'column-reverse';
 
 export type LayoutGap = {
-  rowGap?: number;
-  columnGap?: number;
+  'row-gap'?: number;
+  'column-gap'?: number;
 };
 
 export type LayoutWrapType = 'wrap' | 'nowrap' | 'no-wrap';
@@ -83,21 +83,21 @@ export type LayoutPadding = {
 };
 
 export type LayoutAttributes = {
-  layout?: 'flex' | 'grid';
-  layoutFlexDir?: LayoutFlexDir;
-  layoutGap?: LayoutGap;
-  layoutGapType?: 'simple' | 'multiple';
-  layoutWrapType?: LayoutWrapType;
-  layoutPaddingType?: 'simple' | 'multiple';
-  layoutPadding?: LayoutPadding;
-  layoutJustifyContent?: JustifyAlignContent;
-  layoutJustifyItems?: JustifyAlignItems;
-  layoutAlignContent?: JustifyAlignContent;
-  layoutAlignItems?: JustifyAlignItems;
-  layoutGridDir?: 'row' | 'column';
-  layoutGridRows?: GridTrack[];
-  layoutGridColumns?: GridTrack[];
-  layoutGridCells?: { [uuid: Uuid]: GridCell };
+  'layout'?: 'flex' | 'grid';
+  'layout-flex-dir'?: LayoutFlexDir;
+  'layout-gap'?: LayoutGap;
+  'layout-gap-type'?: 'simple' | 'multiple';
+  'layout-wrap-type'?: LayoutWrapType;
+  'layout-padding-type'?: 'simple' | 'multiple';
+  'layout-padding'?: LayoutPadding;
+  'layout-justify-content'?: JustifyAlignContent;
+  'layout-justify-items'?: JustifyAlignItems;
+  'layout-align-content'?: JustifyAlignContent;
+  'layout-align-items'?: JustifyAlignItems;
+  'layout-grid-dir'?: 'row' | 'column';
+  'layout-grid-rows'?: GridTrack[];
+  'layout-grid-columns'?: GridTrack[];
+  'layout-grid-cells'?: { [uuid: Uuid]: GridCell };
 };
 
 type GridTrack = {
@@ -106,14 +106,14 @@ type GridTrack = {
 };
 
 type GridCell = {
-  id?: Uuid;
-  areaName?: string;
-  row: number;
-  rowSpan: number;
-  column: number;
-  columnSpan: number;
-  position?: 'auto' | 'manual' | 'area';
-  alignSelf?: 'auto' | 'start' | 'end' | 'center' | 'stretch';
-  justifySelf?: 'auto' | 'start' | 'end' | 'center' | 'stretch';
-  shapes?: Uuid[];
+  'id'?: Uuid;
+  'area-name'?: string;
+  'row': number;
+  'row-span': number;
+  'column': number;
+  'column-span': number;
+  'position'?: 'auto' | 'manual' | 'area';
+  'align-self'?: 'auto' | 'start' | 'end' | 'center' | 'stretch';
+  'justify-self'?: 'auto' | 'start' | 'end' | 'center' | 'stretch';
+  'shapes'?: Uuid[];
 };

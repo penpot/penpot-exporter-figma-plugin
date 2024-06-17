@@ -8,21 +8,21 @@ export type PenpotPage = {
 } & Children;
 
 export type PenpotPageOptions = {
-  background?: string; // hex color
-  savedGrids?: SavedGrids;
-  flows?: Flow[];
-  guides?: { [uuid: Uuid]: Guide };
+  'background'?: string; // hex color
+  'saved-grids'?: SavedGrids;
+  'flows'?: Flow[];
+  'guides'?: { [uuid: Uuid]: Guide };
 };
 
 type Flow = {
-  id?: Uuid;
-  name: string;
-  startingFrame: Uuid;
+  'id'?: Uuid;
+  'name': string;
+  'starting-frame': Uuid;
 };
 
 type Guide = {
-  id?: Uuid;
-  axis: 'x' | 'y';
-  position: number;
-  frameId?: Uuid;
+  'id'?: Uuid;
+  'axis': 'x' | 'y';
+  'position': number;
+  'frame-id'?: Uuid;
 };

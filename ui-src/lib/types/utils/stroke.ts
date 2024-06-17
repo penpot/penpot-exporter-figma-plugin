@@ -3,17 +3,17 @@ import { ImageColor, PartialImageColor } from './imageColor';
 import { Uuid } from './uuid';
 
 export type Stroke = {
-  strokeColor?: string;
-  strokeColorRefFile?: Uuid;
-  strokeColorRefId?: Uuid;
-  strokeOpacity?: number;
-  strokeStyle?: 'solid' | 'dotted' | 'dashed' | 'mixed' | 'none' | 'svg';
-  strokeWidth?: number;
-  strokeAlignment?: StrokeAlignment;
-  strokeCapStart?: StrokeCaps;
-  strokeCapEnd?: StrokeCaps;
-  strokeColorGradient?: Gradient;
-  strokeImage?: ImageColor | PartialImageColor;
+  'stroke-color'?: string;
+  'stroke-color-ref-file'?: Uuid;
+  'stroke-color-ref-id'?: Uuid;
+  'stroke-opacity'?: number;
+  'stroke-style'?: 'solid' | 'dotted' | 'dashed' | 'mixed' | 'none' | 'svg';
+  'stroke-width'?: number;
+  'stroke-alignment'?: StrokeAlignment;
+  'stroke-cap-start'?: StrokeCaps;
+  'stroke-cap-end'?: StrokeCaps;
+  'stroke-color-gradient'?: Gradient;
+  'stroke-image'?: ImageColor | PartialImageColor;
 };
 
 export type StrokeAlignment = 'center' | 'inner' | 'outer';

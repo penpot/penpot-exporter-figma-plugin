@@ -10,15 +10,24 @@ import {
 
 export const createPath = (
   file: PenpotFile,
-  { type, fills, strokes, blendMode, content, figmaId, figmaRelatedId, ...rest }: PathShape
+  {
+    type,
+    fills,
+    strokes,
+    'blend-mode': blendMode,
+    content,
+    figmaId,
+    figmaRelatedId,
+    ...rest
+  }: PathShape
 ) => {
   file.createPath({
-    id: parseFigmaId(file, figmaId),
-    shapeRef: parseFigmaId(file, figmaRelatedId, true),
-    fills: symbolFills(fills),
-    strokes: symbolStrokes(strokes),
-    blendMode: symbolBlendMode(blendMode),
-    content: symbolPathContent(content),
+    'id': parseFigmaId(file, figmaId),
+    'shape-ref': parseFigmaId(file, figmaRelatedId, true),
+    'fills': symbolFills(fills),
+    'strokes': symbolStrokes(strokes),
+    'blend-mode': symbolBlendMode(blendMode),
+    'content': symbolPathContent(content),
     ...rest
   });
 };

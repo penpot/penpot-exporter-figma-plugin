@@ -14,19 +14,19 @@ import { LayoutAttributes, LayoutChildAttributes } from '@ui/lib/types/shapes/la
 
 export const transformAutoLayout = (node: BaseFrameMixin): LayoutAttributes => {
   return {
-    layout: node.layoutMode !== 'NONE' ? 'flex' : undefined,
-    layoutFlexDir: translateLayoutFlexDir(node.layoutMode),
-    layoutGap: translateLayoutGap(
+    'layout': node.layoutMode !== 'NONE' ? 'flex' : undefined,
+    'layout-flex-dir': translateLayoutFlexDir(node.layoutMode),
+    'layout-gap': translateLayoutGap(
       node.layoutMode,
       node.itemSpacing,
       node.primaryAxisAlignItems === 'SPACE_BETWEEN'
     ),
-    layoutWrapType: translateLayoutWrapType(node.layoutWrap),
-    layoutPadding: translateLayoutPadding(node),
-    layoutJustifyContent: translateLayoutJustifyContent(node),
-    layoutJustifyItems: translateLayoutJustifyItems(node),
-    layoutAlignContent: translateLayoutAlignContent(node),
-    layoutAlignItems: translateLayoutAlignItems(node)
+    'layout-wrap-type': translateLayoutWrapType(node.layoutWrap),
+    'layout-padding': translateLayoutPadding(node),
+    'layout-justify-content': translateLayoutJustifyContent(node),
+    'layout-justify-items': translateLayoutJustifyItems(node),
+    'layout-align-content': translateLayoutAlignContent(node),
+    'layout-align-items': translateLayoutAlignItems(node)
   };
 };
 
@@ -34,11 +34,11 @@ export const transformLayoutAttributes = (
   node: LayoutMixin
 ): Pick<
   LayoutChildAttributes,
-  'layoutItemH-Sizing' | 'layoutItemV-Sizing' | 'layoutItemAbsolute'
+  'layout-item-h-sizing' | 'layout-item-v-sizing' | 'layout-item-absolute'
 > => {
   return {
-    'layoutItemH-Sizing': translateLayoutSizing(node.layoutSizingHorizontal),
-    'layoutItemV-Sizing': translateLayoutSizing(node.layoutSizingVertical),
-    'layoutItemAbsolute': node.layoutPositioning === 'ABSOLUTE'
+    'layout-item-h-sizing': translateLayoutSizing(node.layoutSizingHorizontal),
+    'layout-item-v-sizing': translateLayoutSizing(node.layoutSizingVertical),
+    'layout-item-absolute': node.layoutPositioning === 'ABSOLUTE'
   };
 };

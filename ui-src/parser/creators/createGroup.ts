@@ -7,12 +7,12 @@ import { createItems } from '.';
 
 export const createGroup = (
   file: PenpotFile,
-  { type, blendMode, children = [], figmaId, figmaRelatedId, ...rest }: GroupShape
+  { type, 'blend-mode': blendMode, children = [], figmaId, figmaRelatedId, ...rest }: GroupShape
 ) => {
   file.addGroup({
-    id: parseFigmaId(file, figmaId),
-    shapeRef: parseFigmaId(file, figmaRelatedId, true),
-    blendMode: symbolBlendMode(blendMode),
+    'id': parseFigmaId(file, figmaId),
+    'shape-ref': parseFigmaId(file, figmaRelatedId, true),
+    'blend-mode': symbolBlendMode(blendMode),
     ...rest
   });
 

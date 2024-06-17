@@ -63,20 +63,20 @@ const transformVectorPath = (
   const normalizedPaths = parseSVG(vectorPath.data);
 
   return {
-    type: 'path',
-    name: 'svg-path',
-    content: translateCommandsToSegments(
+    'type': 'path',
+    'name': 'svg-path',
+    'content': translateCommandsToSegments(
       normalizedPaths,
       node.absoluteTransform[0][2],
       node.absoluteTransform[1][2]
     ),
-    fills:
+    'fills':
       vectorPath.windingRule === 'NONE' ? [] : translateFills(vectorRegion?.fills ?? node.fills),
-    svgAttrs: {
+    'svg-attrs': {
       fillRule: translateWindingRule(vectorPath.windingRule)
     },
-    constraintsH: 'scale',
-    constraintsV: 'scale',
+    'constraints-h': 'scale',
+    'constraints-v': 'scale',
     ...transformStrokesFromVector(node, normalizedPaths, vectorRegion),
     ...transformEffects(node),
     ...transformSceneNode(node),

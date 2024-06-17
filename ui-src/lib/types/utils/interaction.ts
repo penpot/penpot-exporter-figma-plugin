@@ -29,52 +29,52 @@ type OverlayPosType =
   | 'bottom-center';
 
 type InteractionNavigate = {
-  actionType: 'navigate';
-  eventType: EventType;
-  destination?: Uuid;
-  preserveScroll?: boolean;
-  animation?: Animation;
+  'action-type': 'navigate';
+  'event-type': EventType;
+  'destination'?: Uuid;
+  'preserve-scroll'?: boolean;
+  'animation'?: Animation;
 };
 
 type InteractionOpenOverlay = {
-  actionType: 'open-overlay';
-  eventType: EventType;
-  overlayPosition?: Point;
-  overlayPosType?: OverlayPosType;
-  destination?: Uuid;
-  closeClickOutside?: boolean;
-  backgroundOverlay?: boolean;
-  animation?: Animation;
-  positionRelativeTo?: Uuid;
+  'action-type': 'open-overlay';
+  'event-type': EventType;
+  'overlay-position'?: Point;
+  'overlay-pos-type'?: OverlayPosType;
+  'destination'?: Uuid;
+  'close-click-outside'?: boolean;
+  'background-overlay'?: boolean;
+  'animation'?: Animation;
+  'position-relative-to'?: Uuid;
 };
 
 type InteractionToggleOverlay = {
-  actionType: 'toggle-overlay';
-  eventType: EventType;
-  overlayPosition?: Point;
-  overlayPosType?: OverlayPosType;
-  destination?: Uuid;
-  closeClickOutside?: boolean;
-  backgroundOverlay?: boolean;
-  animation?: Animation;
-  positionRelativeTo?: Uuid;
+  'action-type': 'toggle-overlay';
+  'event-type': EventType;
+  'overlay-position'?: Point;
+  'overlay-pos-type'?: OverlayPosType;
+  'destination'?: Uuid;
+  'close-click-outside'?: boolean;
+  'background-overlay'?: boolean;
+  'animation'?: Animation;
+  'position-relative-to'?: Uuid;
 };
 
 type InteractionCloseOverlay = {
-  actionType: 'close-overlay';
-  eventType: EventType;
-  destination?: Uuid;
-  animation?: Animation;
-  positionRelativeTo?: Uuid;
+  'action-type': 'close-overlay';
+  'event-type': EventType;
+  'destination'?: Uuid;
+  'animation'?: Animation;
+  'position-relative-to'?: Uuid;
 };
 
 type InteractionPrevScreen = {
-  actionType: 'prev-screen';
-  eventType: EventType;
+  'action-type': 'prev-screen';
+  'event-type': EventType;
 };
 
 type InteractionOpenUrl = {
-  actionType: 'open-url';
-  eventType: EventType;
-  url: string;
+  'action-type': 'open-url';
+  'event-type': EventType;
+  'url': string;
 };

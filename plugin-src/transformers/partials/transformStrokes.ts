@@ -20,8 +20,8 @@ export const transformStrokes = (
 
   const strokeCaps = (stroke: Stroke) => {
     if (!hasFillGeometry(node) && vectorNetwork && vectorNetwork.vertices.length > 0) {
-      stroke.strokeCapStart = translateStrokeCap(vectorNetwork.vertices[0]);
-      stroke.strokeCapEnd = translateStrokeCap(
+      stroke['stroke-cap-start'] = translateStrokeCap(vectorNetwork.vertices[0]);
+      stroke['stroke-cap-end'] = translateStrokeCap(
         vectorNetwork.vertices[vectorNetwork.vertices.length - 1]
       );
     }
@@ -47,8 +47,8 @@ export const transformStrokesFromVector = (
 
     if (!startVertex || !endVertex) return stroke;
 
-    stroke.strokeCapStart = translateStrokeCap(startVertex);
-    stroke.strokeCapEnd = translateStrokeCap(endVertex);
+    stroke['stroke-cap-start'] = translateStrokeCap(startVertex);
+    stroke['stroke-cap-end'] = translateStrokeCap(endVertex);
 
     return stroke;
   };

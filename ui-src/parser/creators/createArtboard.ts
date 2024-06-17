@@ -12,11 +12,11 @@ export const createArtboard = (
     type,
     fills,
     strokes,
-    blendMode,
     children = [],
     figmaId,
+    'blend-mode': blendMode,
+    'shape-ref': shapeRef,
     figmaRelatedId,
-    shapeRef,
     ...rest
   }: FrameShape
 ): Uuid | undefined => {
@@ -24,10 +24,10 @@ export const createArtboard = (
 
   file.addArtboard({
     id,
-    shapeRef: shapeRef ?? parseFigmaId(file, figmaRelatedId, true),
-    fills: symbolFills(fills),
-    strokes: symbolStrokes(strokes),
-    blendMode: symbolBlendMode(blendMode),
+    'shape-ref': shapeRef ?? parseFigmaId(file, figmaRelatedId, true),
+    'fills': symbolFills(fills),
+    'strokes': symbolStrokes(strokes),
+    'blend-mode': symbolBlendMode(blendMode),
     ...rest
   });
 

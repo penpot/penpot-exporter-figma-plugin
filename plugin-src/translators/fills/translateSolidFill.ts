@@ -4,7 +4,7 @@ import { Fill } from '@ui/lib/types/utils/fill';
 
 export const translateSolidFill = (fill: SolidPaint): Fill => {
   return {
-    fillColor: rgbToHex(fill.color),
-    fillOpacity: !fill.visible ? 0 : fill.opacity
+    'fill-color': rgbToHex(fill.color),
+    'fill-opacity': !fill.visible ? 0 : fill.opacity
   };
 };

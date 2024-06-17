@@ -25,12 +25,12 @@ type SquareGrid = {
 };
 
 type ColumnParams = {
-  color: GridColor;
-  type?: 'stretch' | 'left' | 'center' | 'right';
-  size?: number;
-  margin?: number;
-  itemLength?: number;
-  gutter?: number;
+  'color': GridColor;
+  'type'?: 'stretch' | 'left' | 'center' | 'right';
+  'size'?: number;
+  'margin'?: number;
+  'item-length'?: number;
+  'gutter'?: number;
 };
 
 type SquareParams = {

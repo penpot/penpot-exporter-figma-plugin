@@ -23,10 +23,10 @@ export const transformComponentNode = async (
   baseRotation: number
 ): Promise<ComponentRoot> => {
   componentsLibrary.register(node.id, {
-    type: 'component',
-    name: node.name,
-    path: node.parent?.type === 'COMPONENT_SET' ? node.parent.name : '',
-    showContent: !node.clipsContent,
+    'type': 'component',
+    'name': node.name,
+    'path': node.parent?.type === 'COMPONENT_SET' ? node.parent.name : '',
+    'show-content': !node.clipsContent,
     ...transformFigmaIds(node),
     ...transformFills(node),
     ...transformEffects(node),

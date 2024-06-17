@@ -10,8 +10,8 @@ export const translateLocalFont = (fontName: FontName, fontWeight: number): Font
   if (localFont === undefined) return;
 
   return {
-    fontId: localFont.id,
-    fontVariantId: translateFontVariantId(localFont, fontName, fontWeight)
+    'font-id': localFont.id,
+    'font-variant-id': translateFontVariantId(localFont, fontName, fontWeight)
   };
 };
 

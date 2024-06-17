@@ -17,11 +17,11 @@ export const createComponent = (file: PenpotFile, { figmaId }: ComponentRoot) =>
 
   const frameId = createArtboard(file, {
     ...component,
-    componentFile: file.getId(),
-    componentId,
-    componentRoot: true,
-    mainInstance: true,
-    type: 'frame'
+    'component-file': file.getId(),
+    'component-id': componentId,
+    'component-root': true,
+    'main-instance': true,
+    'type': 'frame'
   });
 
   if (!frameId) {

@@ -20,9 +20,9 @@ export const transformBooleanNode = async (
   baseRotation: number
 ): Promise<BoolShape> => {
   return {
-    type: 'bool',
-    name: node.name,
-    boolType: translateBoolType(node.booleanOperation),
+    'type': 'bool',
+    'name': node.name,
+    'bool-type': translateBoolType(node.booleanOperation),
     ...transformFigmaIds(node),
     ...(await transformChildren(node, baseRotation)),
     ...transformFills(node),

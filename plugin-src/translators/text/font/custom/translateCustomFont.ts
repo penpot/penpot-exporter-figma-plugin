@@ -4,7 +4,7 @@ import { FontId } from '@ui/lib/types/shapes/textShape';
 
 export const translateCustomFont = (fontName: FontName, fontWeight: number): FontId | undefined => {
   return {
-    fontId: `custom-${getCustomFontId(fontName)}`,
-    fontVariantId: translateFontVariantId(fontName, fontWeight)
+    'font-id': `custom-${getCustomFontId(fontName)}`,
+    'font-variant-id': translateFontVariantId(fontName, fontWeight)
   };
 };

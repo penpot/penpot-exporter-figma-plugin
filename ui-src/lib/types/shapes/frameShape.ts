@@ -16,9 +16,9 @@ export type FrameShape = ShapeBaseAttributes &
   Children;
 
 type FrameAttributes = {
-  type?: 'frame';
-  shapes?: Uuid[];
-  hideFillOnExport?: boolean;
-  showContent?: boolean;
-  hideInViewer?: boolean;
+  'type'?: 'frame';
+  'shapes'?: Uuid[];
+  'hide-fill-on-export'?: boolean;
+  'show-content'?: boolean;
+  'hide-in-viewer'?: boolean;
 };

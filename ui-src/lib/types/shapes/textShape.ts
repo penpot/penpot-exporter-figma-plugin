@@ -18,10 +18,10 @@ export type TextAttributes = {
 };
 
 export type TextContent = {
-  type: 'root';
-  key?: string;
-  verticalAlign?: TextVerticalAlign;
-  children?: ParagraphSet[];
+  'type': 'root';
+  'key'?: string;
+  'vertical-align'?: TextVerticalAlign;
+  'children'?: ParagraphSet[];
 };
 
 export type TextVerticalAlign = 'top' | 'bottom' | 'center';
@@ -46,23 +46,23 @@ export type TextNode = {
 } & TextStyle;
 
 export type TextStyle = FontId & {
-  fontFamily?: string;
-  fontSize?: string;
-  fontStyle?: TextFontStyle;
-  fontWeight?: string;
-  textDecoration?: string;
-  textTransform?: string;
-  direction?: string;
-  typographyRefId?: string;
-  typographyRefFile?: string;
-  lineHeight?: number;
-  letterSpacing?: number;
-  textAlign?: TextHorizontalAlign;
-  textDirection?: 'ltr' | 'rtl' | 'auto';
-  fills?: Fill[];
+  'font-family'?: string;
+  'font-size'?: string;
+  'font-style'?: TextFontStyle;
+  'font-weight'?: string;
+  'text-decoration'?: string;
+  'text-transform'?: string;
+  'direction'?: string;
+  'typography-ref-id'?: string;
+  'typography-ref-file'?: string;
+  'line-height'?: number;
+  'letter-spacing'?: number;
+  'text-align'?: TextHorizontalAlign;
+  'text-direction'?: 'ltr' | 'rtl' | 'auto';
+  'fills'?: Fill[];
 };
 
 export type FontId = {
-  fontId?: string;
-  fontVariantId?: string;
+  'font-id'?: string;
+  'font-variant-id'?: string;
 };

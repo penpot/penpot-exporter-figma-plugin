@@ -54,9 +54,9 @@ export const transformFrameNode = async (
   }
 
   return {
-    type: 'frame',
-    name: node.name,
-    showContent: isSectionNode(node) ? true : !node.clipsContent,
+    'type': 'frame',
+    'name': node.name,
+    'show-content': isSectionNode(node) ? true : !node.clipsContent,
     ...transformFigmaIds(node),
     ...transformFills(node),
     ...referencePoint,

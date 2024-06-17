@@ -67,14 +67,14 @@ export class Paragraph {
     if (indent === 0) return;
 
     return {
-      text: ' '.repeat(indent),
-      fontId: 'sourcesanspro',
-      fontVariantId: 'regular',
-      fontSize: '5',
-      fontStyle: 'normal',
-      fontWeight: '400',
-      lineHeight: 1,
-      letterSpacing: 0
+      'text': ' '.repeat(indent),
+      'font-id': 'sourcesanspro',
+      'font-variant-id': 'regular',
+      'font-size': '5',
+      'font-style': 'normal',
+      'font-weight': '400',
+      'line-height': 1,
+      'letter-spacing': 0
     };
   }
 
@@ -82,14 +82,14 @@ export class Paragraph {
     if (paragraphSpacing === 0) return;
 
     return {
-      text: '\n',
-      fontId: 'sourcesanspro',
-      fontVariantId: 'regular',
-      fontSize: paragraphSpacing.toString(),
-      fontStyle: 'normal',
-      fontWeight: '400',
-      lineHeight: 1,
-      letterSpacing: 0
+      'text': '\n',
+      'font-id': 'sourcesanspro',
+      'font-variant-id': 'regular',
+      'font-size': paragraphSpacing.toString(),
+      'font-style': 'normal',
+      'font-weight': '400',
+      'line-height': 1,
+      'letter-spacing': 0
     };
   }
 }

@@ -5,14 +5,14 @@ import { symbolBlendMode, symbolFills, symbolStrokes } from '@ui/parser/creators
 
 export const createText = (
   file: PenpotFile,
-  { type, blendMode, strokes, figmaId, content, figmaRelatedId, ...rest }: TextShape
+  { type, 'blend-mode': blendMode, strokes, figmaId, content, figmaRelatedId, ...rest }: TextShape
 ) => {
   file.createText({
-    id: parseFigmaId(file, figmaId),
-    shapeRef: parseFigmaId(file, figmaRelatedId, true),
-    content: parseContent(content),
-    blendMode: symbolBlendMode(blendMode),
-    strokes: symbolStrokes(strokes),
+    'id': parseFigmaId(file, figmaId),
+    'shape-ref': parseFigmaId(file, figmaRelatedId, true),
+    'content': parseContent(content),
+    'blend-mode': symbolBlendMode(blendMode),
+    'strokes': symbolStrokes(strokes),
     ...rest
   });
 };

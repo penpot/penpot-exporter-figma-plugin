@@ -13,20 +13,20 @@ export const createComponentLibrary = (file: PenpotFile) => {
       return;
     }
 
-    const { children = [], fills, strokes, blendMode, ...rest } = component;
+    const { children = [], fills, strokes, 'blend-mode': blendMode, ...rest } = component;
 
     file.startComponent({
       ...rest,
-      fills: symbolFills(fills),
-      strokes: symbolStrokes(strokes),
-      blendMode: symbolBlendMode(blendMode),
-      id: uiComponent.componentId,
-      componentId: uiComponent.componentId,
-      mainInstancePage: uiComponent.mainInstancePage,
-      mainInstanceId: uiComponent.mainInstanceId,
-      componentRoot: true,
-      mainInstance: true,
-      componentFile: file.getId()
+      'fills': symbolFills(fills),
+      'strokes': symbolStrokes(strokes),
+      'blend-mode': symbolBlendMode(blendMode),
+      'id': uiComponent.componentId,
+      'component-id': uiComponent.componentId,
+      'main-instance-page': uiComponent.mainInstancePage,
+      'main-instance-id': uiComponent.mainInstanceId,
+      'component-root': true,
+      'main-instance': true,
+      'component-file': file.getId()
     });
 
     createItems(file, children);

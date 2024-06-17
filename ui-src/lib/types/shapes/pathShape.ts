@@ -7,9 +7,9 @@ export type PathShape = ShapeBaseAttributes &
   LayoutChildAttributes;
 
 export type PathAttributes = {
-  type?: 'path';
-  content: PathContent;
-  svgAttrs?: {
+  'type'?: 'path';
+  'content': PathContent;
+  'svg-attrs'?: {
     fillRule?: FillRules;
   };
 };

@@ -4,7 +4,7 @@ import { translateGrowType, translateVerticalAlign } from '@plugin/translators/t
 
 import { TextAttributes, TextShape } from '@ui/lib/types/shapes/textShape';
 
-export const transformText = (node: TextNode): TextAttributes & Pick<TextShape, 'growType'> => {
+export const transformText = (node: TextNode): TextAttributes & Pick<TextShape, 'grow-type'> => {
   const styledTextSegments = node.getStyledTextSegments([
     'fontName',
     'fontSize',
@@ -19,10 +19,10 @@ export const transformText = (node: TextNode): TextAttributes & Pick<TextShape, 
   ]);
 
   return {
-    content: {
-      type: 'root',
-      verticalAlign: translateVerticalAlign(node.textAlignVertical),
-      children: styledTextSegments.length
+    'content': {
+      'type': 'root',
+      'vertical-align': translateVerticalAlign(node.textAlignVertical),
+      'children': styledTextSegments.length
         ? [
             {
               type: 'paragraph-set',
@@ -38,6 +38,6 @@ export const transformText = (node: TextNode): TextAttributes & Pick<TextShape, 
           ]
         : undefined
     },
-    growType: translateGrowType(node)
+    'grow-type': translateGrowType(node)
   };
 };

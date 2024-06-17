@@ -3,6 +3,7 @@ import { transformGroupNodeLike, transformSceneNode } from '@plugin/transformers
 import { transformMaskFigmaIds } from '@plugin/transformers/partials';
 import { sleep } from '@plugin/utils';
 
+import { GroupShape } from '@ui/lib/types/shapes/groupShape';
 import { PenpotNode } from '@ui/types';
 
 /**
@@ -39,11 +40,11 @@ export const translateMaskChildren = async (
     return [...unmaskedChildren, ...maskedChildren];
   }
 
-  const maskGroup = {
+  const maskGroup: GroupShape = {
     ...transformMaskFigmaIds(maskChild),
     ...transformGroupNodeLike(maskChild, baseRotation),
-    children: maskedChildren,
-    maskedGroup: true
+    'children': maskedChildren,
+    'masked-group': true
   };
 
   return [...unmaskedChildren, maskGroup];

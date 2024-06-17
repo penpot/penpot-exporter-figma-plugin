@@ -7,9 +7,9 @@ export const translateStrokes = (
   strokeCaps: (stroke: Stroke) => Stroke = stroke => stroke
 ): Stroke[] => {
   const sharedStrokeProperties: Stroke = {
-    strokeWidth: translateStrokeWeight(node),
-    strokeAlignment: translateStrokeAlignment(node.strokeAlign),
-    strokeStyle: node.dashPattern.length ? 'dashed' : 'solid'
+    'stroke-width': translateStrokeWeight(node),
+    'stroke-alignment': translateStrokeAlignment(node.strokeAlign),
+    'stroke-style': node.dashPattern.length ? 'dashed' : 'solid'
   };
 
   return node.strokes.map((paint, index) =>
@@ -26,9 +26,9 @@ export const translateStroke = (
   const fill = translateFill(paint);
 
   let stroke: Stroke = {
-    strokeColor: fill?.fillColor,
-    strokeOpacity: fill?.fillOpacity,
-    strokeImage: fill?.fillImage,
+    'stroke-color': fill?.['fill-color'],
+    'stroke-opacity': fill?.['fill-opacity'],
+    'stroke-image': fill?.['fill-image'],
     ...sharedStrokeProperties
   };
 

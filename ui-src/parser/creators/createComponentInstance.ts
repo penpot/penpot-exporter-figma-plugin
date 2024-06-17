@@ -34,10 +34,10 @@ export const createComponentInstance = (
 
   createArtboard(file, {
     ...rest,
-    shapeRef: uiComponent.mainInstanceId,
-    componentFile: file.getId(),
-    componentRoot: isComponentRoot,
-    componentId: uiComponent.componentId,
-    type: 'frame'
+    'shape-ref': uiComponent.mainInstanceId,
+    'component-file': file.getId(),
+    'component-root': isComponentRoot,
+    'component-id': uiComponent.componentId,
+    'type': 'frame'
   });
 };

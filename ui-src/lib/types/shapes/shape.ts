@@ -12,11 +12,11 @@ import { Stroke } from '@ui/lib/types/utils/stroke';
 import { Uuid } from '@ui/lib/types/utils/uuid';
 
 export type ShapeBaseAttributes = {
-  id?: Uuid;
-  figmaId?: string; // @TODO: move to any other place
-  figmaRelatedId?: string; // @TODO: move to any other place
-  name?: string;
-  type?:
+  'id'?: Uuid;
+  'figmaId'?: string; // @TODO: move to any other place
+  'figmaRelatedId'?: string; // @TODO: move to any other place
+  'name'?: string;
+  'type'?:
     | 'frame'
     | 'group'
     | 'bool'
@@ -28,52 +28,50 @@ export type ShapeBaseAttributes = {
     | 'image'
     | 'component'
     | 'instance';
-  selrect?: Selrect;
-  points?: Point[];
-  transform?: Matrix;
-  transformInverse?: Matrix;
-  parentId?: Uuid;
-  frameId?: Uuid;
-  rotation?: number;
+  'selrect'?: Selrect;
+  'points'?: Point[];
+  'transform'?: Matrix;
+  'transform-inverse'?: Matrix;
+  'parent-id'?: Uuid;
+  'frame-id'?: Uuid;
+  'rotation'?: number;
 };
 
 export type ShapeAttributes = {
-  name?: string;
-  componentId?: string;
-  componentFile?: string;
-  componentRoot?: boolean;
-  mainInstance?: boolean;
-  remoteSynced?: boolean;
-  shapeRef?: string;
-  selrect?: Selrect;
-  points?: Point[];
-  blocked?: boolean;
-  collapsed?: boolean;
-  locked?: boolean;
-  hidden?: boolean;
-  maskedGroup?: boolean;
-  fills?: Fill[];
-  hideFillOnExport?: boolean;
-  proportion?: number;
-  proportionLock?: boolean;
-  constraintsH?: ConstraintH;
-  constraintsV?: ConstraintV;
-  fixedScroll?: boolean;
-  rx?: number;
-  ry?: number;
-  r1?: number;
-  r2?: number;
-  r3?: number;
-  r4?: number;
-  opacity?: number;
-  grids?: Grid[];
-  exports?: Export[];
-  strokes?: Stroke[];
-  blendMode?: BlendMode;
-  interactions?: Interaction[];
-  shadow?: Shadow[];
-  blur?: Blur;
-  growType?: GrowType;
+  'name'?: string;
+  'component-id'?: string;
+  'component-file'?: string;
+  'component-root'?: boolean;
+  'main-instance'?: boolean;
+  'remote-synced'?: boolean;
+  'shape-ref'?: string;
+  'blocked'?: boolean;
+  'collapsed'?: boolean;
+  'locked'?: boolean;
+  'hidden'?: boolean;
+  'masked-group'?: boolean;
+  'fills'?: Fill[];
+  'hide-fill-on-export'?: boolean;
+  'proportion'?: number;
+  'proportion-lock'?: boolean;
+  'constraints-h'?: ConstraintH;
+  'constraints-v'?: ConstraintV;
+  'fixed-scroll'?: boolean;
+  'rx'?: number;
+  'ry'?: number;
+  'r1'?: number;
+  'r2'?: number;
+  'r3'?: number;
+  'r4'?: number;
+  'opacity'?: number;
+  'grids'?: Grid[];
+  'exports'?: Export[];
+  'strokes'?: Stroke[];
+  'blend-mode'?: BlendMode;
+  'interactions'?: Interaction[];
+  'shadow'?: Shadow[];
+  'blur'?: Blur;
+  'grow-type'?: GrowType;
 };
 
 export type ShapeGeomAttributes = {

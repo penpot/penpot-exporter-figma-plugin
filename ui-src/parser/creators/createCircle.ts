@@ -5,14 +5,14 @@ import { symbolBlendMode, symbolFills, symbolStrokes } from '@ui/parser/creators
 
 export const createCircle = (
   file: PenpotFile,
-  { type, fills, strokes, blendMode, figmaId, figmaRelatedId, ...rest }: CircleShape
+  { type, fills, strokes, 'blend-mode': blendMode, figmaId, figmaRelatedId, ...rest }: CircleShape
 ) => {
   file.createCircle({
-    id: parseFigmaId(file, figmaId),
-    shapeRef: parseFigmaId(file, figmaRelatedId, true),
-    fills: symbolFills(fills),
-    strokes: symbolStrokes(strokes),
-    blendMode: symbolBlendMode(blendMode),
+    'id': parseFigmaId(file, figmaId),
+    'shape-ref': parseFigmaId(file, figmaRelatedId, true),
+    'fills': symbolFills(fills),
+    'strokes': symbolStrokes(strokes),
+    'blend-mode': symbolBlendMode(blendMode),
     ...rest
   });
 };

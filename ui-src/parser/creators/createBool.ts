@@ -16,8 +16,8 @@ export const createBool = (
     type,
     fills,
     strokes,
-    boolType,
-    blendMode,
+    'bool-type': boolType,
+    'blend-mode': blendMode,
     figmaId,
     figmaRelatedId,
     children = [],
@@ -25,12 +25,12 @@ export const createBool = (
   }: BoolShape
 ) => {
   file.addBool({
-    id: parseFigmaId(file, figmaId),
-    shapeRef: parseFigmaId(file, figmaRelatedId, true),
-    fills: symbolFills(fills),
-    strokes: symbolStrokes(strokes),
-    blendMode: symbolBlendMode(blendMode),
-    boolType: symbolBoolType(boolType),
+    'id': parseFigmaId(file, figmaId),
+    'shape-ref': parseFigmaId(file, figmaRelatedId, true),
+    'fills': symbolFills(fills),
+    'strokes': symbolStrokes(strokes),
+    'blend-mode': symbolBlendMode(blendMode),
+    'bool-type': symbolBoolType(boolType),
     ...rest
   });
 

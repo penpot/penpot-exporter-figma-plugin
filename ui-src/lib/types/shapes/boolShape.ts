@@ -27,13 +27,13 @@ export type BoolShape = ShapeBaseAttributes &
   Children;
 
 type BoolAttributes = {
-  type?: 'bool';
-  shapes?: Uuid[];
-  boolType: BoolOperations;
-  boolContent?: BoolContent[];
+  'type'?: 'bool';
+  'shapes'?: Uuid[];
+  'bool-type': BoolOperations;
+  'bool-content'?: BoolContent[];
 };
 
 type BoolContent = {
-  relative?: boolean;
-  prevPos?: Point;
+  'relative'?: boolean;
+  'prev-pos'?: Point;
 } & PathContent;

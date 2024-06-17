@@ -7,11 +7,11 @@ export const parseImage = async (bytes: Uint8Array): Promise<ImageColor> => {
   const image = await extractFromBytes(bytes);
 
   return {
-    width: image.width,
-    height: image.height,
-    dataUri: image.dataURL,
-    keepAspectRatio: true,
-    id: '00000000-0000-0000-0000-000000000000'
+    'width': image.width,
+    'height': image.height,
+    'data-uri': image.dataURL,
+    'keep-aspect-ratio': true,
+    'id': '00000000-0000-0000-0000-000000000000'
   };
 };
 

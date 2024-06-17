@@ -8,8 +8,8 @@ export const translateImageFill = (fill: ImagePaint): Fill | undefined => {
   if (!fillImage) return;
 
   return {
-    fillOpacity: !fill.visible ? 0 : fill.opacity,
-    fillImage
+    'fill-opacity': !fill.visible ? 0 : fill.opacity,
+    'fill-image': fillImage
   };
 };
 

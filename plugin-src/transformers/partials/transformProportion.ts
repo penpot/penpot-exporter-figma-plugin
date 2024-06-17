@@ -1,7 +1,9 @@
 import { ShapeAttributes } from '@ui/lib/types/shapes/shape';
 
-export const transformProportion = (node: LayoutMixin): Pick<ShapeAttributes, 'proportionLock'> => {
+export const transformProportion = (
+  node: LayoutMixin
+): Pick<ShapeAttributes, 'proportion-lock'> => {
   return {
-    proportionLock: node.constrainProportions
+    'proportion-lock': node.constrainProportions
   };
 };

@@ -4,9 +4,9 @@ import { ShapeAttributes } from '@ui/lib/types/shapes/shape';
 
 export const transformConstraints = (
   node: ConstraintMixin
-): Pick<ShapeAttributes, 'constraintsH' | 'constraintsV'> => {
+): Pick<ShapeAttributes, 'constraints-h' | 'constraints-v'> => {
   return {
-    constraintsH: translateConstraintH(node.constraints.horizontal),
-    constraintsV: translateConstraintV(node.constraints.vertical)
+    'constraints-h': translateConstraintH(node.constraints.horizontal),
+    'constraints-v': translateConstraintV(node.constraints.vertical)
   };
 };

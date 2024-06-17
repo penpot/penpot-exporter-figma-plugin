@@ -27,15 +27,15 @@ export const translateStyleTextSegments = (
 export const transformTextStyle = (node: TextNode, segment: StyleTextSegment): TextStyle => {
   return {
     ...translateFontId(segment.fontName, segment.fontWeight),
-    fontFamily: segment.fontName.family,
-    fontSize: segment.fontSize.toString(),
-    fontStyle: translateFontStyle(segment.fontName.style),
-    fontWeight: segment.fontWeight.toString(),
-    textAlign: translateHorizontalAlign(node.textAlignHorizontal),
-    textDecoration: translateTextDecoration(segment),
-    textTransform: translateTextTransform(segment),
-    letterSpacing: translateLetterSpacing(segment),
-    lineHeight: translateLineHeight(segment)
+    'font-family': segment.fontName.family,
+    'font-size': segment.fontSize.toString(),
+    'font-style': translateFontStyle(segment.fontName.style),
+    'font-weight': segment.fontWeight.toString(),
+    'text-align': translateHorizontalAlign(node.textAlignHorizontal),
+    'text-decoration': translateTextDecoration(segment),
+    'text-transform': translateTextTransform(segment),
+    'letter-spacing': translateLetterSpacing(segment),
+    'line-height': translateLineHeight(segment)
   };
 };
 

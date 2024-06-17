@@ -16,10 +16,10 @@ export type ComponentShape = ShapeBaseAttributes &
   Children;
 
 export type ComponentAttributes = {
-  type?: 'component';
-  name: string;
-  path: string;
-  showContent?: boolean;
-  mainInstanceId?: Uuid;
-  mainInstancePage?: Uuid;
+  'type'?: 'component';
+  'name': string;
+  'path': string;
+  'show-content'?: boolean;
+  'main-instance-id'?: Uuid;
+  'main-instance-page'?: Uuid;
 };

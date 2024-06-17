@@ -32,14 +32,14 @@ export const translateLayoutGap = (
 ): LayoutGap => {
   if (auto) {
     return {
-      rowGap: 0,
-      columnGap: 0
+      'row-gap': 0,
+      'column-gap': 0
     };
   }
 
   return {
-    rowGap: layoutMode === 'VERTICAL' ? itemSpacing : 0,
-    columnGap: layoutMode === 'HORIZONTAL' ? itemSpacing : 0
+    'row-gap': layoutMode === 'VERTICAL' ? itemSpacing : 0,
+    'column-gap': layoutMode === 'HORIZONTAL' ? itemSpacing : 0
   };
 };
 
