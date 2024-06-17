@@ -6,6 +6,7 @@ import {
   transformFigmaIds,
   transformFills,
   transformLayoutAttributes,
+  transformOverrides,
   transformProportion,
   transformRotationAndPosition,
   transformSceneNode,
@@ -28,6 +29,7 @@ export const transformEllipseNode = (node: EllipseNode, baseRotation: number): C
     ...transformBlend(node),
     ...transformProportion(node),
     ...transformLayoutAttributes(node),
-    ...transformConstraints(node)
+    ...transformConstraints(node),
+    ...transformOverrides(node)
   };
 };

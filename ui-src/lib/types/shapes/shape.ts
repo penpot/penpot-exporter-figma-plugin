@@ -75,7 +75,7 @@ export type ShapeAttributes = {
   shadow?: Shadow[];
   blur?: Blur;
   growType?: GrowType;
-  touched: SyncGroups[];
+  touched?: SyncGroups[];
 };
 
 export type ShapeGeomAttributes = {

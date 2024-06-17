@@ -3,6 +3,7 @@ import {
   transformDimension,
   transformEffects,
   transformFigmaIds,
+  transformOverrides,
   transformRotationAndPosition,
   transformSceneNode
 } from '@plugin/transformers/partials';
@@ -19,7 +20,8 @@ export const transformGroupNode = async (
     ...transformGroupNodeLike(node, baseRotation),
     ...transformEffects(node),
     ...transformBlend(node),
-    ...(await transformChildren(node, baseRotation))
+    ...(await transformChildren(node, baseRotation)),
+    ...transformOverrides(node)
   };
 };
 

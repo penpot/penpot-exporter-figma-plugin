@@ -11,6 +11,7 @@ import {
   transformFigmaIds,
   transformFills,
   transformLayoutAttributes,
+  transformOverrides,
   transformProportion,
   transformRotationAndPosition,
   transformSceneNode,
@@ -58,7 +59,8 @@ export const transformInstanceNode = async (
     ...transformRotationAndPosition(node, baseRotation),
     ...transformConstraints(node),
     ...transformAutoLayout(node),
-    ...(await transformChildren(node, node.rotation + baseRotation))
+    ...(await transformChildren(node, node.rotation + baseRotation)),
+    ...transformOverrides(node)
   };
 };
 

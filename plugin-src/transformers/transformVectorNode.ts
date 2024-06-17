@@ -1,6 +1,7 @@
 import {
   transformConstraints,
   transformFigmaIds,
+  transformOverrides,
   transformVectorPaths
 } from '@plugin/transformers/partials';
 
@@ -26,7 +27,8 @@ export const transformVectorNode = (
       ...children[0],
       name: node.name,
       ...transformFigmaIds(node),
-      ...transformConstraints(node)
+      ...transformConstraints(node),
+      ...transformOverrides(node)
     };
   }
 
@@ -34,6 +36,7 @@ export const transformVectorNode = (
     ...transformGroupNodeLike(node, baseRotation),
     ...transformFigmaIds(node),
     ...transformConstraints(node),
+    ...transformOverrides(node),
     children
   };
 };
