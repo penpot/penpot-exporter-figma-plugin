@@ -1,14 +1,32 @@
 import { componentsLibrary } from '@plugin/ComponentLibrary';
+import { sleep } from '@plugin/utils/sleep';
 
+import { sendMessage } from '@ui/context';
 import { PenpotFile } from '@ui/lib/types/penpotFile';
 import { symbolBlendMode, symbolFills, symbolStrokes } from '@ui/parser/creators/symbols';
 import { uiComponents } from '@ui/parser/libraries';
 
 import { createItems } from '.';
 
-export const createComponentLibrary = (file: PenpotFile) => {
-  uiComponents.all().forEach(uiComponent => {
+export const createComponentLibrary = async (file: PenpotFile) => {
+  let componentsBuilt = 1;
+  const components = uiComponents.all();
+
+  sendMessage({
+    type: 'PROGRESS_STEP',
+    data: 'components'
+  });
+
+  await sleep(20);
+
+  sendMessage({
+    type: 'PROGRESS_TOTAL_ITEMS',
+    data: components.length
+  });
+
+  for (const uiComponent of components) {
     const component = componentsLibrary.get(uiComponent.componentFigmaId);
+
     if (!component) {
       return;
     }
@@ -32,5 +50,12 @@ export const createComponentLibrary = (file: PenpotFile) => {
     createItems(file, children);
 
     file.finishComponent();
-  });
+
+    sendMessage({
+      type: 'PROGRESS_PROCESSED_ITEMS',
+      data: componentsBuilt++
+    });
+
+    await sleep(0);
+  }
 };

@@ -25,7 +25,15 @@ const stepMessages: Record<Steps, Messages> = {
   optimization: {
     total: 'images optimized 📸'
   },
-  downloading: {
+  building: {
+    total: 'pages built 🏗️',
+    current: 'Currently processing layer'
+  },
+  components: {
+    total: 'components built 🏗️',
+    current: 'Currently processing layer'
+  },
+  exporting: {
     total: 'Generating Penpot file 🚀',
     current: 'Please wait, this process might take a while...'
   }
@@ -51,6 +59,8 @@ const StepProgress = (): JSX.Element | null => {
     case 'remote':
     case 'images':
     case 'optimization':
+    case 'building':
+    case 'components':
       return (
         <>
           {processedItems} of {totalItems} {stepMessages[step].total}
@@ -64,7 +74,7 @@ const StepProgress = (): JSX.Element | null => {
           ) : undefined}
         </>
       );
-    case 'downloading':
+    case 'exporting':
       return (
         <>
           {stepMessages[step].total}

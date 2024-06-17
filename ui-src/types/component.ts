@@ -5,6 +5,7 @@ import { Children } from '@ui/lib/types/utils/children';
 export type ComponentRoot = {
   figmaId: string;
   type: 'component';
+  name: string;
 };
 
 export type ComponentTextPropertyOverride = {
