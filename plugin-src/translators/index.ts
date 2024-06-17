@@ -4,5 +4,6 @@ export * from './translateBoolType';
 export * from './translateChildren';
 export * from './translateConstraints';
 export * from './translateLayout';
+export * from './translateRotation';
 export * from './translateShadowEffects';
 export * from './translateStrokes';

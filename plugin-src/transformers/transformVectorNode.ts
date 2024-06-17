@@ -20,7 +20,7 @@ export const transformVectorNode = (
   node: VectorNode,
   baseRotation: number
 ): GroupShape | PathShape => {
-  const children = transformVectorPaths(node);
+  const children = transformVectorPaths(node, baseRotation);
 
   if (children.length === 1) {
     return {

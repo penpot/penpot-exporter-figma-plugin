@@ -1,4 +1,4 @@
-export * from './translateCommandsToSegments';
-export * from './translateLineNode';
-export * from './translatePathNode';
+export * from './translateCommands';
+export * from './translateNonRotatedCommands';
+export * from './translateRotatedCommands';
 export * from './translateWindingRule';

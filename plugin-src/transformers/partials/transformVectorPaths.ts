@@ -9,11 +9,11 @@ import {
   transformStrokesFromVector
 } from '@plugin/transformers/partials';
 import { translateFills } from '@plugin/translators/fills';
-import { translateCommandsToSegments, translateWindingRule } from '@plugin/translators/vectors';
+import { translateCommands, translateWindingRule } from '@plugin/translators/vectors';
 
 import { PathShape } from '@ui/lib/types/shapes/pathShape';
 
-export const transformVectorPaths = (node: VectorNode): PathShape[] => {
+export const transformVectorPaths = (node: VectorNode, baseRotation: number): PathShape[] => {
   const pathShapes = node.vectorPaths
     .filter((vectorPath, index) => {
       return (
@@ -22,7 +22,7 @@ export const transformVectorPaths = (node: VectorNode): PathShape[] => {
       );
     })
     .map((vectorPath, index) =>
-      transformVectorPath(node, vectorPath, (node.vectorNetwork.regions ?? [])[index])
+      transformVectorPath(node, vectorPath, (node.vectorNetwork.regions ?? [])[index], baseRotation)
     );
 
   const geometryShapes = node.fillGeometry
@@ -32,7 +32,7 @@ export const transformVectorPaths = (node: VectorNode): PathShape[] => {
           vectorPath => normalizePath(vectorPath.data) === normalizePath(geometry.data)
         )
     )
-    .map(geometry => transformVectorPath(node, geometry, undefined));
+    .map(geometry => transformVectorPath(node, geometry, undefined, baseRotation));
 
   return [...geometryShapes, ...pathShapes];
 };
@@ -58,18 +58,15 @@ const nodeHasFills = (
 const transformVectorPath = (
   node: VectorNode,
   vectorPath: VectorPath,
-  vectorRegion: VectorRegion | undefined
+  vectorRegion: VectorRegion | undefined,
+  baseRotation: number
 ): PathShape => {
   const normalizedPaths = parseSVG(vectorPath.data);
 
   return {
     type: 'path',
     name: 'svg-path',
-    content: translateCommandsToSegments(
-      normalizedPaths,
-      node.absoluteTransform[0][2],
-      node.absoluteTransform[1][2]
-    ),
+    content: translateCommands(node, normalizedPaths, baseRotation),
     fills:
       vectorPath.windingRule === 'NONE' ? [] : translateFills(vectorRegion?.fills ?? node.fills),
     svgAttrs: {

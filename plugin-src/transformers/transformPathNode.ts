@@ -1,3 +1,5 @@
+import { parseSVG } from 'svg-path-parser';
+
 import {
   transformBlend,
   transformConstraints,
@@ -7,12 +9,13 @@ import {
   transformLayoutAttributes,
   transformOverrides,
   transformProportion,
+  transformRotation,
   transformSceneNode,
   transformStrokes
 } from '@plugin/transformers/partials';
-import { translatePathNode } from '@plugin/translators/vectors';
+import { translateCommands } from '@plugin/translators/vectors';
 
-import { PathShape } from '@ui/lib/types/shapes/pathShape';
+import { PathShape, Segment } from '@ui/lib/types/shapes/pathShape';
 
 export const transformPathNode = (
   node: StarNode | PolygonNode,
@@ -29,8 +32,12 @@ export const transformPathNode = (
     ...transformSceneNode(node),
     ...transformBlend(node),
     ...transformProportion(node),
+    ...transformRotation(node, baseRotation),
     ...transformLayoutAttributes(node),
     ...transformConstraints(node),
     ...transformOverrides(node)
   };
 };
+
+const translatePathNode = (node: StarNode | PolygonNode, baseRotation: number): Segment[] =>
+  translateCommands(node, parseSVG(node.fillGeometry[0].data), baseRotation);
