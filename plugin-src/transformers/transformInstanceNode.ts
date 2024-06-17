@@ -90,21 +90,15 @@ const getComponentTextPropertyOverrides = (
   node: InstanceNode,
   primaryComponent: ComponentNode | ComponentSetNode
 ): ComponentTextPropertyOverride[] => {
-  const componentPropertyDefinitions = new Map(
-    Object.entries(primaryComponent.componentPropertyDefinitions).filter(
-      ([_, value]) => value.type === 'TEXT'
-    )
-  );
+  const componentPropertyDefinitions = Object.entries(
+    primaryComponent.componentPropertyDefinitions
+  ).filter(([, value]) => value.type === 'TEXT');
 
   const instanceComponentProperties = new Map(
-    Object.entries(node.componentProperties).filter(([_, value]) => value.type === 'TEXT')
+    Object.entries(node.componentProperties).filter(([, value]) => value.type === 'TEXT')
   );
 
-  if (componentPropertyDefinitions.size === 0 || instanceComponentProperties.size === 0) {
-    return [];
-  }
-
-  return Array.from(componentPropertyDefinitions.entries())
+  return componentPropertyDefinitions
     .map(([key, value]) => {
       const nodeValue = instanceComponentProperties.get(key);
       return {
@@ -113,7 +107,7 @@ const getComponentTextPropertyOverrides = (
         value: nodeValue ? nodeValue.value : value.defaultValue
       } as ComponentTextPropertyOverride;
     })
-    .filter(value => value.value !== value.defaultValue);
+    .filter(({ value, defaultValue }) => value !== defaultValue);
 };
 
 const registerTextVariableOverrides = (
