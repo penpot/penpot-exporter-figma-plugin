@@ -93,40 +93,40 @@ const getComponentPropertyDefinitions = (
 };
 
 const registerTextVariableOverrides = (node: InstanceNode, mainComponent: ComponentNode) => {
-  const propertyDefinitions = Object.entries(getComponentPropertyDefinitions(mainComponent)).filter(
-    ([_, value]) => value.type === 'TEXT'
-  );
-  const nodeComponentProperties = Object.entries(node.componentProperties).filter(
-    ([_, value]) => value.type === 'TEXT'
+  const propertyDefinitions = new Map(
+    Object.entries(getComponentPropertyDefinitions(mainComponent)).filter(
+      ([_, value]) => value.type === 'TEXT'
+    )
   );
 
-  if (!propertyDefinitions || !nodeComponentProperties) {
+  const nodeComponentProperties = new Map(
+    Object.entries(node.componentProperties).filter(([_, value]) => value.type === 'TEXT')
+  );
+
+  if (propertyDefinitions.size === 0 || nodeComponentProperties.size === 0) {
     return;
   }
 
-  // Merge the property definitions with the node component properties
-  const mergedOverriden = propertyDefinitions
+  const mergedOverridden = Array.from(propertyDefinitions.entries())
     .map(([key, value]) => {
-      const nodeValue = nodeComponentProperties.find(([nodeKey]) => nodeKey === key);
-
+      const nodeValue = nodeComponentProperties.get(key);
       return {
         id: key,
         ...value,
-        value: nodeValue ? nodeValue[1].value : value.defaultValue
+        value: nodeValue ? nodeValue.value : value.defaultValue
       };
     })
     .filter(value => value.value !== value.defaultValue);
 
-  if (mergedOverriden.length > 0) {
+  if (mergedOverridden.length > 0) {
     const textNodes = node
       .findChildren(child => child.type === 'TEXT')
       .filter(textNode => {
         const componentPropertyReference = textNode.componentPropertyReferences?.characters;
-        if (!componentPropertyReference) {
-          return false;
-        }
-
-        return mergedOverriden.find(property => property.id === componentPropertyReference);
+        return (
+          componentPropertyReference &&
+          mergedOverridden.some(property => property.id === componentPropertyReference)
+        );
       });
 
     textNodes.forEach(textNode => {
