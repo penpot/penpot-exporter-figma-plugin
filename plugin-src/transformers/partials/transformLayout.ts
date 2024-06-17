@@ -34,11 +34,21 @@ export const transformLayoutAttributes = (
   node: LayoutMixin
 ): Pick<
   LayoutChildAttributes,
-  'layoutItemH-Sizing' | 'layoutItemV-Sizing' | 'layoutItemAbsolute'
+  | 'layoutItemH-Sizing'
+  | 'layoutItemV-Sizing'
+  | 'layoutItemAbsolute'
+  | 'layoutItemMaxH'
+  | 'layoutItemMinH'
+  | 'layoutItemMaxW'
+  | 'layoutItemMinW'
 > => {
   return {
     'layoutItemH-Sizing': translateLayoutSizing(node.layoutSizingHorizontal),
     'layoutItemV-Sizing': translateLayoutSizing(node.layoutSizingVertical),
-    'layoutItemAbsolute': node.layoutPositioning === 'ABSOLUTE'
+    'layoutItemAbsolute': node.layoutPositioning === 'ABSOLUTE',
+    'layoutItemMaxH': node.maxHeight ?? undefined,
+    'layoutItemMinH': node.minHeight ?? undefined,
+    'layoutItemMaxW': node.maxWidth ?? undefined,
+    'layoutItemMinW': node.minWidth ?? undefined
   };
 };
