@@ -53,7 +53,7 @@ type MoveTo = {
   };
 };
 
-type CurveTo = {
+export type CurveTo = {
   command: 'curve-to' | typeof VECTOR_CURVE_TO;
   params: {
     x: number;
