@@ -34,6 +34,8 @@ export const transformInstanceNode = async (
     registerExternalComponents(mainComponent);
   }
 
+  registerTextVariableOverrides(node, mainComponent);
+
   if (node.overrides.length > 0) {
     node.overrides.forEach(override =>
       overridesLibrary.register(override.id, override.overriddenFields)
@@ -76,6 +78,61 @@ const registerExternalComponents = (mainComponent: ComponentNode): void => {
   }
 
   remoteComponentLibrary.register(component.id, component);
+};
+
+const getComponentPropertyDefinitions = (
+  mainComponent: ComponentNode
+): ComponentPropertyDefinitions => {
+  let component: ComponentSetNode | ComponentNode = mainComponent;
+
+  if (component.parent?.type === 'COMPONENT_SET') {
+    component = component.parent;
+  }
+
+  return component.componentPropertyDefinitions;
+};
+
+const registerTextVariableOverrides = (node: InstanceNode, mainComponent: ComponentNode) => {
+  const propertyDefinitions = Object.entries(getComponentPropertyDefinitions(mainComponent)).filter(
+    ([_, value]) => value.type === 'TEXT'
+  );
+  const nodeComponentProperties = Object.entries(node.componentProperties).filter(
+    ([_, value]) => value.type === 'TEXT'
+  );
+
+  if (!propertyDefinitions || !nodeComponentProperties) {
+    return;
+  }
+
+  // Merge the property definitions with the node component properties
+  const mergedOverriden = propertyDefinitions
+    .map(([key, value]) => {
+      const nodeValue = nodeComponentProperties.find(([nodeKey]) => nodeKey === key);
+
+      return {
+        id: key,
+        ...value,
+        value: nodeValue ? nodeValue[1].value : value.defaultValue
+      };
+    })
+    .filter(value => value.value !== value.defaultValue);
+
+  if (mergedOverriden.length > 0) {
+    const textNodes = node
+      .findChildren(child => child.type === 'TEXT')
+      .filter(textNode => {
+        const componentPropertyReference = textNode.componentPropertyReferences?.characters;
+        if (!componentPropertyReference) {
+          return false;
+        }
+
+        return mergedOverriden.find(property => property.id === componentPropertyReference);
+      });
+
+    textNodes.forEach(textNode => {
+      overridesLibrary.register(textNode.id, ['text']);
+    });
+  }
 };
 
 const isExternalComponent = (mainComponent: ComponentNode): boolean => {
