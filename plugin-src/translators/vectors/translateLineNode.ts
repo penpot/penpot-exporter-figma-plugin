@@ -6,8 +6,12 @@ import { Segment } from '@ui/lib/types/shapes/pathShape';
 
 import { translateCommandsToSegments } from '.';
 
-export const translateLineNode = (node: LineNode, baseX: number, baseY: number): Segment[] => {
-  if (!hasRotation(node.rotation) || !node.absoluteBoundingBox) {
+export const translateLineNode = (node: LineNode, baseRotation: number): Segment[] => {
+  const rotation = node.rotation + baseRotation;
+  const x = node.absoluteTransform[0][2];
+  const y = node.absoluteTransform[1][2];
+
+  if (!hasRotation(rotation) || !node.absoluteBoundingBox) {
     return translateCommandsToSegments(
       [
         {
@@ -23,27 +27,27 @@ export const translateLineNode = (node: LineNode, baseX: number, baseY: number):
           code: 'L'
         }
       ],
-      baseX + node.x,
-      baseY + node.y
+      x,
+      y
     );
   }
 
-  const startPoint = applyRotation(
-    { x: 0, y: 0 },
+  const referencePoint = applyInverseRotation(
+    { x, y },
     node.absoluteTransform,
     node.absoluteBoundingBox
   );
 
   const endPoint = applyRotation(
-    { x: node.width, y: 0 },
+    { x: referencePoint.x + node.width, y: referencePoint.y },
     node.absoluteTransform,
     node.absoluteBoundingBox
   );
 
   const commands: Command[] = [
     {
-      x: startPoint.x,
-      y: startPoint.y,
+      x,
+      y,
       command: 'moveto',
       code: 'M'
     },
@@ -55,11 +59,5 @@ export const translateLineNode = (node: LineNode, baseX: number, baseY: number):
     }
   ];
 
-  const referencePoint = applyInverseRotation(
-    { x: node.x, y: node.y },
-    node.absoluteTransform,
-    node.absoluteBoundingBox
-  );
-
-  return translateCommandsToSegments(commands, baseX + referencePoint.x, baseY + referencePoint.y);
+  return translateCommandsToSegments(commands);
 };

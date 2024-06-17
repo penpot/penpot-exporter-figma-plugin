@@ -17,16 +17,31 @@ import { PenpotNode } from '@ui/types';
 export const translateMaskChildren = async (
   children: readonly SceneNode[],
   maskIndex: number,
-  baseX: number,
-  baseY: number
+  baseRotation: number
 ): Promise<PenpotNode[]> => {
   const maskChild = children[maskIndex];
-  const unmaskedChildren = await translateChildren(children.slice(0, maskIndex), baseX, baseY);
-  const maskedChildren = await translateChildren(children.slice(maskIndex), baseX, baseY);
+
+  const unmaskedChildren = await translateChildren(children.slice(0, maskIndex), baseRotation);
+  const maskedChildren = await translateChildren(children.slice(maskIndex), baseRotation);
+
+  if (
+    maskChild.type === 'STICKY' ||
+    maskChild.type === 'CONNECTOR' ||
+    maskChild.type === 'CODE_BLOCK' ||
+    maskChild.type === 'WIDGET' ||
+    maskChild.type === 'EMBED' ||
+    maskChild.type === 'LINK_UNFURL' ||
+    maskChild.type === 'MEDIA' ||
+    maskChild.type === 'SECTION' ||
+    maskChild.type === 'TABLE' ||
+    maskChild.type === 'SHAPE_WITH_TEXT'
+  ) {
+    return [...unmaskedChildren, ...maskedChildren];
+  }
 
   const maskGroup = {
     ...transformMaskFigmaIds(maskChild),
-    ...transformGroupNodeLike(maskChild, baseX, baseY),
+    ...transformGroupNodeLike(maskChild, baseRotation),
     children: maskedChildren,
     maskedGroup: true
   };
@@ -36,13 +51,12 @@ export const translateMaskChildren = async (
 
 export const translateChildren = async (
   children: readonly SceneNode[],
-  baseX: number = 0,
-  baseY: number = 0
+  baseRotation: number = 0
 ): Promise<PenpotNode[]> => {
   const transformedChildren: PenpotNode[] = [];
 
   for (const child of children) {
-    const penpotNode = await transformSceneNode(child, baseX, baseY);
+    const penpotNode = await transformSceneNode(child, baseRotation);
 
     if (penpotNode) transformedChildren.push(penpotNode);
 
