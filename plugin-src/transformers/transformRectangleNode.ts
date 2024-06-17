@@ -7,6 +7,7 @@ import {
   transformFigmaIds,
   transformFills,
   transformLayoutAttributes,
+  transformOverrides,
   transformProportion,
   transformRotationAndPosition,
   transformSceneNode,
@@ -30,6 +31,7 @@ export const transformRectangleNode = (node: RectangleNode, baseRotation: number
     ...transformProportion(node),
     ...transformLayoutAttributes(node),
     ...transformCornerRadius(node),
-    ...transformConstraints(node)
+    ...transformConstraints(node),
+    ...transformOverrides(node)
   };
 };

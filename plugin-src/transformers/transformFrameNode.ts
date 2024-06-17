@@ -9,6 +9,7 @@ import {
   transformFigmaIds,
   transformFills,
   transformLayoutAttributes,
+  transformOverrides,
   transformProportion,
   transformRotationAndPosition,
   transformSceneNode,
@@ -63,6 +64,7 @@ export const transformFrameNode = async (
     ...frameSpecificAttributes,
     ...transformDimension(node),
     ...(await transformChildren(node, rotation)),
-    ...transformSceneNode(node)
+    ...transformSceneNode(node),
+    ...transformOverrides(node)
   };
 };

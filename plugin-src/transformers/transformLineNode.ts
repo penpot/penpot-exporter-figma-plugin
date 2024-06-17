@@ -4,6 +4,7 @@ import {
   transformEffects,
   transformFigmaIds,
   transformLayoutAttributes,
+  transformOverrides,
   transformProportion,
   transformSceneNode,
   transformStrokes
@@ -31,7 +32,8 @@ export const transformLineNode = (node: LineNode, baseRotation: number): PathSha
     ...transformBlend(node),
     ...transformProportion(node),
     ...transformLayoutAttributes(node),
-    ...transformConstraints(node)
+    ...transformConstraints(node),
+    ...transformOverrides(node)
   };
 };
 

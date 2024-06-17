@@ -5,6 +5,7 @@ import {
   transformEffects,
   transformFigmaIds,
   transformLayoutAttributes,
+  transformOverrides,
   transformProportion,
   transformRotationAndPosition,
   transformSceneNode,
@@ -28,6 +29,7 @@ export const transformTextNode = (node: TextNode, baseRotation: number): TextSha
     ...transformProportion(node),
     ...transformLayoutAttributes(node),
     ...transformStrokes(node),
-    ...transformConstraints(node)
+    ...transformConstraints(node),
+    ...transformOverrides(node)
   };
 };

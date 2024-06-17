@@ -7,6 +7,7 @@ import {
   transformFigmaIds,
   transformFills,
   transformLayoutAttributes,
+  transformOverrides,
   transformProportion,
   transformRotation,
   transformSceneNode,
@@ -33,7 +34,8 @@ export const transformPathNode = (
     ...transformProportion(node),
     ...transformRotation(node, baseRotation),
     ...transformLayoutAttributes(node),
-    ...transformConstraints(node)
+    ...transformConstraints(node),
+    ...transformOverrides(node)
   };
 };
 
