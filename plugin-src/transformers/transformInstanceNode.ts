@@ -18,23 +18,27 @@ import {
   transformStrokes
 } from '@plugin/transformers/partials';
 
-import { ComponentInstance } from '@ui/types';
+import { ComponentInstance, ComponentTextPropertyOverride } from '@ui/types';
 
 export const transformInstanceNode = async (
   node: InstanceNode,
   baseRotation: number
 ): Promise<ComponentInstance | undefined> => {
   const mainComponent = await node.getMainComponentAsync();
-
-  if (mainComponent === null || isUnprocessableComponent(mainComponent)) {
+  if (mainComponent === null) {
     return;
   }
 
-  if (isExternalComponent(mainComponent)) {
-    registerExternalComponents(mainComponent);
+  const primaryComponent = getPrimaryComponent(mainComponent);
+  if (isUnprocessableComponent(primaryComponent)) {
+    return;
   }
 
-  registerTextVariableOverrides(node, mainComponent);
+  if (primaryComponent.remote) {
+    registerExternalComponents(primaryComponent);
+  }
+
+  registerTextVariableOverrides(node, primaryComponent);
 
   if (node.overrides.length > 0) {
     node.overrides.forEach(override =>
@@ -66,57 +70,57 @@ export const transformInstanceNode = async (
   };
 };
 
-const registerExternalComponents = (mainComponent: ComponentNode): void => {
-  let component: ComponentSetNode | ComponentNode = mainComponent;
-
-  if (component.parent?.type === 'COMPONENT_SET') {
-    component = component.parent;
+const getPrimaryComponent = (mainComponent: ComponentNode): ComponentNode | ComponentSetNode => {
+  if (mainComponent.parent?.type === 'COMPONENT_SET') {
+    return mainComponent.parent;
   }
 
-  if (remoteComponentLibrary.get(component.id) !== undefined) {
+  return mainComponent;
+};
+
+const registerExternalComponents = (primaryComponent: ComponentNode | ComponentSetNode): void => {
+  if (remoteComponentLibrary.get(primaryComponent.id) !== undefined) {
     return;
   }
 
-  remoteComponentLibrary.register(component.id, component);
+  remoteComponentLibrary.register(primaryComponent.id, primaryComponent);
 };
 
-const getComponentPropertyDefinitions = (
-  mainComponent: ComponentNode
-): ComponentPropertyDefinitions => {
-  let component: ComponentSetNode | ComponentNode = mainComponent;
-
-  if (component.parent?.type === 'COMPONENT_SET') {
-    component = component.parent;
-  }
-
-  return component.componentPropertyDefinitions;
-};
-
-const registerTextVariableOverrides = (node: InstanceNode, mainComponent: ComponentNode) => {
-  const propertyDefinitions = new Map(
-    Object.entries(getComponentPropertyDefinitions(mainComponent)).filter(
+const getComponentTextPropertyOverrides = (
+  node: InstanceNode,
+  primaryComponent: ComponentNode | ComponentSetNode
+): ComponentTextPropertyOverride[] => {
+  const componentPropertyDefinitions = new Map(
+    Object.entries(primaryComponent.componentPropertyDefinitions).filter(
       ([_, value]) => value.type === 'TEXT'
     )
   );
 
-  const nodeComponentProperties = new Map(
+  const instanceComponentProperties = new Map(
     Object.entries(node.componentProperties).filter(([_, value]) => value.type === 'TEXT')
   );
 
-  if (propertyDefinitions.size === 0 || nodeComponentProperties.size === 0) {
-    return;
+  if (componentPropertyDefinitions.size === 0 || instanceComponentProperties.size === 0) {
+    return [];
   }
 
-  const mergedOverridden = Array.from(propertyDefinitions.entries())
+  return Array.from(componentPropertyDefinitions.entries())
     .map(([key, value]) => {
-      const nodeValue = nodeComponentProperties.get(key);
+      const nodeValue = instanceComponentProperties.get(key);
       return {
         id: key,
         ...value,
         value: nodeValue ? nodeValue.value : value.defaultValue
-      };
+      } as ComponentTextPropertyOverride;
     })
     .filter(value => value.value !== value.defaultValue);
+};
+
+const registerTextVariableOverrides = (
+  node: InstanceNode,
+  primaryComponent: ComponentNode | ComponentSetNode
+) => {
+  const mergedOverridden = getComponentTextPropertyOverrides(node, primaryComponent);
 
   if (mergedOverridden.length > 0) {
     const textNodes = node
@@ -135,26 +139,14 @@ const registerTextVariableOverrides = (node: InstanceNode, mainComponent: Compon
   }
 };
 
-const isExternalComponent = (mainComponent: ComponentNode): boolean => {
-  return (
-    mainComponent.remote ||
-    (mainComponent.parent?.type === 'COMPONENT_SET' && mainComponent.parent.remote)
-  );
-};
-
 /**
  * We do not want to process component instances in the following scenarios:
  *
  * 1. If the component does not have a parent. (it's been removed)
  * 2. Main component can be in a ComponentSet (the same logic applies to the parent).
  */
-const isUnprocessableComponent = (mainComponent: ComponentNode): boolean => {
-  return (
-    (mainComponent.parent === null && !mainComponent.remote) ||
-    (mainComponent.parent?.type === 'COMPONENT_SET' &&
-      mainComponent.parent.parent === null &&
-      !mainComponent.parent.remote)
-  );
+const isUnprocessableComponent = (primaryComponent: ComponentNode | ComponentSetNode): boolean => {
+  return primaryComponent.parent === null && !primaryComponent.remote;
 };
 
 const isComponentRoot = (node: InstanceNode): boolean => {

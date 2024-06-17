@@ -7,6 +7,13 @@ export type ComponentRoot = {
   type: 'component';
 };
 
+export type ComponentTextPropertyOverride = {
+  id: string;
+  type: 'TEXT';
+  value: string;
+  defaultValue: string;
+};
+
 export type ComponentInstance = ShapeGeomAttributes &
   ShapeAttributes &
   LayoutAttributes &
