@@ -9,11 +9,11 @@ export const transformOverrides = (node: SceneNode) => {
     return {};
   }
 
-  let touched: SyncGroups[] = [];
+  const touched: SyncGroups[] = [];
 
   overrides.forEach(override => {
     if (syncAttributes[override]) {
-      touched = [...touched, ...syncAttributes[override]];
+      touched.push(...syncAttributes[override]);
     }
   });
 
