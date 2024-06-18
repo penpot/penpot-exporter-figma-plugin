@@ -3,7 +3,7 @@ import { sleep } from '@plugin/utils/sleep';
 
 import { sendMessage } from '@ui/context';
 import { PenpotFile } from '@ui/lib/types/penpotFile';
-import { symbolBlendMode, symbolFills, symbolStrokes } from '@ui/parser/creators/symbols';
+import { symbolFills, symbolStrokes } from '@ui/parser/creators/symbols';
 import { UiComponent, uiComponents } from '@ui/parser/libraries';
 
 import { createItems } from '.';
@@ -41,13 +41,12 @@ const createComponentLibrary = async (file: PenpotFile, uiComponent: UiComponent
     return;
   }
 
-  const { children = [], fills, strokes, blendMode, ...rest } = component;
+  const { children = [], fills, strokes, ...rest } = component;
 
   file.startComponent({
     ...rest,
     fills: symbolFills(fills),
     strokes: symbolStrokes(strokes),
-    blendMode: symbolBlendMode(blendMode),
     id: uiComponent.componentId,
     componentId: uiComponent.componentId,
     mainInstancePage: uiComponent.mainInstancePage,
