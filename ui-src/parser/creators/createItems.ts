@@ -1,3 +1,4 @@
+import { sendMessage } from '@ui/context';
 import { PenpotFile } from '@ui/lib/types/penpotFile';
 import { PenpotNode } from '@ui/types';
 
@@ -20,6 +21,11 @@ export const createItems = (file: PenpotFile, nodes: PenpotNode[]) => {
 };
 
 const createItem = (file: PenpotFile, node: PenpotNode) => {
+  sendMessage({
+    type: 'PROGRESS_CURRENT_ITEM',
+    data: node.name
+  });
+
   switch (node.type) {
     case 'rect':
       return createRectangle(file, node);

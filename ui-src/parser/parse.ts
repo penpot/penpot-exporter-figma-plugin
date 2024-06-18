@@ -3,25 +3,27 @@ import { componentsLibrary } from '@plugin/ComponentLibrary';
 import { sleep } from '@plugin/utils/sleep';
 
 import { sendMessage } from '@ui/context';
-import { createFile } from '@ui/lib/penpot';
-import { createComponentLibrary, createPage } from '@ui/parser/creators';
-import { uiComponents, uiImages } from '@ui/parser/libraries';
+import { createFile } from '@ui/parser/creators';
+import { uiImages } from '@ui/parser/libraries';
 import { PenpotDocument } from '@ui/types';
 
-import { idLibrary, parseImage } from '.';
+import { parseImage } from '.';
 
 const optimizeImages = async (images: Record<string, Uint8Array>) => {
   const imagesToOptimize = Object.entries(images);
-  let imagesOptimized = 1;
 
-  sendMessage({
-    type: 'PROGRESS_STEP',
-    data: 'optimization'
-  });
+  if (imagesToOptimize.length === 0) return;
+
+  let imagesOptimized = 1;
 
   sendMessage({
     type: 'PROGRESS_TOTAL_ITEMS',
     data: imagesToOptimize.length
+  });
+
+  sendMessage({
+    type: 'PROGRESS_STEP',
+    data: 'optimization'
   });
 
   for (const [key, bytes] of imagesToOptimize) {
@@ -43,23 +45,5 @@ export const parse = async ({ name, children = [], components, images }: PenpotD
 
   await optimizeImages(images);
 
-  sendMessage({
-    type: 'PROGRESS_STEP',
-    data: 'downloading'
-  });
-
-  await sleep(20);
-
-  uiComponents.init();
-  idLibrary.init();
-
-  const file = createFile(name);
-
-  for (const page of children) {
-    await createPage(file, page);
-  }
-
-  createComponentLibrary(file);
-
-  return file;
+  return createFile(name, children);
 };

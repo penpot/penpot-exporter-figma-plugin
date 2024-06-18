@@ -16,7 +16,6 @@ export type ShapeBaseAttributes = {
   id?: Uuid;
   figmaId?: string; // @TODO: move to any other place
   figmaRelatedId?: string; // @TODO: move to any other place
-  name?: string;
   type?:
     | 'frame'
     | 'group'
@@ -29,8 +28,6 @@ export type ShapeBaseAttributes = {
     | 'image'
     | 'component'
     | 'instance';
-  selrect?: Selrect;
-  points?: Point[];
   transform?: Matrix;
   transformInverse?: Matrix;
   parentId?: Uuid;
@@ -39,7 +36,7 @@ export type ShapeBaseAttributes = {
 };
 
 export type ShapeAttributes = {
-  name?: string;
+  name: string;
   componentId?: string;
   componentFile?: string;
   componentRoot?: boolean;

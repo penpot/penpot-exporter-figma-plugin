@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { FormValues } from '@ui/components/ExportForm';
 import { parse } from '@ui/parser';
 
-import { MessageData } from '.';
+import { MessageData, sendMessage } from '.';
 
 export type UseFigmaHook = {
   missingFonts: string[] | undefined;
@@ -19,7 +19,14 @@ export type UseFigmaHook = {
   exportPenpot: (data: FormValues) => void;
 };
 
-export type Steps = 'processing' | 'remote' | 'images' | 'optimization' | 'downloading';
+export type Steps =
+  | 'processing'
+  | 'remote'
+  | 'images'
+  | 'optimization'
+  | 'building'
+  | 'components'
+  | 'exporting';
 
 export const useFigma = (): UseFigmaHook => {
   const [missingFonts, setMissingFonts] = useState<string[]>();
@@ -44,6 +51,12 @@ export const useFigma = (): UseFigmaHook => {
     switch (pluginMessage.type) {
       case 'PENPOT_DOCUMENT': {
         const file = await parse(pluginMessage.data);
+
+        sendMessage({
+          type: 'PROGRESS_STEP',
+          data: 'exporting'
+        });
+
         const blob = await file.export();
 
         download(blob, `${pluginMessage.data.name}.zip`);

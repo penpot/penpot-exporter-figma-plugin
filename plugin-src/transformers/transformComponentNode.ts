@@ -45,6 +45,7 @@ export const transformComponentNode = async (
 
   return {
     figmaId: node.id,
-    type: 'component'
+    type: 'component',
+    name: node.name
   };
 };

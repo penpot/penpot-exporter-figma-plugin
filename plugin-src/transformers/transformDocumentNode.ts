@@ -12,16 +12,19 @@ import { transformPageNode } from '.';
 const downloadImages = async (): Promise<Record<string, Uint8Array>> => {
   const imageToDownload = Object.entries(imagesLibrary.all());
   const images: Record<string, Uint8Array> = {};
-  let currentImage = 1;
 
-  figma.ui.postMessage({
-    type: 'PROGRESS_STEP',
-    data: 'images'
-  });
+  if (imageToDownload.length === 0) return images;
+
+  let currentImage = 1;
 
   figma.ui.postMessage({
     type: 'PROGRESS_TOTAL_ITEMS',
     data: imageToDownload.length
+  });
+
+  figma.ui.postMessage({
+    type: 'PROGRESS_STEP',
+    data: 'images'
   });
 
   for (const [key, image] of imageToDownload) {

@@ -1,6 +1,6 @@
 import { Uuid } from '@ui/lib/types/utils/uuid';
 
-type UiComponent = {
+export type UiComponent = {
   componentId: Uuid;
   mainInstancePage?: Uuid;
   mainInstanceId: Uuid;
