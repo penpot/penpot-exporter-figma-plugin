@@ -5,14 +5,13 @@ import { symbolFills, symbolPathContent, symbolStrokes } from '@ui/parser/creato
 
 export const createPath = (
   file: PenpotFile,
-  { type, fills, strokes, content, figmaId, figmaRelatedId, ...rest }: PathShape
+  { type, figmaId, figmaRelatedId, ...shape }: PathShape
 ) => {
-  file.createPath({
-    id: parseFigmaId(file, figmaId),
-    shapeRef: parseFigmaId(file, figmaRelatedId, true),
-    fills: symbolFills(fills),
-    strokes: symbolStrokes(strokes),
-    content: symbolPathContent(content),
-    ...rest
-  });
+  shape.id = parseFigmaId(file, figmaId);
+  shape.shapeRef = parseFigmaId(file, figmaRelatedId, true);
+  shape.fills = symbolFills(shape.fills);
+  shape.strokes = symbolStrokes(shape.strokes);
+  shape.content = symbolPathContent(shape.content);
+
+  file.createPath(shape);
 };

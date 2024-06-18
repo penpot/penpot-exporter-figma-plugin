@@ -8,21 +8,20 @@ import { createArtboard } from '.';
 
 export const createComponent = (file: PenpotFile, { figmaId }: ComponentRoot) => {
   const component = componentsLibrary.get(figmaId);
+
   if (!component) {
     return;
   }
 
-  const uiComponent = uiComponents.get(figmaId);
-  const componentId = uiComponent?.componentId ?? file.newId();
+  const componentId = getComponentId(file, figmaId);
+  const { type, ...shape } = component;
 
-  const frameId = createArtboard(file, {
-    ...component,
-    componentFile: file.getId(),
-    componentId,
-    componentRoot: true,
-    mainInstance: true,
-    type: 'frame'
-  });
+  shape.componentFile = file.getId();
+  shape.componentId = componentId;
+  shape.componentRoot = true;
+  shape.mainInstance = true;
+
+  const frameId = createArtboard(file, shape);
 
   if (!frameId) {
     return;
@@ -34,4 +33,10 @@ export const createComponent = (file: PenpotFile, { figmaId }: ComponentRoot) =>
     componentFigmaId: figmaId,
     mainInstanceId: frameId
   });
+};
+
+const getComponentId = (file: PenpotFile, figmaId: string) => {
+  const uiComponent = uiComponents.get(figmaId);
+
+  return uiComponent?.componentId ?? file.newId();
 };

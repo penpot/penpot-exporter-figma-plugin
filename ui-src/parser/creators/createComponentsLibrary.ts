@@ -41,20 +41,19 @@ const createComponentLibrary = async (file: PenpotFile, uiComponent: UiComponent
     return;
   }
 
-  const { children = [], fills, strokes, ...rest } = component;
+  const { children = [], ...shape } = component;
 
-  file.startComponent({
-    ...rest,
-    fills: symbolFills(fills),
-    strokes: symbolStrokes(strokes),
-    id: uiComponent.componentId,
-    componentId: uiComponent.componentId,
-    mainInstancePage: uiComponent.mainInstancePage,
-    mainInstanceId: uiComponent.mainInstanceId,
-    componentRoot: true,
-    mainInstance: true,
-    componentFile: file.getId()
-  });
+  shape.fills = symbolFills(shape.fills);
+  shape.strokes = symbolStrokes(shape.strokes);
+  shape.id = uiComponent.componentId;
+  shape.componentId = uiComponent.componentId;
+  shape.mainInstancePage = uiComponent.mainInstancePage;
+  shape.mainInstanceId = uiComponent.mainInstanceId;
+  shape.componentRoot = true;
+  shape.mainInstance = true;
+  shape.componentFile = file.getId();
+
+  file.startComponent(shape);
 
   createItems(file, children);
 

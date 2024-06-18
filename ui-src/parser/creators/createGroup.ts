@@ -6,13 +6,12 @@ import { createItems } from '.';
 
 export const createGroup = (
   file: PenpotFile,
-  { type, children = [], figmaId, figmaRelatedId, ...rest }: GroupShape
+  { type, children = [], figmaId, figmaRelatedId, ...shape }: GroupShape
 ) => {
-  file.addGroup({
-    id: parseFigmaId(file, figmaId),
-    shapeRef: parseFigmaId(file, figmaRelatedId, true),
-    ...rest
-  });
+  shape.id = parseFigmaId(file, figmaId);
+  shape.shapeRef = parseFigmaId(file, figmaRelatedId, true);
+
+  file.addGroup(shape);
 
   createItems(file, children);
 

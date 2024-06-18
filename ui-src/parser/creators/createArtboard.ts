@@ -8,17 +8,16 @@ import { createItems } from '.';
 
 export const createArtboard = (
   file: PenpotFile,
-  { type, fills, strokes, children = [], figmaId, figmaRelatedId, shapeRef, ...rest }: FrameShape
+  { type, children = [], figmaId, figmaRelatedId, ...shape }: FrameShape
 ): Uuid | undefined => {
   const id = parseFigmaId(file, figmaId);
 
-  file.addArtboard({
-    id,
-    shapeRef: shapeRef ?? parseFigmaId(file, figmaRelatedId, true),
-    fills: symbolFills(fills),
-    strokes: symbolStrokes(strokes),
-    ...rest
-  });
+  shape.id = id;
+  shape.shapeRef ??= parseFigmaId(file, figmaRelatedId, true);
+  shape.fills = symbolFills(shape.fills);
+  shape.strokes = symbolStrokes(shape.strokes);
+
+  file.addArtboard(shape);
 
   createItems(file, children);
 

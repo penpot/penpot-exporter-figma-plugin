@@ -5,13 +5,12 @@ import { symbolFills, symbolStrokes } from '@ui/parser/creators/symbols';
 
 export const createRectangle = (
   file: PenpotFile,
-  { type, fills, strokes, figmaId, figmaRelatedId, ...rest }: RectShape
+  { type, figmaId, figmaRelatedId, ...shape }: RectShape
 ) => {
-  file.createRect({
-    id: parseFigmaId(file, figmaId),
-    shapeRef: parseFigmaId(file, figmaRelatedId, true),
-    fills: symbolFills(fills),
-    strokes: symbolStrokes(strokes),
-    ...rest
-  });
+  shape.id = parseFigmaId(file, figmaId);
+  shape.shapeRef = parseFigmaId(file, figmaRelatedId, true);
+  shape.fills = symbolFills(shape.fills);
+  shape.strokes = symbolStrokes(shape.strokes);
+
+  file.createRect(shape);
 };

@@ -7,16 +7,15 @@ import { createItems } from '.';
 
 export const createBool = (
   file: PenpotFile,
-  { type, fills, strokes, boolType, figmaId, figmaRelatedId, children = [], ...rest }: BoolShape
+  { type, figmaId, figmaRelatedId, children = [], ...shape }: BoolShape
 ) => {
-  file.addBool({
-    id: parseFigmaId(file, figmaId),
-    shapeRef: parseFigmaId(file, figmaRelatedId, true),
-    fills: symbolFills(fills),
-    strokes: symbolStrokes(strokes),
-    boolType: symbolBoolType(boolType),
-    ...rest
-  });
+  shape.id = parseFigmaId(file, figmaId);
+  shape.shapeRef = parseFigmaId(file, figmaRelatedId, true);
+  shape.fills = symbolFills(shape.fills);
+  shape.strokes = symbolStrokes(shape.strokes);
+  shape.boolType = symbolBoolType(shape.boolType);
+
+  file.addBool(shape);
 
   createItems(file, children);
 

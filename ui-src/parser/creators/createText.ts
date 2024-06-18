@@ -5,15 +5,14 @@ import { symbolFills, symbolStrokes } from '@ui/parser/creators/symbols';
 
 export const createText = (
   file: PenpotFile,
-  { type, strokes, figmaId, content, figmaRelatedId, ...rest }: TextShape
+  { type, figmaId, figmaRelatedId, ...shape }: TextShape
 ) => {
-  file.createText({
-    id: parseFigmaId(file, figmaId),
-    shapeRef: parseFigmaId(file, figmaRelatedId, true),
-    content: parseContent(content),
-    strokes: symbolStrokes(strokes),
-    ...rest
-  });
+  shape.id = parseFigmaId(file, figmaId);
+  shape.shapeRef = parseFigmaId(file, figmaRelatedId, true);
+  shape.content = parseContent(shape.content);
+  shape.strokes = symbolStrokes(shape.strokes);
+
+  file.createText(shape);
 };
 
 const parseContent = (content: TextContent | undefined): TextContent | undefined => {
