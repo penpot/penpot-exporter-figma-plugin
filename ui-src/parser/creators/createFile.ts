@@ -4,7 +4,7 @@ import { sendMessage } from '@ui/context';
 import { createFile as createPenpotFile } from '@ui/lib/penpot';
 import { PenpotPage } from '@ui/lib/types/penpotPage';
 import { idLibrary } from '@ui/parser';
-import { createComponentLibrary, createPage } from '@ui/parser/creators';
+import { createComponentsLibrary, createPage } from '@ui/parser/creators';
 import { uiComponents } from '@ui/parser/libraries';
 
 export const createFile = async (name: string, children: PenpotPage[]) => {
@@ -35,7 +35,7 @@ export const createFile = async (name: string, children: PenpotPage[]) => {
     await sleep(0);
   }
 
-  await createComponentLibrary(file);
+  await createComponentsLibrary(file);
 
   return file;
 };

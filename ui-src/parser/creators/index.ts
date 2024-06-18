@@ -3,7 +3,7 @@ export * from './createBool';
 export * from './createCircle';
 export * from './createComponent';
 export * from './createComponentInstance';
-export * from './createComponentLibrary';
+export * from './createComponentsLibrary';
 export * from './createFile';
 export * from './createGroup';
 export * from './createItems';
