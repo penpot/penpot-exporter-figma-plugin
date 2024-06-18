@@ -45,7 +45,7 @@ export const transformLayoutAttributes = (
 > => {
   return {
     'layoutItemH-Sizing': translateLayoutSizing(node.layoutSizingHorizontal, isFrame),
-    'layoutItemV-Sizing': translateLayoutSizing(node.layoutSizingVertical, isFrame),
+    'layoutItemV-Sizing': translateLayoutSizing(node.layoutSizingVertical),
     'layoutItemAbsolute': node.layoutPositioning === 'ABSOLUTE',
     'layoutItemMaxH': node.maxHeight ?? undefined,
     'layoutItemMinH': node.minHeight ?? undefined,
