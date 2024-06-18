@@ -1,6 +1,6 @@
-import { LRUCache } from 'lru-cache';
 import slugify from 'slugify';
 
+import { Cache } from '@plugin/Cache';
 import { translateFontVariantId } from '@plugin/translators/text/font/gfonts';
 
 import { FontId } from '@ui/lib/types/shapes/textShape';
@@ -8,8 +8,7 @@ import { FontId } from '@ui/lib/types/shapes/textShape';
 import { items as gfonts } from './gfonts.json';
 import { GoogleFont } from './googleFont';
 
-const empty: unique symbol = Symbol('noValue');
-const cache = new LRUCache<string, GoogleFont | typeof empty>({ max: 30 });
+const fontsCache = new Cache<string, GoogleFont>({ max: 30 });
 
 export const translateGoogleFont = (fontName: FontName, fontWeight: number): FontId | undefined => {
   const googleFont = getGoogleFont(fontName);
@@ -27,15 +26,7 @@ export const isGoogleFont = (fontName: FontName): boolean => {
 };
 
 const getGoogleFont = (fontName: FontName): GoogleFont | undefined => {
-  if (cache.has(fontName.family)) {
-    const foo = cache.get(fontName.family);
-
-    return foo === empty ? undefined : foo;
-  }
-
-  const googleFont = gfonts.find(font => font.family === fontName.family);
-
-  cache.set(fontName.family, googleFont ?? empty);
-
-  return googleFont;
+  return fontsCache.get(fontName.family, () =>
+    gfonts.find(font => font.family === fontName.family)
+  );
 };
