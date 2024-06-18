@@ -25,6 +25,7 @@
     "@create-figma-plugin/ui": "^3.2",
     "base64-js": "^1.5",
     "classnames": "^2.5",
+    "lru-cache": "^10.2.2",
     "preact": "^10.22",
     "react-hook-form": "^7.51",
     "romans": "^2.0",
