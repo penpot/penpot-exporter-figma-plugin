@@ -6,6 +6,7 @@
     "strict": true,
     "typeRoots": ["../node_modules/@figma"],
     "moduleResolution": "Node",
+    "skipLibCheck": true,
     "resolveJsonModule": true
   }
 }
