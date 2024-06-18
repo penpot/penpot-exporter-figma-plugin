@@ -29,6 +29,14 @@ figma.ui.onmessage = message => {
   }
 };
 
+let currentPage = figma.currentPage;
+
+currentPage.on('nodechange', registerChange);
+
 figma.on('currentpagechange', () => {
-  figma.currentPage.once('nodechange', registerChange);
+  currentPage.off('nodechange', registerChange);
+
+  currentPage = figma.currentPage;
+
+  currentPage.on('nodechange', registerChange);
 });
