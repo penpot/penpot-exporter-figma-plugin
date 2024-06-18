@@ -8,7 +8,7 @@ export type PenpotPage = {
 } & Children;
 
 export type PenpotPageOptions = {
-  background?: string; // hex color
+  background?: string;
   savedGrids?: SavedGrids;
   flows?: Flow[];
   guides?: { [uuid: Uuid]: Guide };

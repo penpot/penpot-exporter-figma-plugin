@@ -39,6 +39,6 @@ type SquareParams = {
 };
 
 type GridColor = {
-  color: string; // hex color
+  color: string;
   opacity: number;
 };

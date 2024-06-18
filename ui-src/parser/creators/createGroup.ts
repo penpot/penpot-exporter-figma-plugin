@@ -1,20 +1,17 @@
 import { PenpotFile } from '@ui/lib/types/penpotFile';
 import { GroupShape } from '@ui/lib/types/shapes/groupShape';
 import { parseFigmaId } from '@ui/parser';
-import { symbolBlendMode } from '@ui/parser/creators/symbols';
 
 import { createItems } from '.';
 
 export const createGroup = (
   file: PenpotFile,
-  { type, blendMode, children = [], figmaId, figmaRelatedId, ...rest }: GroupShape
+  { type, children = [], figmaId, figmaRelatedId, ...shape }: GroupShape
 ) => {
-  file.addGroup({
-    id: parseFigmaId(file, figmaId),
-    shapeRef: parseFigmaId(file, figmaRelatedId, true),
-    blendMode: symbolBlendMode(blendMode),
-    ...rest
-  });
+  shape.id = parseFigmaId(file, figmaId);
+  shape.shapeRef = parseFigmaId(file, figmaRelatedId, true);
+
+  file.addGroup(shape);
 
   createItems(file, children);
 

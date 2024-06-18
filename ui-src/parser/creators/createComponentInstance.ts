@@ -13,31 +13,37 @@ export const createComponentInstance = (
     figmaId,
     figmaRelatedId,
     isComponentRoot,
-    ...rest
+    ...shape
   }: ComponentInstance
 ) => {
-  let uiComponent = uiComponents.get(mainComponentFigmaId);
+  const uiComponent =
+    uiComponents.get(mainComponentFigmaId) ?? createUiComponent(file, mainComponentFigmaId);
 
   if (!uiComponent) {
-    const mainInstanceId = parseFigmaId(file, mainComponentFigmaId);
-    if (!mainInstanceId) {
-      return;
-    }
-
-    uiComponent = {
-      componentId: file.newId(),
-      componentFigmaId: mainComponentFigmaId,
-      mainInstanceId
-    };
-    uiComponents.register(mainComponentFigmaId, uiComponent);
+    return;
   }
 
-  createArtboard(file, {
-    ...rest,
-    shapeRef: uiComponent.mainInstanceId,
-    componentFile: file.getId(),
-    componentRoot: isComponentRoot,
-    componentId: uiComponent.componentId,
-    type: 'frame'
-  });
+  shape.shapeRef = uiComponent.mainInstanceId;
+  shape.componentFile = file.getId();
+  shape.componentRoot = isComponentRoot;
+  shape.componentId = uiComponent.componentId;
+
+  createArtboard(file, shape);
+};
+
+const createUiComponent = (file: PenpotFile, mainComponentFigmaId: string) => {
+  const mainInstanceId = parseFigmaId(file, mainComponentFigmaId);
+  if (!mainInstanceId) {
+    return;
+  }
+
+  const uiComponent = {
+    componentId: file.newId(),
+    componentFigmaId: mainComponentFigmaId,
+    mainInstanceId
+  };
+
+  uiComponents.register(mainComponentFigmaId, uiComponent);
+
+  return uiComponent;
 };
