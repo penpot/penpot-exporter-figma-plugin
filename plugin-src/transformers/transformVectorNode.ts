@@ -16,11 +16,8 @@ import { transformGroupNodeLike } from '.';
  * If there are no regions on the vector network, we treat it like a normal `PathShape`.
  * If there are regions, we treat the vector node as a `GroupShape` with multiple `PathShape` children.
  */
-export const transformVectorNode = (
-  node: VectorNode,
-  baseRotation: number
-): GroupShape | PathShape => {
-  const children = transformVectorPaths(node, baseRotation);
+export const transformVectorNode = (node: VectorNode): GroupShape | PathShape => {
+  const children = transformVectorPaths(node);
 
   if (children.length === 1) {
     return {
@@ -33,7 +30,7 @@ export const transformVectorNode = (
   }
 
   return {
-    ...transformGroupNodeLike(node, baseRotation),
+    ...transformGroupNodeLike(node),
     ...transformFigmaIds(node),
     ...transformConstraints(node),
     ...transformOverrides(node),

@@ -21,8 +21,7 @@ import {
 import { ComponentInstance, ComponentTextPropertyOverride } from '@ui/types';
 
 export const transformInstanceNode = async (
-  node: InstanceNode,
-  baseRotation: number
+  node: InstanceNode
 ): Promise<ComponentInstance | undefined> => {
   const mainComponent = await node.getMainComponentAsync();
   if (mainComponent === null) {
@@ -62,10 +61,10 @@ export const transformInstanceNode = async (
     ...transformLayoutAttributes(node, true),
     ...transformCornerRadius(node),
     ...transformDimension(node),
-    ...transformRotationAndPosition(node, baseRotation),
+    ...transformRotationAndPosition(node),
     ...transformConstraints(node),
     ...transformAutoLayout(node),
-    ...(await transformChildren(node, node.rotation + baseRotation)),
+    ...(await transformChildren(node)),
     ...transformOverrides(node)
   };
 };

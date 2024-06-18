@@ -15,14 +15,14 @@ import {
 
 import { TextShape } from '@ui/lib/types/shapes/textShape';
 
-export const transformTextNode = (node: TextNode, baseRotation: number): TextShape => {
+export const transformTextNode = (node: TextNode): TextShape => {
   return {
     type: 'text',
     name: node.name,
     ...transformFigmaIds(node),
     ...transformText(node),
     ...transformDimension(node),
-    ...transformRotationAndPosition(node, baseRotation),
+    ...transformRotationAndPosition(node),
     ...transformEffects(node),
     ...transformSceneNode(node),
     ...transformBlend(node),

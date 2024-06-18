@@ -58,7 +58,10 @@ export const applyInverseRotation = (
   boundingBox: Rect
 ): Point => applyRotation(point, inverseMatrix(transform), boundingBox);
 
-export const hasRotation = (rotation: number): boolean => Math.abs(rotation) > ROTATION_TOLERANCE;
+export const getRotation = (transform: Transform): number =>
+  Math.acos(transform[0][0]) * (180 / Math.PI);
+
+export const hasRotation = (rotation: number): boolean => rotation > ROTATION_TOLERANCE;
 
 const inverseMatrix = (matrix: Transform): Transform => [
   [matrix[0][0], matrix[1][0], matrix[0][2]],

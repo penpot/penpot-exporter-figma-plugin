@@ -16,13 +16,12 @@ import { PenpotNode } from '@ui/types';
  */
 export const translateMaskChildren = async (
   children: readonly SceneNode[],
-  maskIndex: number,
-  baseRotation: number
+  maskIndex: number
 ): Promise<PenpotNode[]> => {
   const maskChild = children[maskIndex];
 
-  const unmaskedChildren = await translateChildren(children.slice(0, maskIndex), baseRotation);
-  const maskedChildren = await translateChildren(children.slice(maskIndex), baseRotation);
+  const unmaskedChildren = await translateChildren(children.slice(0, maskIndex));
+  const maskedChildren = await translateChildren(children.slice(maskIndex));
 
   if (
     maskChild.type === 'STICKY' ||
@@ -41,7 +40,7 @@ export const translateMaskChildren = async (
 
   const maskGroup = {
     ...transformMaskFigmaIds(maskChild),
-    ...transformGroupNodeLike(maskChild, baseRotation),
+    ...transformGroupNodeLike(maskChild),
     children: maskedChildren,
     maskedGroup: true
   };
@@ -49,14 +48,11 @@ export const translateMaskChildren = async (
   return [...unmaskedChildren, maskGroup];
 };
 
-export const translateChildren = async (
-  children: readonly SceneNode[],
-  baseRotation: number = 0
-): Promise<PenpotNode[]> => {
+export const translateChildren = async (children: readonly SceneNode[]): Promise<PenpotNode[]> => {
   const transformedChildren: PenpotNode[] = [];
 
   for (const child of children) {
-    const penpotNode = await transformSceneNode(child, baseRotation);
+    const penpotNode = await transformSceneNode(child);
 
     if (penpotNode) transformedChildren.push(penpotNode);
 
