@@ -123,8 +123,8 @@ export const translateLayoutSizing = (
     case 'FIXED':
       return 'fix';
     case 'HUG':
-      return isFrame ? 'fix' : 'auto'; // @TODO: Penpot does not handle hug in frames as figma does
+      return 'auto';
     case 'FILL':
-      return 'fill';
+      return isFrame ? 'fix' : 'fill'; // @TODO: Penpot does not handle fill in frames as figma does
   }
 };
