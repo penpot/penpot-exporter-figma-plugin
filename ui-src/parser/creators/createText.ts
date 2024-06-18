@@ -1,20 +1,18 @@
 import { PenpotFile } from '@ui/lib/types/penpotFile';
 import { TextContent, TextShape } from '@ui/lib/types/shapes/textShape';
 import { parseFigmaId } from '@ui/parser';
-import { symbolBlendMode, symbolFills, symbolStrokes } from '@ui/parser/creators/symbols';
+import { symbolFills, symbolStrokes } from '@ui/parser/creators/symbols';
 
 export const createText = (
   file: PenpotFile,
-  { type, blendMode, strokes, figmaId, content, figmaRelatedId, ...rest }: TextShape
+  { type, figmaId, figmaRelatedId, ...shape }: TextShape
 ) => {
-  file.createText({
-    id: parseFigmaId(file, figmaId),
-    shapeRef: parseFigmaId(file, figmaRelatedId, true),
-    content: parseContent(content),
-    blendMode: symbolBlendMode(blendMode),
-    strokes: symbolStrokes(strokes),
-    ...rest
-  });
+  shape.id = parseFigmaId(file, figmaId);
+  shape.shapeRef = parseFigmaId(file, figmaRelatedId, true);
+  shape.content = parseContent(shape.content);
+  shape.strokes = symbolStrokes(shape.strokes);
+
+  file.createText(shape);
 };
 
 const parseContent = (content: TextContent | undefined): TextContent | undefined => {

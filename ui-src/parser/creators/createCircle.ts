@@ -1,18 +1,16 @@
 import { PenpotFile } from '@ui/lib/types/penpotFile';
 import { CircleShape } from '@ui/lib/types/shapes/circleShape';
 import { parseFigmaId } from '@ui/parser';
-import { symbolBlendMode, symbolFills, symbolStrokes } from '@ui/parser/creators/symbols';
+import { symbolFills, symbolStrokes } from '@ui/parser/creators/symbols';
 
 export const createCircle = (
   file: PenpotFile,
-  { type, fills, strokes, blendMode, figmaId, figmaRelatedId, ...rest }: CircleShape
+  { type, figmaId, figmaRelatedId, ...shape }: CircleShape
 ) => {
-  file.createCircle({
-    id: parseFigmaId(file, figmaId),
-    shapeRef: parseFigmaId(file, figmaRelatedId, true),
-    fills: symbolFills(fills),
-    strokes: symbolStrokes(strokes),
-    blendMode: symbolBlendMode(blendMode),
-    ...rest
-  });
+  shape.id = parseFigmaId(file, figmaId);
+  shape.shapeRef = parseFigmaId(file, figmaRelatedId, true);
+  shape.fills = symbolFills(shape.fills);
+  shape.strokes = symbolStrokes(shape.strokes);
+
+  file.createCircle(shape);
 };
