@@ -13,15 +13,13 @@ export const createComponentLibrary = async (file: PenpotFile) => {
   const components = uiComponents.all();
 
   sendMessage({
-    type: 'PROGRESS_STEP',
-    data: 'components'
-  });
-
-  await sleep(20);
-
-  sendMessage({
     type: 'PROGRESS_TOTAL_ITEMS',
     data: components.length
+  });
+
+  sendMessage({
+    type: 'PROGRESS_STEP',
+    data: 'components'
   });
 
   for (const uiComponent of components) {

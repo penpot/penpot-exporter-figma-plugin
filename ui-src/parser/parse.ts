@@ -11,16 +11,19 @@ import { parseImage } from '.';
 
 const optimizeImages = async (images: Record<string, Uint8Array>) => {
   const imagesToOptimize = Object.entries(images);
-  let imagesOptimized = 1;
 
-  sendMessage({
-    type: 'PROGRESS_STEP',
-    data: 'optimization'
-  });
+  if (imagesToOptimize.length === 0) return;
+
+  let imagesOptimized = 1;
 
   sendMessage({
     type: 'PROGRESS_TOTAL_ITEMS',
     data: imagesToOptimize.length
+  });
+
+  sendMessage({
+    type: 'PROGRESS_STEP',
+    data: 'optimization'
   });
 
   for (const [key, bytes] of imagesToOptimize) {

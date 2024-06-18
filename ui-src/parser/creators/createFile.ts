@@ -15,15 +15,13 @@ export const createFile = async (name: string, children: PenpotPage[]) => {
   idLibrary.init();
 
   sendMessage({
-    type: 'PROGRESS_STEP',
-    data: 'building'
-  });
-
-  await sleep(20);
-
-  sendMessage({
     type: 'PROGRESS_TOTAL_ITEMS',
     data: children.length
+  });
+
+  sendMessage({
+    type: 'PROGRESS_STEP',
+    data: 'building'
   });
 
   for (const page of children) {
