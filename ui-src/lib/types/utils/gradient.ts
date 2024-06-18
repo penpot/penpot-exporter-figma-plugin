@@ -1,8 +1,5 @@
-export const LINEAR_TYPE: unique symbol = Symbol.for('linear');
-export const RADIAL_TYPE: unique symbol = Symbol.for('radial');
-
 export type Gradient = {
-  type: 'linear' | 'radial' | typeof LINEAR_TYPE | typeof RADIAL_TYPE; // symbol
+  type: 'linear' | 'radial';
   startX: number;
   startY: number;
   endX: number;
