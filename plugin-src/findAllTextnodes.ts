@@ -1,8 +1,6 @@
 import { isGoogleFont } from '@plugin/translators/text/font/gfonts';
 import { isLocalFont } from '@plugin/translators/text/font/local';
 
-import { registerChange } from './registerChange';
-
 export const findAllTextNodes = async () => {
   const fonts = new Set<string>();
 
@@ -20,18 +18,33 @@ export const findAllTextNodes = async () => {
     type: 'CUSTOM_FONTS',
     data: Array.from(fonts)
   });
+};
 
-  figma.currentPage.once('nodechange', registerChange);
+export const findMissingFonts = (node: TextNode): FontName[] => {
+  if (node.fontName !== figma.mixed) {
+    return isKnownFont(node.fontName) ? [] : [node.fontName];
+  }
+
+  const missingFonts: FontName[] = [];
+  const styledTextSegments = node.getStyledTextSegments(['fontName']);
+
+  styledTextSegments.map(segment => {
+    if (isKnownFont(segment.fontName)) return;
+
+    missingFonts.push(segment.fontName);
+  });
+
+  return missingFonts;
 };
 
 const extractMissingFonts = (node: TextNode, fonts: Set<string>) => {
-  const styledTextSegments = node.getStyledTextSegments(['fontName']);
+  const missingFonts = findMissingFonts(node);
 
-  styledTextSegments.forEach(segment => {
-    if (isGoogleFont(segment.fontName) || isLocalFont(segment.fontName)) {
-      return;
-    }
-
-    fonts.add(segment.fontName.family);
+  missingFonts.forEach(font => {
+    fonts.add(font.family);
   });
+};
+
+const isKnownFont = (fontName: FontName): boolean => {
+  return isGoogleFont(fontName) || isLocalFont(fontName);
 };
