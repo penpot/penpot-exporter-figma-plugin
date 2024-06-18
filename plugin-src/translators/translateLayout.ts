@@ -115,12 +115,15 @@ export const translateLayoutAlignItems = (node: BaseFrameMixin): JustifyAlignIte
   }
 };
 
-export const translateLayoutSizing = (sizing: FigmaLayoutSizing): LayoutSizing => {
+export const translateLayoutSizing = (
+  sizing: FigmaLayoutSizing,
+  isFrame: boolean = false
+): LayoutSizing => {
   switch (sizing) {
     case 'FIXED':
       return 'fix';
     case 'HUG':
-      return 'auto';
+      return isFrame ? 'fix' : 'auto'; // @TODO: Penpot does not handle hug in frames as figma does
     case 'FILL':
       return 'fill';
   }

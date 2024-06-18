@@ -59,7 +59,7 @@ export const transformInstanceNode = async (
     ...transformSceneNode(node),
     ...transformBlend(node),
     ...transformProportion(node),
-    ...transformLayoutAttributes(node),
+    ...transformLayoutAttributes(node, true),
     ...transformCornerRadius(node),
     ...transformDimension(node),
     ...transformRotationAndPosition(node, baseRotation),
