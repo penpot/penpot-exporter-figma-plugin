@@ -45,7 +45,7 @@ export const transformFrameNode = async (
       // @see: https://forum.figma.com/t/add-a-blendmode-property-for-sectionnode/58560
       ...transformBlend(node),
       ...transformProportion(node),
-      ...transformLayoutAttributes(node),
+      ...transformLayoutAttributes(node, true),
       ...transformCornerRadius(node),
       ...transformEffects(node),
       ...transformConstraints(node),

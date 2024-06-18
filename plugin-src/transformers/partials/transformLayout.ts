@@ -31,7 +31,8 @@ export const transformAutoLayout = (node: BaseFrameMixin): LayoutAttributes => {
 };
 
 export const transformLayoutAttributes = (
-  node: LayoutMixin
+  node: LayoutMixin,
+  isFrame: boolean = false
 ): Pick<
   LayoutChildAttributes,
   | 'layoutItemH-Sizing'
@@ -43,8 +44,8 @@ export const transformLayoutAttributes = (
   | 'layoutItemMinW'
 > => {
   return {
-    'layoutItemH-Sizing': translateLayoutSizing(node.layoutSizingHorizontal),
-    'layoutItemV-Sizing': translateLayoutSizing(node.layoutSizingVertical),
+    'layoutItemH-Sizing': translateLayoutSizing(node.layoutSizingHorizontal, isFrame),
+    'layoutItemV-Sizing': translateLayoutSizing(node.layoutSizingVertical, isFrame),
     'layoutItemAbsolute': node.layoutPositioning === 'ABSOLUTE',
     'layoutItemMaxH': node.maxHeight ?? undefined,
     'layoutItemMinH': node.minHeight ?? undefined,
