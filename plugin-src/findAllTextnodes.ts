@@ -4,21 +4,15 @@ import { isLocalFont } from '@plugin/translators/text/font/local';
 export const findAllTextNodes = async () => {
   const fonts = new Set<string>();
 
-  let totalTime = 0;
-
   for (const page of figma.root.children) {
     await page.loadAsync();
 
     const nodes = page.findAll(node => node.type === 'TEXT') as TextNode[];
 
-    const startDate = Date.now();
     for (const node of nodes) {
       extractMissingFonts(node, fonts);
     }
-    totalTime += Date.now() - startDate;
   }
-
-  console.log('Time to find all text nodes:', totalTime);
 
   figma.ui.postMessage({
     type: 'CUSTOM_FONTS',
