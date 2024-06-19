@@ -43,7 +43,7 @@ const createComponentLibrary = async (file: PenpotFile, uiComponent: UiComponent
 
   const { children = [], ...shape } = component;
 
-  shape.fills = symbolFills(shape.fills);
+  shape.fills = symbolFills(shape.fillStyleId, shape.fills);
   shape.strokes = symbolStrokes(shape.strokes);
   shape.id = uiComponent.componentId;
   shape.componentId = uiComponent.componentId;

@@ -9,7 +9,7 @@ export const createRectangle = (
 ) => {
   shape.id = parseFigmaId(file, figmaId);
   shape.shapeRef = parseFigmaId(file, figmaRelatedId, true);
-  shape.fills = symbolFills(shape.fills);
+  shape.fills = symbolFills(shape.fillStyleId, shape.fills);
   shape.strokes = symbolStrokes(shape.strokes);
 
   file.createRect(shape);

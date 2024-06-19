@@ -60,6 +60,7 @@ export type TextStyle = FontId & {
   textAlign?: TextHorizontalAlign;
   textDirection?: 'ltr' | 'rtl' | 'auto';
   fills?: Fill[];
+  fillStyleId?: string; // @TODO: move to any other place
 };
 
 export type FontId = {

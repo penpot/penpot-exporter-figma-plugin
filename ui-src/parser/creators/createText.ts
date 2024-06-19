@@ -21,10 +21,10 @@ const parseContent = (content: TextContent | undefined): TextContent | undefined
   content.children?.forEach(paragraphSet => {
     paragraphSet.children.forEach(paragraph => {
       paragraph.children.forEach(textNode => {
-        textNode.fills = symbolFills(textNode.fills);
+        textNode.fills = symbolFills(textNode.fillStyleId, textNode.fills);
       });
 
-      paragraph.fills = symbolFills(paragraph.fills);
+      paragraph.fills = symbolFills(paragraph.fillStyleId, paragraph.fills);
     });
   });
 

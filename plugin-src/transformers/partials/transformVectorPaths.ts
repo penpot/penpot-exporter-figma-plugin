@@ -6,9 +6,9 @@ import {
   transformLayoutAttributes,
   transformProportion,
   transformSceneNode,
-  transformStrokesFromVector
+  transformStrokesFromVector,
+  transformVectorFills
 } from '@plugin/transformers/partials';
-import { translateFills } from '@plugin/translators/fills';
 import { translateCommands, translateWindingRule } from '@plugin/translators/vectors';
 
 import { PathShape } from '@ui/lib/types/shapes/pathShape';
@@ -66,13 +66,12 @@ const transformVectorPath = (
     type: 'path',
     name: 'svg-path',
     content: translateCommands(node, normalizedPaths),
-    fills:
-      vectorPath.windingRule === 'NONE' ? [] : translateFills(vectorRegion?.fills ?? node.fills),
     svgAttrs: {
       fillRule: translateWindingRule(vectorPath.windingRule)
     },
     constraintsH: 'scale',
     constraintsV: 'scale',
+    ...transformVectorFills(node, vectorPath, vectorRegion),
     ...transformStrokesFromVector(node, normalizedPaths, vectorRegion),
     ...transformEffects(node),
     ...transformSceneNode(node),

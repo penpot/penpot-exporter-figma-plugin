@@ -15,7 +15,8 @@ export const transformText = (node: TextNode): TextAttributes & Pick<TextShape, 
     'textDecoration',
     'indentation',
     'listOptions',
-    'fills'
+    'fills',
+    'fillStyleId'
   ]);
 
   return {
