@@ -2,4 +2,4 @@
 "penpot-exporter": patch
 ---
 
-Fix svg translation of fill rules
+Fix scrollbar showing up randomly

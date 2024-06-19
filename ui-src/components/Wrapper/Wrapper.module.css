@@ -1,7 +1,3 @@
 .wrapper {
   padding: 1.5rem 1rem 1rem;
-
-  .wrapper-overflow {
-    /* Empty class used to detect overflow on the body */
-  }
 }
