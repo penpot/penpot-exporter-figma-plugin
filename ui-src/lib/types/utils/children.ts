@@ -1,3 +1,3 @@
 import { PenpotNode } from '@ui/types';
 
-export type Children = { children?: PenpotNode[] };
+export type Children = { children: Promise<PenpotNode | undefined>[] | (PenpotNode | undefined)[] };

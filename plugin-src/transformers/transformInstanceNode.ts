@@ -64,7 +64,7 @@ export const transformInstanceNode = async (
     ...transformRotationAndPosition(node),
     ...transformConstraints(node),
     ...transformAutoLayout(node),
-    ...(await transformChildren(node)),
+    ...transformChildren(node),
     ...transformOverrides(node)
   };
 };

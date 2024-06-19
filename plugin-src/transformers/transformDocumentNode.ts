@@ -78,7 +78,7 @@ export const transformDocumentNode = async (node: DocumentNode): Promise<PenpotD
   if (remoteComponentLibrary.remaining() > 0) {
     children.push({
       name: 'External Components',
-      children: await translateRemoteChildren()
+      children: translateRemoteChildren()
     });
   }
 

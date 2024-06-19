@@ -1,8 +1,8 @@
 import { remoteComponentLibrary } from '@plugin/RemoteComponentLibrary';
 import { transformGroupNodeLike, transformSceneNode } from '@plugin/transformers';
 import { transformMaskFigmaIds } from '@plugin/transformers/partials';
-import { sleep } from '@plugin/utils';
 
+import { GroupShape } from '@ui/lib/types/shapes/groupShape';
 import { PenpotNode } from '@ui/types';
 
 /**
@@ -14,14 +14,14 @@ import { PenpotNode } from '@ui/types';
  *
  * @maskIndex The index of the mask node in the children array
  */
-export const translateMaskChildren = async (
+export const translateMaskChildren = (
   children: readonly SceneNode[],
   maskIndex: number
-): Promise<PenpotNode[]> => {
+): Promise<PenpotNode | undefined>[] => {
   const maskChild = children[maskIndex];
 
-  const unmaskedChildren = await translateChildren(children.slice(0, maskIndex));
-  const maskedChildren = await translateChildren(children.slice(maskIndex));
+  const unmaskedChildren = translateChildren(children.slice(0, maskIndex));
+  const maskedChildren = translateChildren(children.slice(maskIndex));
 
   if (
     maskChild.type === 'STICKY' ||
@@ -38,32 +38,30 @@ export const translateMaskChildren = async (
     return [...unmaskedChildren, ...maskedChildren];
   }
 
-  const maskGroup = {
+  const maskGroup = Promise.resolve<GroupShape>({
     ...transformMaskFigmaIds(maskChild),
     ...transformGroupNodeLike(maskChild),
     children: maskedChildren,
     maskedGroup: true
-  };
+  });
 
   return [...unmaskedChildren, maskGroup];
 };
 
-export const translateChildren = async (children: readonly SceneNode[]): Promise<PenpotNode[]> => {
-  const transformedChildren: PenpotNode[] = [];
+export const translateChildren = (
+  children: readonly SceneNode[]
+): Promise<PenpotNode | undefined>[] => {
+  const transformedChildren: Promise<PenpotNode | undefined>[] = [];
 
   for (const child of children) {
-    const penpotNode = await transformSceneNode(child);
-
-    if (penpotNode) transformedChildren.push(penpotNode);
-
-    await sleep(0);
+    transformedChildren.push(transformSceneNode(child));
   }
 
   return transformedChildren;
 };
 
-export const translateRemoteChildren = async (): Promise<PenpotNode[]> => {
-  const transformedChildren: PenpotNode[] = [];
+export const translateRemoteChildren = (): Promise<PenpotNode | undefined>[] => {
+  const transformedChildren: Promise<PenpotNode | undefined>[] = [];
   let currentRemote = 1;
 
   figma.ui.postMessage({
@@ -79,16 +77,12 @@ export const translateRemoteChildren = async (): Promise<PenpotNode[]> => {
 
     const child = remoteComponentLibrary.next();
 
-    const penpotNode = await transformSceneNode(child);
-
-    if (penpotNode) transformedChildren.push(penpotNode);
+    transformedChildren.push(transformSceneNode(child));
 
     figma.ui.postMessage({
       type: 'PROGRESS_PROCESSED_ITEMS',
       data: currentRemote++
     });
-
-    await sleep(0);
   }
 
   return transformedChildren;
