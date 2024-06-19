@@ -10,3 +10,8 @@ export type Fill = {
   fillColorRefId?: Uuid;
   fillImage?: ImageColor | PartialImageColor; // @TODO: move to any other place
 };
+
+export type FillStyle = {
+  name: string;
+  fills: Fill[];
+};

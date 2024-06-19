@@ -29,6 +29,9 @@ const stepMessages: Record<Steps, Messages> = {
     total: 'pages built 🏗️',
     current: 'Currently processing layer'
   },
+  fills: {
+    total: 'color libraries fetched 🎨'
+  },
   components: {
     total: 'components built 🏗️',
     current: 'Currently processing layer'
@@ -60,6 +63,7 @@ const StepProgress = (): JSX.Element | null => {
     case 'images':
     case 'optimization':
     case 'building':
+    case 'fills':
     case 'components':
       return (
         <>

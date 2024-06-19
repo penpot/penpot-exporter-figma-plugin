@@ -6,6 +6,7 @@ import { sleep } from '@plugin/utils/sleep';
 import { sendMessage } from '@ui/context';
 import { createFile } from '@ui/parser/creators';
 import { uiImages } from '@ui/parser/libraries';
+import { uiColorLibraries } from '@ui/parser/libraries/UiColorLibraries';
 import { PenpotDocument } from '@ui/types';
 
 import { parseImage } from '.';
@@ -49,7 +50,7 @@ export const parse = async ({
   styles
 }: PenpotDocument) => {
   componentsLibrary.init(components);
-  styleLibrary.init(styles);
+  uiColorLibraries.init(styles);
 
   await optimizeImages(images);
 
