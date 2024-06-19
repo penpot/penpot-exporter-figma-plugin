@@ -15,7 +15,7 @@ import {
 
 import { CircleShape } from '@ui/lib/types/shapes/circleShape';
 
-export const transformEllipseNode = (node: EllipseNode, baseRotation: number): CircleShape => {
+export const transformEllipseNode = (node: EllipseNode): CircleShape => {
   return {
     type: 'circle',
     name: node.name,
@@ -24,7 +24,7 @@ export const transformEllipseNode = (node: EllipseNode, baseRotation: number): C
     ...transformEffects(node),
     ...transformStrokes(node),
     ...transformDimension(node),
-    ...transformRotationAndPosition(node, baseRotation),
+    ...transformRotationAndPosition(node),
     ...transformSceneNode(node),
     ...transformBlend(node),
     ...transformProportion(node),

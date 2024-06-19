@@ -14,10 +14,7 @@ import {
   transformVectorNode
 } from '.';
 
-export const transformSceneNode = async (
-  node: SceneNode,
-  baseRotation: number = 0
-): Promise<PenpotNode | undefined> => {
+export const transformSceneNode = async (node: SceneNode): Promise<PenpotNode | undefined> => {
   let penpotNode: PenpotNode | undefined;
 
   figma.ui.postMessage({
@@ -27,40 +24,40 @@ export const transformSceneNode = async (
 
   switch (node.type) {
     case 'RECTANGLE':
-      penpotNode = transformRectangleNode(node, baseRotation);
+      penpotNode = transformRectangleNode(node);
       break;
     case 'ELLIPSE':
-      penpotNode = transformEllipseNode(node, baseRotation);
+      penpotNode = transformEllipseNode(node);
       break;
     case 'SECTION':
     case 'FRAME':
     case 'COMPONENT_SET':
-      penpotNode = await transformFrameNode(node, baseRotation);
+      penpotNode = await transformFrameNode(node);
       break;
     case 'GROUP':
-      penpotNode = await transformGroupNode(node, baseRotation);
+      penpotNode = await transformGroupNode(node);
       break;
     case 'TEXT':
-      penpotNode = transformTextNode(node, baseRotation);
+      penpotNode = transformTextNode(node);
       break;
     case 'VECTOR':
-      penpotNode = transformVectorNode(node, baseRotation);
+      penpotNode = transformVectorNode(node);
       break;
     case 'LINE':
-      penpotNode = transformLineNode(node, baseRotation);
+      penpotNode = transformLineNode(node);
       break;
     case 'STAR':
     case 'POLYGON':
-      penpotNode = transformPathNode(node, baseRotation);
+      penpotNode = transformPathNode(node);
       break;
     case 'BOOLEAN_OPERATION':
-      penpotNode = await transformBooleanNode(node, baseRotation);
+      penpotNode = await transformBooleanNode(node);
       break;
     case 'COMPONENT':
-      penpotNode = await transformComponentNode(node, baseRotation);
+      penpotNode = await transformComponentNode(node);
       break;
     case 'INSTANCE':
-      penpotNode = await transformInstanceNode(node, baseRotation);
+      penpotNode = await transformInstanceNode(node);
       break;
   }
 

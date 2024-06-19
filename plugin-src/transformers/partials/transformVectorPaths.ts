@@ -13,7 +13,7 @@ import { translateCommands, translateWindingRule } from '@plugin/translators/vec
 
 import { PathShape } from '@ui/lib/types/shapes/pathShape';
 
-export const transformVectorPaths = (node: VectorNode, baseRotation: number): PathShape[] => {
+export const transformVectorPaths = (node: VectorNode): PathShape[] => {
   const pathShapes = node.vectorPaths
     .filter((vectorPath, index) => {
       return (
@@ -22,7 +22,7 @@ export const transformVectorPaths = (node: VectorNode, baseRotation: number): Pa
       );
     })
     .map((vectorPath, index) =>
-      transformVectorPath(node, vectorPath, (node.vectorNetwork.regions ?? [])[index], baseRotation)
+      transformVectorPath(node, vectorPath, (node.vectorNetwork.regions ?? [])[index])
     );
 
   const geometryShapes = node.fillGeometry
@@ -32,7 +32,7 @@ export const transformVectorPaths = (node: VectorNode, baseRotation: number): Pa
           vectorPath => normalizePath(vectorPath.data) === normalizePath(geometry.data)
         )
     )
-    .map(geometry => transformVectorPath(node, geometry, undefined, baseRotation));
+    .map(geometry => transformVectorPath(node, geometry, undefined));
 
   return [...geometryShapes, ...pathShapes];
 };
@@ -58,15 +58,14 @@ const nodeHasFills = (
 const transformVectorPath = (
   node: VectorNode,
   vectorPath: VectorPath,
-  vectorRegion: VectorRegion | undefined,
-  baseRotation: number
+  vectorRegion: VectorRegion | undefined
 ): PathShape => {
   const normalizedPaths = parseSVG(vectorPath.data);
 
   return {
     type: 'path',
     name: 'svg-path',
-    content: translateCommands(node, normalizedPaths, baseRotation),
+    content: translateCommands(node, normalizedPaths),
     fills:
       vectorPath.windingRule === 'NONE' ? [] : translateFills(vectorRegion?.fills ?? node.fills),
     svgAttrs: {

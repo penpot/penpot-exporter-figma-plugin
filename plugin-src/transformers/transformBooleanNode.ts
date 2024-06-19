@@ -16,21 +16,18 @@ import { translateBoolType } from '@plugin/translators';
 
 import { BoolShape } from '@ui/lib/types/shapes/boolShape';
 
-export const transformBooleanNode = async (
-  node: BooleanOperationNode,
-  baseRotation: number
-): Promise<BoolShape> => {
+export const transformBooleanNode = async (node: BooleanOperationNode): Promise<BoolShape> => {
   return {
     type: 'bool',
     name: node.name,
     boolType: translateBoolType(node.booleanOperation),
     ...transformFigmaIds(node),
-    ...(await transformChildren(node, baseRotation)),
+    ...(await transformChildren(node)),
     ...transformFills(node),
     ...transformEffects(node),
     ...transformStrokes(node),
     ...transformDimension(node),
-    ...transformRotationAndPosition(node, baseRotation),
+    ...transformRotationAndPosition(node),
     ...transformSceneNode(node),
     ...transformBlend(node),
     ...transformProportion(node),

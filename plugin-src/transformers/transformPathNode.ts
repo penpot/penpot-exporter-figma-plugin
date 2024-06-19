@@ -17,14 +17,11 @@ import { translateCommands } from '@plugin/translators/vectors';
 
 import { PathShape, Segment } from '@ui/lib/types/shapes/pathShape';
 
-export const transformPathNode = (
-  node: StarNode | PolygonNode,
-  baseRotation: number
-): PathShape => {
+export const transformPathNode = (node: StarNode | PolygonNode): PathShape => {
   return {
     type: 'path',
     name: node.name,
-    content: translatePathNode(node, baseRotation),
+    content: translatePathNode(node),
     ...transformFigmaIds(node),
     ...transformFills(node),
     ...transformStrokes(node),
@@ -32,12 +29,12 @@ export const transformPathNode = (
     ...transformSceneNode(node),
     ...transformBlend(node),
     ...transformProportion(node),
-    ...transformRotation(node, baseRotation),
+    ...transformRotation(node),
     ...transformLayoutAttributes(node),
     ...transformConstraints(node),
     ...transformOverrides(node)
   };
 };
 
-const translatePathNode = (node: StarNode | PolygonNode, baseRotation: number): Segment[] =>
-  translateCommands(node, parseSVG(node.fillGeometry[0].data), baseRotation);
+const translatePathNode = (node: StarNode | PolygonNode): Segment[] =>
+  translateCommands(node, parseSVG(node.fillGeometry[0].data));

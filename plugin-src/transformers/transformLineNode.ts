@@ -20,11 +20,11 @@ import { Segment } from '@ui/lib/types/shapes/pathShape';
  *
  * To represent the line rotated we do take into account the rotation of the line, but only in its content.
  */
-export const transformLineNode = (node: LineNode, baseRotation: number): PathShape => {
+export const transformLineNode = (node: LineNode): PathShape => {
   return {
     type: 'path',
     name: node.name,
-    content: translateLineNode(node, baseRotation),
+    content: translateLineNode(node),
     ...transformFigmaIds(node),
     ...transformStrokes(node),
     ...transformEffects(node),
@@ -37,23 +37,19 @@ export const transformLineNode = (node: LineNode, baseRotation: number): PathSha
   };
 };
 
-const translateLineNode = (node: LineNode, baseRotation: number): Segment[] => {
-  return translateCommands(
-    node,
-    [
-      {
-        x: 0,
-        y: 0,
-        command: 'moveto',
-        code: 'M'
-      },
-      {
-        x: node.width,
-        y: 0,
-        command: 'lineto',
-        code: 'L'
-      }
-    ],
-    baseRotation
-  );
+const translateLineNode = (node: LineNode): Segment[] => {
+  return translateCommands(node, [
+    {
+      x: 0,
+      y: 0,
+      command: 'moveto',
+      code: 'M'
+    },
+    {
+      x: node.width,
+      y: 0,
+      command: 'lineto',
+      code: 'L'
+    }
+  ]);
 };

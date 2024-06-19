@@ -24,18 +24,15 @@ const isSectionNode = (node: FrameNode | SectionNode | ComponentSetNode): node i
 };
 
 export const transformFrameNode = async (
-  node: FrameNode | SectionNode | ComponentSetNode,
-  baseRotation: number
+  node: FrameNode | SectionNode | ComponentSetNode
 ): Promise<FrameShape> => {
   let frameSpecificAttributes: Partial<FrameShape> = {};
   let referencePoint: Point = { x: node.absoluteTransform[0][2], y: node.absoluteTransform[1][2] };
-  let rotation = baseRotation;
 
   if (!isSectionNode(node)) {
-    const { x, y, ...transformAndRotation } = transformRotationAndPosition(node, baseRotation);
+    const { x, y, ...transformAndRotation } = transformRotationAndPosition(node);
 
     referencePoint = { x, y };
-    rotation += node.rotation;
 
     // Figma API does not expose strokes, blend modes, corner radius, or constraint proportions for sections,
     // they plan to add it in the future. Refactor this when available.
@@ -63,7 +60,7 @@ export const transformFrameNode = async (
     ...referencePoint,
     ...frameSpecificAttributes,
     ...transformDimension(node),
-    ...(await transformChildren(node, rotation)),
+    ...(await transformChildren(node)),
     ...transformSceneNode(node),
     ...transformOverrides(node)
   };
