@@ -1,5 +1,41 @@
 # penpot-exporter
 
+## 0.7.0
+
+### Minor Changes
+
+- [#166](https://github.com/penpot/penpot-exporter-figma-plugin/pull/166) [`4591369`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/4591369e3cf5c9522d904c97db71178c8b71cc0c) Thanks [@Cenadros](https://github.com/Cenadros)! - Added support for instances overrides
+
+- [#180](https://github.com/penpot/penpot-exporter-figma-plugin/pull/180) [`6725676`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/672567614bb69f68ffe32aec3dddaa8ef3866e5b) Thanks [@Cenadros](https://github.com/Cenadros)! - Use Fill Styles to optimize fills transformations
+
+- [#163](https://github.com/penpot/penpot-exporter-figma-plugin/pull/163) [`e5f2943`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/e5f294353233aba5cb9cceca78dec36143b3490f) Thanks [@jordisala1991](https://github.com/jordisala1991)! - Implement rotation for the missing figures
+
+- [#160](https://github.com/penpot/penpot-exporter-figma-plugin/pull/160) [`af81fc7`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/af81fc7e929ecd0efa97d8d36a718695c536cec0) Thanks [@jordisala1991](https://github.com/jordisala1991)! - Apply rotations to lines
+
+- [#151](https://github.com/penpot/penpot-exporter-figma-plugin/pull/151) [`b85a4f7`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/b85a4f72791f6739702cd2989b40b15de964a494) Thanks [@Cenadros](https://github.com/Cenadros)! - Added support for autolayout
+
+- [#172](https://github.com/penpot/penpot-exporter-figma-plugin/pull/172) [`8697902`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/8697902e086174170eeeb24a075a783eeb308ccc) Thanks [@jordisala1991](https://github.com/jordisala1991)! - Track better the progress on file creation
+
+- [#167](https://github.com/penpot/penpot-exporter-figma-plugin/pull/167) [`14c9d02`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/14c9d02cc928aef64b9068ff7d0e2b87b231edb7) Thanks [@Cenadros](https://github.com/Cenadros)! - Register Text Variables as Instance override
+
+- [#168](https://github.com/penpot/penpot-exporter-figma-plugin/pull/168) [`202e7f4`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/202e7f4fda62980094e447a7763864ab2c48624d) Thanks [@jordisala1991](https://github.com/jordisala1991)! - Implement rotation for any arbitrary figure
+
+### Patch Changes
+
+- [#164](https://github.com/penpot/penpot-exporter-figma-plugin/pull/164) [`2f11c5f`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/2f11c5f0907d09a739b7779a9e52583fe75f4d6f) Thanks [@jordisala1991](https://github.com/jordisala1991)! - Fix svg translation of fill rules
+
+- [#174](https://github.com/penpot/penpot-exporter-figma-plugin/pull/174) [`beb3caa`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/beb3caa5e0f28c0cc6a386226f2f3467c59700de) Thanks [@Cenadros](https://github.com/Cenadros)! - Fix Hug in Frames
+
+- [#154](https://github.com/penpot/penpot-exporter-figma-plugin/pull/154) [`342ab90`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/342ab90e69885482e7332fec5b28299226f1b54d) Thanks [@jordisala1991](https://github.com/jordisala1991)! - Translate line endings done with shift+Enter in Figma
+
+- [#170](https://github.com/penpot/penpot-exporter-figma-plugin/pull/170) [`ebad146`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/ebad146d7f01640a6ab086b6c453b1da4fb1eaa5) Thanks [@jordisala1991](https://github.com/jordisala1991)! - Fix fonts detection traversal on the whole document
+
+- [#164](https://github.com/penpot/penpot-exporter-figma-plugin/pull/164) [`2f11c5f`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/2f11c5f0907d09a739b7779a9e52583fe75f4d6f) Thanks [@jordisala1991](https://github.com/jordisala1991)! - Fix frames opacity translation
+
+- [#156](https://github.com/penpot/penpot-exporter-figma-plugin/pull/156) [`6fc812a`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/6fc812a08fb73cc97d43b1e2ab6b99ad311d5443) Thanks [@jordisala1991](https://github.com/jordisala1991)! - Do not apply indentation to texts with indent zero
+
+- [#175](https://github.com/penpot/penpot-exporter-figma-plugin/pull/175) [`33d2502`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/33d250218cb9e68f7aa7afd854bf73c3d85a7ead) Thanks [@jordisala1991](https://github.com/jordisala1991)! - Improve detection of changed fonts
+
 ## 0.6.1
 
 ### Patch Changes
