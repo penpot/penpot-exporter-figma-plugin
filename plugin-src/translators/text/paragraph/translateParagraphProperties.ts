@@ -17,6 +17,7 @@ export type StyleTextSegment = Pick<
   | 'indentation'
   | 'listOptions'
   | 'fills'
+  | 'fillStyleId'
 >;
 
 type PartialTranslation = {

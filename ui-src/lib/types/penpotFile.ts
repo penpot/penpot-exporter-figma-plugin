@@ -7,6 +7,7 @@ import { GroupShape } from '@ui/lib/types/shapes/groupShape';
 import { PathShape } from '@ui/lib/types/shapes/pathShape';
 import { RectShape } from '@ui/lib/types/shapes/rectShape';
 import { TextShape } from '@ui/lib/types/shapes/textShape';
+import { Color } from '@ui/lib/types/utils/color';
 import { Uuid } from '@ui/lib/types/utils/uuid';
 
 export interface PenpotFile {
@@ -22,9 +23,9 @@ export interface PenpotFile {
   createCircle(circle: CircleShape): Uuid;
   createPath(path: PathShape): Uuid;
   createText(options: TextShape): Uuid;
-  // addLibraryColor(color: any): void;
-  // updateLibraryColor(color: any): void;
-  // deleteLibraryColor(color: any): void;
+  addLibraryColor(color: Color): void;
+  updateLibraryColor(color: Color): void;
+  deleteLibraryColor(color: Color): void;
   // addLibraryTypography(typography: any): void;
   // deleteLibraryTypography(typography: any): void;
   startComponent(component: ComponentShape): Uuid;

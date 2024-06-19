@@ -14,7 +14,7 @@ export const createArtboard = (
 
   shape.id = id;
   shape.shapeRef ??= parseFigmaId(file, figmaRelatedId, true);
-  shape.fills = symbolFills(shape.fills);
+  shape.fills = symbolFills(shape.fillStyleId, shape.fills);
   shape.strokes = symbolStrokes(shape.strokes);
 
   file.addArtboard(shape);

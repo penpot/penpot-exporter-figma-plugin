@@ -1,11 +1,15 @@
+import { styleLibrary } from '@plugin/StyleLibrary';
+
 import { Fill } from '@ui/lib/types/utils/fill';
 import { ImageColor, PartialImageColor } from '@ui/lib/types/utils/imageColor';
 import { uiImages } from '@ui/parser/libraries';
 
-export const symbolFills = (fills?: Fill[]): Fill[] | undefined => {
-  if (!fills) return;
+export const symbolFills = (fillStyleId?: string, fills?: Fill[]): Fill[] | undefined => {
+  const nodeFills = fillStyleId ? styleLibrary.get(fillStyleId) : fills;
 
-  return fills.map(fill => {
+  if (!nodeFills) return;
+
+  return nodeFills.map(fill => {
     if (fill.fillImage) {
       fill.fillImage = symbolFillImage(fill.fillImage);
     }

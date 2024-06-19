@@ -51,6 +51,7 @@ export type ShapeAttributes = {
   hidden?: boolean;
   maskedGroup?: boolean;
   fills?: Fill[];
+  fillStyleId?: string; // @TODO: move to any other place
   hideFillOnExport?: boolean;
   proportion?: number;
   proportionLock?: boolean;

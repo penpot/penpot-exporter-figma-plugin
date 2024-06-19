@@ -1,4 +1,5 @@
 import { componentsLibrary } from '@plugin/ComponentLibrary';
+import { styleLibrary } from '@plugin/StyleLibrary';
 // @TODO: Direct import on purpose, to avoid problems with the tsc linting
 import { sleep } from '@plugin/utils/sleep';
 
@@ -40,8 +41,15 @@ const optimizeImages = async (images: Record<string, Uint8Array>) => {
   }
 };
 
-export const parse = async ({ name, children = [], components, images }: PenpotDocument) => {
+export const parse = async ({
+  name,
+  children = [],
+  components,
+  images,
+  styles
+}: PenpotDocument) => {
   componentsLibrary.init(components);
+  styleLibrary.init(styles);
 
   await optimizeImages(images);
 

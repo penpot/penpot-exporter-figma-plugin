@@ -1,4 +1,4 @@
-import { translateFills } from '@plugin/translators/fills';
+import { transformFills } from '@plugin/transformers/partials';
 import { translateFontId } from '@plugin/translators/text/font';
 import { StyleTextSegment, translateParagraphProperties } from '@plugin/translators/text/paragraph';
 import {
@@ -41,8 +41,8 @@ export const transformTextStyle = (node: TextNode, segment: StyleTextSegment): T
 
 const translateStyleTextSegment = (node: TextNode, segment: StyleTextSegment): PenpotTextNode => {
   return {
-    fills: translateFills(segment.fills),
     text: segment.characters,
-    ...transformTextStyle(node, segment)
+    ...transformTextStyle(node, segment),
+    ...transformFills(segment)
   };
 };

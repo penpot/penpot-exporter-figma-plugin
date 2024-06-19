@@ -1,6 +1,7 @@
 import { componentsLibrary } from '@plugin/ComponentLibrary';
 import { imagesLibrary } from '@plugin/ImageLibrary';
 import { remoteComponentLibrary } from '@plugin/RemoteComponentLibrary';
+import { styleLibrary } from '@plugin/StyleLibrary';
 import { translateRemoteChildren } from '@plugin/translators';
 import { sleep } from '@plugin/utils';
 
@@ -86,6 +87,7 @@ export const transformDocumentNode = async (node: DocumentNode): Promise<PenpotD
     name: node.name,
     children,
     components: componentsLibrary.all(),
-    images: await downloadImages()
+    images: await downloadImages(),
+    styles: styleLibrary.all()
   };
 };

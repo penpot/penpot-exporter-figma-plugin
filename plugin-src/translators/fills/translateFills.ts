@@ -1,3 +1,4 @@
+import { styleLibrary } from '@plugin/StyleLibrary';
 import { translateImageFill, translateSolidFill } from '@plugin/translators/fills';
 import {
   translateGradientLinearFill,
@@ -39,6 +40,19 @@ export const translateFills = (
   }
 
   return penpotFills;
+};
+
+export const translateFillStyle = (
+  fillStyleId: string | typeof figma.mixed | undefined,
+  fills: readonly Paint[] | typeof figma.mixed | undefined
+): string | undefined => {
+  if (fillStyleId === figma.mixed || fillStyleId === undefined) return;
+
+  if (!styleLibrary.has(fillStyleId)) {
+    styleLibrary.register(fillStyleId, translateFills(fills));
+  }
+
+  return fillStyleId;
 };
 
 export const translatePageFill = (fill: Paint): string | undefined => {
