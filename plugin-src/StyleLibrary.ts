@@ -16,19 +16,11 @@ class StyleLibrary {
   }
 
   public all(): Record<string, Fill[]> {
-    const styles: Record<string, Fill[]> = {};
-
-    for (const [id, fills] of this.styles) {
-      styles[id] = fills;
-    }
-
-    return styles;
+    return Object.fromEntries(this.styles.entries());
   }
 
   public init(styles: Record<string, Fill[]>): void {
-    for (const [id, fills] of Object.entries(styles)) {
-      this.register(id, fills);
-    }
+    this.styles = new Map(Object.entries(styles));
   }
 }
 
