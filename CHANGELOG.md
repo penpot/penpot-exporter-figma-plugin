@@ -1,5 +1,11 @@
 # penpot-exporter
 
+## 0.7.1
+
+### Patch Changes
+
+- [#181](https://github.com/penpot/penpot-exporter-figma-plugin/pull/181) [`bc33c0e`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/bc33c0ed9c3000d65ec1a18ec09e052b19bbb356) Thanks [@jordisala1991](https://github.com/jordisala1991)! - Fix scrollbar showing up randomly
+
 ## 0.7.0
 
 ### Minor Changes
