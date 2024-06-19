@@ -23,9 +23,9 @@ const isSectionNode = (node: FrameNode | SectionNode | ComponentSetNode): node i
   return node.type === 'SECTION';
 };
 
-export const transformFrameNode = async (
+export const transformFrameNode = (
   node: FrameNode | SectionNode | ComponentSetNode
-): Promise<FrameShape> => {
+): FrameShape => {
   let frameSpecificAttributes: Partial<FrameShape> = {};
   let referencePoint: Point = { x: node.absoluteTransform[0][2], y: node.absoluteTransform[1][2] };
 
@@ -60,7 +60,7 @@ export const transformFrameNode = async (
     ...referencePoint,
     ...frameSpecificAttributes,
     ...transformDimension(node),
-    ...(await transformChildren(node)),
+    ...transformChildren(node),
     ...transformSceneNode(node),
     ...transformOverrides(node)
   };

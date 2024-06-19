@@ -1,7 +1,6 @@
-import { remoteComponentLibrary } from '@plugin/RemoteComponentLibrary';
-import { transformGroupNodeLike, transformSceneNode } from '@plugin/transformers';
+import { nodeQueue } from '@plugin/Queue';
+import { transformGroupNodeLike } from '@plugin/transformers';
 import { transformMaskFigmaIds } from '@plugin/transformers/partials';
-import { sleep } from '@plugin/utils';
 
 import { PenpotNode } from '@ui/types';
 
@@ -14,14 +13,14 @@ import { PenpotNode } from '@ui/types';
  *
  * @maskIndex The index of the mask node in the children array
  */
-export const translateMaskChildren = async (
+export const translateMaskChildren = (
   children: readonly SceneNode[],
   maskIndex: number
-): Promise<PenpotNode[]> => {
+): PenpotNode[] => {
   const maskChild = children[maskIndex];
 
-  const unmaskedChildren = await translateChildren(children.slice(0, maskIndex));
-  const maskedChildren = await translateChildren(children.slice(maskIndex));
+  const unmaskedChildren = translateChildren(children.slice(0, maskIndex));
+  const maskedChildren = translateChildren(children.slice(maskIndex));
 
   if (
     maskChild.type === 'STICKY' ||
@@ -48,47 +47,14 @@ export const translateMaskChildren = async (
   return [...unmaskedChildren, maskGroup];
 };
 
-export const translateChildren = async (children: readonly SceneNode[]): Promise<PenpotNode[]> => {
+export const translateChildren = (children: readonly SceneNode[]): PenpotNode[] => {
   const transformedChildren: PenpotNode[] = [];
+  let count = 0;
 
   for (const child of children) {
-    const penpotNode = await transformSceneNode(child);
-
-    if (penpotNode) transformedChildren.push(penpotNode);
-
-    await sleep(0);
-  }
-
-  return transformedChildren;
-};
-
-export const translateRemoteChildren = async (): Promise<PenpotNode[]> => {
-  const transformedChildren: PenpotNode[] = [];
-  let currentRemote = 1;
-
-  figma.ui.postMessage({
-    type: 'PROGRESS_STEP',
-    data: 'remote'
-  });
-
-  while (remoteComponentLibrary.remaining() > 0) {
-    figma.ui.postMessage({
-      type: 'PROGRESS_TOTAL_ITEMS',
-      data: remoteComponentLibrary.total()
+    nodeQueue.enqueue([child, count++]).then(([penpotNode, position]) => {
+      if (penpotNode) transformedChildren[position] = penpotNode;
     });
-
-    const child = remoteComponentLibrary.next();
-
-    const penpotNode = await transformSceneNode(child);
-
-    if (penpotNode) transformedChildren.push(penpotNode);
-
-    figma.ui.postMessage({
-      type: 'PROGRESS_PROCESSED_ITEMS',
-      data: currentRemote++
-    });
-
-    await sleep(0);
   }
 
   return transformedChildren;

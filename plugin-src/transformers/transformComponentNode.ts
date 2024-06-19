@@ -18,7 +18,7 @@ import {
 
 import { ComponentRoot } from '@ui/types';
 
-export const transformComponentNode = async (node: ComponentNode): Promise<ComponentRoot> => {
+export const transformComponentNode = (node: ComponentNode): ComponentRoot => {
   componentsLibrary.register(node.id, {
     type: 'component',
     name: node.name,
@@ -33,7 +33,7 @@ export const transformComponentNode = async (node: ComponentNode): Promise<Compo
     ...transformProportion(node),
     ...transformLayoutAttributes(node, true),
     ...transformCornerRadius(node),
-    ...(await transformChildren(node)),
+    ...transformChildren(node),
     ...transformDimension(node),
     ...transformRotationAndPosition(node),
     ...transformConstraints(node),

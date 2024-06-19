@@ -54,7 +54,7 @@ export const transformSceneNode = async (node: SceneNode): Promise<PenpotNode | 
       penpotNode = await transformBooleanNode(node);
       break;
     case 'COMPONENT':
-      penpotNode = await transformComponentNode(node);
+      penpotNode = transformComponentNode(node);
       break;
     case 'INSTANCE':
       penpotNode = await transformInstanceNode(node);

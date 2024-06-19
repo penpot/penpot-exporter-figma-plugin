@@ -11,20 +11,20 @@ import { transformChildren } from '@plugin/transformers/partials';
 
 import { GroupShape } from '@ui/lib/types/shapes/groupShape';
 
-export const transformGroupNode = async (node: GroupNode): Promise<GroupShape> => {
+export const transformGroupNode = (node: GroupNode): GroupShape => {
   return {
     ...transformFigmaIds(node),
     ...transformGroupNodeLike(node),
     ...transformEffects(node),
     ...transformBlend(node),
-    ...(await transformChildren(node)),
+    ...transformChildren(node),
     ...transformOverrides(node)
   };
 };
 
 export const transformGroupNodeLike = (
   node: BaseNodeMixin & LayoutMixin & SceneNodeMixin
-): GroupShape => {
+): Omit<GroupShape, 'children'> => {
   return {
     type: 'group',
     name: node.name,

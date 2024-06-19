@@ -22,7 +22,7 @@ export const transformBooleanNode = async (node: BooleanOperationNode): Promise<
     name: node.name,
     boolType: translateBoolType(node.booleanOperation),
     ...transformFigmaIds(node),
-    ...(await transformChildren(node)),
+    ...transformChildren(node),
     ...transformFills(node),
     ...transformEffects(node),
     ...transformStrokes(node),
