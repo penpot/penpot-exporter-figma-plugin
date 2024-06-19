@@ -1,4 +1,5 @@
 import { overridesLibrary } from '@plugin/OverridesLibrary';
+import { nodeQueue } from '@plugin/Queue';
 import { remoteComponentLibrary } from '@plugin/RemoteComponentLibrary';
 import {
   transformAutoLayout,
@@ -78,11 +79,15 @@ const getPrimaryComponent = (mainComponent: ComponentNode): ComponentNode | Comp
 };
 
 const registerExternalComponents = (primaryComponent: ComponentNode | ComponentSetNode): void => {
-  if (remoteComponentLibrary.get(primaryComponent.id) !== undefined) {
+  if (remoteComponentLibrary.has(primaryComponent.id)) {
     return;
   }
 
-  remoteComponentLibrary.register(primaryComponent.id, primaryComponent);
+  remoteComponentLibrary.register(primaryComponent.id);
+
+  nodeQueue.enqueue([primaryComponent, 0]).then(([penpotNode, _]) => {
+    if (penpotNode) remoteComponentLibrary.add(penpotNode);
+  });
 };
 
 const getComponentTextPropertyOverrides = (

@@ -1,33 +1,27 @@
+import { PenpotNode } from '@ui/types';
+
 class RemoteComponentsLibrary {
-  private components: Record<string, ComponentNode | ComponentSetNode> = {};
-  private queue: string[] = [];
+  private components: PenpotNode[] = [];
+  private registry: Record<string, null> = {};
 
-  public register(id: string, component: ComponentNode | ComponentSetNode) {
-    if (!Object.prototype.hasOwnProperty.call(this.components, id)) {
-      this.queue.push(id);
-    }
-
-    this.components[id] = component;
+  public add(component: PenpotNode) {
+    this.components.push(component);
   }
 
-  public get(id: string): ComponentNode | ComponentSetNode | undefined {
-    return this.components[id];
+  public register(id: string) {
+    this.registry[id] = null;
   }
 
-  public next(): ComponentNode | ComponentSetNode {
-    const lastKey = this.queue.pop();
-
-    if (!lastKey) throw new Error('No components to pop');
-
-    return this.components[lastKey];
-  }
-
-  public remaining(): number {
-    return this.queue.length;
+  public has(id: string): boolean {
+    return this.registry[id] === null;
   }
 
   public total(): number {
-    return Object.keys(this.components).length;
+    return this.components.length;
+  }
+
+  public all(): PenpotNode[] {
+    return this.components;
   }
 }
 

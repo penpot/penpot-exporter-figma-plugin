@@ -1,8 +1,7 @@
-import { remoteComponentLibrary } from '@plugin/RemoteComponentLibrary';
-import { transformGroupNodeLike, transformSceneNode } from '@plugin/transformers';
+import { nodeQueue } from '@plugin/Queue';
+import { transformGroupNodeLike } from '@plugin/transformers';
 import { transformMaskFigmaIds } from '@plugin/transformers/partials';
 
-import { GroupShape } from '@ui/lib/types/shapes/groupShape';
 import { PenpotNode } from '@ui/types';
 
 /**
@@ -17,7 +16,7 @@ import { PenpotNode } from '@ui/types';
 export const translateMaskChildren = (
   children: readonly SceneNode[],
   maskIndex: number
-): Promise<PenpotNode | undefined>[] => {
+): PenpotNode[] => {
   const maskChild = children[maskIndex];
 
   const unmaskedChildren = translateChildren(children.slice(0, maskIndex));
@@ -38,50 +37,23 @@ export const translateMaskChildren = (
     return [...unmaskedChildren, ...maskedChildren];
   }
 
-  const maskGroup = Promise.resolve<GroupShape>({
+  const maskGroup = {
     ...transformMaskFigmaIds(maskChild),
     ...transformGroupNodeLike(maskChild),
     children: maskedChildren,
     maskedGroup: true
-  });
+  };
 
   return [...unmaskedChildren, maskGroup];
 };
 
-export const translateChildren = (
-  children: readonly SceneNode[]
-): Promise<PenpotNode | undefined>[] => {
-  const transformedChildren: Promise<PenpotNode | undefined>[] = [];
+export const translateChildren = (children: readonly SceneNode[]): PenpotNode[] => {
+  const transformedChildren: PenpotNode[] = [];
+  let count = 0;
 
   for (const child of children) {
-    transformedChildren.push(transformSceneNode(child));
-  }
-
-  return transformedChildren;
-};
-
-export const translateRemoteChildren = (): Promise<PenpotNode | undefined>[] => {
-  const transformedChildren: Promise<PenpotNode | undefined>[] = [];
-  let currentRemote = 1;
-
-  figma.ui.postMessage({
-    type: 'PROGRESS_STEP',
-    data: 'remote'
-  });
-
-  while (remoteComponentLibrary.remaining() > 0) {
-    figma.ui.postMessage({
-      type: 'PROGRESS_TOTAL_ITEMS',
-      data: remoteComponentLibrary.total()
-    });
-
-    const child = remoteComponentLibrary.next();
-
-    transformedChildren.push(transformSceneNode(child));
-
-    figma.ui.postMessage({
-      type: 'PROGRESS_PROCESSED_ITEMS',
-      data: currentRemote++
+    nodeQueue.enqueue([child, count++]).then(([penpotNode, position]) => {
+      if (penpotNode) transformedChildren[position] = penpotNode;
     });
   }
 

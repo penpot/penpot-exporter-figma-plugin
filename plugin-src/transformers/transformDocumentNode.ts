@@ -1,5 +1,6 @@
 import { componentsLibrary } from '@plugin/ComponentLibrary';
 import { imagesLibrary } from '@plugin/ImageLibrary';
+import { nodeQueue } from '@plugin/Queue';
 import { remoteComponentLibrary } from '@plugin/RemoteComponentLibrary';
 import { translateRemoteChildren } from '@plugin/translators';
 import { sleep } from '@plugin/utils';
@@ -75,10 +76,12 @@ const processPages = async (node: DocumentNode): Promise<PenpotPage[]> => {
 export const transformDocumentNode = async (node: DocumentNode): Promise<PenpotDocument> => {
   const children = await processPages(node);
 
-  if (remoteComponentLibrary.remaining() > 0) {
+  await nodeQueue.waitIdle();
+
+  if (remoteComponentLibrary.total() > 0) {
     children.push({
       name: 'External Components',
-      children: translateRemoteChildren()
+      children: remoteComponentLibrary.all()
     });
   }
 
