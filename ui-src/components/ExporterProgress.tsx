@@ -30,7 +30,13 @@ const stepMessages: Record<Steps, Messages> = {
     current: 'Currently processing layer'
   },
   fills: {
-    total: 'color libraries fetched 🎨'
+    total: 'color libraries fetched '
+  },
+  format: {
+    total: 'formatting color libraries 🎨'
+  },
+  libraries: {
+    total: 'color libraries built 🎨'
   },
   components: {
     total: 'components built 🏗️',
@@ -65,6 +71,8 @@ const StepProgress = (): JSX.Element | null => {
     case 'building':
     case 'fills':
     case 'components':
+    case 'format':
+    case 'libraries':
       return (
         <>
           {processedItems} of {totalItems} {stepMessages[step].total}

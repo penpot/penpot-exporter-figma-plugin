@@ -27,7 +27,9 @@ export type Steps =
   | 'building'
   | 'components'
   | 'exporting'
-  | 'fills';
+  | 'fills'
+  | 'format'
+  | 'libraries';
 
 export const useFigma = (): UseFigmaHook => {
   const [missingFonts, setMissingFonts] = useState<string[]>();

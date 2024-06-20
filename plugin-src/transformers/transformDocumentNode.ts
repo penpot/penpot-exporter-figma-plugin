@@ -72,7 +72,13 @@ const getFillStyles = async (): Promise<Record<string, FillStyle>> => {
     if (figmaStyle) {
       styles[styleId] = {
         name: figmaStyle.name,
-        fills
+        styles: fills.map((fill, index) => ({
+          fill,
+          color: {
+            path: fills.length > 1 ? figmaStyle.name : '',
+            name: fills.length > 1 ? `Color ${index + 1}` : figmaStyle.name // @TODO: Think something better
+          }
+        }))
       };
     }
 

@@ -5,11 +5,15 @@ import { uiColorLibraries } from '@ui/parser/libraries/UiColorLibraries';
 
 export const symbolFills = (fillStyleId?: string, fills?: Fill[]): Fill[] | undefined => {
   const fillStyle = fillStyleId ? uiColorLibraries.get(fillStyleId) : undefined;
-  const nodeFills = fillStyle ? fillStyle.fills : fills;
+  if (fillStyle) {
+    return fillStyle.styles.map(style => {
+      return style.fill;
+    });
+  }
 
-  if (!nodeFills) return;
+  if (!fills) return;
 
-  return nodeFills.map(fill => {
+  return fills.map(fill => {
     if (fill.fillImage) {
       fill.fillImage = symbolFillImage(fill.fillImage);
     }

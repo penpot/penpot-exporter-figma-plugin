@@ -1,3 +1,5 @@
+import { Color } from '@ui/lib/types/utils/color';
+
 import { Gradient } from './gradient';
 import { ImageColor, PartialImageColor } from './imageColor';
 import { Uuid } from './uuid';
@@ -13,5 +15,10 @@ export type Fill = {
 
 export type FillStyle = {
   name: string;
-  fills: Fill[];
+  styles: ColorStyle[];
+};
+
+export type ColorStyle = {
+  fill: Fill;
+  color: Color;
 };
