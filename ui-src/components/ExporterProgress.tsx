@@ -30,7 +30,7 @@ const stepMessages: Record<Steps, Messages> = {
     current: 'Currently processing layer'
   },
   fills: {
-    total: 'color libraries fetched '
+    total: 'color libraries fetched 🎨'
   },
   format: {
     total: 'formatting color libraries 🎨'

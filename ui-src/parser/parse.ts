@@ -72,7 +72,7 @@ const prepareColorLibraries = async (file: PenpotFile, styles: Record<string, Fi
           ...style.fill,
           fillColorRefId: colorId,
           fillColorRefFile: file.getId(),
-          fillImage
+          ...(fillImage ? { fillImage } : {})
         },
         color: {
           ...style.color,
