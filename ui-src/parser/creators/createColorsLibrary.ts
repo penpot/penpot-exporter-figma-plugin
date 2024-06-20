@@ -1,4 +1,4 @@
-import { sleep } from '@plugin/utils';
+import { sleep } from '@plugin/utils/sleep';
 
 import { sendMessage } from '@ui/context';
 import { PenpotFile } from '@ui/lib/types/penpotFile';
