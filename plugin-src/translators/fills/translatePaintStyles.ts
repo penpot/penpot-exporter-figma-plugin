@@ -15,7 +15,8 @@ export const translatePaintStyles = (figmaStyle: PaintStyle): FillStyle => {
   };
 
   let index = 0;
-  const path = figmaStyle.paints.length > 1 ? figmaStyle.name : '';
+  const path =
+    (figmaStyle.remote ? 'Remote / ' : '') + (figmaStyle.paints.length > 1 ? figmaStyle.name : '');
 
   for (const fill of figmaStyle.paints) {
     const penpotFill = translateFill(fill);

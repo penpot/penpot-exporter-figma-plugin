@@ -14,10 +14,6 @@ class UiColorLibraries {
   public all(): FillStyle[] {
     return Array.from(this.libraries.values());
   }
-
-  public init(libraries: Record<string, FillStyle>) {
-    this.libraries = new Map(Object.entries(libraries));
-  }
 }
 
 export const uiColorLibraries = new UiColorLibraries();

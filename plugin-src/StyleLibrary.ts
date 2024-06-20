@@ -1,13 +1,11 @@
-import { Fill } from '@ui/lib/types/utils/fill';
-
 class StyleLibrary {
-  private styles: Map<string, Fill[]> = new Map();
+  private styles: Map<string, PaintStyle | undefined> = new Map();
 
-  public register(id: string, styles: Fill[]) {
+  public register(id: string, styles?: PaintStyle | undefined) {
     this.styles.set(id, styles);
   }
 
-  public get(id: string): Fill[] | undefined {
+  public get(id: string): PaintStyle | undefined {
     return this.styles.get(id);
   }
 
@@ -15,12 +13,8 @@ class StyleLibrary {
     return this.styles.has(id);
   }
 
-  public all(): Record<string, Fill[]> {
+  public all(): Record<string, PaintStyle | undefined> {
     return Object.fromEntries(this.styles.entries());
-  }
-
-  public init(styles: Record<string, Fill[]>): void {
-    this.styles = new Map(Object.entries(styles));
   }
 }
 

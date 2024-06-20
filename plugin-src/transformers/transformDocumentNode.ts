@@ -117,6 +117,11 @@ const processPages = async (node: DocumentNode): Promise<PenpotPage[]> => {
 };
 
 export const transformDocumentNode = async (node: DocumentNode): Promise<PenpotDocument> => {
+  const localPaintStyles = await figma.getLocalPaintStylesAsync();
+  localPaintStyles.forEach(style => {
+    styleLibrary.register(style.id, style);
+  });
+
   const children = await processPages(node);
 
   if (remoteComponentLibrary.remaining() > 0) {
