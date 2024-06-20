@@ -8,7 +8,7 @@ import { PenpotFile } from '@ui/lib/types/penpotFile';
 import { FillStyle } from '@ui/lib/types/utils/fill';
 import { buildFile } from '@ui/parser/creators';
 import { uiImages } from '@ui/parser/libraries';
-import { uiColorLibraries } from '@ui/parser/libraries/UiColorLibraries';
+import { uiColorLibraries } from '@ui/parser/libraries';
 import { PenpotDocument } from '@ui/types';
 
 import { parseImage } from '.';
