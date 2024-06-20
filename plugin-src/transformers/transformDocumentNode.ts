@@ -3,6 +3,7 @@ import { imagesLibrary } from '@plugin/ImageLibrary';
 import { remoteComponentLibrary } from '@plugin/RemoteComponentLibrary';
 import { styleLibrary } from '@plugin/StyleLibrary';
 import { translateRemoteChildren } from '@plugin/translators';
+import { translatePaintStyles } from '@plugin/translators/fills';
 import { sleep } from '@plugin/utils';
 
 import { PenpotPage } from '@ui/lib/types/penpotPage';
@@ -67,19 +68,10 @@ const getFillStyles = async (): Promise<Record<string, FillStyle>> => {
     data: 'fills'
   });
 
-  for (const [styleId, fills] of stylesToFetch) {
+  for (const [styleId] of stylesToFetch) {
     const figmaStyle = await figma.getStyleByIdAsync(styleId);
-    if (figmaStyle) {
-      styles[styleId] = {
-        name: figmaStyle.name,
-        styles: fills.map((fill, index) => ({
-          fill,
-          color: {
-            path: fills.length > 1 ? figmaStyle.name : '',
-            name: fills.length > 1 ? `Color ${index + 1}` : figmaStyle.name // @TODO: Think something better
-          }
-        }))
-      };
+    if (figmaStyle && isPaintStyle(figmaStyle)) {
+      styles[styleId] = translatePaintStyles(figmaStyle);
     }
 
     figma.ui.postMessage({
@@ -93,6 +85,10 @@ const getFillStyles = async (): Promise<Record<string, FillStyle>> => {
   await sleep(20);
 
   return styles;
+};
+
+const isPaintStyle = (style: BaseStyle): style is PaintStyle => {
+  return style.type === 'PAINT';
 };
 
 const processPages = async (node: DocumentNode): Promise<PenpotPage[]> => {
@@ -130,11 +126,15 @@ export const transformDocumentNode = async (node: DocumentNode): Promise<PenpotD
     });
   }
 
+  const styles = await getFillStyles();
+
+  const images = await downloadImages();
+
   return {
     name: node.name,
     children,
     components: componentsLibrary.all(),
-    images: await downloadImages(),
-    styles: await getFillStyles()
+    images,
+    styles
   };
 };

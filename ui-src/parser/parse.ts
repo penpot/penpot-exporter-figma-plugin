@@ -7,7 +7,6 @@ import { createFile } from '@ui/lib/penpot';
 import { PenpotFile } from '@ui/lib/types/penpotFile';
 import { FillStyle } from '@ui/lib/types/utils/fill';
 import { buildFile } from '@ui/parser/creators';
-import { symbolFillImage } from '@ui/parser/creators/symbols';
 import { uiImages } from '@ui/parser/libraries';
 import { uiColorLibraries } from '@ui/parser/libraries/UiColorLibraries';
 import { PenpotDocument } from '@ui/types';
@@ -63,28 +62,13 @@ const prepareColorLibraries = async (file: PenpotFile, styles: Record<string, Fi
   });
 
   for (const [key, fillStyle] of stylesToRegister) {
-    fillStyle.styles = fillStyle.styles.map(style => {
+    for (let i = 0; i < fillStyle.fills.length; i++) {
       const colorId = file.newId();
-      const fillImage = style.fill.fillImage ? symbolFillImage(style.fill.fillImage) : undefined;
-
-      return {
-        fill: {
-          ...style.fill,
-          fillColorRefId: colorId,
-          fillColorRefFile: file.getId(),
-          ...(fillImage ? { fillImage } : {})
-        },
-        color: {
-          ...style.color,
-          refId: colorId,
-          refFile: file.getId(),
-          color: style.fill.fillColor,
-          opacity: style.fill.fillOpacity,
-          gradient: style.fill.fillColorGradient,
-          image: fillImage
-        }
-      };
-    });
+      fillStyle.fills[i].fillColorRefId = colorId;
+      fillStyle.fills[i].fillColorRefFile = file.getId();
+      fillStyle.colors[i].refId = colorId;
+      fillStyle.colors[i].refFile = file.getId();
+    }
 
     uiColorLibraries.register(key, fillStyle);
 

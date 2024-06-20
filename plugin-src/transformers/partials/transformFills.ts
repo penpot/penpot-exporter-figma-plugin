@@ -1,4 +1,4 @@
-import { translateFillStyle, translateFills } from '@plugin/translators/fills';
+import { translateFillStyleId, translateFills } from '@plugin/translators/fills';
 import { StyleTextSegment } from '@plugin/translators/text/paragraph';
 
 import { ShapeAttributes } from '@ui/lib/types/shapes/shape';
@@ -14,7 +14,7 @@ export const transformFills = (
   if (hasFillStyle(node)) {
     return {
       fills: [],
-      fillStyleId: translateFillStyle(node.fillStyleId, node.fills)
+      fillStyleId: translateFillStyleId(node.fillStyleId)
     };
   }
 

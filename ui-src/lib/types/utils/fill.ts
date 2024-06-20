@@ -15,10 +15,6 @@ export type Fill = {
 
 export type FillStyle = {
   name: string;
-  styles: ColorStyle[];
-};
-
-export type ColorStyle = {
-  fill: Fill;
-  color: Color;
+  fills: Fill[];
+  colors: Color[];
 };
