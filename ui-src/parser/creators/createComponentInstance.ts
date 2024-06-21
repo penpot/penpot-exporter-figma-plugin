@@ -7,14 +7,7 @@ import { createArtboard } from '.';
 
 export const createComponentInstance = (
   file: PenpotFile,
-  {
-    type,
-    mainComponentFigmaId,
-    figmaId,
-    figmaRelatedId,
-    isComponentRoot,
-    ...shape
-  }: ComponentInstance
+  { type, mainComponentFigmaId, isComponentRoot, ...shape }: ComponentInstance
 ) => {
   const uiComponent =
     uiComponents.get(mainComponentFigmaId) ?? createUiComponent(file, mainComponentFigmaId);
@@ -23,7 +16,9 @@ export const createComponentInstance = (
     return;
   }
 
-  shape.shapeRef = uiComponent.mainInstanceId;
+  if (!shape.figmaRelatedId) {
+    shape.shapeRef = uiComponent.mainInstanceId;
+  }
   shape.componentFile = file.getId();
   shape.componentRoot = isComponentRoot;
   shape.componentId = uiComponent.componentId;
