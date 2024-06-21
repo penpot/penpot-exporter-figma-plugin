@@ -1,3 +1,5 @@
+import { ComponentProperty } from '@plugin/ComponentPropertiesLibrary';
+
 import { PenpotPage } from '@ui/lib/types/penpotPage';
 import { ComponentShape } from '@ui/lib/types/shapes/componentShape';
 import { Fill } from '@ui/lib/types/utils/fill';
@@ -8,4 +10,5 @@ export type PenpotDocument = {
   components: Record<string, ComponentShape>;
   images: Record<string, Uint8Array>;
   styles: Record<string, Fill[]>;
+  componentProperties: Record<string, ComponentProperty>;
 };

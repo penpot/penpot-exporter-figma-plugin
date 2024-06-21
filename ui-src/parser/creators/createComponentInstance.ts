@@ -1,5 +1,6 @@
 import { PenpotFile } from '@ui/lib/types/penpotFile';
 import { parseFigmaId } from '@ui/parser';
+import { symbolTouched } from '@ui/parser/creators/symbols';
 import { uiComponents } from '@ui/parser/libraries';
 import { ComponentInstance } from '@ui/types';
 
@@ -22,6 +23,12 @@ export const createComponentInstance = (
   shape.componentFile = file.getId();
   shape.componentRoot = isComponentRoot;
   shape.componentId = uiComponent.componentId;
+  shape.touched = symbolTouched(
+    !shape.hidden,
+    undefined,
+    shape.touched,
+    shape.componentPropertyReferences
+  );
 
   createArtboard(file, shape);
 };

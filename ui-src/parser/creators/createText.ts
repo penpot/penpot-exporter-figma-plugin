@@ -1,16 +1,22 @@
 import { PenpotFile } from '@ui/lib/types/penpotFile';
 import { TextContent, TextShape } from '@ui/lib/types/shapes/textShape';
 import { parseFigmaId } from '@ui/parser';
-import { symbolFills, symbolStrokes } from '@ui/parser/creators/symbols';
+import { symbolFills, symbolStrokes, symbolTouched } from '@ui/parser/creators/symbols';
 
 export const createText = (
   file: PenpotFile,
-  { type, figmaId, figmaRelatedId, ...shape }: TextShape
+  { type, figmaId, figmaRelatedId, characters, ...shape }: TextShape
 ) => {
   shape.id = parseFigmaId(file, figmaId);
   shape.shapeRef = parseFigmaId(file, figmaRelatedId, true);
   shape.content = parseContent(shape.content);
   shape.strokes = symbolStrokes(shape.strokes);
+  shape.touched = symbolTouched(
+    !shape.hidden,
+    characters,
+    shape.touched,
+    shape.componentPropertyReferences
+  );
 
   file.createText(shape);
 };

@@ -1,4 +1,5 @@
 import { componentsLibrary } from '@plugin/ComponentLibrary';
+import { componentPropertiesLibrary } from '@plugin/ComponentPropertiesLibrary';
 import { imagesLibrary } from '@plugin/ImageLibrary';
 import { remoteComponentLibrary } from '@plugin/RemoteComponentLibrary';
 import { styleLibrary } from '@plugin/StyleLibrary';
@@ -83,11 +84,14 @@ export const transformDocumentNode = async (node: DocumentNode): Promise<PenpotD
     });
   }
 
+  const componentProperties = componentPropertiesLibrary.all();
+
   return {
     name: node.name,
     children,
     components: componentsLibrary.all(),
     images: await downloadImages(),
-    styles: styleLibrary.all()
+    styles: styleLibrary.all(),
+    componentProperties
   };
 };

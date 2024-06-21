@@ -27,3 +27,9 @@ export type ComponentInstance = ShapeGeomAttributes &
     showContent?: boolean;
     type: 'instance';
   };
+
+export type ComponentPropertyReference =
+  | {
+      [nodeProperty in 'visible' | 'characters' | 'mainComponent']?: string;
+    }
+  | null;

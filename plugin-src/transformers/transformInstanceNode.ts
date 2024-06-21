@@ -37,19 +37,10 @@ export const transformInstanceNode = async (
     registerExternalComponents(primaryComponent);
   }
 
-  registerTextVariableOverrides(node, primaryComponent);
-
   if (node.overrides.length > 0) {
     node.overrides.forEach(override =>
       overridesLibrary.register(override.id, override.overriddenFields)
     );
-  }
-
-  if (!node.visible) {
-    overridesLibrary.register(node.id, ['visible']);
-  }
-  if (node.locked) {
-    overridesLibrary.register(node.id, ['locked']);
   }
 
   return {
@@ -90,57 +81,6 @@ const registerExternalComponents = (primaryComponent: ComponentNode | ComponentS
   }
 
   remoteComponentLibrary.register(primaryComponent.id, primaryComponent);
-};
-
-const getComponentTextPropertyOverrides = (
-  node: InstanceNode,
-  primaryComponent: ComponentNode | ComponentSetNode
-): ComponentTextPropertyOverride[] => {
-  try {
-    const componentPropertyDefinitions = Object.entries(
-      primaryComponent.componentPropertyDefinitions
-    ).filter(([, value]) => value.type === 'TEXT');
-
-    const instanceComponentProperties = new Map(
-      Object.entries(node.componentProperties).filter(([, value]) => value.type === 'TEXT')
-    );
-
-    return componentPropertyDefinitions
-      .map(([key, value]) => {
-        const nodeValue = instanceComponentProperties.get(key);
-        return {
-          id: key,
-          ...value,
-          value: nodeValue ? nodeValue.value : value.defaultValue
-        } as ComponentTextPropertyOverride;
-      })
-      .filter(({ value, defaultValue }) => value !== defaultValue);
-  } catch (error) {
-    return [];
-  }
-};
-
-const registerTextVariableOverrides = (
-  node: InstanceNode,
-  primaryComponent: ComponentNode | ComponentSetNode
-) => {
-  const mergedOverridden = getComponentTextPropertyOverrides(node, primaryComponent);
-
-  if (mergedOverridden.length > 0) {
-    const textNodes = node
-      .findChildren(child => child.type === 'TEXT')
-      .filter(textNode => {
-        const componentPropertyReference = textNode.componentPropertyReferences?.characters;
-        return (
-          componentPropertyReference &&
-          mergedOverridden.some(property => property.id === componentPropertyReference)
-        );
-      });
-
-    textNodes.forEach(textNode => {
-      overridesLibrary.register(textNode.id, ['text']);
-    });
-  }
 };
 
 /**
