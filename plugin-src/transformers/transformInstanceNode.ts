@@ -18,7 +18,7 @@ import {
   transformStrokes
 } from '@plugin/transformers/partials';
 
-import { ComponentInstance, ComponentTextPropertyOverride } from '@ui/types';
+import { ComponentInstance } from '@ui/types';
 
 export const transformInstanceNode = async (
   node: InstanceNode
