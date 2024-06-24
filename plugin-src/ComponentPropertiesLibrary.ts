@@ -1,7 +1,10 @@
 export type ComponentProperty = {
-  type: ComponentPropertyType;
+  type: 'BOOLEAN' | 'TEXT' | 'INSTANCE_SWAP' | 'VARIANT';
   defaultValue: string | boolean;
-  preferredValues?: InstanceSwapPreferredValue[];
+  preferredValues?: {
+    type: 'COMPONENT' | 'COMPONENT_SET';
+    key: string;
+  }[];
   variantOptions?: string[];
 };
 class ComponentPropertiesLibrary {

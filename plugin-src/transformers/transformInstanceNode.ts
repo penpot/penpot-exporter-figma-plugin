@@ -43,6 +43,16 @@ export const transformInstanceNode = async (
     );
   }
 
+  if (node.visible !== mainComponent.visible) {
+    overridesLibrary.register(node.id, ['visible']);
+  }
+  if (node.locked !== mainComponent.locked) {
+    overridesLibrary.register(node.id, ['locked']);
+  }
+  if (node.id === 'I1:360;304:2177') {
+    console.log(node, mainComponent);
+  }
+
   return {
     type: 'instance',
     name: node.name,
