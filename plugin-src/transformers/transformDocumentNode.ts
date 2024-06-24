@@ -112,8 +112,8 @@ const getTextStyles = async (): Promise<Record<string, TypographyStyle>> => {
     data: 'typographies'
   });
 
-  for (const [styleId] of stylesToFetch) {
-    const figmaStyle = await figma.getStyleByIdAsync(styleId);
+  for (const [styleId, style] of stylesToFetch) {
+    const figmaStyle = style ?? (await figma.getStyleByIdAsync(styleId));
     if (figmaStyle && isTextStyle(figmaStyle)) {
       styles[styleId] = translateTextStyles(figmaStyle);
     }

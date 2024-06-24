@@ -13,8 +13,6 @@ export const createText = (
   shape.content = parseContent(shape.content);
   shape.strokes = symbolStrokes(shape.strokes);
 
-  console.log(shape);
-
   file.createText(shape);
 };
 
@@ -35,20 +33,34 @@ const parseContent = (content: TextContent | undefined): TextContent | undefined
 };
 
 const parseTextStyle = (text: Paragraph | TextNode, textStyleId?: string): Paragraph | TextNode => {
-  const textStyle = textStyleId
-    ? uiTextLibraries.get(textStyleId)?.textStyle
-    : {
-        fontFamily: text.fontFamily,
-        fontSize: text.fontSize,
-        fontStyle: text.fontStyle,
-        textDecoration: text.textDecoration,
-        letterSpacing: text.letterSpacing,
-        lineHeight: text.lineHeight
-      };
-
-  return {
-    ...textStyle,
+  const commonTextAttrs = {
     ...text,
     fills: symbolFills(text.fillStyleId, text.fills)
+  };
+
+  if (textStyleId === undefined) {
+    return commonTextAttrs;
+  }
+
+  let textLibrary = uiTextLibraries.get(textStyleId);
+  if (textLibrary === undefined) {
+    return commonTextAttrs;
+  }
+
+  textLibrary = {
+    textStyle: {
+      ...textLibrary.textStyle,
+      fontId: text.fontId,
+      fontVariantId: text.fontVariantId,
+      fontWeight: text.fontWeight
+    },
+    typography: textLibrary.typography,
+    name: textLibrary.name
+  };
+  uiTextLibraries.register(textStyleId, textLibrary);
+
+  return {
+    ...textLibrary.textStyle,
+    ...commonTextAttrs
   };
 };

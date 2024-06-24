@@ -12,3 +12,4 @@ export * from './createPage';
 export * from './createPath';
 export * from './createRectangle';
 export * from './createText';
+export * from './createTextLibrary';

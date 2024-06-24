@@ -24,9 +24,9 @@ export interface PenpotFile {
   createPath(path: PathShape): Uuid;
   createText(options: TextShape): Uuid;
   addLibraryColor(color: Color): void;
-  updateLibraryColor(color: Color): void;
-  deleteLibraryColor(color: Color): void;
-  // addLibraryTypography(typography: any): void;
+  // updateLibraryColor(color: Color): void;
+  // deleteLibraryColor(color: Color): void;
+  addLibraryTypography(typography: any): void;
   // deleteLibraryTypography(typography: any): void;
   startComponent(component: ComponentShape): Uuid;
   finishComponent(): void;

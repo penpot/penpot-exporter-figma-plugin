@@ -2,7 +2,8 @@ import {
   translateFontStyle,
   translateLetterSpacing,
   translateLineHeight,
-  translateTextDecoration
+  translateTextDecoration,
+  translateTextTransform
 } from '@plugin/translators/text/properties';
 
 import { TypographyStyle } from '@ui/lib/types/shapes/textShape';
@@ -14,7 +15,9 @@ export const translateTextStyles = (figmaStyle: TextStyle): TypographyStyle => {
     typography: {}
   };
 
-  const path = (figmaStyle.remote ? 'Remote / ' : '') + figmaStyle.name;
+  const path = figmaStyle.remote ? 'Remote / ' : '';
+
+  const lineHeight = translateLineHeight(figmaStyle);
 
   typographyStyle.textStyle = {
     fontFamily: figmaStyle.fontName.family,
@@ -22,7 +25,8 @@ export const translateTextStyles = (figmaStyle: TextStyle): TypographyStyle => {
     fontStyle: translateFontStyle(figmaStyle.fontName.style),
     textDecoration: translateTextDecoration(figmaStyle),
     letterSpacing: translateLetterSpacing(figmaStyle),
-    lineHeight: translateLineHeight(figmaStyle)
+    textTransform: translateTextTransform(figmaStyle),
+    ...(lineHeight ? { lineHeight } : {})
   };
   typographyStyle.typography = {
     path,
