@@ -49,7 +49,7 @@ const prepareColorLibraries = async (file: PenpotFile, styles: Record<string, Fi
 
   if (stylesToRegister.length === 0) return;
 
-  const stylesRegistered = 1;
+  let stylesRegistered = 1;
 
   sendMessage({
     type: 'PROGRESS_TOTAL_ITEMS',
@@ -66,7 +66,7 @@ const prepareColorLibraries = async (file: PenpotFile, styles: Record<string, Fi
       const colorId = file.newId();
       fillStyle.fills[i].fillColorRefId = colorId;
       fillStyle.fills[i].fillColorRefFile = file.getId();
-      fillStyle.colors[i].refId = colorId;
+      fillStyle.colors[i].id = colorId;
       fillStyle.colors[i].refFile = file.getId();
     }
 
@@ -74,7 +74,7 @@ const prepareColorLibraries = async (file: PenpotFile, styles: Record<string, Fi
 
     sendMessage({
       type: 'PROGRESS_PROCESSED_ITEMS',
-      data: stylesRegistered
+      data: stylesRegistered++
     });
 
     await sleep(0);
