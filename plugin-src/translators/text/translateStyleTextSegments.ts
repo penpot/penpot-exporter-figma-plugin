@@ -1,3 +1,4 @@
+import { textLibrary } from '@plugin/TextLibrary';
 import { transformFills } from '@plugin/transformers/partials';
 import { translateFontId } from '@plugin/translators/text/font';
 import { StyleTextSegment, translateParagraphProperties } from '@plugin/translators/text/paragraph';
@@ -25,17 +26,30 @@ export const translateStyleTextSegments = (
 };
 
 export const transformTextStyle = (node: TextNode, segment: StyleTextSegment): TextStyle => {
+  if (hasTextStyle(segment)) {
+    return {
+      ...partialTransformTextStyle(node, segment),
+      textStyleId: translateTextStyleId(segment.textStyleId)
+    };
+  }
+
   return {
-    ...translateFontId(segment.fontName, segment.fontWeight),
+    ...partialTransformTextStyle(node, segment),
     fontFamily: segment.fontName.family,
     fontSize: segment.fontSize.toString(),
     fontStyle: translateFontStyle(segment.fontName.style),
-    fontWeight: segment.fontWeight.toString(),
-    textAlign: translateHorizontalAlign(node.textAlignHorizontal),
     textDecoration: translateTextDecoration(segment),
-    textTransform: translateTextTransform(segment),
     letterSpacing: translateLetterSpacing(segment),
     lineHeight: translateLineHeight(segment)
+  };
+};
+
+export const partialTransformTextStyle = (node: TextNode, segment: StyleTextSegment): TextStyle => {
+  return {
+    ...translateFontId(segment.fontName, segment.fontWeight),
+    fontWeight: segment.fontWeight.toString(),
+    textAlign: translateHorizontalAlign(node.textAlignHorizontal),
+    textTransform: translateTextTransform(segment)
   };
 };
 
@@ -45,4 +59,18 @@ const translateStyleTextSegment = (node: TextNode, segment: StyleTextSegment): P
     ...transformTextStyle(node, segment),
     ...transformFills(segment)
   };
+};
+
+const hasTextStyle = (segment: StyleTextSegment): boolean => {
+  return segment.textStyleId !== undefined && segment.textStyleId.length > 0;
+};
+
+const translateTextStyleId = (textStyleId: string | undefined): string | undefined => {
+  if (textStyleId === undefined) return;
+
+  if (!textLibrary.has(textStyleId)) {
+    textLibrary.register(textStyleId);
+  }
+
+  return textStyleId;
 };

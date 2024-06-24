@@ -51,6 +51,15 @@ const stepMessages: Record<Steps, Messages> = {
   exporting: {
     total: 'Generating Penpot file 🚀',
     current: 'Please wait, this process might take a while...'
+  },
+  typographies: {
+    total: 'text styles fetched 📝'
+  },
+  typoFormat: {
+    total: 'formatting text styles 📝'
+  },
+  typoLibraries: {
+    total: 'text styles built 📝'
   }
 };
 
@@ -79,6 +88,9 @@ const StepProgress = (): JSX.Element | null => {
     case 'components':
     case 'format':
     case 'libraries':
+    case 'typographies':
+    case 'typoFormat':
+    case 'typoLibraries':
       return (
         <>
           {processedItems} of {totalItems} {stepMessages[step].total}

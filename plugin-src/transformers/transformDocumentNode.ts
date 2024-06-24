@@ -2,11 +2,14 @@ import { componentsLibrary } from '@plugin/ComponentLibrary';
 import { imagesLibrary } from '@plugin/ImageLibrary';
 import { remoteComponentLibrary } from '@plugin/RemoteComponentLibrary';
 import { styleLibrary } from '@plugin/StyleLibrary';
+import { textLibrary } from '@plugin/TextLibrary';
 import { translateRemoteChildren } from '@plugin/translators';
 import { translatePaintStyles } from '@plugin/translators/fills';
+import { translateTextStyles } from '@plugin/translators/text/translateTextStyles';
 import { sleep } from '@plugin/utils';
 
 import { PenpotPage } from '@ui/lib/types/penpotPage';
+import { TypographyStyle } from '@ui/lib/types/shapes/textShape';
 import { FillStyle } from '@ui/lib/types/utils/fill';
 import { PenpotDocument } from '@ui/types';
 
@@ -91,6 +94,47 @@ const isPaintStyle = (style: BaseStyle): style is PaintStyle => {
   return style.type === 'PAINT';
 };
 
+const getTextStyles = async (): Promise<Record<string, TypographyStyle>> => {
+  const stylesToFetch = Object.entries(textLibrary.all());
+  const styles: Record<string, TypographyStyle> = {};
+
+  if (stylesToFetch.length === 0) return styles;
+
+  let currentStyle = 1;
+
+  figma.ui.postMessage({
+    type: 'PROGRESS_TOTAL_ITEMS',
+    data: stylesToFetch.length
+  });
+
+  figma.ui.postMessage({
+    type: 'PROGRESS_STEP',
+    data: 'typographies'
+  });
+
+  for (const [styleId] of stylesToFetch) {
+    const figmaStyle = await figma.getStyleByIdAsync(styleId);
+    if (figmaStyle && isTextStyle(figmaStyle)) {
+      styles[styleId] = translateTextStyles(figmaStyle);
+    }
+
+    figma.ui.postMessage({
+      type: 'PROGRESS_PROCESSED_ITEMS',
+      data: currentStyle++
+    });
+
+    await sleep(0);
+  }
+
+  await sleep(20);
+
+  return styles;
+};
+
+const isTextStyle = (style: BaseStyle): style is TextStyle => {
+  return style.type === 'TEXT';
+};
+
 const processPages = async (node: DocumentNode): Promise<PenpotPage[]> => {
   const children = [];
   let currentPage = 1;
@@ -122,6 +166,11 @@ export const transformDocumentNode = async (node: DocumentNode): Promise<PenpotD
     styleLibrary.register(style.id, style);
   });
 
+  const localTextStyles = await figma.getLocalTextStylesAsync();
+  localTextStyles.forEach(style => {
+    textLibrary.register(style.id, style);
+  });
+
   const children = await processPages(node);
 
   if (remoteComponentLibrary.remaining() > 0) {
@@ -135,11 +184,14 @@ export const transformDocumentNode = async (node: DocumentNode): Promise<PenpotD
 
   const images = await downloadImages();
 
+  const typographies = await getTextStyles();
+
   return {
     name: node.name,
     children,
     components: componentsLibrary.all(),
     images,
-    styles
+    styles,
+    typographies
   };
 };

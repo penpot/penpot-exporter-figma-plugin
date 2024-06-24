@@ -18,6 +18,7 @@ export type StyleTextSegment = Pick<
   | 'listOptions'
   | 'fills'
   | 'fillStyleId'
+  | 'textStyleId'
 >;
 
 type PartialTranslation = {
