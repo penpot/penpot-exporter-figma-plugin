@@ -68,8 +68,8 @@ const getFillStyles = async (): Promise<Record<string, FillStyle>> => {
     data: 'fills'
   });
 
-  for (const [styleId] of stylesToFetch) {
-    const figmaStyle = await figma.getStyleByIdAsync(styleId);
+  for (const [styleId, paintStyle] of stylesToFetch) {
+    const figmaStyle = paintStyle ?? (await figma.getStyleByIdAsync(styleId));
     if (figmaStyle && isPaintStyle(figmaStyle)) {
       styles[styleId] = translatePaintStyles(figmaStyle);
     }
