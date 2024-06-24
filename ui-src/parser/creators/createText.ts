@@ -13,6 +13,8 @@ export const createText = (
   shape.content = parseContent(shape.content);
   shape.strokes = symbolStrokes(shape.strokes);
 
+  console.log(shape);
+
   file.createText(shape);
 };
 
