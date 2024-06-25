@@ -16,7 +16,7 @@ export const translateImageFill = (fill: ImagePaint): Fill | undefined => {
 const translateImage = (imageHash: string | null): PartialImageColor | undefined => {
   if (!imageHash) return;
 
-  if (images.get(imageHash) === undefined) {
+  if (!images.has(imageHash)) {
     images.register(imageHash, figma.getImageByHash(imageHash));
   }
 

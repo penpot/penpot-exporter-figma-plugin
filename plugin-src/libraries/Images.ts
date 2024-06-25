@@ -1,20 +1,24 @@
 class Images {
-  private images: Record<string, Image | null> = {};
+  private images: Map<string, Image | null> = new Map();
 
   public register(hash: string, image: Image | null) {
-    this.images[hash] = image;
+    this.images.set(hash, image);
   }
 
   public get(hash: string): Image | null | undefined {
-    return this.images[hash];
+    return this.images.get(hash);
+  }
+
+  public has(hash: string): boolean {
+    return this.images.has(hash);
   }
 
   public all(): Record<string, Image | null> {
-    return this.images;
+    return Object.fromEntries(this.images.entries());
   }
 
   public init(images: Record<string, Image | null>): void {
-    this.images = images;
+    this.images = new Map(Object.entries(images));
   }
 }
 

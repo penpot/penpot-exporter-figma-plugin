@@ -8,22 +8,22 @@ export type UiComponent = {
 };
 
 class UiComponents {
-  private components: Record<string, UiComponent> = {};
+  private components: Map<string, UiComponent> = new Map();
 
   public register(id: string, component: UiComponent) {
-    this.components[id] = component;
+    this.components.set(id, component);
   }
 
   public get(id: string): UiComponent | undefined {
-    return this.components[id];
+    return this.components.get(id);
   }
 
   public all(): UiComponent[] {
-    return Object.values(this.components);
+    return Array.from(this.components.values());
   }
 
   public init() {
-    this.components = {};
+    this.components.clear();
   }
 }
 

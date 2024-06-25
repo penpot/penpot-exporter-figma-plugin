@@ -75,7 +75,7 @@ const getPrimaryComponent = (mainComponent: ComponentNode): ComponentNode | Comp
 };
 
 const registerExternalComponents = (primaryComponent: ComponentNode | ComponentSetNode): void => {
-  if (remoteComponents.get(primaryComponent.id) !== undefined) {
+  if (remoteComponents.has(primaryComponent.id)) {
     return;
   }
 

@@ -1,22 +1,22 @@
 import { ImageColor } from '@ui/lib/types/utils/imageColor';
 
 class UiImages {
-  private images: Record<string, ImageColor> = {};
+  private images: Map<string, ImageColor> = new Map();
 
   public register(id: string, image: ImageColor) {
-    this.images[id] = image;
+    this.images.set(id, image);
   }
 
   public get(id: string): ImageColor | undefined {
-    return this.images[id];
+    return this.images.get(id);
   }
 
   public all(): ImageColor[] {
-    return Object.values(this.images);
+    return Array.from(this.images.values());
   }
 
   public init() {
-    this.images = {};
+    this.images.clear();
   }
 }
 
