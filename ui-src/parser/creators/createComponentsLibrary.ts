@@ -4,7 +4,7 @@ import { sleep } from '@plugin/utils/sleep';
 import { sendMessage } from '@ui/context';
 import { PenpotFile } from '@ui/lib/types/penpotFile';
 import { symbolFills, symbolStrokes } from '@ui/parser/creators/symbols';
-import { UiComponent, uiComponents } from '@ui/parser/libraries';
+import { UiComponent, components as uiComponents } from '@ui/parser/libraries';
 
 import { createItems } from '.';
 

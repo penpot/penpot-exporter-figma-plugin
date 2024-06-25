@@ -1,6 +1,6 @@
 import { TypographyStyle } from '@ui/lib/types/shapes/textShape';
 
-class UiTypographies {
+class Typographies {
   private libraries: Map<string, TypographyStyle> = new Map();
 
   public register(id: string, textStyle: TypographyStyle) {
@@ -16,4 +16,4 @@ class UiTypographies {
   }
 }
 
-export const uiTypographies = new UiTypographies();
+export const typographies = new Typographies();

@@ -2,11 +2,11 @@ import { sleep } from '@plugin/utils/sleep';
 
 import { sendMessage } from '@ui/context';
 import { PenpotFile } from '@ui/lib/types/penpotFile';
-import { uiColors } from '@ui/parser/libraries';
+import { colors } from '@ui/parser/libraries';
 
 export const createColorsLibrary = async (file: PenpotFile) => {
   let librariesBuilt = 1;
-  const libraries = uiColors.all();
+  const libraries = colors.all();
 
   sendMessage({
     type: 'PROGRESS_TOTAL_ITEMS',

@@ -1,6 +1,6 @@
 import { FillStyle } from '@ui/lib/types/utils/fill';
 
-class UiColors {
+class Colors {
   private libraries: Map<string, FillStyle> = new Map();
 
   public register(id: string, fillStyle: FillStyle) {
@@ -16,4 +16,4 @@ class UiColors {
   }
 }
 
-export const uiColors = new UiColors();
+export const colors = new Colors();

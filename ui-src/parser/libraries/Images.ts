@@ -1,6 +1,6 @@
 import { ImageColor } from '@ui/lib/types/utils/imageColor';
 
-class UiImages {
+class Images {
   private images: Map<string, ImageColor> = new Map();
 
   public register(id: string, image: ImageColor) {
@@ -20,4 +20,4 @@ class UiImages {
   }
 }
 
-export const uiImages = new UiImages();
+export const images = new Images();

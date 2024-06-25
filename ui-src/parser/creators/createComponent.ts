@@ -1,7 +1,7 @@
 import { components } from '@plugin/libraries/Components';
 
 import { PenpotFile } from '@ui/lib/types/penpotFile';
-import { uiComponents } from '@ui/parser/libraries';
+import { components as uiComponents } from '@ui/parser/libraries';
 import { ComponentRoot } from '@ui/types';
 
 import { createArtboard } from '.';

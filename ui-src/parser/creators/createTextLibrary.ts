@@ -2,11 +2,11 @@ import { sleep } from '@plugin/utils/sleep';
 
 import { sendMessage } from '@ui/context';
 import { PenpotFile } from '@ui/lib/types/penpotFile';
-import { uiTypographies } from '@ui/parser/libraries';
+import { typographies } from '@ui/parser/libraries';
 
 export const createTextLibrary = async (file: PenpotFile) => {
   let librariesBuilt = 1;
-  const libraries = uiTypographies.all();
+  const libraries = typographies.all();
 
   sendMessage({
     type: 'PROGRESS_TOTAL_ITEMS',

@@ -7,7 +7,7 @@ export type UiComponent = {
   componentFigmaId: string;
 };
 
-class UiComponents {
+class Components {
   private components: Map<string, UiComponent> = new Map();
 
   public register(id: string, component: UiComponent) {
@@ -27,4 +27,4 @@ class UiComponents {
   }
 }
 
-export const uiComponents = new UiComponents();
+export const components = new Components();

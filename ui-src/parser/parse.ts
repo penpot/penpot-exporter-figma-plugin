@@ -8,7 +8,7 @@ import { PenpotFile } from '@ui/lib/types/penpotFile';
 import { TypographyStyle } from '@ui/lib/types/shapes/textShape';
 import { FillStyle } from '@ui/lib/types/utils/fill';
 import { buildFile } from '@ui/parser/creators';
-import { uiColors, uiImages, uiTypographies } from '@ui/parser/libraries';
+import { colors, typographies, images as uiImages } from '@ui/parser/libraries';
 import { PenpotDocument } from '@ui/types';
 
 import { parseImage } from '.';
@@ -70,7 +70,7 @@ const prepareTypographyLibraries = async (
     style.textStyle.typographyRefFile = file.getId();
     style.typography.id = typographyId;
 
-    uiTypographies.register(key, style);
+    typographies.register(key, style);
 
     sendMessage({
       type: 'PROGRESS_PROCESSED_ITEMS',
@@ -107,7 +107,7 @@ const prepareColorLibraries = async (file: PenpotFile, styles: Record<string, Fi
       fillStyle.colors[index].refFile = file.getId();
     }
 
-    uiColors.register(key, fillStyle);
+    colors.register(key, fillStyle);
 
     sendMessage({
       type: 'PROGRESS_PROCESSED_ITEMS',

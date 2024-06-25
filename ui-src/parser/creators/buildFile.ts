@@ -9,12 +9,12 @@ import {
   createPage,
   createTextLibrary
 } from '@ui/parser/creators';
-import { identifiers, uiComponents } from '@ui/parser/libraries';
+import { components, identifiers } from '@ui/parser/libraries';
 
 export const buildFile = async (file: PenpotFile, children: PenpotPage[]) => {
   let pagesBuilt = 1;
 
-  uiComponents.init();
+  components.init();
   identifiers.init();
 
   sendMessage({
