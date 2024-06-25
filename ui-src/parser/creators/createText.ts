@@ -33,15 +33,17 @@ const parseContent = (content: TextContent | undefined): TextContent | undefined
 };
 
 const parseTextStyle = (text: Paragraph | TextNode, textStyleId?: string): Paragraph | TextNode => {
-  const textStyle = textStyleId
-    ? {
-        ...uiTextLibraries.get(textStyleId)?.textStyle,
-        ...text
-      }
-    : text;
+  let textStyle = text;
+  textStyle.fills = symbolFills(text.fillStyleId, text.fills);
 
-  return {
-    ...textStyle,
-    fills: symbolFills(text.fillStyleId, text.fills)
-  };
+  const libraryStyle = textStyleId ? uiTextLibraries.get(textStyleId) : undefined;
+
+  if (libraryStyle) {
+    textStyle = {
+      ...libraryStyle.textStyle,
+      ...textStyle
+    };
+  }
+
+  return textStyle;
 };
