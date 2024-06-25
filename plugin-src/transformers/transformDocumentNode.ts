@@ -4,8 +4,7 @@ import { remoteComponentLibrary } from '@plugin/RemoteComponentLibrary';
 import { styleLibrary } from '@plugin/StyleLibrary';
 import { textLibrary } from '@plugin/TextLibrary';
 import { translateRemoteChildren } from '@plugin/translators';
-import { translatePaintStyles } from '@plugin/translators/fills';
-import { translateTextStyles } from '@plugin/translators/text/translateTextStyles';
+import { translatePaintStyle, translateTextStyle } from '@plugin/translators/styles';
 import { sleep } from '@plugin/utils';
 
 import { PenpotPage } from '@ui/lib/types/penpotPage';
@@ -82,7 +81,7 @@ const getFillStyles = async (): Promise<Record<string, FillStyle>> => {
   for (const [styleId, paintStyle] of stylesToFetch) {
     const figmaStyle = paintStyle ?? (await figma.getStyleByIdAsync(styleId));
     if (figmaStyle && isPaintStyle(figmaStyle)) {
-      styles[styleId] = translatePaintStyles(figmaStyle);
+      styles[styleId] = translatePaintStyle(figmaStyle);
     }
 
     figma.ui.postMessage({
@@ -119,7 +118,7 @@ const getTextStyles = async (): Promise<Record<string, TypographyStyle>> => {
   for (const [styleId, style] of stylesToFetch) {
     const figmaStyle = style ?? (await figma.getStyleByIdAsync(styleId));
     if (figmaStyle && isTextStyle(figmaStyle)) {
-      styles[styleId] = translateTextStyles(figmaStyle);
+      styles[styleId] = translateTextStyle(figmaStyle);
     }
 
     figma.ui.postMessage({

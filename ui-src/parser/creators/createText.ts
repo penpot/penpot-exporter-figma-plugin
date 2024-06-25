@@ -33,34 +33,15 @@ const parseContent = (content: TextContent | undefined): TextContent | undefined
 };
 
 const parseTextStyle = (text: Paragraph | TextNode, textStyleId?: string): Paragraph | TextNode => {
-  const commonTextAttrs = {
-    ...text,
-    fills: symbolFills(text.fillStyleId, text.fills)
-  };
-
-  if (textStyleId === undefined) {
-    return commonTextAttrs;
-  }
-
-  let textLibrary = uiTextLibraries.get(textStyleId);
-  if (textLibrary === undefined) {
-    return commonTextAttrs;
-  }
-
-  textLibrary = {
-    textStyle: {
-      ...textLibrary.textStyle,
-      fontId: text.fontId,
-      fontVariantId: text.fontVariantId,
-      fontWeight: text.fontWeight
-    },
-    typography: textLibrary.typography,
-    name: textLibrary.name
-  };
-  uiTextLibraries.register(textStyleId, textLibrary);
+  const textStyle = textStyleId
+    ? {
+        ...uiTextLibraries.get(textStyleId)?.textStyle,
+        ...text
+      }
+    : text;
 
   return {
-    ...textLibrary.textStyle,
-    ...commonTextAttrs
+    ...textStyle,
+    fills: symbolFills(text.fillStyleId, text.fills)
   };
 };

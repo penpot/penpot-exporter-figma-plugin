@@ -1,7 +1,7 @@
 import { textLibrary } from '@plugin/TextLibrary';
 import { transformFills } from '@plugin/transformers/partials';
-import { translateFontId } from '@plugin/translators/text/font';
-import { StyleTextSegment, translateParagraphProperties } from '@plugin/translators/text/paragraph';
+import { translateFontName } from '@plugin/translators/text/font';
+import { TextSegment, translateParagraphProperties } from '@plugin/translators/text/paragraph';
 import {
   translateFontStyle,
   translateHorizontalAlign,
@@ -13,9 +13,9 @@ import {
 
 import { TextNode as PenpotTextNode, TextStyle } from '@ui/lib/types/shapes/textShape';
 
-export const translateStyleTextSegments = (
+export const translateTextSegments = (
   node: TextNode,
-  segments: StyleTextSegment[]
+  segments: TextSegment[]
 ): PenpotTextNode[] => {
   const partials = segments.map(segment => ({
     textNode: translateStyleTextSegment(node, segment),
@@ -25,7 +25,7 @@ export const translateStyleTextSegments = (
   return translateParagraphProperties(node, partials);
 };
 
-export const transformTextStyle = (node: TextNode, segment: StyleTextSegment): TextStyle => {
+export const transformTextStyle = (node: TextNode, segment: TextSegment): TextStyle => {
   if (hasTextStyle(segment)) {
     return {
       ...partialTransformTextStyle(node, segment),
@@ -40,20 +40,19 @@ export const transformTextStyle = (node: TextNode, segment: StyleTextSegment): T
     fontStyle: translateFontStyle(segment.fontName.style),
     textDecoration: translateTextDecoration(segment),
     letterSpacing: translateLetterSpacing(segment),
-    lineHeight: translateLineHeight(segment)
-  };
-};
-
-export const partialTransformTextStyle = (node: TextNode, segment: StyleTextSegment): TextStyle => {
-  return {
-    ...translateFontId(segment.fontName, segment.fontWeight),
-    fontWeight: segment.fontWeight.toString(),
-    textAlign: translateHorizontalAlign(node.textAlignHorizontal),
+    lineHeight: translateLineHeight(segment),
     textTransform: translateTextTransform(segment)
   };
 };
 
-const translateStyleTextSegment = (node: TextNode, segment: StyleTextSegment): PenpotTextNode => {
+const partialTransformTextStyle = (node: TextNode, segment: TextSegment): TextStyle => {
+  return {
+    ...translateFontName(segment.fontName),
+    textAlign: translateHorizontalAlign(node.textAlignHorizontal)
+  };
+};
+
+const translateStyleTextSegment = (node: TextNode, segment: TextSegment): PenpotTextNode => {
   return {
     text: segment.characters,
     ...transformTextStyle(node, segment),
@@ -61,7 +60,7 @@ const translateStyleTextSegment = (node: TextNode, segment: StyleTextSegment): P
   };
 };
 
-const hasTextStyle = (segment: StyleTextSegment): boolean => {
+const hasTextStyle = (segment: TextSegment): boolean => {
   return segment.textStyleId !== undefined && segment.textStyleId.length > 0;
 };
 

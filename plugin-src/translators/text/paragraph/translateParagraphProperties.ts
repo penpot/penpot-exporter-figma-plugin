@@ -2,7 +2,7 @@ import { TextNode as PenpotTextNode } from '@ui/lib/types/shapes/textShape';
 
 import { Paragraph } from './Paragraph';
 
-export type StyleTextSegment = Pick<
+export type TextSegment = Pick<
   StyledTextSegment,
   | 'characters'
   | 'start'
@@ -23,12 +23,12 @@ export type StyleTextSegment = Pick<
 
 type PartialTranslation = {
   textNodes: PenpotTextNode[];
-  segment: StyleTextSegment;
+  segment: TextSegment;
 };
 
 export const translateParagraphProperties = (
   node: TextNode,
-  partials: { textNode: PenpotTextNode; segment: StyleTextSegment }[]
+  partials: { textNode: PenpotTextNode; segment: TextSegment }[]
 ): PenpotTextNode[] => {
   const splitSegments: PartialTranslation[] = [];
 

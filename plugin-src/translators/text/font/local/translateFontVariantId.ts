@@ -3,13 +3,12 @@ import { LocalFont } from './localFont';
 export const translateFontVariantId = (
   localFont: LocalFont,
   fontName: FontName,
-  fontWeight: number
+  fontWeight: string
 ): string | undefined => {
   // check match by style and weight
   const italic = fontName.style.toLowerCase().includes('italic');
   const variantWithStyleWeight = localFont.variants?.find(
-    variant =>
-      variant.weight === fontWeight.toString() && variant.style === (italic ? 'italic' : 'normal')
+    variant => variant.weight === fontWeight && variant.style === (italic ? 'italic' : 'normal')
   );
 
   if (variantWithStyleWeight !== undefined) return variantWithStyleWeight.id;

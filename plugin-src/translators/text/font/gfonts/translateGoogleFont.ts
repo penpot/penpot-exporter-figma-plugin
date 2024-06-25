@@ -3,21 +3,25 @@ import slugify from 'slugify';
 import { Cache } from '@plugin/Cache';
 import { translateFontVariantId } from '@plugin/translators/text/font/gfonts';
 
-import { FontId } from '@ui/lib/types/shapes/textShape';
+import { TextTypography } from '@ui/lib/types/shapes/textShape';
 
 import { items as gfonts } from './gfonts.json';
 import { GoogleFont } from './googleFont';
 
 const fontsCache = new Cache<string, GoogleFont>({ max: 30 });
 
-export const translateGoogleFont = (fontName: FontName, fontWeight: number): FontId | undefined => {
+export const translateGoogleFont = (
+  fontName: FontName,
+  fontWeight: string
+): Pick<TextTypography, 'fontId' | 'fontVariantId' | 'fontWeight'> | undefined => {
   const googleFont = getGoogleFont(fontName);
 
   if (googleFont === undefined) return;
 
   return {
     fontId: `gfont-${slugify(fontName.family.toLowerCase())}`,
-    fontVariantId: translateFontVariantId(googleFont, fontName, fontWeight)
+    fontVariantId: translateFontVariantId(googleFont, fontName, fontWeight),
+    fontWeight
   };
 };
 

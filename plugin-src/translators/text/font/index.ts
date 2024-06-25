@@ -1,1 +1,1 @@
-export * from './translateFontId';
+export * from './translateFontName';
