@@ -25,18 +25,11 @@ export interface PenpotFile {
   createPath(path: PathShape): Uuid;
   createText(options: TextShape): Uuid;
   addLibraryColor(color: Color): void;
-  // updateLibraryColor(color: Color): void;
-  // deleteLibraryColor(color: Color): void;
   addLibraryTypography(typography: Typography): void;
-  // deleteLibraryTypography(typography: any): void;
   startComponent(component: ComponentShape): Uuid;
   finishComponent(): void;
-  // lookupShape(shapeId: string): PenpotNode;
-  // updateObject(id: string, object: any): void;
-  // deleteObject(id: string): void;
   getId(): Uuid;
   getCurrentPageId(): Uuid;
   newId(): Uuid;
-  // asMap(): unknown;
   export(): Promise<Blob>;
 }
