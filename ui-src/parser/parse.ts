@@ -5,10 +5,11 @@ import { sleep } from '@plugin/utils/sleep';
 import { sendMessage } from '@ui/context';
 import { createFile } from '@ui/lib/penpot';
 import { PenpotFile } from '@ui/lib/types/penpotFile';
+import { TypographyStyle } from '@ui/lib/types/shapes/textShape';
 import { FillStyle } from '@ui/lib/types/utils/fill';
 import { buildFile } from '@ui/parser/creators';
-import { uiImages } from '@ui/parser/libraries';
-import { uiColorLibraries } from '@ui/parser/libraries';
+import { uiColorLibraries, uiImages } from '@ui/parser/libraries';
+import { uiTextLibraries } from '@ui/parser/libraries/UiTextLibraries';
 import { PenpotDocument } from '@ui/types';
 
 import { parseImage } from '.';
@@ -38,6 +39,43 @@ const optimizeImages = async (images: Record<string, Uint8Array>) => {
     sendMessage({
       type: 'PROGRESS_PROCESSED_ITEMS',
       data: imagesOptimized++
+    });
+
+    await sleep(0);
+  }
+};
+
+const prepareTypographyLibraries = async (
+  file: PenpotFile,
+  styles: Record<string, TypographyStyle>
+) => {
+  const stylesToRegister = Object.entries(styles);
+
+  if (stylesToRegister.length === 0) return;
+
+  let stylesRegistered = 1;
+
+  sendMessage({
+    type: 'PROGRESS_TOTAL_ITEMS',
+    data: stylesToRegister.length
+  });
+
+  sendMessage({
+    type: 'PROGRESS_STEP',
+    data: 'typoFormat'
+  });
+
+  for (const [key, style] of stylesToRegister) {
+    const typographyId = file.newId();
+    style.textStyle.typographyRefId = typographyId;
+    style.textStyle.typographyRefFile = file.getId();
+    style.typography.id = typographyId;
+
+    uiTextLibraries.register(key, style);
+
+    sendMessage({
+      type: 'PROGRESS_PROCESSED_ITEMS',
+      data: stylesRegistered++
     });
 
     await sleep(0);
@@ -86,7 +124,8 @@ export const parse = async ({
   children = [],
   components,
   images,
-  styles
+  styles,
+  typographies
 }: PenpotDocument) => {
   componentsLibrary.init(components);
 
@@ -94,6 +133,7 @@ export const parse = async ({
 
   await optimizeImages(images);
   await prepareColorLibraries(file, styles);
+  await prepareTypographyLibraries(file, typographies);
 
   return buildFile(file, children);
 };

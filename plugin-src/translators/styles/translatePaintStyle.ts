@@ -2,7 +2,7 @@ import { translateFill } from '@plugin/translators/fills/translateFills';
 
 import { FillStyle } from '@ui/lib/types/utils/fill';
 
-export const translatePaintStyles = (figmaStyle: PaintStyle): FillStyle => {
+export const translatePaintStyle = (figmaStyle: PaintStyle): FillStyle => {
   const fillStyle: FillStyle = {
     name: figmaStyle.name,
     fills: [],
@@ -10,7 +10,6 @@ export const translatePaintStyles = (figmaStyle: PaintStyle): FillStyle => {
   };
 
   const colorName = (figmaStyle: PaintStyle, index: number): string => {
-    // @TODO: Think something better
     return figmaStyle.paints.length > 1 ? `Color ${index + 1}` : figmaStyle.name;
   };
 

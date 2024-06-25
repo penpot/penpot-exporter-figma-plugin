@@ -1,15 +1,11 @@
 import { translateFillStyleId, translateFills } from '@plugin/translators/fills';
-import { StyleTextSegment } from '@plugin/translators/text/paragraph';
+import { TextSegment } from '@plugin/translators/text/paragraph';
 
 import { ShapeAttributes } from '@ui/lib/types/shapes/shape';
 import { TextStyle } from '@ui/lib/types/shapes/textShape';
 
 export const transformFills = (
-  node:
-    | (MinimalFillsMixin & DimensionAndPositionMixin)
-    | VectorRegion
-    | VectorNode
-    | StyleTextSegment
+  node: (MinimalFillsMixin & DimensionAndPositionMixin) | VectorRegion | VectorNode | TextSegment
 ): Pick<ShapeAttributes, 'fills' | 'fillStyleId'> | Pick<TextStyle, 'fills' | 'fillStyleId'> => {
   if (hasFillStyle(node)) {
     return {
@@ -39,11 +35,7 @@ export const transformVectorFills = (
 };
 
 const hasFillStyle = (
-  node:
-    | (MinimalFillsMixin & DimensionAndPositionMixin)
-    | VectorRegion
-    | VectorNode
-    | StyleTextSegment
+  node: (MinimalFillsMixin & DimensionAndPositionMixin) | VectorRegion | VectorNode | TextSegment
 ): boolean => {
   return (
     node.fillStyleId !== figma.mixed &&

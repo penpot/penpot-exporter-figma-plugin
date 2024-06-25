@@ -3,7 +3,7 @@ import { GoogleFont } from './googleFont';
 export const translateFontVariantId = (
   googleFont: GoogleFont,
   fontName: FontName,
-  fontWeight: number
+  fontWeight: string
 ) => {
   // check match directly by style
   const variant = googleFont.variants?.find(variant => variant === fontName.style.toLowerCase());
@@ -13,7 +13,7 @@ export const translateFontVariantId = (
   // check match by style and weight
   const italic = fontName.style.toLowerCase().includes('italic') ? 'italic' : '';
   const variantWithWeight = googleFont.variants?.find(
-    variant => variant === `${fontWeight.toString()}${italic}`
+    variant => variant === `${fontWeight}${italic}`
   );
 
   if (variantWithWeight !== undefined) return variantWithWeight;

@@ -1,7 +1,7 @@
 import { TextNode as PenpotTextNode } from '@ui/lib/types/shapes/textShape';
 
 import { List } from './List';
-import { StyleTextSegment } from './translateParagraphProperties';
+import { TextSegment } from './translateParagraphProperties';
 
 export class Paragraph {
   private isParagraphStarting = false;
@@ -9,11 +9,7 @@ export class Paragraph {
   private firstTextNode: PenpotTextNode | null = null;
   private list = new List();
 
-  public format(
-    node: TextNode,
-    textNode: PenpotTextNode,
-    segment: StyleTextSegment
-  ): PenpotTextNode[] {
+  public format(node: TextNode, textNode: PenpotTextNode, segment: TextSegment): PenpotTextNode[] {
     const textNodes: PenpotTextNode[] = [];
 
     const spacing = this.applySpacing(segment, node);
@@ -32,7 +28,7 @@ export class Paragraph {
 
   private applyIndentation(
     textNode: PenpotTextNode,
-    segment: StyleTextSegment,
+    segment: TextSegment,
     node: TextNode
   ): PenpotTextNode | undefined {
     if (this.isParagraphStarting || this.isFirstTextNode(textNode)) {
@@ -44,7 +40,7 @@ export class Paragraph {
     }
   }
 
-  private applySpacing(segment: StyleTextSegment, node: TextNode): PenpotTextNode | undefined {
+  private applySpacing(segment: TextSegment, node: TextNode): PenpotTextNode | undefined {
     if (this.isParagraphStarting) {
       const isList = segment.listOptions.type !== 'NONE';
 
@@ -73,8 +69,8 @@ export class Paragraph {
       fontSize: '5',
       fontStyle: 'normal',
       fontWeight: '400',
-      lineHeight: 1,
-      letterSpacing: 0
+      lineHeight: '1',
+      letterSpacing: '0'
     };
   }
 
@@ -88,8 +84,8 @@ export class Paragraph {
       fontSize: paragraphSpacing.toString(),
       fontStyle: 'normal',
       fontWeight: '400',
-      lineHeight: 1,
-      letterSpacing: 0
+      lineHeight: '1',
+      letterSpacing: '0'
     };
   }
 }
