@@ -1,12 +1,13 @@
-import { sleep } from '@plugin/utils/sleep';
+import { toArray } from '@common/map';
+import { sleep } from '@common/sleep';
 
 import { sendMessage } from '@ui/context';
 import { PenpotFile } from '@ui/lib/types/penpotFile';
-import { colors } from '@ui/parser/libraries';
+import { colors } from '@ui/parser';
 
 export const createColorsLibrary = async (file: PenpotFile) => {
   let librariesBuilt = 1;
-  const libraries = colors.all();
+  const libraries = toArray(colors);
 
   sendMessage({
     type: 'PROGRESS_TOTAL_ITEMS',
@@ -18,7 +19,7 @@ export const createColorsLibrary = async (file: PenpotFile) => {
     data: 'libraries'
   });
 
-  for (const library of libraries) {
+  for (const [_, library] of libraries) {
     for (let index = 0; index < library.fills.length; index++) {
       file.addLibraryColor({
         ...library.colors[index],

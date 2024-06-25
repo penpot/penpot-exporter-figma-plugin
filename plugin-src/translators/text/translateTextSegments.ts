@@ -68,7 +68,7 @@ const translateTextStyleId = (textStyleId: string | undefined): string | undefin
   if (textStyleId === undefined) return;
 
   if (!textStyles.has(textStyleId)) {
-    textStyles.register(textStyleId);
+    textStyles.set(textStyleId, undefined);
   }
 
   return textStyleId;

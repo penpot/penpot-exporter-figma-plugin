@@ -1,9 +1,9 @@
-class RemoteComponentsLibrary {
+export class RemoteComponentsLibrary {
   private components: Map<string, ComponentNode | ComponentSetNode> = new Map();
   private queue: string[] = [];
 
   public register(id: string, component: ComponentNode | ComponentSetNode) {
-    if (!Object.prototype.hasOwnProperty.call(this.components, id)) {
+    if (!this.components.has(id)) {
       this.queue.push(id);
     }
 
@@ -37,5 +37,3 @@ class RemoteComponentsLibrary {
     return this.components.size;
   }
 }
-
-export const remoteComponents = new RemoteComponentsLibrary();

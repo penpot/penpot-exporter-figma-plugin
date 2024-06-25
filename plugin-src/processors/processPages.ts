@@ -1,7 +1,8 @@
+import { sleep } from '@common/sleep';
+
 import { remoteComponents } from '@plugin/libraries';
 import { transformPageNode } from '@plugin/transformers';
 import { translateRemoteChildren } from '@plugin/translators';
-import { sleep } from '@plugin/utils';
 
 import { PenpotPage } from '@ui/lib/types/penpotPage';
 

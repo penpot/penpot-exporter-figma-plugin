@@ -1,21 +1,21 @@
-import { sleep } from '@plugin/utils/sleep';
+import { sleep } from '@common/sleep';
 
 import { sendMessage } from '@ui/context';
 import { PenpotFile } from '@ui/lib/types/penpotFile';
 import { PenpotPage } from '@ui/lib/types/penpotPage';
+import { components, identifiers } from '@ui/parser';
 import {
   createColorsLibrary,
   createComponentsLibrary,
   createPage,
   createTextLibrary
 } from '@ui/parser/creators';
-import { components, identifiers } from '@ui/parser/libraries';
 
 export const buildFile = async (file: PenpotFile, children: PenpotPage[]) => {
   let pagesBuilt = 1;
 
-  components.init();
-  identifiers.init();
+  components.clear();
+  identifiers.clear();
 
   sendMessage({
     type: 'PROGRESS_TOTAL_ITEMS',

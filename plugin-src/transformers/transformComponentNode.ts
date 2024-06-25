@@ -19,7 +19,7 @@ import {
 import { ComponentRoot } from '@ui/types';
 
 export const transformComponentNode = async (node: ComponentNode): Promise<ComponentRoot> => {
-  components.register(node.id, {
+  components.set(node.id, {
     type: 'component',
     name: node.name,
     path: node.parent?.type === 'COMPONENT_SET' ? node.parent.name : '',

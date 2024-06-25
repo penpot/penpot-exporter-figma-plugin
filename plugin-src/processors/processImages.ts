@@ -1,8 +1,10 @@
+import { toArray } from '@common/map';
+import { sleep } from '@common/sleep';
+
 import { images as imagesLibrary } from '@plugin/libraries';
-import { sleep } from '@plugin/utils';
 
 export const processImages = async (): Promise<Record<string, Uint8Array>> => {
-  const imageToDownload = Object.entries(imagesLibrary.all());
+  const imageToDownload = toArray(imagesLibrary);
   const images: Record<string, Uint8Array> = {};
 
   if (imageToDownload.length === 0) return images;

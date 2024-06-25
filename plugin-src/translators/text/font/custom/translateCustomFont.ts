@@ -7,6 +7,7 @@ export const translateCustomFont = (
   fontWeight: string
 ): Pick<TextTypography, 'fontId' | 'fontVariantId' | 'fontWeight'> | undefined => {
   const customFontId = getCustomFontId(fontName);
+
   return {
     fontId: customFontId ? `custom-${customFontId}` : '',
     fontVariantId: translateFontVariantId(fontName, fontWeight),

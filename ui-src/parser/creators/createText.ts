@@ -1,8 +1,7 @@
 import { PenpotFile } from '@ui/lib/types/penpotFile';
 import { Paragraph, TextContent, TextNode, TextShape } from '@ui/lib/types/shapes/textShape';
-import { parseFigmaId } from '@ui/parser';
+import { parseFigmaId, typographies } from '@ui/parser';
 import { symbolFills, symbolStrokes } from '@ui/parser/creators/symbols';
-import { typographies } from '@ui/parser/libraries';
 
 export const createText = (
   file: PenpotFile,
