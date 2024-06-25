@@ -8,6 +8,6 @@ export type PenpotDocument = {
   children?: PenpotPage[];
   components: Record<string, ComponentShape>;
   images: Record<string, Uint8Array>;
-  styles: Record<string, FillStyle>;
-  typographies: Record<string, TypographyStyle>;
+  paintStyles: Record<string, FillStyle>;
+  textStyles: Record<string, TypographyStyle>;
 };

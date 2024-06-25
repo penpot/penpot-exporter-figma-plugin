@@ -1,4 +1,4 @@
-class StyleLibrary {
+class PaintStyles {
   private styles: Map<string, PaintStyle | undefined> = new Map();
 
   public register(id: string, styles?: PaintStyle | undefined) {
@@ -18,4 +18,4 @@ class StyleLibrary {
   }
 }
 
-export const styleLibrary = new StyleLibrary();
+export const paintStyles = new PaintStyles();

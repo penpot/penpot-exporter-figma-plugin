@@ -1,5 +1,4 @@
-import { overridesLibrary } from '@plugin/OverridesLibrary';
-import { remoteComponentLibrary } from '@plugin/RemoteComponentLibrary';
+import { overrides, remoteComponents } from '@plugin/libraries';
 import {
   transformAutoLayout,
   transformBlend,
@@ -40,9 +39,7 @@ export const transformInstanceNode = async (
   registerTextVariableOverrides(node, primaryComponent);
 
   if (node.overrides.length > 0) {
-    node.overrides.forEach(override =>
-      overridesLibrary.register(override.id, override.overriddenFields)
-    );
+    node.overrides.forEach(override => overrides.register(override.id, override.overriddenFields));
   }
 
   return {
@@ -78,11 +75,11 @@ const getPrimaryComponent = (mainComponent: ComponentNode): ComponentNode | Comp
 };
 
 const registerExternalComponents = (primaryComponent: ComponentNode | ComponentSetNode): void => {
-  if (remoteComponentLibrary.get(primaryComponent.id) !== undefined) {
+  if (remoteComponents.has(primaryComponent.id)) {
     return;
   }
 
-  remoteComponentLibrary.register(primaryComponent.id, primaryComponent);
+  remoteComponents.register(primaryComponent.id, primaryComponent);
 };
 
 const getComponentTextPropertyOverrides = (
@@ -131,7 +128,7 @@ const registerTextVariableOverrides = (
       });
 
     textNodes.forEach(textNode => {
-      overridesLibrary.register(textNode.id, ['text']);
+      overrides.register(textNode.id, ['text']);
     });
   }
 };

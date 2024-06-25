@@ -1,23 +1,23 @@
 import { ComponentShape } from '@ui/lib/types/shapes/componentShape';
 
-class ComponentLibrary {
-  private components: Record<string, ComponentShape> = {};
+class Components {
+  private components: Map<string, ComponentShape> = new Map();
 
   public register(id: string, component: ComponentShape) {
-    this.components[id] = component;
+    this.components.set(id, component);
   }
 
   public get(id: string): ComponentShape | undefined {
-    return this.components[id];
+    return this.components.get(id);
   }
 
   public all(): Record<string, ComponentShape> {
-    return this.components;
+    return Object.fromEntries(this.components.entries());
   }
 
   public init(components: Record<string, ComponentShape>): void {
-    this.components = components;
+    this.components = new Map(Object.entries(components));
   }
 }
 
-export const componentsLibrary = new ComponentLibrary();
+export const components = new Components();

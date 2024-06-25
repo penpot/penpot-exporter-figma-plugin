@@ -1,4 +1,4 @@
-import { componentsLibrary } from '@plugin/ComponentLibrary';
+import { components as componentsLibrary } from '@plugin/libraries/Components';
 // @TODO: Direct import on purpose, to avoid problems with the tsc linting
 import { sleep } from '@plugin/utils/sleep';
 
@@ -8,8 +8,7 @@ import { PenpotFile } from '@ui/lib/types/penpotFile';
 import { TypographyStyle } from '@ui/lib/types/shapes/textShape';
 import { FillStyle } from '@ui/lib/types/utils/fill';
 import { buildFile } from '@ui/parser/creators';
-import { uiColorLibraries, uiImages } from '@ui/parser/libraries';
-import { uiTextLibraries } from '@ui/parser/libraries/UiTextLibraries';
+import { colors, typographies, images as uiImages } from '@ui/parser/libraries';
 import { PenpotDocument } from '@ui/types';
 
 import { parseImage } from '.';
@@ -71,7 +70,7 @@ const prepareTypographyLibraries = async (
     style.textStyle.typographyRefFile = file.getId();
     style.typography.id = typographyId;
 
-    uiTextLibraries.register(key, style);
+    typographies.register(key, style);
 
     sendMessage({
       type: 'PROGRESS_PROCESSED_ITEMS',
@@ -108,7 +107,7 @@ const prepareColorLibraries = async (file: PenpotFile, styles: Record<string, Fi
       fillStyle.colors[index].refFile = file.getId();
     }
 
-    uiColorLibraries.register(key, fillStyle);
+    colors.register(key, fillStyle);
 
     sendMessage({
       type: 'PROGRESS_PROCESSED_ITEMS',
@@ -124,16 +123,16 @@ export const parse = async ({
   children = [],
   components,
   images,
-  styles,
-  typographies
+  paintStyles,
+  textStyles
 }: PenpotDocument) => {
   componentsLibrary.init(components);
 
   const file = createFile(name);
 
   await optimizeImages(images);
-  await prepareColorLibraries(file, styles);
-  await prepareTypographyLibraries(file, typographies);
+  await prepareColorLibraries(file, paintStyles);
+  await prepareTypographyLibraries(file, textStyles);
 
   return buildFile(file, children);
 };

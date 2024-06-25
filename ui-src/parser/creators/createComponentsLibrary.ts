@@ -1,10 +1,10 @@
-import { componentsLibrary } from '@plugin/ComponentLibrary';
+import { components } from '@plugin/libraries/Components';
 import { sleep } from '@plugin/utils/sleep';
 
 import { sendMessage } from '@ui/context';
 import { PenpotFile } from '@ui/lib/types/penpotFile';
 import { symbolFills, symbolStrokes } from '@ui/parser/creators/symbols';
-import { UiComponent, uiComponents } from '@ui/parser/libraries';
+import { UiComponent, components as uiComponents } from '@ui/parser/libraries';
 
 import { createItems } from '.';
 
@@ -35,7 +35,7 @@ export const createComponentsLibrary = async (file: PenpotFile) => {
 };
 
 const createComponentLibrary = async (file: PenpotFile, uiComponent: UiComponent) => {
-  const component = componentsLibrary.get(uiComponent.componentFigmaId);
+  const component = components.get(uiComponent.componentFigmaId);
 
   if (!component) {
     return;

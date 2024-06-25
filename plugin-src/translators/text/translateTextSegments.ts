@@ -1,4 +1,4 @@
-import { textLibrary } from '@plugin/TextLibrary';
+import { textStyles } from '@plugin/libraries';
 import { transformFills } from '@plugin/transformers/partials';
 import { translateFontName } from '@plugin/translators/text/font';
 import { TextSegment, translateParagraphProperties } from '@plugin/translators/text/paragraph';
@@ -67,8 +67,8 @@ const hasTextStyle = (segment: TextSegment): boolean => {
 const translateTextStyleId = (textStyleId: string | undefined): string | undefined => {
   if (textStyleId === undefined) return;
 
-  if (!textLibrary.has(textStyleId)) {
-    textLibrary.register(textStyleId);
+  if (!textStyles.has(textStyleId)) {
+    textStyles.register(textStyleId);
   }
 
   return textStyleId;

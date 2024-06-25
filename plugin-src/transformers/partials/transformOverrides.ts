@@ -1,4 +1,4 @@
-import { overridesLibrary } from '@plugin/OverridesLibrary';
+import { overrides as overridesLibrary } from '@plugin/libraries';
 import { syncAttributes } from '@plugin/utils/syncAttributes';
 
 import { SyncGroups } from '@ui/lib/types/utils/syncGroups';

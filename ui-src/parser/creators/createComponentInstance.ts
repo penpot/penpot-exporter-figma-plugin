@@ -1,6 +1,6 @@
 import { PenpotFile } from '@ui/lib/types/penpotFile';
 import { parseFigmaId } from '@ui/parser';
-import { uiComponents } from '@ui/parser/libraries';
+import { components } from '@ui/parser/libraries';
 import { ComponentInstance } from '@ui/types';
 
 import { createArtboard } from '.';
@@ -17,7 +17,7 @@ export const createComponentInstance = (
   }: ComponentInstance
 ) => {
   const uiComponent =
-    uiComponents.get(mainComponentFigmaId) ?? createUiComponent(file, mainComponentFigmaId);
+    components.get(mainComponentFigmaId) ?? createUiComponent(file, mainComponentFigmaId);
 
   if (!uiComponent) {
     return;
@@ -43,7 +43,7 @@ const createUiComponent = (file: PenpotFile, mainComponentFigmaId: string) => {
     mainInstanceId
   };
 
-  uiComponents.register(mainComponentFigmaId, uiComponent);
+  components.register(mainComponentFigmaId, uiComponent);
 
   return uiComponent;
 };

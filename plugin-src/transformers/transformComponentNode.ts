@@ -1,4 +1,4 @@
-import { componentsLibrary } from '@plugin/ComponentLibrary';
+import { components } from '@plugin/libraries';
 import {
   transformAutoLayout,
   transformBlend,
@@ -19,7 +19,7 @@ import {
 import { ComponentRoot } from '@ui/types';
 
 export const transformComponentNode = async (node: ComponentNode): Promise<ComponentRoot> => {
-  componentsLibrary.register(node.id, {
+  components.register(node.id, {
     type: 'component',
     name: node.name,
     path: node.parent?.type === 'COMPONENT_SET' ? node.parent.name : '',

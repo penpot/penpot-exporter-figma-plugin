@@ -1,4 +1,4 @@
-import { styleLibrary } from '@plugin/StyleLibrary';
+import { paintStyles } from '@plugin/libraries';
 import { translateImageFill, translateSolidFill } from '@plugin/translators/fills';
 import {
   translateGradientLinearFill,
@@ -47,8 +47,8 @@ export const translateFillStyleId = (
 ): string | undefined => {
   if (fillStyleId === figma.mixed || fillStyleId === undefined) return;
 
-  if (!styleLibrary.has(fillStyleId)) {
-    styleLibrary.register(fillStyleId);
+  if (!paintStyles.has(fillStyleId)) {
+    paintStyles.register(fillStyleId);
   }
 
   return fillStyleId;
