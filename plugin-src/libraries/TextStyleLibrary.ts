@@ -1,4 +1,4 @@
-class TextLibrary {
+class TextStyleLibrary {
   private styles: Map<string, TextStyle | undefined> = new Map();
 
   public register(id: string, styles?: TextStyle | undefined) {
@@ -18,4 +18,4 @@ class TextLibrary {
   }
 }
 
-export const textLibrary = new TextLibrary();
+export const textLibrary = new TextStyleLibrary();
