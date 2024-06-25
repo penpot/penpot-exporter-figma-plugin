@@ -3,14 +3,13 @@ import { sleep } from '@plugin/utils/sleep';
 import { sendMessage } from '@ui/context';
 import { PenpotFile } from '@ui/lib/types/penpotFile';
 import { PenpotPage } from '@ui/lib/types/penpotPage';
-import { idLibrary } from '@ui/parser';
 import {
   createColorsLibrary,
   createComponentsLibrary,
   createPage,
   createTextLibrary
 } from '@ui/parser/creators';
-import { uiComponents } from '@ui/parser/libraries';
+import { idLibrary, uiComponents } from '@ui/parser/libraries';
 
 export const buildFile = async (file: PenpotFile, children: PenpotPage[]) => {
   let pagesBuilt = 1;

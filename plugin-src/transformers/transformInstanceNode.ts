@@ -1,5 +1,4 @@
-import { overridesLibrary } from '@plugin/OverridesLibrary';
-import { remoteComponentLibrary } from '@plugin/RemoteComponentLibrary';
+import { overridesLibrary, remoteComponentLibrary } from '@plugin/libraries';
 import {
   transformAutoLayout,
   transformBlend,

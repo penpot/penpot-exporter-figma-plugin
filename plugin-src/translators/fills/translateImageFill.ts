@@ -1,4 +1,4 @@
-import { imagesLibrary } from '@plugin/ImageLibrary';
+import { imagesLibrary } from '@plugin/libraries';
 
 import { Fill } from '@ui/lib/types/utils/fill';
 import { PartialImageColor } from '@ui/lib/types/utils/imageColor';

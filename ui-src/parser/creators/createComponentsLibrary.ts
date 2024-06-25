@@ -1,4 +1,4 @@
-import { componentsLibrary } from '@plugin/ComponentLibrary';
+import { componentsLibrary } from '@plugin/libraries/ComponentLibrary';
 import { sleep } from '@plugin/utils/sleep';
 
 import { sendMessage } from '@ui/context';

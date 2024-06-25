@@ -1,7 +1,6 @@
 import { PenpotFile } from '@ui/lib/types/penpotFile';
 import { Uuid } from '@ui/lib/types/utils/uuid';
-
-import { idLibrary } from '.';
+import { idLibrary } from '@ui/parser/libraries';
 
 export const parseFigmaId = (
   file: PenpotFile,

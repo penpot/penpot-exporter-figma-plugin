@@ -1,4 +1,4 @@
-import { textLibrary } from '@plugin/TextLibrary';
+import { textLibrary } from '@plugin/libraries';
 import { transformFills } from '@plugin/transformers/partials';
 import { translateFontName } from '@plugin/translators/text/font';
 import { TextSegment, translateParagraphProperties } from '@plugin/translators/text/paragraph';

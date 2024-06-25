@@ -1,4 +1,4 @@
-import { componentsLibrary } from '@plugin/ComponentLibrary';
+import { componentsLibrary } from '@plugin/libraries';
 import {
   transformAutoLayout,
   transformBlend,

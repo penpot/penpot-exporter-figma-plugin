@@ -1,4 +1,4 @@
-import { componentsLibrary } from '@plugin/ComponentLibrary';
+import { componentsLibrary } from '@plugin/libraries/ComponentLibrary';
 
 import { PenpotFile } from '@ui/lib/types/penpotFile';
 import { uiComponents } from '@ui/parser/libraries';

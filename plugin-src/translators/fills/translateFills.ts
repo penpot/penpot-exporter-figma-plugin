@@ -1,4 +1,4 @@
-import { styleLibrary } from '@plugin/StyleLibrary';
+import { styleLibrary } from '@plugin/libraries';
 import { translateImageFill, translateSolidFill } from '@plugin/translators/fills';
 import {
   translateGradientLinearFill,

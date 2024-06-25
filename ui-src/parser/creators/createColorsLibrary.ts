@@ -2,7 +2,7 @@ import { sleep } from '@plugin/utils/sleep';
 
 import { sendMessage } from '@ui/context';
 import { PenpotFile } from '@ui/lib/types/penpotFile';
-import { uiColorLibraries } from '@ui/parser/libraries/UiColorLibraries';
+import { uiColorLibraries } from '@ui/parser/libraries';
 
 export const createColorsLibrary = async (file: PenpotFile) => {
   let librariesBuilt = 1;
