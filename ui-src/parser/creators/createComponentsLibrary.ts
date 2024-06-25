@@ -23,7 +23,7 @@ export const createComponentsLibrary = async (file: PenpotFile) => {
   });
 
   for (const uiComponent of components) {
-    await createComponentLibrary(file, uiComponent);
+    createComponentLibrary(file, uiComponent);
 
     sendMessage({
       type: 'PROGRESS_PROCESSED_ITEMS',

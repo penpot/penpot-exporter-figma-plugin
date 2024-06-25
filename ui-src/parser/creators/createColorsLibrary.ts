@@ -19,15 +19,15 @@ export const createColorsLibrary = async (file: PenpotFile) => {
   });
 
   for (const library of libraries) {
-    for (let i = 0; i < library.fills.length; i++) {
+    for (let index = 0; index < library.fills.length; index++) {
       file.addLibraryColor({
-        ...library.colors[i],
-        id: library.fills[i].fillColorRefId,
-        refFile: library.fills[i].fillColorRefFile,
-        color: library.fills[i].fillColor,
-        opacity: library.fills[i].fillOpacity,
-        image: library.fills[i].fillImage,
-        gradient: library.fills[i].fillColorGradient
+        ...library.colors[index],
+        id: library.fills[index].fillColorRefId,
+        refFile: library.fills[index].fillColorRefFile,
+        color: library.fills[index].fillColor,
+        opacity: library.fills[index].fillOpacity,
+        image: library.fills[index].fillImage,
+        gradient: library.fills[index].fillColorGradient
       });
 
       sendMessage({

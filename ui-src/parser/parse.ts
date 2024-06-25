@@ -62,12 +62,12 @@ const prepareColorLibraries = async (file: PenpotFile, styles: Record<string, Fi
   });
 
   for (const [key, fillStyle] of stylesToRegister) {
-    for (let i = 0; i < fillStyle.fills.length; i++) {
+    for (let index = 0; index < fillStyle.fills.length; index++) {
       const colorId = file.newId();
-      fillStyle.fills[i].fillColorRefId = colorId;
-      fillStyle.fills[i].fillColorRefFile = file.getId();
-      fillStyle.colors[i].id = colorId;
-      fillStyle.colors[i].refFile = file.getId();
+      fillStyle.fills[index].fillColorRefId = colorId;
+      fillStyle.fills[index].fillColorRefFile = file.getId();
+      fillStyle.colors[index].id = colorId;
+      fillStyle.colors[index].refFile = file.getId();
     }
 
     uiColorLibraries.register(key, fillStyle);
