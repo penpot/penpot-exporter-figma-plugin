@@ -1,4 +1,4 @@
-import { textLibrary } from '@plugin/libraries';
+import { textStyles } from '@plugin/libraries';
 import { translateTextStyle } from '@plugin/translators/styles';
 import { sleep } from '@plugin/utils';
 
@@ -11,12 +11,12 @@ const isTextStyle = (style: BaseStyle): style is TextStyle => {
 export const registerTextStyles = async () => {
   const localTextStyles = await figma.getLocalTextStylesAsync();
   localTextStyles.forEach(style => {
-    textLibrary.register(style.id, style);
+    textStyles.register(style.id, style);
   });
 };
 
 export const processTextStyles = async (): Promise<Record<string, TypographyStyle>> => {
-  const stylesToFetch = Object.entries(textLibrary.all());
+  const stylesToFetch = Object.entries(textStyles.all());
   const styles: Record<string, TypographyStyle> = {};
 
   if (stylesToFetch.length === 0) return styles;

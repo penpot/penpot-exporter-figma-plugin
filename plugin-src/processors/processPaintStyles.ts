@@ -1,4 +1,4 @@
-import { styleLibrary } from '@plugin/libraries';
+import { paintStyles } from '@plugin/libraries';
 import { translatePaintStyle } from '@plugin/translators/styles';
 import { sleep } from '@plugin/utils';
 
@@ -11,12 +11,12 @@ const isPaintStyle = (style: BaseStyle): style is PaintStyle => {
 export const registerPaintStyles = async () => {
   const localPaintStyles = await figma.getLocalPaintStylesAsync();
   localPaintStyles.forEach(style => {
-    styleLibrary.register(style.id, style);
+    paintStyles.register(style.id, style);
   });
 };
 
 export const processPaintStyles = async (): Promise<Record<string, FillStyle>> => {
-  const stylesToFetch = Object.entries(styleLibrary.all());
+  const stylesToFetch = Object.entries(paintStyles.all());
   const styles: Record<string, FillStyle> = {};
 
   if (stylesToFetch.length === 0) return styles;

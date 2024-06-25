@@ -1,4 +1,4 @@
-import { componentsLibrary } from '@plugin/libraries/ComponentLibrary';
+import { components } from '@plugin/libraries/Components';
 import { sleep } from '@plugin/utils/sleep';
 
 import { sendMessage } from '@ui/context';
@@ -35,7 +35,7 @@ export const createComponentsLibrary = async (file: PenpotFile) => {
 };
 
 const createComponentLibrary = async (file: PenpotFile, uiComponent: UiComponent) => {
-  const component = componentsLibrary.get(uiComponent.componentFigmaId);
+  const component = components.get(uiComponent.componentFigmaId);
 
   if (!component) {
     return;

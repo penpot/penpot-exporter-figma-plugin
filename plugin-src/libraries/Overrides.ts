@@ -1,4 +1,4 @@
-class OverridesLibrary {
+class Overrides {
   private overrides: Map<string, NodeChangeProperty[]> = new Map();
 
   public register(nodeId: string, overrides: NodeChangeProperty[]): void {
@@ -10,4 +10,4 @@ class OverridesLibrary {
   }
 }
 
-export const overridesLibrary = new OverridesLibrary();
+export const overrides = new Overrides();

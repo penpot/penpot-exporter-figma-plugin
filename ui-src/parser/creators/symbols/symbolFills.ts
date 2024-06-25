@@ -1,9 +1,9 @@
 import { Fill } from '@ui/lib/types/utils/fill';
 import { ImageColor, PartialImageColor } from '@ui/lib/types/utils/imageColor';
-import { uiColorLibraries, uiImages } from '@ui/parser/libraries';
+import { uiColors, uiImages } from '@ui/parser/libraries';
 
 export const symbolFills = (fillStyleId?: string, fills?: Fill[]): Fill[] | undefined => {
-  const nodeFills = fillStyleId ? uiColorLibraries.get(fillStyleId)?.fills : fills;
+  const nodeFills = fillStyleId ? uiColors.get(fillStyleId)?.fills : fills;
 
   if (!nodeFills) return;
 

@@ -1,4 +1,4 @@
-import { componentsLibrary } from '@plugin/libraries/ComponentLibrary';
+import { components } from '@plugin/libraries/Components';
 
 import { PenpotFile } from '@ui/lib/types/penpotFile';
 import { uiComponents } from '@ui/parser/libraries';
@@ -7,7 +7,7 @@ import { ComponentRoot } from '@ui/types';
 import { createArtboard } from '.';
 
 export const createComponent = (file: PenpotFile, { figmaId }: ComponentRoot) => {
-  const component = componentsLibrary.get(figmaId);
+  const component = components.get(figmaId);
 
   if (!component) {
     return;

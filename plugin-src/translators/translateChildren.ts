@@ -1,4 +1,4 @@
-import { remoteComponentLibrary } from '@plugin/libraries';
+import { remoteComponents } from '@plugin/libraries';
 import { transformGroupNodeLike, transformSceneNode } from '@plugin/transformers';
 import { transformMaskFigmaIds } from '@plugin/transformers/partials';
 import { sleep } from '@plugin/utils';
@@ -71,13 +71,13 @@ export const translateRemoteChildren = async (): Promise<PenpotNode[]> => {
     data: 'remote'
   });
 
-  while (remoteComponentLibrary.remaining() > 0) {
+  while (remoteComponents.remaining() > 0) {
     figma.ui.postMessage({
       type: 'PROGRESS_TOTAL_ITEMS',
-      data: remoteComponentLibrary.total()
+      data: remoteComponents.total()
     });
 
-    const child = remoteComponentLibrary.next();
+    const child = remoteComponents.next();
 
     const penpotNode = await transformSceneNode(child);
 

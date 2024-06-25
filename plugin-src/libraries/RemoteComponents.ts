@@ -31,4 +31,4 @@ class RemoteComponentsLibrary {
   }
 }
 
-export const remoteComponentLibrary = new RemoteComponentsLibrary();
+export const remoteComponents = new RemoteComponentsLibrary();

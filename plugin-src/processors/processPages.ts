@@ -1,4 +1,4 @@
-import { remoteComponentLibrary } from '@plugin/libraries';
+import { remoteComponents } from '@plugin/libraries';
 import { transformPageNode } from '@plugin/transformers';
 import { translateRemoteChildren } from '@plugin/translators';
 import { sleep } from '@plugin/utils';
@@ -16,7 +16,7 @@ export const processPages = async (node: DocumentNode): Promise<PenpotPage[]> =>
 };
 
 const processRemoteComponents = async (): Promise<PenpotPage | undefined> => {
-  if (remoteComponentLibrary.remaining() > 0) {
+  if (remoteComponents.remaining() > 0) {
     return {
       name: 'External Components',
       children: await translateRemoteChildren()

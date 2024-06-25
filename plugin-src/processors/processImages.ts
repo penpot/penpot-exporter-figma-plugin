@@ -1,4 +1,4 @@
-import { imagesLibrary } from '@plugin/libraries';
+import { images as imagesLibrary } from '@plugin/libraries';
 import { sleep } from '@plugin/utils';
 
 export const processImages = async (): Promise<Record<string, Uint8Array>> => {

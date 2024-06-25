@@ -1,6 +1,6 @@
 import { ComponentShape } from '@ui/lib/types/shapes/componentShape';
 
-class ComponentLibrary {
+class Components {
   private components: Record<string, ComponentShape> = {};
 
   public register(id: string, component: ComponentShape) {
@@ -20,4 +20,4 @@ class ComponentLibrary {
   }
 }
 
-export const componentsLibrary = new ComponentLibrary();
+export const components = new Components();

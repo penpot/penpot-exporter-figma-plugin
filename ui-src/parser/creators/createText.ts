@@ -2,7 +2,7 @@ import { PenpotFile } from '@ui/lib/types/penpotFile';
 import { Paragraph, TextContent, TextNode, TextShape } from '@ui/lib/types/shapes/textShape';
 import { parseFigmaId } from '@ui/parser';
 import { symbolFills, symbolStrokes } from '@ui/parser/creators/symbols';
-import { uiTextLibraries } from '@ui/parser/libraries';
+import { uiTypographies } from '@ui/parser/libraries';
 
 export const createText = (
   file: PenpotFile,
@@ -36,7 +36,7 @@ const parseTextStyle = (text: Paragraph | TextNode, textStyleId?: string): Parag
   let textStyle = text;
   textStyle.fills = symbolFills(text.fillStyleId, text.fills);
 
-  const libraryStyle = textStyleId ? uiTextLibraries.get(textStyleId) : undefined;
+  const libraryStyle = textStyleId ? uiTypographies.get(textStyleId) : undefined;
 
   if (libraryStyle) {
     textStyle = {

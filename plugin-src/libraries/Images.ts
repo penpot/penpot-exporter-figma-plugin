@@ -1,4 +1,4 @@
-class ImageLibrary {
+class Images {
   private images: Record<string, Image | null> = {};
 
   public register(hash: string, image: Image | null) {
@@ -18,4 +18,4 @@ class ImageLibrary {
   }
 }
 
-export const imagesLibrary = new ImageLibrary();
+export const images = new Images();

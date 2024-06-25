@@ -1,6 +1,6 @@
 import { Uuid } from '@ui/lib/types/utils/uuid';
 
-class IdLibrary {
+class Identifiers {
   private idMap: Map<string, Uuid> = new Map();
 
   public init() {
@@ -16,4 +16,4 @@ class IdLibrary {
   }
 }
 
-export const idLibrary = new IdLibrary();
+export const identifiers = new Identifiers();

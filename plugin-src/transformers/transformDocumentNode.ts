@@ -1,4 +1,4 @@
-import { componentsLibrary } from '@plugin/libraries';
+import { components } from '@plugin/libraries';
 import {
   processImages,
   processPages,
@@ -22,7 +22,7 @@ export const transformDocumentNode = async (node: DocumentNode): Promise<PenpotD
   return {
     name: node.name,
     children,
-    components: componentsLibrary.all(),
+    components: components.all(),
     images,
     paintStyles,
     textStyles

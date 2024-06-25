@@ -9,13 +9,13 @@ import {
   createPage,
   createTextLibrary
 } from '@ui/parser/creators';
-import { idLibrary, uiComponents } from '@ui/parser/libraries';
+import { identifiers, uiComponents } from '@ui/parser/libraries';
 
 export const buildFile = async (file: PenpotFile, children: PenpotPage[]) => {
   let pagesBuilt = 1;
 
   uiComponents.init();
-  idLibrary.init();
+  identifiers.init();
 
   sendMessage({
     type: 'PROGRESS_TOTAL_ITEMS',
