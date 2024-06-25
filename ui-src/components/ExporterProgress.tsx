@@ -38,12 +38,6 @@ const stepMessages: Record<Steps, Messages> = {
   libraries: {
     total: 'color libraries built 🎨'
   },
-  format: {
-    total: 'formatting color libraries 🎨'
-  },
-  libraries: {
-    total: 'color libraries built 🎨'
-  },
   components: {
     total: 'components built 🏗️',
     current: 'Currently processing layer'
