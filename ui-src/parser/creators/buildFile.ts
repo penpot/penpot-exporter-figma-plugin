@@ -28,7 +28,7 @@ export const buildFile = async (file: PenpotFile, children: PenpotPage[]) => {
   });
 
   for (const page of children) {
-    await createPage(file, page);
+    createPage(file, page);
 
     sendMessage({
       type: 'PROGRESS_PROCESSED_ITEMS',
