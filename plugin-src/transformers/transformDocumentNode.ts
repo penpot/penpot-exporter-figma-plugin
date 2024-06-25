@@ -15,6 +15,14 @@ import { PenpotDocument } from '@ui/types';
 
 import { transformPageNode } from '.';
 
+const isPaintStyle = (style: BaseStyle): style is PaintStyle => {
+  return style.type === 'PAINT';
+};
+
+const isTextStyle = (style: BaseStyle): style is TextStyle => {
+  return style.type === 'TEXT';
+};
+
 const downloadImages = async (): Promise<Record<string, Uint8Array>> => {
   const imageToDownload = Object.entries(imagesLibrary.all());
   const images: Record<string, Uint8Array> = {};
@@ -90,10 +98,6 @@ const getFillStyles = async (): Promise<Record<string, FillStyle>> => {
   return styles;
 };
 
-const isPaintStyle = (style: BaseStyle): style is PaintStyle => {
-  return style.type === 'PAINT';
-};
-
 const getTextStyles = async (): Promise<Record<string, TypographyStyle>> => {
   const stylesToFetch = Object.entries(textLibrary.all());
   const styles: Record<string, TypographyStyle> = {};
@@ -129,10 +133,6 @@ const getTextStyles = async (): Promise<Record<string, TypographyStyle>> => {
   await sleep(20);
 
   return styles;
-};
-
-const isTextStyle = (style: BaseStyle): style is TextStyle => {
-  return style.type === 'TEXT';
 };
 
 const processPages = async (node: DocumentNode): Promise<PenpotPage[]> => {

@@ -19,10 +19,8 @@ export const createTextLibrary = async (file: PenpotFile) => {
   });
 
   for (const library of libraries) {
-    const lineHeight = library.textStyle.lineHeight;
     file.addLibraryTypography({
       ...library.typography,
-      id: library.textStyle.typographyRefId,
       fontId: library.textStyle.fontId,
       fontVariantId: library.textStyle.fontVariantId,
       letterSpacing: library.textStyle.letterSpacing,
@@ -31,7 +29,7 @@ export const createTextLibrary = async (file: PenpotFile) => {
       fontFamily: library.textStyle.fontFamily,
       fontSize: library.textStyle.fontSize,
       textTransform: library.textStyle.textTransform,
-      ...(lineHeight ? { lineHeight } : {})
+      lineHeight: library.textStyle.lineHeight
     });
 
     sendMessage({

@@ -73,8 +73,8 @@ export class Paragraph {
       fontSize: '5',
       fontStyle: 'normal',
       fontWeight: '400',
-      lineHeight: 1,
-      letterSpacing: 0
+      lineHeight: '1',
+      letterSpacing: '0'
     };
   }
 
@@ -88,8 +88,8 @@ export class Paragraph {
       fontSize: paragraphSpacing.toString(),
       fontStyle: 'normal',
       fontWeight: '400',
-      lineHeight: 1,
-      letterSpacing: 0
+      lineHeight: '1',
+      letterSpacing: '0'
     };
   }
 }

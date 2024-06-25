@@ -17,8 +17,6 @@ export const translateTextStyles = (figmaStyle: TextStyle): TypographyStyle => {
 
   const path = figmaStyle.remote ? 'Remote / ' : '';
 
-  const lineHeight = translateLineHeight(figmaStyle);
-
   typographyStyle.textStyle = {
     fontFamily: figmaStyle.fontName.family,
     fontSize: figmaStyle.fontSize.toString(),
@@ -26,7 +24,7 @@ export const translateTextStyles = (figmaStyle: TextStyle): TypographyStyle => {
     textDecoration: translateTextDecoration(figmaStyle),
     letterSpacing: translateLetterSpacing(figmaStyle),
     textTransform: translateTextTransform(figmaStyle),
-    ...(lineHeight ? { lineHeight } : {})
+    lineHeight: translateLineHeight(figmaStyle)
   };
   typographyStyle.typography = {
     path,

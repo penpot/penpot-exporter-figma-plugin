@@ -63,8 +63,8 @@ export type TextTypography = FontId & {
   fontSize?: string;
   fontWeight?: string;
   fontStyle?: TextFontStyle;
-  lineHeight?: number;
-  letterSpacing?: number;
+  lineHeight?: string;
+  letterSpacing?: string;
   textTransform?: string;
 };
 
