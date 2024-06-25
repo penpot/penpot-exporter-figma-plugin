@@ -3,9 +3,11 @@ import { imagesLibrary } from '@plugin/ImageLibrary';
 import { remoteComponentLibrary } from '@plugin/RemoteComponentLibrary';
 import { styleLibrary } from '@plugin/StyleLibrary';
 import { translateRemoteChildren } from '@plugin/translators';
+import { translatePaintStyles } from '@plugin/translators/fills';
 import { sleep } from '@plugin/utils';
 
 import { PenpotPage } from '@ui/lib/types/penpotPage';
+import { FillStyle } from '@ui/lib/types/utils/fill';
 import { PenpotDocument } from '@ui/types';
 
 import { transformPageNode } from '.';
@@ -48,6 +50,47 @@ const downloadImages = async (): Promise<Record<string, Uint8Array>> => {
   return images;
 };
 
+const getFillStyles = async (): Promise<Record<string, FillStyle>> => {
+  const stylesToFetch = Object.entries(styleLibrary.all());
+  const styles: Record<string, FillStyle> = {};
+
+  if (stylesToFetch.length === 0) return styles;
+
+  let currentStyle = 1;
+
+  figma.ui.postMessage({
+    type: 'PROGRESS_TOTAL_ITEMS',
+    data: stylesToFetch.length
+  });
+
+  figma.ui.postMessage({
+    type: 'PROGRESS_STEP',
+    data: 'fills'
+  });
+
+  for (const [styleId, paintStyle] of stylesToFetch) {
+    const figmaStyle = paintStyle ?? (await figma.getStyleByIdAsync(styleId));
+    if (figmaStyle && isPaintStyle(figmaStyle)) {
+      styles[styleId] = translatePaintStyles(figmaStyle);
+    }
+
+    figma.ui.postMessage({
+      type: 'PROGRESS_PROCESSED_ITEMS',
+      data: currentStyle++
+    });
+
+    await sleep(0);
+  }
+
+  await sleep(20);
+
+  return styles;
+};
+
+const isPaintStyle = (style: BaseStyle): style is PaintStyle => {
+  return style.type === 'PAINT';
+};
+
 const processPages = async (node: DocumentNode): Promise<PenpotPage[]> => {
   const children = [];
   let currentPage = 1;
@@ -74,6 +117,11 @@ const processPages = async (node: DocumentNode): Promise<PenpotPage[]> => {
 };
 
 export const transformDocumentNode = async (node: DocumentNode): Promise<PenpotDocument> => {
+  const localPaintStyles = await figma.getLocalPaintStylesAsync();
+  localPaintStyles.forEach(style => {
+    styleLibrary.register(style.id, style);
+  });
+
   const children = await processPages(node);
 
   if (remoteComponentLibrary.remaining() > 0) {
@@ -83,11 +131,15 @@ export const transformDocumentNode = async (node: DocumentNode): Promise<PenpotD
     });
   }
 
+  const styles = await getFillStyles();
+
+  const images = await downloadImages();
+
   return {
     name: node.name,
     children,
     components: componentsLibrary.all(),
-    images: await downloadImages(),
-    styles: styleLibrary.all()
+    images,
+    styles
   };
 };

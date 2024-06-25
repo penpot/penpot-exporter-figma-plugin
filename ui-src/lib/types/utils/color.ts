@@ -1,5 +1,5 @@
 import { Gradient } from './gradient';
-import { ImageColor } from './imageColor';
+import { ImageColor, PartialImageColor } from './imageColor';
 import { Uuid } from './uuid';
 
 export type Color = {
@@ -13,5 +13,5 @@ export type Color = {
   refId?: Uuid;
   refFile?: Uuid;
   gradient?: Gradient;
-  image?: ImageColor;
+  image?: ImageColor | PartialImageColor; // @TODO: move to any other place
 };

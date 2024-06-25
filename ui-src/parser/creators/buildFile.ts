@@ -1,14 +1,13 @@
 import { sleep } from '@plugin/utils/sleep';
 
 import { sendMessage } from '@ui/context';
-import { createFile as createPenpotFile } from '@ui/lib/penpot';
+import { PenpotFile } from '@ui/lib/types/penpotFile';
 import { PenpotPage } from '@ui/lib/types/penpotPage';
 import { idLibrary } from '@ui/parser';
-import { createComponentsLibrary, createPage } from '@ui/parser/creators';
+import { createColorsLibrary, createComponentsLibrary, createPage } from '@ui/parser/creators';
 import { uiComponents } from '@ui/parser/libraries';
 
-export const createFile = async (name: string, children: PenpotPage[]) => {
-  const file = createPenpotFile(name);
+export const buildFile = async (file: PenpotFile, children: PenpotPage[]) => {
   let pagesBuilt = 1;
 
   uiComponents.init();
@@ -34,6 +33,8 @@ export const createFile = async (name: string, children: PenpotPage[]) => {
 
     await sleep(0);
   }
+
+  await createColorsLibrary(file);
 
   await createComponentsLibrary(file);
 

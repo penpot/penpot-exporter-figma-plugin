@@ -1,11 +1,14 @@
 import { componentsLibrary } from '@plugin/ComponentLibrary';
-import { styleLibrary } from '@plugin/StyleLibrary';
 // @TODO: Direct import on purpose, to avoid problems with the tsc linting
 import { sleep } from '@plugin/utils/sleep';
 
 import { sendMessage } from '@ui/context';
-import { createFile } from '@ui/parser/creators';
+import { createFile } from '@ui/lib/penpot';
+import { PenpotFile } from '@ui/lib/types/penpotFile';
+import { FillStyle } from '@ui/lib/types/utils/fill';
+import { buildFile } from '@ui/parser/creators';
 import { uiImages } from '@ui/parser/libraries';
+import { uiColorLibraries } from '@ui/parser/libraries';
 import { PenpotDocument } from '@ui/types';
 
 import { parseImage } from '.';
@@ -41,6 +44,43 @@ const optimizeImages = async (images: Record<string, Uint8Array>) => {
   }
 };
 
+const prepareColorLibraries = async (file: PenpotFile, styles: Record<string, FillStyle>) => {
+  const stylesToRegister = Object.entries(styles);
+
+  if (stylesToRegister.length === 0) return;
+
+  let stylesRegistered = 1;
+
+  sendMessage({
+    type: 'PROGRESS_TOTAL_ITEMS',
+    data: stylesToRegister.length
+  });
+
+  sendMessage({
+    type: 'PROGRESS_STEP',
+    data: 'format'
+  });
+
+  for (const [key, fillStyle] of stylesToRegister) {
+    for (let index = 0; index < fillStyle.fills.length; index++) {
+      const colorId = file.newId();
+      fillStyle.fills[index].fillColorRefId = colorId;
+      fillStyle.fills[index].fillColorRefFile = file.getId();
+      fillStyle.colors[index].id = colorId;
+      fillStyle.colors[index].refFile = file.getId();
+    }
+
+    uiColorLibraries.register(key, fillStyle);
+
+    sendMessage({
+      type: 'PROGRESS_PROCESSED_ITEMS',
+      data: stylesRegistered++
+    });
+
+    await sleep(0);
+  }
+};
+
 export const parse = async ({
   name,
   children = [],
@@ -49,9 +89,11 @@ export const parse = async ({
   styles
 }: PenpotDocument) => {
   componentsLibrary.init(components);
-  styleLibrary.init(styles);
+
+  const file = createFile(name);
 
   await optimizeImages(images);
+  await prepareColorLibraries(file, styles);
 
-  return createFile(name, children);
+  return buildFile(file, children);
 };

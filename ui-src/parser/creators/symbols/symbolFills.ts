@@ -1,11 +1,10 @@
-import { styleLibrary } from '@plugin/StyleLibrary';
-
 import { Fill } from '@ui/lib/types/utils/fill';
 import { ImageColor, PartialImageColor } from '@ui/lib/types/utils/imageColor';
 import { uiImages } from '@ui/parser/libraries';
+import { uiColorLibraries } from '@ui/parser/libraries/UiColorLibraries';
 
 export const symbolFills = (fillStyleId?: string, fills?: Fill[]): Fill[] | undefined => {
-  const nodeFills = fillStyleId ? styleLibrary.get(fillStyleId) : fills;
+  const nodeFills = fillStyleId ? uiColorLibraries.get(fillStyleId)?.fills : fills;
 
   if (!nodeFills) return;
 
