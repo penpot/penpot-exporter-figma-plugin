@@ -34,7 +34,7 @@ export const createComponentsLibrary = async (file: PenpotFile) => {
   }
 };
 
-const createComponentLibrary = async (file: PenpotFile, uiComponent: UiComponent) => {
+const createComponentLibrary = (file: PenpotFile, uiComponent: UiComponent) => {
   const componentShape = componentShapes.get(uiComponent.componentFigmaId);
 
   if (!componentShape) {
