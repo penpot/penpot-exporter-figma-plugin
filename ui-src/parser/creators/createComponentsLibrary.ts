@@ -3,8 +3,9 @@ import { sleep } from '@common/sleep';
 
 import { sendMessage } from '@ui/context';
 import { PenpotFile } from '@ui/lib/types/penpotFile';
-import { UiComponent, componentShapes, components as uiComponents } from '@ui/parser';
+import { componentShapes, components as uiComponents } from '@ui/parser';
 import { symbolFills, symbolStrokes } from '@ui/parser/creators/symbols';
+import { UiComponent } from '@ui/types';
 
 import { createItems } from '.';
 

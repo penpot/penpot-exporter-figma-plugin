@@ -1,3 +1,4 @@
+import { init } from '@common/map';
 import { sleep } from '@common/sleep';
 
 import { sendMessage } from '@ui/context';
@@ -9,7 +10,6 @@ import {
   colors,
   componentShapes,
   images,
-  init,
   typographies,
   componentProperties as uiComponentProperties
 } from '@ui/parser';
@@ -132,8 +132,8 @@ export const parse = async ({
   textStyles,
   componentProperties
 }: PenpotDocument) => {
-  init(components, componentShapes);
-  init(componentProperties, uiComponentProperties);
+  init(componentShapes, components);
+  init(uiComponentProperties, componentProperties);
 
   const file = createFile(name);
 
