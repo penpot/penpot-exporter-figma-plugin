@@ -1,20 +1,18 @@
-import { components as componentsLibrary } from '@plugin/libraries/Components';
-// @TODO: Direct import on purpose, to avoid problems with the tsc linting
-import { sleep } from '@plugin/utils/sleep';
+import { sleep } from '@common/sleep';
 
 import { sendMessage } from '@ui/context';
 import { createFile } from '@ui/lib/penpot';
 import { PenpotFile } from '@ui/lib/types/penpotFile';
 import { TypographyStyle } from '@ui/lib/types/shapes/textShape';
 import { FillStyle } from '@ui/lib/types/utils/fill';
+import { colors, componentShapes, images, init, typographies } from '@ui/parser';
 import { buildFile } from '@ui/parser/creators';
-import { colors, typographies, images as uiImages } from '@ui/parser/libraries';
 import { PenpotDocument } from '@ui/types';
 
 import { parseImage } from '.';
 
-const optimizeImages = async (images: Record<string, Uint8Array>) => {
-  const imagesToOptimize = Object.entries(images);
+const optimizeImages = async (binaryImages: Record<string, Uint8Array>) => {
+  const imagesToOptimize = Object.entries(binaryImages);
 
   if (imagesToOptimize.length === 0) return;
 
@@ -32,7 +30,7 @@ const optimizeImages = async (images: Record<string, Uint8Array>) => {
 
   for (const [key, bytes] of imagesToOptimize) {
     if (bytes) {
-      uiImages.register(key, await parseImage(bytes));
+      images.set(key, await parseImage(bytes));
     }
 
     sendMessage({
@@ -70,7 +68,7 @@ const prepareTypographyLibraries = async (
     style.textStyle.typographyRefFile = file.getId();
     style.typography.id = typographyId;
 
-    typographies.register(key, style);
+    typographies.set(key, style);
 
     sendMessage({
       type: 'PROGRESS_PROCESSED_ITEMS',
@@ -107,7 +105,7 @@ const prepareColorLibraries = async (file: PenpotFile, styles: Record<string, Fi
       fillStyle.colors[index].refFile = file.getId();
     }
 
-    colors.register(key, fillStyle);
+    colors.set(key, fillStyle);
 
     sendMessage({
       type: 'PROGRESS_PROCESSED_ITEMS',
@@ -126,7 +124,7 @@ export const parse = async ({
   paintStyles,
   textStyles
 }: PenpotDocument) => {
-  componentsLibrary.init(components);
+  init(components, componentShapes);
 
   const file = createFile(name);
 

@@ -1,6 +1,8 @@
+import { toArray } from '@common/map';
+import { sleep } from '@common/sleep';
+
 import { paintStyles } from '@plugin/libraries';
 import { translatePaintStyle } from '@plugin/translators/styles';
-import { sleep } from '@plugin/utils';
 
 import { FillStyle } from '@ui/lib/types/utils/fill';
 
@@ -11,12 +13,12 @@ const isPaintStyle = (style: BaseStyle): style is PaintStyle => {
 export const registerPaintStyles = async () => {
   const localPaintStyles = await figma.getLocalPaintStylesAsync();
   localPaintStyles.forEach(style => {
-    paintStyles.register(style.id, style);
+    paintStyles.set(style.id, style);
   });
 };
 
 export const processPaintStyles = async (): Promise<Record<string, FillStyle>> => {
-  const stylesToFetch = Object.entries(paintStyles.all());
+  const stylesToFetch = toArray(paintStyles);
   const styles: Record<string, FillStyle> = {};
 
   if (stylesToFetch.length === 0) return styles;

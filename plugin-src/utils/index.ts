@@ -5,4 +5,3 @@ export * from './calculateLinearGradient';
 export * from './calculateRadialGradient';
 export * from './matrixInvert';
 export * from './rgbToHex';
-export * from './sleep';

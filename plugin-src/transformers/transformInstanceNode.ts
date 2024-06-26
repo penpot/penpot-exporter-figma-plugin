@@ -39,7 +39,7 @@ export const transformInstanceNode = async (
   registerTextVariableOverrides(node, primaryComponent);
 
   if (node.overrides.length > 0) {
-    node.overrides.forEach(override => overrides.register(override.id, override.overriddenFields));
+    node.overrides.forEach(override => overrides.set(override.id, override.overriddenFields));
   }
 
   return {
@@ -128,7 +128,7 @@ const registerTextVariableOverrides = (
       });
 
     textNodes.forEach(textNode => {
-      overrides.register(textNode.id, ['text']);
+      overrides.set(textNode.id, ['text']);
     });
   }
 };

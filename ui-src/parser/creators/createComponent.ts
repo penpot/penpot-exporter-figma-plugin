@@ -1,20 +1,18 @@
-import { components } from '@plugin/libraries/Components';
-
 import { PenpotFile } from '@ui/lib/types/penpotFile';
-import { components as uiComponents } from '@ui/parser/libraries';
+import { componentShapes, components } from '@ui/parser';
 import { ComponentRoot } from '@ui/types';
 
 import { createArtboard } from '.';
 
 export const createComponent = (file: PenpotFile, { figmaId }: ComponentRoot) => {
-  const component = components.get(figmaId);
+  const componentShape = componentShapes.get(figmaId);
 
-  if (!component) {
+  if (!componentShape) {
     return;
   }
 
   const componentId = getComponentId(file, figmaId);
-  const { type, ...shape } = component;
+  const { type, ...shape } = componentShape;
 
   shape.componentFile = file.getId();
   shape.componentId = componentId;
@@ -27,7 +25,7 @@ export const createComponent = (file: PenpotFile, { figmaId }: ComponentRoot) =>
     return;
   }
 
-  uiComponents.register(figmaId, {
+  components.set(figmaId, {
     componentId,
     mainInstancePage: file.getCurrentPageId(),
     componentFigmaId: figmaId,
@@ -36,7 +34,7 @@ export const createComponent = (file: PenpotFile, { figmaId }: ComponentRoot) =>
 };
 
 const getComponentId = (file: PenpotFile, figmaId: string) => {
-  const uiComponent = uiComponents.get(figmaId);
+  const component = components.get(figmaId);
 
-  return uiComponent?.componentId ?? file.newId();
+  return component?.componentId ?? file.newId();
 };

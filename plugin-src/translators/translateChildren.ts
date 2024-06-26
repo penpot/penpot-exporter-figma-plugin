@@ -1,7 +1,8 @@
+import { sleep } from '@common/sleep';
+
 import { remoteComponents } from '@plugin/libraries';
 import { transformGroupNodeLike, transformSceneNode } from '@plugin/transformers';
 import { transformMaskFigmaIds } from '@plugin/transformers/partials';
-import { sleep } from '@plugin/utils';
 
 import { PenpotNode } from '@ui/types';
 

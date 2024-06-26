@@ -11,7 +11,7 @@ const config = {
   trailingComma: 'none',
   useTabs: false,
   plugins: ['@trivago/prettier-plugin-sort-imports'],
-  importOrder: ['^@plugin/(.*)$', '^@ui/(.*)$', '^[./]'],
+  importOrder: ['^@common/(.*)$', '^@plugin/(.*)$', '^@ui/(.*)$', '^[./]'],
   importOrderSeparation: true,
   importOrderSortSpecifiers: true
 };

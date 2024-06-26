@@ -23,7 +23,11 @@ module.exports = {
   rules: {
     '@typescript-eslint/no-unused-vars': [
       'error',
-      { ignoreRestSiblings: true, argsIgnorePattern: '^_' }
+      {
+        ignoreRestSiblings: true,
+        argsIgnorePattern: '^_',
+        destructuredArrayIgnorePattern: '^_'
+      }
     ]
   }
 };

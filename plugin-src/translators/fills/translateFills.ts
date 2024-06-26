@@ -48,7 +48,7 @@ export const translateFillStyleId = (
   if (fillStyleId === figma.mixed || fillStyleId === undefined) return;
 
   if (!paintStyles.has(fillStyleId)) {
-    paintStyles.register(fillStyleId);
+    paintStyles.set(fillStyleId, undefined);
   }
 
   return fillStyleId;

@@ -1,3 +1,5 @@
+import { toObject } from '@common/map';
+
 import { components } from '@plugin/libraries';
 import {
   processImages,
@@ -22,7 +24,7 @@ export const transformDocumentNode = async (node: DocumentNode): Promise<PenpotD
   return {
     name: node.name,
     children,
-    components: components.all(),
+    components: toObject(components),
     images,
     paintStyles,
     textStyles

@@ -1,6 +1,8 @@
+import { toArray } from '@common/map';
+import { sleep } from '@common/sleep';
+
 import { textStyles } from '@plugin/libraries';
 import { translateTextStyle } from '@plugin/translators/styles';
-import { sleep } from '@plugin/utils';
 
 import { TypographyStyle } from '@ui/lib/types/shapes/textShape';
 
@@ -11,12 +13,12 @@ const isTextStyle = (style: BaseStyle): style is TextStyle => {
 export const registerTextStyles = async () => {
   const localTextStyles = await figma.getLocalTextStylesAsync();
   localTextStyles.forEach(style => {
-    textStyles.register(style.id, style);
+    textStyles.set(style.id, style);
   });
 };
 
 export const processTextStyles = async (): Promise<Record<string, TypographyStyle>> => {
-  const stylesToFetch = Object.entries(textStyles.all());
+  const stylesToFetch = toArray(textStyles);
   const styles: Record<string, TypographyStyle> = {};
 
   if (stylesToFetch.length === 0) return styles;

@@ -5,7 +5,7 @@
     "useDefineForClassFields": true,
     "lib": ["DOM", "DOM.Iterable", "ESNext"],
     "paths": {
-      "@plugin/*": ["./plugin-src/*"],
+      "@common/*": ["./common/*"],
       "@ui/*": ["./ui-src/*"],
       "react": ["./node_modules/preact/compat/"],
       "react-dom": ["./node_modules/preact/compat/"],
