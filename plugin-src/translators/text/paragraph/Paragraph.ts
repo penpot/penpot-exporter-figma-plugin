@@ -63,14 +63,14 @@ export class Paragraph {
     if (indent === 0) return;
 
     return {
-      text: ' '.repeat(indent),
+      text: ' ',
       fontId: 'sourcesanspro',
       fontVariantId: 'regular',
-      fontSize: '5',
+      fontSize: '1',
       fontStyle: 'normal',
       fontWeight: '400',
       lineHeight: '1',
-      letterSpacing: '0'
+      letterSpacing: indent.toString()
     };
   }
 
