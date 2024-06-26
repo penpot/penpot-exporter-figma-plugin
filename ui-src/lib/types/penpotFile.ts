@@ -28,6 +28,8 @@ export interface PenpotFile {
   addLibraryTypography(typography: Typography): void;
   startComponent(component: ComponentShape): Uuid;
   finishComponent(): void;
+  startDeletedComponent(component: ComponentShape): Uuid;
+  finishDeletedComponent(): void;
   getId(): Uuid;
   getCurrentPageId(): Uuid;
   newId(): Uuid;
