@@ -3,18 +3,7 @@ import { TypographyStyle } from '@ui/lib/types/shapes/textShape';
 import { FillStyle } from '@ui/lib/types/utils/fill';
 import { ImageColor } from '@ui/lib/types/utils/imageColor';
 import { Uuid } from '@ui/lib/types/utils/uuid';
-
-export type UiComponent = {
-  componentId: Uuid;
-  mainInstancePage?: Uuid;
-  mainInstanceId: Uuid;
-  componentFigmaId: string;
-};
-
-export const init = <T>(records: Record<string, T>, map: Map<string, T>) => {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  map = new Map(Object.entries(records));
-};
+import { UiComponent } from '@ui/types';
 
 export const typographies: Map<string, TypographyStyle> = new Map();
 export const images: Map<string, ImageColor> = new Map();
