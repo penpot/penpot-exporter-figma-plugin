@@ -1,5 +1,4 @@
-import { overridesLibrary } from '@plugin/OverridesLibrary';
-import { remoteComponentLibrary } from '@plugin/RemoteComponentLibrary';
+import { overrides, remoteComponents } from '@plugin/libraries';
 import {
   transformAutoLayout,
   transformBlend,
@@ -38,16 +37,14 @@ export const transformInstanceNode = async (
   }
 
   if (node.overrides.length > 0) {
-    node.overrides.forEach(override =>
-      overridesLibrary.register(override.id, override.overriddenFields)
-    );
+    node.overrides.forEach(override => overrides.set(override.id, override.overriddenFields));
   }
 
   if (node.visible !== mainComponent.visible) {
-    overridesLibrary.register(node.id, ['visible']);
+    overrides.set(node.id, [...(overrides.get(node.id) ?? []), 'visible']);
   }
   if (node.locked !== mainComponent.locked) {
-    overridesLibrary.register(node.id, ['locked']);
+    overrides.set(node.id, [...(overrides.get(node.id) ?? []), 'locked']);
   }
 
   return {
@@ -83,11 +80,11 @@ const getPrimaryComponent = (mainComponent: ComponentNode): ComponentNode | Comp
 };
 
 const registerExternalComponents = (primaryComponent: ComponentNode | ComponentSetNode): void => {
-  if (remoteComponentLibrary.get(primaryComponent.id) !== undefined) {
+  if (remoteComponents.has(primaryComponent.id)) {
     return;
   }
 
-  remoteComponentLibrary.register(primaryComponent.id, primaryComponent);
+  remoteComponents.register(primaryComponent.id, primaryComponent);
 };
 
 /**

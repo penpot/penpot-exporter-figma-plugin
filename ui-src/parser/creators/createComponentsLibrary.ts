@@ -1,16 +1,16 @@
-import { componentsLibrary } from '@plugin/ComponentLibrary';
-import { sleep } from '@plugin/utils/sleep';
+import { toArray } from '@common/map';
+import { sleep } from '@common/sleep';
 
 import { sendMessage } from '@ui/context';
 import { PenpotFile } from '@ui/lib/types/penpotFile';
+import { UiComponent, componentShapes, components as uiComponents } from '@ui/parser';
 import { symbolFills, symbolStrokes } from '@ui/parser/creators/symbols';
-import { UiComponent, uiComponents } from '@ui/parser/libraries';
 
 import { createItems } from '.';
 
 export const createComponentsLibrary = async (file: PenpotFile) => {
   let componentsBuilt = 1;
-  const components = uiComponents.all();
+  const components = toArray(uiComponents);
 
   sendMessage({
     type: 'PROGRESS_TOTAL_ITEMS',
@@ -22,7 +22,7 @@ export const createComponentsLibrary = async (file: PenpotFile) => {
     data: 'components'
   });
 
-  for (const uiComponent of components) {
+  for (const [_, uiComponent] of components) {
     createComponentLibrary(file, uiComponent);
 
     sendMessage({
@@ -34,14 +34,14 @@ export const createComponentsLibrary = async (file: PenpotFile) => {
   }
 };
 
-const createComponentLibrary = async (file: PenpotFile, uiComponent: UiComponent) => {
-  const component = componentsLibrary.get(uiComponent.componentFigmaId);
+const createComponentLibrary = (file: PenpotFile, uiComponent: UiComponent) => {
+  const componentShape = componentShapes.get(uiComponent.componentFigmaId);
 
-  if (!component) {
+  if (!componentShape) {
     return;
   }
 
-  const { children = [], ...shape } = component;
+  const { children = [], ...shape } = componentShape;
 
   shape.fills = symbolFills(shape.fillStyleId, shape.fills);
   shape.strokes = symbolStrokes(shape.strokes);

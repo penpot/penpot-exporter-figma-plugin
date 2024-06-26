@@ -1,5 +1,4 @@
-import { componentsLibrary } from '@plugin/ComponentLibrary';
-import { componentPropertiesLibrary } from '@plugin/ComponentPropertiesLibrary';
+import { componentProperties, components } from '@plugin/libraries';
 import {
   transformAutoLayout,
   transformBlend,
@@ -24,7 +23,7 @@ const isNonVariantComponentNode = (node: ComponentNode): boolean => {
 };
 
 export const transformComponentNode = async (node: ComponentNode): Promise<ComponentRoot> => {
-  componentsLibrary.register(node.id, {
+  components.set(node.id, {
     type: 'component',
     name: node.name,
     path: node.parent?.type === 'COMPONENT_SET' ? node.parent.name : '',
@@ -47,7 +46,7 @@ export const transformComponentNode = async (node: ComponentNode): Promise<Compo
 
   if (isNonVariantComponentNode(node)) {
     try {
-      componentPropertiesLibrary.registerAll(node.componentPropertyDefinitions);
+      componentProperties.registerAll(node.componentPropertyDefinitions);
     } catch (error) {
       console.error('Error registering component properties', error);
     }

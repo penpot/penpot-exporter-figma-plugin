@@ -26,7 +26,13 @@ export type Steps =
   | 'optimization'
   | 'building'
   | 'components'
-  | 'exporting';
+  | 'exporting'
+  | 'fills'
+  | 'format'
+  | 'libraries'
+  | 'typographies'
+  | 'typoFormat'
+  | 'typoLibraries';
 
 export const useFigma = (): UseFigmaHook => {
   const [missingFonts, setMissingFonts] = useState<string[]>();

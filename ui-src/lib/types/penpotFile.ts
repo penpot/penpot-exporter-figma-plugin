@@ -8,6 +8,7 @@ import { PathShape } from '@ui/lib/types/shapes/pathShape';
 import { RectShape } from '@ui/lib/types/shapes/rectShape';
 import { TextShape } from '@ui/lib/types/shapes/textShape';
 import { Color } from '@ui/lib/types/utils/color';
+import { Typography } from '@ui/lib/types/utils/typography';
 import { Uuid } from '@ui/lib/types/utils/uuid';
 
 export interface PenpotFile {
@@ -24,18 +25,11 @@ export interface PenpotFile {
   createPath(path: PathShape): Uuid;
   createText(options: TextShape): Uuid;
   addLibraryColor(color: Color): void;
-  updateLibraryColor(color: Color): void;
-  deleteLibraryColor(color: Color): void;
-  // addLibraryTypography(typography: any): void;
-  // deleteLibraryTypography(typography: any): void;
+  addLibraryTypography(typography: Typography): void;
   startComponent(component: ComponentShape): Uuid;
   finishComponent(): void;
-  // lookupShape(shapeId: string): PenpotNode;
-  // updateObject(id: string, object: any): void;
-  // deleteObject(id: string): void;
   getId(): Uuid;
   getCurrentPageId(): Uuid;
   newId(): Uuid;
-  // asMap(): unknown;
   export(): Promise<Blob>;
 }

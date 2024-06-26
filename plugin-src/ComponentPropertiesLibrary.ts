@@ -1,13 +1,6 @@
-export type ComponentProperty = {
-  type: 'BOOLEAN' | 'TEXT' | 'INSTANCE_SWAP' | 'VARIANT';
-  defaultValue: string | boolean;
-  preferredValues?: {
-    type: 'COMPONENT' | 'COMPONENT_SET';
-    key: string;
-  }[];
-  variantOptions?: string[];
-};
-class ComponentPropertiesLibrary {
+import { ComponentProperty } from '@ui/types';
+
+export class ComponentPropertiesLibrary {
   private properties: Map<string, ComponentProperty> = new Map();
 
   public register(id: string, property: ComponentProperty) {
@@ -34,5 +27,3 @@ class ComponentPropertiesLibrary {
     this.properties = new Map(Object.entries(properties));
   }
 }
-
-export const componentPropertiesLibrary = new ComponentPropertiesLibrary();

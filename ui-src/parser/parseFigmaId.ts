@@ -1,7 +1,6 @@
 import { PenpotFile } from '@ui/lib/types/penpotFile';
 import { Uuid } from '@ui/lib/types/utils/uuid';
-
-import { idLibrary } from '.';
+import { identifiers } from '@ui/parser';
 
 export const parseFigmaId = (
   file: PenpotFile,
@@ -9,19 +8,20 @@ export const parseFigmaId = (
   shapeRef: boolean = false
 ): Uuid | undefined => {
   if (!figmaId) {
-    if (shapeRef) {
-      return;
-    }
+    if (shapeRef) return;
 
     return file.newId();
   }
 
-  const id = idLibrary.get(figmaId);
+  const id = identifiers.get(figmaId);
+
   if (id) {
     return id;
   }
 
   const newId = file.newId();
-  idLibrary.register(figmaId, newId);
+
+  identifiers.set(figmaId, newId);
+
   return newId;
 };

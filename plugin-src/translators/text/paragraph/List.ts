@@ -1,4 +1,4 @@
-import { StyleTextSegment } from '@plugin/translators/text/paragraph/translateParagraphProperties';
+import { TextSegment } from '@plugin/translators/text/paragraph/translateParagraphProperties';
 
 import { TextNode as PenpotTextNode } from '@ui/lib/types/shapes/textShape';
 
@@ -18,7 +18,7 @@ export class List {
   protected counter: number[] = [];
   private listTypeFactory = new ListTypeFactory();
 
-  public update(textNode: PenpotTextNode, segment: StyleTextSegment): void {
+  public update(textNode: PenpotTextNode, segment: TextSegment): void {
     if (segment.indentation < this.indentation) {
       for (let i = segment.indentation + 1; i <= this.indentation; i++) {
         this.levels.delete(i);
@@ -41,7 +41,7 @@ export class List {
     this.indentation = segment.indentation;
   }
 
-  public getCurrentList(textNode: PenpotTextNode, segment: StyleTextSegment): PenpotTextNode {
+  public getCurrentList(textNode: PenpotTextNode, segment: TextSegment): PenpotTextNode {
     const level = this.levels.get(segment.indentation);
     if (level === undefined) {
       throw new Error('Levels not updated');

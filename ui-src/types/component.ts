@@ -28,6 +28,16 @@ export type ComponentInstance = ShapeGeomAttributes &
     type: 'instance';
   };
 
+export type ComponentProperty = {
+  type: 'BOOLEAN' | 'TEXT' | 'INSTANCE_SWAP' | 'VARIANT';
+  defaultValue: string | boolean;
+  preferredValues?: {
+    type: 'COMPONENT' | 'COMPONENT_SET';
+    key: string;
+  }[];
+  variantOptions?: string[];
+};
+
 export type ComponentPropertyReference =
   | {
       [nodeProperty in 'visible' | 'characters' | 'mainComponent']?: string;

@@ -3,9 +3,11 @@ import {
   translateLayoutAlignItems,
   translateLayoutFlexDir,
   translateLayoutGap,
+  translateLayoutItemAlignSelf,
   translateLayoutJustifyContent,
   translateLayoutJustifyItems,
   translateLayoutPadding,
+  translateLayoutPaddingType,
   translateLayoutSizing,
   translateLayoutWrapType
 } from '@plugin/translators';
@@ -23,6 +25,7 @@ export const transformAutoLayout = (node: BaseFrameMixin): LayoutAttributes => {
     ),
     layoutWrapType: translateLayoutWrapType(node.layoutWrap),
     layoutPadding: translateLayoutPadding(node),
+    layoutPaddingType: translateLayoutPaddingType(node),
     layoutJustifyContent: translateLayoutJustifyContent(node),
     layoutJustifyItems: translateLayoutJustifyItems(node),
     layoutAlignContent: translateLayoutAlignContent(node),
@@ -37,6 +40,7 @@ export const transformLayoutAttributes = (
   LayoutChildAttributes,
   | 'layoutItemH-Sizing'
   | 'layoutItemV-Sizing'
+  | 'layoutItemAlignSelf'
   | 'layoutItemAbsolute'
   | 'layoutItemMaxH'
   | 'layoutItemMinH'
@@ -46,6 +50,7 @@ export const transformLayoutAttributes = (
   return {
     'layoutItemH-Sizing': translateLayoutSizing(node.layoutSizingHorizontal, isFrame),
     'layoutItemV-Sizing': translateLayoutSizing(node.layoutSizingVertical, isFrame),
+    'layoutItemAlignSelf': translateLayoutItemAlignSelf(node.layoutAlign),
     'layoutItemAbsolute': node.layoutPositioning === 'ABSOLUTE',
     'layoutItemMaxH': node.maxHeight ?? undefined,
     'layoutItemMinH': node.minHeight ?? undefined,

@@ -5,6 +5,7 @@ import {
   ShapeGeomAttributes
 } from '@ui/lib/types/shapes/shape';
 import { Fill } from '@ui/lib/types/utils/fill';
+import { Typography } from '@ui/lib/types/utils/typography';
 
 export type TextShape = ShapeBaseAttributes &
   ShapeGeomAttributes &
@@ -46,25 +47,35 @@ export type TextNode = {
   key?: string;
 } & TextStyle;
 
-export type TextStyle = FontId & {
-  fontFamily?: string;
-  fontSize?: string;
-  fontStyle?: TextFontStyle;
-  fontWeight?: string;
+export type TextStyle = TextTypography & {
   textDecoration?: string;
-  textTransform?: string;
   direction?: string;
   typographyRefId?: string;
   typographyRefFile?: string;
-  lineHeight?: number;
-  letterSpacing?: number;
   textAlign?: TextHorizontalAlign;
   textDirection?: 'ltr' | 'rtl' | 'auto';
   fills?: Fill[];
   fillStyleId?: string; // @TODO: move to any other place
+  textStyleId?: string; // @TODO: move to any other place
+};
+
+export type TextTypography = FontId & {
+  fontFamily?: string;
+  fontSize?: string;
+  fontWeight?: string;
+  fontStyle?: TextFontStyle;
+  lineHeight?: string;
+  letterSpacing?: string;
+  textTransform?: string;
 };
 
 export type FontId = {
   fontId?: string;
   fontVariantId?: string;
+};
+
+export type TypographyStyle = {
+  name: string;
+  textStyle: TextStyle;
+  typography: Typography;
 };

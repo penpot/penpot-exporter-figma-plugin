@@ -2,6 +2,8 @@ import { Uuid } from '@ui/lib/types/utils/uuid';
 
 export type LayoutSizing = 'fill' | 'fix' | 'auto';
 
+export type LayoutAlignSelf = 'start' | 'end' | 'center' | 'stretch';
+
 export type LayoutChildAttributes = {
   'layoutItemMarginType'?: 'simple' | 'multiple';
   'layoutItemMargin'?: {
@@ -16,7 +18,7 @@ export type LayoutChildAttributes = {
   'layoutItemMinW'?: number;
   'layoutItemH-Sizing'?: LayoutSizing;
   'layoutItemV-Sizing'?: LayoutSizing;
-  'layoutItemAlignSelf'?: 'start' | 'end' | 'center' | 'stretch';
+  'layoutItemAlignSelf'?: LayoutAlignSelf;
   'layoutItemAbsolute'?: boolean;
   'layoutItemZIndex'?: number;
 };

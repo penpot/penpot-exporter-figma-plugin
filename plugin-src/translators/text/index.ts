@@ -1,1 +1,1 @@
-export * from './translateStyleTextSegments';
+export * from './translateTextSegments';

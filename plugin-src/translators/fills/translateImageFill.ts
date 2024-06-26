@@ -1,4 +1,4 @@
-import { imagesLibrary } from '@plugin/ImageLibrary';
+import { images } from '@plugin/libraries';
 
 import { Fill } from '@ui/lib/types/utils/fill';
 import { PartialImageColor } from '@ui/lib/types/utils/imageColor';
@@ -16,8 +16,8 @@ export const translateImageFill = (fill: ImagePaint): Fill | undefined => {
 const translateImage = (imageHash: string | null): PartialImageColor | undefined => {
   if (!imageHash) return;
 
-  if (imagesLibrary.get(imageHash) === undefined) {
-    imagesLibrary.register(imageHash, figma.getImageByHash(imageHash));
+  if (!images.has(imageHash)) {
+    images.set(imageHash, figma.getImageByHash(imageHash));
   }
 
   return {

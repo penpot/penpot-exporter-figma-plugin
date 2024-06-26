@@ -1,4 +1,4 @@
-import { overridesLibrary } from '@plugin/OverridesLibrary';
+import { overrides as overridesLibrary } from '@plugin/libraries';
 import { syncAttributes } from '@plugin/utils/syncAttributes';
 
 import { ShapeAttributes } from '@ui/lib/types/shapes/shape';

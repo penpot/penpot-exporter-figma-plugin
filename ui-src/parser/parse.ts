@@ -1,18 +1,25 @@
-import { componentsLibrary } from '@plugin/ComponentLibrary';
-import { componentPropertiesLibrary } from '@plugin/ComponentPropertiesLibrary';
-import { styleLibrary } from '@plugin/StyleLibrary';
-// @TODO: Direct import on purpose, to avoid problems with the tsc linting
-import { sleep } from '@plugin/utils/sleep';
+import { sleep } from '@common/sleep';
 
 import { sendMessage } from '@ui/context';
-import { createFile } from '@ui/parser/creators';
-import { uiImages } from '@ui/parser/libraries';
+import { createFile } from '@ui/lib/penpot';
+import { PenpotFile } from '@ui/lib/types/penpotFile';
+import { TypographyStyle } from '@ui/lib/types/shapes/textShape';
+import { FillStyle } from '@ui/lib/types/utils/fill';
+import {
+  colors,
+  componentShapes,
+  images,
+  init,
+  typographies,
+  componentProperties as uiComponentProperties
+} from '@ui/parser';
+import { buildFile } from '@ui/parser/creators';
 import { PenpotDocument } from '@ui/types';
 
 import { parseImage } from '.';
 
-const optimizeImages = async (images: Record<string, Uint8Array>) => {
-  const imagesToOptimize = Object.entries(images);
+const optimizeImages = async (binaryImages: Record<string, Uint8Array>) => {
+  const imagesToOptimize = Object.entries(binaryImages);
 
   if (imagesToOptimize.length === 0) return;
 
@@ -30,7 +37,7 @@ const optimizeImages = async (images: Record<string, Uint8Array>) => {
 
   for (const [key, bytes] of imagesToOptimize) {
     if (bytes) {
-      uiImages.register(key, await parseImage(bytes));
+      images.set(key, await parseImage(bytes));
     }
 
     sendMessage({
@@ -42,19 +49,97 @@ const optimizeImages = async (images: Record<string, Uint8Array>) => {
   }
 };
 
+const prepareTypographyLibraries = async (
+  file: PenpotFile,
+  styles: Record<string, TypographyStyle>
+) => {
+  const stylesToRegister = Object.entries(styles);
+
+  if (stylesToRegister.length === 0) return;
+
+  let stylesRegistered = 1;
+
+  sendMessage({
+    type: 'PROGRESS_TOTAL_ITEMS',
+    data: stylesToRegister.length
+  });
+
+  sendMessage({
+    type: 'PROGRESS_STEP',
+    data: 'typoFormat'
+  });
+
+  for (const [key, style] of stylesToRegister) {
+    const typographyId = file.newId();
+    style.textStyle.typographyRefId = typographyId;
+    style.textStyle.typographyRefFile = file.getId();
+    style.typography.id = typographyId;
+
+    typographies.set(key, style);
+
+    sendMessage({
+      type: 'PROGRESS_PROCESSED_ITEMS',
+      data: stylesRegistered++
+    });
+
+    await sleep(0);
+  }
+};
+
+const prepareColorLibraries = async (file: PenpotFile, styles: Record<string, FillStyle>) => {
+  const stylesToRegister = Object.entries(styles);
+
+  if (stylesToRegister.length === 0) return;
+
+  let stylesRegistered = 1;
+
+  sendMessage({
+    type: 'PROGRESS_TOTAL_ITEMS',
+    data: stylesToRegister.length
+  });
+
+  sendMessage({
+    type: 'PROGRESS_STEP',
+    data: 'format'
+  });
+
+  for (const [key, fillStyle] of stylesToRegister) {
+    for (let index = 0; index < fillStyle.fills.length; index++) {
+      const colorId = file.newId();
+      fillStyle.fills[index].fillColorRefId = colorId;
+      fillStyle.fills[index].fillColorRefFile = file.getId();
+      fillStyle.colors[index].id = colorId;
+      fillStyle.colors[index].refFile = file.getId();
+    }
+
+    colors.set(key, fillStyle);
+
+    sendMessage({
+      type: 'PROGRESS_PROCESSED_ITEMS',
+      data: stylesRegistered++
+    });
+
+    await sleep(0);
+  }
+};
+
 export const parse = async ({
   name,
   children = [],
   components,
   images,
-  styles,
+  paintStyles,
+  textStyles,
   componentProperties
 }: PenpotDocument) => {
-  componentsLibrary.init(components);
-  styleLibrary.init(styles);
-  componentPropertiesLibrary.init(componentProperties);
+  init(components, componentShapes);
+  init(componentProperties, uiComponentProperties);
+
+  const file = createFile(name);
 
   await optimizeImages(images);
+  await prepareColorLibraries(file, paintStyles);
+  await prepareTypographyLibraries(file, textStyles);
 
-  return createFile(name, children);
+  return buildFile(file, children);
 };

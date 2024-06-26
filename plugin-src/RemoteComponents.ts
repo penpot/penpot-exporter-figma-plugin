@@ -1,17 +1,21 @@
-class RemoteComponentsLibrary {
-  private components: Record<string, ComponentNode | ComponentSetNode> = {};
+export class RemoteComponentsLibrary {
+  private components: Map<string, ComponentNode | ComponentSetNode> = new Map();
   private queue: string[] = [];
 
   public register(id: string, component: ComponentNode | ComponentSetNode) {
-    if (!Object.prototype.hasOwnProperty.call(this.components, id)) {
+    if (!this.components.has(id)) {
       this.queue.push(id);
     }
 
-    this.components[id] = component;
+    this.components.set(id, component);
   }
 
   public get(id: string): ComponentNode | ComponentSetNode | undefined {
-    return this.components[id];
+    return this.components.get(id);
+  }
+
+  public has(id: string): boolean {
+    return this.components.has(id);
   }
 
   public next(): ComponentNode | ComponentSetNode {
@@ -19,7 +23,10 @@ class RemoteComponentsLibrary {
 
     if (!lastKey) throw new Error('No components to pop');
 
-    return this.components[lastKey];
+    const component = this.components.get(lastKey);
+    if (!component) throw new Error('Component not found');
+
+    return component;
   }
 
   public remaining(): number {
@@ -27,8 +34,6 @@ class RemoteComponentsLibrary {
   }
 
   public total(): number {
-    return Object.keys(this.components).length;
+    return this.components.size;
   }
 }
-
-export const remoteComponentLibrary = new RemoteComponentsLibrary();

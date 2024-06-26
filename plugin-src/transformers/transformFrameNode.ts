@@ -1,4 +1,4 @@
-import { componentPropertiesLibrary } from '@plugin/ComponentPropertiesLibrary';
+import { componentProperties } from '@plugin/libraries';
 import {
   transformAutoLayout,
   transformBlend,
@@ -38,7 +38,7 @@ export const transformFrameNode = async (
 
   if (isComponentSetNode(node)) {
     try {
-      componentPropertiesLibrary.registerAll(node.componentPropertyDefinitions);
+      componentProperties.registerAll(node.componentPropertyDefinitions);
     } catch (error) {
       console.error('Error registering component properties', error);
     }
