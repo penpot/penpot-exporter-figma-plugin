@@ -1,6 +1,7 @@
 import { LayoutAttributes, LayoutChildAttributes } from '@ui/lib/types/shapes/layout';
 import { ShapeAttributes, ShapeGeomAttributes } from '@ui/lib/types/shapes/shape';
 import { Children } from '@ui/lib/types/utils/children';
+import { Uuid } from '@ui/lib/types/utils/uuid';
 
 export type ComponentRoot = {
   figmaId: string;
@@ -27,3 +28,10 @@ export type ComponentInstance = ShapeGeomAttributes &
     showContent?: boolean;
     type: 'instance';
   };
+
+export type UiComponent = {
+  componentId: Uuid;
+  mainInstancePage?: Uuid;
+  mainInstanceId: Uuid;
+  componentFigmaId: string;
+};

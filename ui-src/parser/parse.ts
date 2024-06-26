@@ -1,3 +1,4 @@
+import { init } from '@common/map';
 import { sleep } from '@common/sleep';
 
 import { sendMessage } from '@ui/context';
@@ -5,7 +6,7 @@ import { createFile } from '@ui/lib/penpot';
 import { PenpotFile } from '@ui/lib/types/penpotFile';
 import { TypographyStyle } from '@ui/lib/types/shapes/textShape';
 import { FillStyle } from '@ui/lib/types/utils/fill';
-import { colors, componentShapes, images, init, typographies } from '@ui/parser';
+import { colors, componentShapes, images, typographies } from '@ui/parser';
 import { buildFile } from '@ui/parser/creators';
 import { PenpotDocument } from '@ui/types';
 
@@ -124,7 +125,7 @@ export const parse = async ({
   paintStyles,
   textStyles
 }: PenpotDocument) => {
-  init(components, componentShapes);
+  init(componentShapes, components);
 
   const file = createFile(name);
 
