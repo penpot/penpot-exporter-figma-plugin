@@ -1,6 +1,7 @@
 import {
   JustifyAlignContent,
   JustifyAlignItems,
+  LayoutAlignSelf,
   LayoutFlexDir,
   LayoutGap,
   LayoutPadding,
@@ -13,6 +14,8 @@ type FigmaLayoutMode = 'NONE' | 'HORIZONTAL' | 'VERTICAL';
 type FigmaWrap = 'NO_WRAP' | 'WRAP';
 
 type FigmaLayoutSizing = 'FIXED' | 'HUG' | 'FILL';
+
+type FigmaLayoutAlign = 'MIN' | 'CENTER' | 'MAX' | 'STRETCH' | 'INHERIT';
 
 export const translateLayoutFlexDir = (layoutMode: FigmaLayoutMode): LayoutFlexDir | undefined => {
   switch (layoutMode) {
@@ -59,6 +62,14 @@ export const translateLayoutPadding = (node: BaseFrameMixin): LayoutPadding => {
     p3: node.paddingBottom,
     p4: node.paddingLeft
   };
+};
+
+export const translateLayoutPaddingType = (node: BaseFrameMixin): 'simple' | 'multiple' => {
+  if (node.paddingTop === node.paddingBottom && node.paddingRight === node.paddingLeft) {
+    return 'simple';
+  }
+
+  return 'multiple';
 };
 
 export const translateLayoutJustifyContent = (node: BaseFrameMixin): JustifyAlignContent => {
@@ -126,5 +137,18 @@ export const translateLayoutSizing = (
       return 'auto';
     case 'FILL':
       return isFrame ? 'fix' : 'fill'; // @TODO: Penpot does not handle fill in frames as figma does
+  }
+};
+
+export const translateLayoutItemAlignSelf = (align: FigmaLayoutAlign): LayoutAlignSelf => {
+  switch (align) {
+    case 'MIN':
+      return 'start';
+    case 'CENTER':
+      return 'center';
+    case 'MAX':
+      return 'end';
+    default:
+      return 'stretch';
   }
 };
