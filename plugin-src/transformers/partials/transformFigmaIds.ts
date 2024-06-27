@@ -2,7 +2,7 @@ import { ShapeBaseAttributes } from '@ui/lib/types/shapes/shape';
 
 export const transformFigmaIds = (
   node: SceneNode
-): Pick<ShapeBaseAttributes, 'figmaId' | 'figmaRelatedId'> => {
+): Required<Pick<ShapeBaseAttributes, 'figmaId'>> & Pick<ShapeBaseAttributes, 'figmaRelatedId'> => {
   return {
     figmaId: normalizeNodeId(node.id),
     figmaRelatedId: getRelatedNodeId(node.id)
@@ -11,7 +11,7 @@ export const transformFigmaIds = (
 
 export const transformMaskFigmaIds = (
   node: SceneNode
-): Pick<ShapeBaseAttributes, 'figmaId' | 'figmaRelatedId'> => {
+): Required<Pick<ShapeBaseAttributes, 'figmaId'>> & Pick<ShapeBaseAttributes, 'figmaRelatedId'> => {
   const transformedIds = transformFigmaIds(node);
   return {
     figmaId: `M${transformedIds.figmaId}`,

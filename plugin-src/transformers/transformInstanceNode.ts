@@ -1,4 +1,4 @@
-import { overrides, remoteComponents } from '@plugin/libraries';
+import { instances, overrides, remoteComponents } from '@plugin/libraries';
 import {
   transformAutoLayout,
   transformBlend,
@@ -47,13 +47,17 @@ export const transformInstanceNode = async (
     overrides.set(node.id, [...(overrides.get(node.id) ?? []), 'locked']);
   }
 
+  const figmaIds = transformFigmaIds(node);
+
+  instances.set(figmaIds.figmaId, mainComponent.id);
+
   return {
     type: 'instance',
     name: node.name,
     mainComponentFigmaId: mainComponent.id,
     isComponentRoot: isComponentRoot(node),
     showContent: !node.clipsContent,
-    ...transformFigmaIds(node),
+    ...figmaIds,
     ...transformFills(node),
     ...transformEffects(node),
     ...transformStrokes(node),

@@ -1,12 +1,13 @@
 import { SyncGroups } from '@ui/lib/types/utils/syncGroups';
 import { componentProperties } from '@ui/parser';
-import { ComponentPropertyReference } from '@ui/types';
+import { ComponentPropertyReference, UiComponent } from '@ui/types';
 
 export const symbolTouched = (
   visible: boolean | undefined,
   characters: string | undefined,
   touched: SyncGroups[] | undefined,
-  componentPropertyReferences: ComponentPropertyReference | undefined
+  componentPropertyReferences: ComponentPropertyReference | undefined,
+  originalUiComponent?: UiComponent
 ): SyncGroups[] | undefined => {
   if (!componentPropertyReferences) {
     return touched;
@@ -33,7 +34,9 @@ export const symbolTouched = (
     }
   }
 
-  console.log('touched', touched);
+  if (originalUiComponent) {
+    touched?.push(`:swap-slot-${originalUiComponent.mainInstanceId}`);
+  }
 
   return touched;
 };

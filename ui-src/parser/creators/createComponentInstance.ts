@@ -1,5 +1,5 @@
 import { PenpotFile } from '@ui/lib/types/penpotFile';
-import { components, parseFigmaId } from '@ui/parser';
+import { components, instances, parseFigmaId } from '@ui/parser';
 import { symbolTouched } from '@ui/parser/creators/symbols';
 import { ComponentInstance } from '@ui/types';
 
@@ -16,6 +16,13 @@ export const createComponentInstance = (
     return;
   }
 
+  const originalComponentFigmaId = originalId(shape.figmaId);
+  const originalUiComponent =
+    originalComponentFigmaId && originalComponentFigmaId !== mainComponentFigmaId
+      ? components.get(originalComponentFigmaId) ??
+        createUiComponent(file, originalComponentFigmaId)
+      : undefined;
+
   if (!shape.figmaRelatedId) {
     shape.shapeRef = uiComponent.mainInstanceId;
   }
@@ -26,7 +33,8 @@ export const createComponentInstance = (
     !shape.hidden,
     undefined,
     shape.touched,
-    shape.componentPropertyReferences
+    shape.componentPropertyReferences,
+    originalUiComponent
   );
 
   createArtboard(file, shape);
@@ -47,4 +55,12 @@ const createUiComponent = (file: PenpotFile, mainComponentFigmaId: string) => {
   components.set(mainComponentFigmaId, uiComponent);
 
   return uiComponent;
+};
+
+const originalId = (figmaId: string | undefined) => {
+  const originalFigmaId = figmaId?.split(';').pop();
+
+  if (originalFigmaId) {
+    return instances.get(originalFigmaId);
+  }
 };

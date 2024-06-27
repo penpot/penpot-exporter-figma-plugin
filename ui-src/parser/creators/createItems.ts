@@ -26,8 +26,6 @@ const createItem = (file: PenpotFile, node: PenpotNode) => {
     data: node.name
   });
 
-  console.log(node.figmaId, node.name, node.type);
-
   switch (node.type) {
     case 'rect':
       return createRectangle(file, node);

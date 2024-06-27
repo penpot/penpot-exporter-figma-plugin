@@ -11,7 +11,8 @@ import {
   componentShapes,
   images,
   typographies,
-  componentProperties as uiComponentProperties
+  componentProperties as uiComponentProperties,
+  instances as uiInstances
 } from '@ui/parser';
 import { buildFile } from '@ui/parser/creators';
 import { PenpotDocument } from '@ui/types';
@@ -128,12 +129,14 @@ export const parse = async ({
   children = [],
   components,
   images,
+  instances,
   paintStyles,
   textStyles,
   componentProperties
 }: PenpotDocument) => {
   init(componentShapes, components);
   init(uiComponentProperties, componentProperties);
+  init(uiInstances, instances);
 
   const file = createFile(name);
 
