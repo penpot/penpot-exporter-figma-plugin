@@ -5,7 +5,7 @@ import { symbolFills, symbolStrokes, symbolTouched } from '@ui/parser/creators/s
 
 export const createText = (
   file: PenpotFile,
-  { type, figmaId, figmaRelatedId, characters, ...shape }: TextShape
+  { type, figmaId, characters, ...shape }: TextShape
 ) => {
   const { id, shapeRef } = parseFigmaId(file, figmaId);
 

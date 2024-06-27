@@ -3,10 +3,7 @@ import { RectShape } from '@ui/lib/types/shapes/rectShape';
 import { parseFigmaId } from '@ui/parser';
 import { symbolFills, symbolStrokes, symbolTouched } from '@ui/parser/creators/symbols';
 
-export const createRectangle = (
-  file: PenpotFile,
-  { type, figmaId, figmaRelatedId, ...shape }: RectShape
-) => {
+export const createRectangle = (file: PenpotFile, { type, figmaId, ...shape }: RectShape) => {
   const { id, shapeRef } = parseFigmaId(file, figmaId);
 
   shape.id = id;

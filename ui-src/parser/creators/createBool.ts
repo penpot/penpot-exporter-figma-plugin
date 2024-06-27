@@ -12,7 +12,7 @@ import { createItems } from '.';
 
 export const createBool = (
   file: PenpotFile,
-  { type, figmaId, figmaRelatedId, children = [], ...shape }: BoolShape
+  { type, figmaId, children = [], ...shape }: BoolShape
 ) => {
   const { id, shapeRef } = parseFigmaId(file, figmaId);
 

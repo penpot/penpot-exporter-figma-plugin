@@ -8,10 +8,7 @@ import {
   symbolTouched
 } from '@ui/parser/creators/symbols';
 
-export const createPath = (
-  file: PenpotFile,
-  { type, figmaId, figmaRelatedId, ...shape }: PathShape
-) => {
+export const createPath = (file: PenpotFile, { type, figmaId, ...shape }: PathShape) => {
   const { id, shapeRef } = parseFigmaId(file, figmaId);
 
   shape.id = id;

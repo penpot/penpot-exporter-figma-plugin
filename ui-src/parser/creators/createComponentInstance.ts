@@ -9,7 +9,7 @@ export const createComponentInstance = (
   file: PenpotFile,
   { type, mainComponentFigmaId, isComponentRoot, ...shape }: ComponentInstance
 ) => {
-  const { id } = parseFigmaId(file, shape.figmaId);
+  const { id, shapeRef } = parseFigmaId(file, shape.figmaId);
   const uiComponent =
     components.get(mainComponentFigmaId) ?? createUiComponent(file, mainComponentFigmaId);
 
@@ -34,9 +34,7 @@ export const createComponentInstance = (
   }
 
   shape.id = id;
-  if (!shape.figmaRelatedId || originalUiComponent) {
-    shape.shapeRef = uiComponent.mainInstanceId;
-  }
+  shape.shapeRef = originalUiComponent ? uiComponent.mainInstanceId : shapeRef;
   shape.componentFile = file.getId();
   shape.componentRoot = isComponentRoot;
   shape.componentId = uiComponent.componentId;

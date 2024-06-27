@@ -3,10 +3,7 @@ import { CircleShape } from '@ui/lib/types/shapes/circleShape';
 import { parseFigmaId } from '@ui/parser';
 import { symbolFills, symbolStrokes, symbolTouched } from '@ui/parser/creators/symbols';
 
-export const createCircle = (
-  file: PenpotFile,
-  { type, figmaId, figmaRelatedId, ...shape }: CircleShape
-) => {
+export const createCircle = (file: PenpotFile, { type, figmaId, ...shape }: CircleShape) => {
   const { id, shapeRef } = parseFigmaId(file, figmaId);
 
   shape.id = id;

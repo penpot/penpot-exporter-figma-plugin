@@ -15,7 +15,6 @@ import { ComponentPropertyReference } from '@ui/types';
 
 export type ShapeBaseAttributes = {
   figmaId?: string; // @TODO: move to any other place
-  figmaRelatedId?: string; // @TODO: move to any other place
   type?:
     | 'frame'
     | 'group'

@@ -23,7 +23,6 @@ export type ComponentInstance = ShapeGeomAttributes &
   Children & {
     mainComponentFigmaId: string;
     figmaId?: string;
-    figmaRelatedId?: string;
     isComponentRoot: boolean;
     showContent?: boolean;
     type: 'instance';

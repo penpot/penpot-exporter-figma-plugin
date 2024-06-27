@@ -7,7 +7,7 @@ import { createItems } from '.';
 
 export const createGroup = (
   file: PenpotFile,
-  { type, children = [], figmaId, figmaRelatedId, ...shape }: GroupShape
+  { type, children = [], figmaId, ...shape }: GroupShape
 ) => {
   const { id, shapeRef } = parseFigmaId(file, figmaId);
 
