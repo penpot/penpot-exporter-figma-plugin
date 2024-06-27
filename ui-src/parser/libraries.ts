@@ -13,3 +13,4 @@ export const components: Map<string, UiComponent> = new Map();
 export const componentShapes: Map<string, ComponentShape> = new Map();
 export const colors: Map<string, FillStyle> = new Map();
 export const componentProperties: Map<string, ComponentProperty> = new Map();
+export const swaps: { original: string; swapped: string }[] = [];

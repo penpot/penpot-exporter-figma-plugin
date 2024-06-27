@@ -7,8 +7,10 @@ export const createText = (
   file: PenpotFile,
   { type, figmaId, figmaRelatedId, characters, ...shape }: TextShape
 ) => {
-  shape.id = parseFigmaId(file, figmaId);
-  shape.shapeRef = parseFigmaId(file, figmaRelatedId, true);
+  const { id, shapeRef } = parseFigmaId(file, figmaId);
+
+  shape.id = id;
+  shape.shapeRef = shapeRef;
   shape.content = parseContent(shape.content);
   shape.strokes = symbolStrokes(shape.strokes);
   shape.touched = symbolTouched(

@@ -1,5 +1,5 @@
 import { PenpotFile } from '@ui/lib/types/penpotFile';
-import { components, instances, parseFigmaId } from '@ui/parser';
+import { components, instances, parseFigmaId, swaps } from '@ui/parser';
 import { symbolTouched } from '@ui/parser/creators/symbols';
 import { ComponentInstance } from '@ui/types';
 
@@ -9,6 +9,7 @@ export const createComponentInstance = (
   file: PenpotFile,
   { type, mainComponentFigmaId, isComponentRoot, ...shape }: ComponentInstance
 ) => {
+  const { id } = parseFigmaId(file, shape.figmaId);
   const uiComponent =
     components.get(mainComponentFigmaId) ?? createUiComponent(file, mainComponentFigmaId);
 
@@ -23,6 +24,16 @@ export const createComponentInstance = (
         createUiComponent(file, originalComponentFigmaId)
       : undefined;
 
+  if (originalUiComponent && shape.figmaId) {
+    const index = shape.figmaId.lastIndexOf(';');
+
+    swaps.push({
+      original: shape.figmaId,
+      swapped: index !== -1 ? shape.figmaId.substring(0, index) : shape.figmaId
+    });
+  }
+
+  shape.id = id;
   if (!shape.figmaRelatedId || originalUiComponent) {
     shape.shapeRef = uiComponent.mainInstanceId;
   }
@@ -41,15 +52,16 @@ export const createComponentInstance = (
 };
 
 const createUiComponent = (file: PenpotFile, mainComponentFigmaId: string) => {
-  const mainInstanceId = parseFigmaId(file, mainComponentFigmaId);
-  if (!mainInstanceId) {
+  const { id } = parseFigmaId(file, mainComponentFigmaId);
+
+  if (!id) {
     return;
   }
 
   const uiComponent = {
     componentId: file.newId(),
     componentFigmaId: mainComponentFigmaId,
-    mainInstanceId
+    mainInstanceId: id
   };
 
   components.set(mainComponentFigmaId, uiComponent);

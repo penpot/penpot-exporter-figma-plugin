@@ -10,10 +10,10 @@ export const createArtboard = (
   file: PenpotFile,
   { type, children = [], figmaId, figmaRelatedId, ...shape }: FrameShape
 ): Uuid | undefined => {
-  const id = parseFigmaId(file, figmaId);
+  const { id, shapeRef } = parseFigmaId(file, figmaId);
 
-  shape.id = id;
-  shape.shapeRef ??= parseFigmaId(file, figmaRelatedId, true);
+  shape.id ??= id;
+  shape.shapeRef ??= shapeRef;
   shape.fills = symbolFills(shape.fillStyleId, shape.fills);
   shape.strokes = symbolStrokes(shape.strokes);
   shape.touched = symbolTouched(

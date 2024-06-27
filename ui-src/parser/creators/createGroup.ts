@@ -9,8 +9,10 @@ export const createGroup = (
   file: PenpotFile,
   { type, children = [], figmaId, figmaRelatedId, ...shape }: GroupShape
 ) => {
-  shape.id = parseFigmaId(file, figmaId);
-  shape.shapeRef = parseFigmaId(file, figmaRelatedId, true);
+  const { id, shapeRef } = parseFigmaId(file, figmaId);
+
+  shape.id = id;
+  shape.shapeRef = shapeRef;
   shape.touched = symbolTouched(
     !shape.hidden,
     undefined,

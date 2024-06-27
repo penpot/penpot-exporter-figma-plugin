@@ -13,6 +13,7 @@ export const transformMaskFigmaIds = (
   node: SceneNode
 ): Required<Pick<ShapeBaseAttributes, 'figmaId'>> & Pick<ShapeBaseAttributes, 'figmaRelatedId'> => {
   const transformedIds = transformFigmaIds(node);
+
   return {
     figmaId: `M${transformedIds.figmaId}`,
     figmaRelatedId: transformedIds.figmaRelatedId ? `M${transformedIds.figmaRelatedId}` : undefined

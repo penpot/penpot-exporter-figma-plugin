@@ -14,7 +14,6 @@ import { Uuid } from '@ui/lib/types/utils/uuid';
 import { ComponentPropertyReference } from '@ui/types';
 
 export type ShapeBaseAttributes = {
-  id?: Uuid;
   figmaId?: string; // @TODO: move to any other place
   figmaRelatedId?: string; // @TODO: move to any other place
   type?:
@@ -37,6 +36,7 @@ export type ShapeBaseAttributes = {
 };
 
 export type ShapeAttributes = {
+  id?: Uuid;
   name: string;
   componentId?: string;
   componentFile?: string;

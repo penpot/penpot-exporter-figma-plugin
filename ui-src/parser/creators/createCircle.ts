@@ -7,8 +7,10 @@ export const createCircle = (
   file: PenpotFile,
   { type, figmaId, figmaRelatedId, ...shape }: CircleShape
 ) => {
-  shape.id = parseFigmaId(file, figmaId);
-  shape.shapeRef = parseFigmaId(file, figmaRelatedId, true);
+  const { id, shapeRef } = parseFigmaId(file, figmaId);
+
+  shape.id = id;
+  shape.shapeRef = shapeRef;
   shape.fills = symbolFills(shape.fillStyleId, shape.fills);
   shape.strokes = symbolStrokes(shape.strokes);
   shape.touched = symbolTouched(
