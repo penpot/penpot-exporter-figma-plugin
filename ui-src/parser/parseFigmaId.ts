@@ -9,7 +9,7 @@ export const parseFigmaId = (
   const realFigmaId = calculateRealFigmaId(figmaId);
 
   return {
-    id: parseId(file, realFigmaId),
+    id: parseId(file, figmaId),
     shapeRef: parseShapeRef(file, realFigmaId)
   };
 };
