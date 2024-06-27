@@ -23,7 +23,7 @@ export const createComponentInstance = (
         createUiComponent(file, originalComponentFigmaId)
       : undefined;
 
-  if (!shape.figmaRelatedId) {
+  if (!shape.figmaRelatedId || originalUiComponent) {
     shape.shapeRef = uiComponent.mainInstanceId;
   }
   shape.componentFile = file.getId();
