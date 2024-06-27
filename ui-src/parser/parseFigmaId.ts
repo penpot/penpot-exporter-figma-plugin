@@ -41,17 +41,11 @@ const parseShapeRef = (file: PenpotFile, figmaId: string | undefined): Uuid | un
     return;
   }
 
-  const id = identifiers.get(figmaRelatedId);
-
-  if (id) {
-    return id;
+  if (!identifiers.has(figmaRelatedId)) {
+    identifiers.set(figmaRelatedId, file.newId());
   }
 
-  const newId = file.newId();
-
-  identifiers.set(figmaRelatedId, newId);
-
-  return newId;
+  return identifiers.get(figmaRelatedId);
 };
 
 const getRelatedNodeId = (nodeId: string): string | undefined => {

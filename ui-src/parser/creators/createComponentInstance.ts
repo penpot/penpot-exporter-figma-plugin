@@ -34,7 +34,7 @@ export const createComponentInstance = (
   }
 
   shape.id = id;
-  shape.shapeRef = originalUiComponent ? uiComponent.mainInstanceId : shapeRef;
+  shape.shapeRef = originalUiComponent || !shapeRef ? uiComponent.mainInstanceId : shapeRef;
   shape.componentFile = file.getId();
   shape.componentRoot = isComponentRoot;
   shape.componentId = uiComponent.componentId;
