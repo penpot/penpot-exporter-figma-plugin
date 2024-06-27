@@ -7,3 +7,4 @@ export * from './translateLayout';
 export * from './translateRotation';
 export * from './translateShadowEffects';
 export * from './translateStrokes';
+export * from './translateTouched';

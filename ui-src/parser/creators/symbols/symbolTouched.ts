@@ -12,22 +12,28 @@ export const symbolTouched = (
     return touched;
   }
 
-  Object.entries(componentPropertyReferences).forEach(([key, value]) => {
-    switch (key) {
-      case 'visible':
-        if (visible !== componentProperties.get(value)?.defaultValue) {
-          touched?.push(':visibility-group');
-        }
-        break;
-      case 'characters':
-        if (characters !== componentProperties.get(value)?.defaultValue) {
-          touched?.push(':content-group');
-        }
-        break;
-      default:
-        break;
+  const propertyReferenceVisible = componentPropertyReferences.visible;
+  const propertyReferenceVisible2 = componentPropertyReferences.characters;
+
+  if (propertyReferenceVisible) {
+    if (
+      visible !== componentProperties.get(propertyReferenceVisible)?.defaultValue &&
+      !touched?.includes(':visibility-group')
+    ) {
+      touched?.push(':visibility-group');
     }
-  });
+  }
+
+  if (propertyReferenceVisible2) {
+    if (
+      characters !== componentProperties.get(propertyReferenceVisible2)?.defaultValue &&
+      !touched?.includes(':content-group')
+    ) {
+      touched?.push(':content-group');
+    }
+  }
+
+  console.log('touched', touched);
 
   return touched;
 };
