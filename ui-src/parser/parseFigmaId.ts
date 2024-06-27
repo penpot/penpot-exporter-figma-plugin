@@ -49,7 +49,7 @@ const parseShapeRef = (file: PenpotFile, figmaId: string | undefined): Uuid | un
 
   const newId = file.newId();
 
-  identifiers.set(figmaId, newId);
+  identifiers.set(figmaRelatedId, newId);
 
   return newId;
 };
