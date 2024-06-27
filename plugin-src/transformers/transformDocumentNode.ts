@@ -20,7 +20,7 @@ export const transformDocumentNode = async (node: DocumentNode): Promise<PenpotD
   const paintStyles = await processPaintStyles();
   const images = await processImages();
   const textStyles = await processTextStyles();
-  const componentProperties = componentPropertiesLib.all();
+  const componentProperties = toObject(componentPropertiesLib);
 
   return {
     name: node.name,

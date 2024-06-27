@@ -38,7 +38,11 @@ export const transformFrameNode = async (
 
   if (isComponentSetNode(node)) {
     try {
-      componentProperties.registerAll(node.componentPropertyDefinitions);
+      Object.entries(node.componentPropertyDefinitions).forEach(([key, value]) => {
+        if (value.type === 'TEXT' || value.type === 'BOOLEAN') {
+          componentProperties.set(key, value);
+        }
+      });
     } catch (error) {
       console.error('Error registering component properties', error);
     }
