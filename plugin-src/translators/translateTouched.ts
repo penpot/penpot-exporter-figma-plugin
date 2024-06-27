@@ -159,7 +159,7 @@ export const translateTouched = (
   changedProperties.forEach(changedProperty => {
     const syncGroup = syncAttributes[changedProperty];
 
-    if (syncGroup.length > 0) {
+    if (syncGroup && syncGroup.length > 0) {
       syncGroup.forEach(group => syncGroups.add(group));
     }
   });
