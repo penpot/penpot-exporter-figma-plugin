@@ -25,7 +25,6 @@
 
 https://github.com/penpot/penpot-exporter-figma-plugin/assets/165997885/44208d17-1ca0-4fe8-a541-4e68a24ee554
 
-
 ## Table of contents
 
 - [Table of contents](#table-of-contents)
@@ -43,9 +42,14 @@ https://github.com/penpot/penpot-exporter-figma-plugin/assets/165997885/44208d17
 
 ## Why a Penpot exporter
 
-The aim of this plugin is to help people migrate their files from Figma to [Penpot](https://penpot.app/). Migrating work from one design tool to another was never an easy task due to the abundance of closed and non-standard formats, and this is not a different case. Our approach to better solve this situation is to build a Figma plugin that can convert a Figma file into a .zip file that can be imported to Penpot. 
+The aim of this plugin is to help people migrate their files from Figma
+to [Penpot](https://penpot.app/). Migrating work from one design tool to another was never an easy
+task due to the abundance of closed and non-standard formats, and this is not a different case. Our
+approach to better solve this situation is to build a Figma plugin that can convert a Figma file
+into a .zip file that can be imported to Penpot.
 
-There is a sense of urgency for this capability because there is a feeling that Adobe might force Figma to limit exports and interoperability via plugins very soon.
+There is a sense of urgency for this capability because there is a feeling that Adobe might force
+Figma to limit exports and interoperability via plugins very soon.
 
 ## Getting started
 
@@ -105,22 +109,30 @@ for the plugin.
 
 ### To use the plugin
 
-1. `Open a Figma file` > `Figma top toolbar` > `Resources` > `Plugins` > search for `Penpot Exporter` > `Select the plugin` > `Export your file`.
-<img width="421" alt="Screenshot 2024-06-26 at 08 51 49" src="https://github.com/penpot/penpot-exporter-figma-plugin/assets/165997885/c50ad95d-2ebc-41dc-a62d-3f901612bdd3">
+1. `Open a Figma file` > `Figma top toolbar` > `Resources` > `Plugins` > search for
+   `Penpot Exporter` > `Select the plugin` > `Export your file`.
+   <img width="421" alt="Screenshot 2024-06-26 at 08 51 49" src="https://github.com/penpot/penpot-exporter-figma-plugin/assets/165997885/c50ad95d-2ebc-41dc-a62d-3f901612bdd3">
 
-3. A `.zip file` will be generated that you can `import into Penpot`. 
-4. `Open Penpot` > `Select the projects or drafts menu` (three dots on the right side) > `Select Import Penpot files` > `Select the exported .zip file` > `Open the file` and continue your work in Penpot 🥳
-![Untitled](https://github.com/penpot/penpot-exporter-figma-plugin/assets/165997885/3dc1bd1e-1f59-4069-b3a5-90e024ffc806)
+2. A `.zip file` will be generated that you can `import into Penpot`.
+3. `Open Penpot` > `Select the projects or drafts menu` (three dots on the right side) >
+   `Select Import Penpot files` > `Select the exported .zip file` > `Open the file` and continue
+   your work in Penpot 🥳
+   ![Untitled](https://github.com/penpot/penpot-exporter-figma-plugin/assets/165997885/3dc1bd1e-1f59-4069-b3a5-90e024ffc806)
 
-Visit the <a href="https://github.com/penpot/penpot-exporter-figma-plugin/wiki"><b>Penpot Exporter Wik</b></a> to learn more about how to use the plug-in.
+Visit the <a href="https://github.com/penpot/penpot-exporter-figma-plugin/wiki"><b>Penpot Exporter
+Wik</b></a> to learn more about how to use the plug-in.
 
 ## Call to the community
 
-Answering to the interest expressed by community members to build the plugin by themselves, we're opening the door for anyone interested to jump in and contribute.
+Answering to the interest expressed by community members to build the plugin by themselves, we're
+opening the door for anyone interested to jump in and contribute.
 
 We'd love your help! 🤗
 
-For more details on this initiative, we've shared our approach in a [community post](https://community.penpot.app/t/figma-file-importer/1684) and provided updates in another [community post](https://community.penpot.app/t/figma-to-penpot-export-plugin/5554). Feel free to join the conversation!
+For more details on this initiative, we've shared our approach in a
+[community post](https://community.penpot.app/t/figma-file-importer/1684) and provided updates in
+another [community post](https://community.penpot.app/t/figma-to-penpot-export-plugin/5554). Feel
+free to join the conversation!
 
 ## What can this plugin currently import?
 
@@ -132,30 +144,40 @@ Things that are currently included in the import are:
 - **Groups and Boolean groups**
 - **Masks groups**
 - **Texts** (you can upload your own fonts too)
-- **All basic shapes properties** (fills, visibility, strokes, corner radius, shadows, rotations, effects, etc...)
+- **All basic shapes properties** (fills, visibility, strokes, corner radius, shadows, rotations,
+  effects, etc...)
 - **Components and Components Sets**
 - **Component instances**
 - **Variants and properties**
 - **Variables**
 - **Libraries and local styles**
 - **Files connected to a Library** (exported as a page in exported file)
-- **Remote design systems** 
+- **Remote design systems**
 - **Auto Layouts**
 
 ## Limitations
 
-Since the objective of the plug-in is to enable seamless file exports from Figma to Penpot. A key part of this goal is to support exporting large files, making **performance a primary challenge**. The exportation process requires comprehensive navigation through all nodes in a Figma file, and currently we’re facing some limitation with the Figma API to solve this.
+Since the objective of the plug-in is to enable seamless file exports from Figma to Penpot. A key
+part of this goal is to support exporting large files, making **performance a primary challenge**.
+The exportation process requires comprehensive navigation through all nodes in a Figma file, and
+currently we’re facing some limitation with the Figma API to solve this.
 
-Another obvious limitations are the features that are in Figma but not in Penpot or work differently in both tools so they can not be easily converted, consequently, some features may not look exactly the same. Additionally, **prototyping settings are currently not supported** in the export/import process of files.
+Another obvious limitations are the features that are in Figma but not in Penpot or work differently
+in both tools so they can not be easily converted, consequently, some features may not look exactly
+the same. Additionally, **prototyping settings are currently not supported** in the export/import
+process of files.
 
 ## Contributing
 
-If you want to make many people very happy and help us continue to build this Figma plugin, for instance, it would be interesting to add:
+If you want to make many people very happy and help us continue to build this Figma plugin, for
+instance, it would be interesting to add:
 
 - Performance optimization
 - Prototyping interactions and flows
 
-Motivated to contribute? Take a look at our [Contributing Guide](https://help.penpot.app/contributing-guide/) that explains our guidelines (they're for the Penpot Core, but are mostly of application here too).
+Motivated to contribute? Take a look at
+our [Contributing Guide](https://help.penpot.app/contributing-guide/) that explains our guidelines
+(they're for the Penpot Core, but are mostly of application here too).
 
 ## License
 
