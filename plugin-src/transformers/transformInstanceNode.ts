@@ -35,12 +35,14 @@ export const transformInstanceNode = async (
     nodeOverrides = transformOverrides(node);
   }
 
+  const fetchedOverrides = overrides.get(node.id) ?? [];
   if (node.visible !== mainComponent.visible) {
-    overrides.set(node.id, [...(overrides.get(node.id) ?? []), 'visible']);
+    fetchedOverrides.push('visible');
   }
   if (node.locked !== mainComponent.locked) {
-    overrides.set(node.id, [...(overrides.get(node.id) ?? []), 'locked']);
+    fetchedOverrides.push('locked');
   }
+  overrides.set(node.id, fetchedOverrides);
 
   return {
     type: 'instance',
