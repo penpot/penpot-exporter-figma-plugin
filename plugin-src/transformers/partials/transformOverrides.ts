@@ -1,23 +1,13 @@
-import { overrides as overridesLibrary } from '@plugin/libraries';
-import { syncAttributes } from '@plugin/utils/syncAttributes';
+import { overrides } from '@plugin/libraries';
+import { translateTouched } from '@plugin/translators';
 
-import { SyncGroups } from '@ui/lib/types/utils/syncGroups';
+import { ShapeAttributes } from '@ui/lib/types/shapes/shape';
 
-export const transformOverrides = (node: SceneNode) => {
-  const overrides = overridesLibrary.get(node.id);
-  if (!overrides) {
-    return {};
-  }
-
-  const touched: SyncGroups[] = [];
-
-  overrides.forEach(override => {
-    if (syncAttributes[override]) {
-      touched.push(...syncAttributes[override]);
-    }
-  });
-
+export const transformOverrides = (
+  node: SceneNode
+): Pick<ShapeAttributes, 'touched' | 'componentPropertyReferences'> => {
   return {
-    touched
+    touched: translateTouched(overrides.get(node.id)),
+    componentPropertyReferences: node.componentPropertyReferences
   };
 };

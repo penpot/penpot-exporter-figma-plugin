@@ -1,3 +1,4 @@
+import { componentProperties } from '@plugin/libraries';
 import {
   transformAutoLayout,
   transformBlend,
@@ -23,11 +24,29 @@ const isSectionNode = (node: FrameNode | SectionNode | ComponentSetNode): node i
   return node.type === 'SECTION';
 };
 
+const isComponentSetNode = (
+  node: FrameNode | SectionNode | ComponentSetNode
+): node is ComponentSetNode => {
+  return node.type === 'COMPONENT_SET';
+};
+
 export const transformFrameNode = async (
   node: FrameNode | SectionNode | ComponentSetNode
 ): Promise<FrameShape> => {
   let frameSpecificAttributes: Partial<FrameShape> = {};
   let referencePoint: Point = { x: node.absoluteTransform[0][2], y: node.absoluteTransform[1][2] };
+
+  if (isComponentSetNode(node)) {
+    try {
+      Object.entries(node.componentPropertyDefinitions).forEach(([key, value]) => {
+        if (value.type === 'TEXT' || value.type === 'BOOLEAN') {
+          componentProperties.set(key, value);
+        }
+      });
+    } catch (error) {
+      console.error('Error registering component properties', error);
+    }
+  }
 
   if (!isSectionNode(node)) {
     const { x, y, ...transformAndRotation } = transformRotationAndPosition(node);

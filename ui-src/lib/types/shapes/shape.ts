@@ -11,6 +11,7 @@ import { Shadow } from '@ui/lib/types/utils/shadow';
 import { Stroke } from '@ui/lib/types/utils/stroke';
 import { SyncGroups } from '@ui/lib/types/utils/syncGroups';
 import { Uuid } from '@ui/lib/types/utils/uuid';
+import { ComponentPropertyReference } from '@ui/types';
 
 export type ShapeBaseAttributes = {
   id?: Uuid;
@@ -74,6 +75,7 @@ export type ShapeAttributes = {
   blur?: Blur;
   growType?: GrowType;
   touched?: SyncGroups[];
+  componentPropertyReferences?: ComponentPropertyReference; // @TODO: move to any other place
 };
 
 export type ShapeGeomAttributes = {

@@ -17,7 +17,7 @@ import {
   transformStrokes
 } from '@plugin/transformers/partials';
 
-import { ComponentInstance, ComponentTextPropertyOverride } from '@ui/types';
+import { ComponentInstance } from '@ui/types';
 
 export const transformInstanceNode = async (
   node: InstanceNode
@@ -30,13 +30,19 @@ export const transformInstanceNode = async (
   const primaryComponent = getPrimaryComponent(mainComponent);
   const isOrphan = isOrphanInstance(primaryComponent);
   let nodeOverrides = {};
-  if (!isOrphan) {
-    registerTextVariableOverrides(node, primaryComponent);
-    if (node.overrides.length > 0) {
-      node.overrides.forEach(override => overrides.set(override.id, override.overriddenFields));
-    }
+  if (!isOrphan && node.overrides.length > 0) {
+    node.overrides.forEach(override => overrides.set(override.id, override.overriddenFields));
     nodeOverrides = transformOverrides(node);
   }
+
+  const fetchedOverrides = overrides.get(node.id) ?? [];
+  if (node.visible !== mainComponent.visible) {
+    fetchedOverrides.push('visible');
+  }
+  if (node.locked !== mainComponent.locked) {
+    fetchedOverrides.push('locked');
+  }
+  overrides.set(node.id, fetchedOverrides);
 
   return {
     type: 'instance',
@@ -69,57 +75,6 @@ const getPrimaryComponent = (mainComponent: ComponentNode): ComponentNode | Comp
   }
 
   return mainComponent;
-};
-
-const getComponentTextPropertyOverrides = (
-  node: InstanceNode,
-  primaryComponent: ComponentNode | ComponentSetNode
-): ComponentTextPropertyOverride[] => {
-  try {
-    const componentPropertyDefinitions = Object.entries(
-      primaryComponent.componentPropertyDefinitions
-    ).filter(([, value]) => value.type === 'TEXT');
-
-    const instanceComponentProperties = new Map(
-      Object.entries(node.componentProperties).filter(([, value]) => value.type === 'TEXT')
-    );
-
-    return componentPropertyDefinitions
-      .map(([key, value]) => {
-        const nodeValue = instanceComponentProperties.get(key);
-        return {
-          id: key,
-          ...value,
-          value: nodeValue ? nodeValue.value : value.defaultValue
-        } as ComponentTextPropertyOverride;
-      })
-      .filter(({ value, defaultValue }) => value !== defaultValue);
-  } catch (error) {
-    return [];
-  }
-};
-
-const registerTextVariableOverrides = (
-  node: InstanceNode,
-  primaryComponent: ComponentNode | ComponentSetNode
-) => {
-  const mergedOverridden = getComponentTextPropertyOverrides(node, primaryComponent);
-
-  if (mergedOverridden.length > 0) {
-    const textNodes = node
-      .findChildren(child => child.type === 'TEXT')
-      .filter(textNode => {
-        const componentPropertyReference = textNode.componentPropertyReferences?.characters;
-        return (
-          componentPropertyReference &&
-          mergedOverridden.some(property => property.id === componentPropertyReference)
-        );
-      });
-
-    textNodes.forEach(textNode => {
-      overrides.set(textNode.id, ['text']);
-    });
-  }
 };
 
 const isOrphanInstance = (primaryComponent: ComponentNode | ComponentSetNode): boolean => {

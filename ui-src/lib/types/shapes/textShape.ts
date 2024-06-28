@@ -16,6 +16,7 @@ export type TextShape = ShapeBaseAttributes &
 export type TextAttributes = {
   type?: 'text';
   content?: TextContent;
+  characters?: string; // @ TODO: move to any other place
 };
 
 export type TextContent = {

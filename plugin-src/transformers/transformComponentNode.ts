@@ -1,4 +1,4 @@
-import { components } from '@plugin/libraries';
+import { componentProperties, components } from '@plugin/libraries';
 import {
   transformAutoLayout,
   transformBlend,
@@ -17,6 +17,10 @@ import {
 } from '@plugin/transformers/partials';
 
 import { ComponentRoot } from '@ui/types';
+
+const isNonVariantComponentNode = (node: ComponentNode): boolean => {
+  return node.parent?.type !== 'COMPONENT_SET';
+};
 
 export const transformComponentNode = async (node: ComponentNode): Promise<ComponentRoot> => {
   components.set(node.id, {
@@ -39,6 +43,18 @@ export const transformComponentNode = async (node: ComponentNode): Promise<Compo
     ...transformConstraints(node),
     ...transformAutoLayout(node)
   });
+
+  if (isNonVariantComponentNode(node)) {
+    try {
+      Object.entries(node.componentPropertyDefinitions).forEach(([key, value]) => {
+        if (value.type === 'TEXT' || value.type === 'BOOLEAN') {
+          componentProperties.set(key, value);
+        }
+      });
+    } catch (error) {
+      console.error('Error registering component properties', error);
+    }
+  }
 
   return {
     figmaId: node.id,

@@ -6,7 +6,13 @@ import { createFile } from '@ui/lib/penpot';
 import { PenpotFile } from '@ui/lib/types/penpotFile';
 import { TypographyStyle } from '@ui/lib/types/shapes/textShape';
 import { FillStyle } from '@ui/lib/types/utils/fill';
-import { colors, componentShapes, images, typographies } from '@ui/parser';
+import {
+  colors,
+  componentShapes,
+  images,
+  typographies,
+  componentProperties as uiComponentProperties
+} from '@ui/parser';
 import { buildFile } from '@ui/parser/creators';
 import { PenpotDocument } from '@ui/types';
 
@@ -123,9 +129,11 @@ export const parse = async ({
   components,
   images,
   paintStyles,
-  textStyles
+  textStyles,
+  componentProperties
 }: PenpotDocument) => {
   init(componentShapes, components);
+  init(uiComponentProperties, componentProperties);
 
   const file = createFile(name);
 

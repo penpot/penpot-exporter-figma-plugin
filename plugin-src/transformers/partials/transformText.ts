@@ -21,6 +21,7 @@ export const transformText = (node: TextNode): TextAttributes & Pick<TextShape, 
   ]);
 
   return {
+    characters: node.characters,
     content: {
       type: 'root',
       verticalAlign: translateVerticalAlign(node.textAlignVertical),

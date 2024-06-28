@@ -9,14 +9,7 @@ let remoteFileId: Uuid | undefined = undefined;
 
 export const createComponentInstance = (
   file: PenpotFile,
-  {
-    type,
-    mainComponentFigmaId,
-    figmaId,
-    figmaRelatedId,
-    isComponentRoot,
-    ...shape
-  }: ComponentInstance
+  { type, mainComponentFigmaId, isComponentRoot, ...shape }: ComponentInstance
 ) => {
   const uiComponent =
     components.get(mainComponentFigmaId) ?? createUiComponent(file, mainComponentFigmaId);
@@ -25,7 +18,9 @@ export const createComponentInstance = (
     return;
   }
 
-  shape.shapeRef = uiComponent.mainInstanceId;
+  if (!shape.figmaRelatedId) {
+    shape.shapeRef = uiComponent.mainInstanceId;
+  }
   shape.componentFile = shape.isOrphan ? getRemoteFileId(file) : file.getId();
   shape.componentRoot = isComponentRoot;
   shape.componentId = uiComponent.componentId;
