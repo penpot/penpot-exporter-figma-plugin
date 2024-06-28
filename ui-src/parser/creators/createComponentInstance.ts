@@ -1,7 +1,6 @@
 import { PenpotFile } from '@ui/lib/types/penpotFile';
 import { Uuid } from '@ui/lib/types/utils/uuid';
 import { components, parseFigmaId } from '@ui/parser';
-import { symbolTouched } from '@ui/parser/creators/symbols';
 import { ComponentInstance } from '@ui/types';
 
 import { createArtboard } from '.';
