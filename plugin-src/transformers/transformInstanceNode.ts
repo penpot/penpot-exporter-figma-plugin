@@ -35,7 +35,7 @@ export const transformInstanceNode = async (
     nodeOverrides = transformOverrides(node);
   }
 
-  const fetchedOverrides = overrides.get(node.id) ?? [];
+  const fetchedOverrides = [...(overrides.get(node.id) ?? [])];
   if (node.visible !== mainComponent.visible) {
     fetchedOverrides.push('visible');
   }

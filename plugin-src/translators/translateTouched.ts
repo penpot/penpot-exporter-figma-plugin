@@ -1,3 +1,5 @@
+import { componentProperties } from '@plugin/libraries';
+
 import { SyncGroups } from '@ui/lib/types/utils/syncGroups';
 
 type SyncAttributes = {

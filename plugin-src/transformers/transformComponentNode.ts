@@ -1,4 +1,5 @@
-import { componentProperties, components } from '@plugin/libraries';
+import { components } from '@plugin/libraries';
+import { registerComponentProperties } from '@plugin/registerComponentProperties';
 import {
   transformAutoLayout,
   transformBlend,
@@ -45,15 +46,7 @@ export const transformComponentNode = async (node: ComponentNode): Promise<Compo
   });
 
   if (isNonVariantComponentNode(node)) {
-    try {
-      Object.entries(node.componentPropertyDefinitions).forEach(([key, value]) => {
-        if (value.type === 'TEXT' || value.type === 'BOOLEAN') {
-          componentProperties.set(key, value);
-        }
-      });
-    } catch (error) {
-      console.error('Error registering component properties', error);
-    }
+    registerComponentProperties(node);
   }
 
   return {

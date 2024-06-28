@@ -1,4 +1,4 @@
-import { componentProperties } from '@plugin/libraries';
+import { registerComponentProperties } from '@plugin/registerComponentProperties';
 import {
   transformAutoLayout,
   transformBlend,
@@ -37,15 +37,7 @@ export const transformFrameNode = async (
   let referencePoint: Point = { x: node.absoluteTransform[0][2], y: node.absoluteTransform[1][2] };
 
   if (isComponentSetNode(node)) {
-    try {
-      Object.entries(node.componentPropertyDefinitions).forEach(([key, value]) => {
-        if (value.type === 'TEXT' || value.type === 'BOOLEAN') {
-          componentProperties.set(key, value);
-        }
-      });
-    } catch (error) {
-      console.error('Error registering component properties', error);
-    }
+    registerComponentProperties(node);
   }
 
   if (!isSectionNode(node)) {
