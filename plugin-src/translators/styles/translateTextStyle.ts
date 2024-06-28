@@ -9,11 +9,13 @@ import {
 
 import { TypographyStyle } from '@ui/lib/types/shapes/textShape';
 
+import { translateStyleName, translateStylePath } from '.';
+
 export const translateTextStyle = (figmaStyle: TextStyle): TypographyStyle => {
   const name = (figmaStyle.remote ? 'Remote / ' : '') + figmaStyle.name;
 
   return {
-    name: figmaStyle.name,
+    name: translateStyleName(figmaStyle),
     textStyle: {
       ...translateFontName(figmaStyle.fontName),
       fontFamily: figmaStyle.fontName.family,
@@ -25,7 +27,7 @@ export const translateTextStyle = (figmaStyle: TextStyle): TypographyStyle => {
       lineHeight: translateLineHeight(figmaStyle)
     },
     typography: {
-      path: '',
+      path: translateStylePath(figmaStyle),
       name
     }
   };

@@ -2,6 +2,8 @@ import { translateFill } from '@plugin/translators/fills/translateFills';
 
 import { FillStyle } from '@ui/lib/types/utils/fill';
 
+import { translateStyleName, translateStylePath } from '.';
+
 export const translatePaintStyle = (figmaStyle: PaintStyle): FillStyle => {
   const fillStyle: FillStyle = {
     name: figmaStyle.name,
@@ -10,12 +12,11 @@ export const translatePaintStyle = (figmaStyle: PaintStyle): FillStyle => {
   };
 
   const colorName = (figmaStyle: PaintStyle, index: number): string => {
-    return figmaStyle.paints.length > 1 ? `Color ${index + 1}` : figmaStyle.name;
+    return figmaStyle.paints.length > 1 ? `Color ${index + 1}` : translateStyleName(figmaStyle);
   };
 
   let index = 0;
-  const path =
-    (figmaStyle.remote ? 'Remote / ' : '') + (figmaStyle.paints.length > 1 ? figmaStyle.name : '');
+  const path = translatePaintStylePath(figmaStyle);
 
   for (const fill of figmaStyle.paints) {
     const penpotFill = translateFill(fill);
@@ -31,4 +32,14 @@ export const translatePaintStyle = (figmaStyle: PaintStyle): FillStyle => {
   }
 
   return fillStyle;
+};
+
+const translatePaintStylePath = (figmaStyle: PaintStyle) => {
+  const path = translateStylePath(figmaStyle);
+
+  if (figmaStyle.paints.length <= 1) {
+    return path;
+  }
+
+  return path + (path !== '' ? ' / ' : '') + translateStyleName(figmaStyle);
 };
