@@ -12,8 +12,6 @@ import { TypographyStyle } from '@ui/lib/types/shapes/textShape';
 import { translateStyleName, translateStylePath } from '.';
 
 export const translateTextStyle = (figmaStyle: TextStyle): TypographyStyle => {
-  const name = (figmaStyle.remote ? 'Remote / ' : '') + figmaStyle.name;
-
   return {
     name: translateStyleName(figmaStyle),
     textStyle: {
@@ -28,7 +26,7 @@ export const translateTextStyle = (figmaStyle: TextStyle): TypographyStyle => {
     },
     typography: {
       path: translateStylePath(figmaStyle),
-      name
+      name: translateStyleName(figmaStyle)
     }
   };
 };
