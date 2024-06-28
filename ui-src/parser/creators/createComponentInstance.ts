@@ -25,12 +25,6 @@ export const createComponentInstance = (
   shape.componentFile = shape.isOrphan ? getRemoteFileId(file) : file.getId();
   shape.componentRoot = isComponentRoot;
   shape.componentId = uiComponent.componentId;
-  shape.touched = symbolTouched(
-    !shape.hidden,
-    undefined,
-    shape.touched,
-    shape.componentPropertyReferences
-  );
 
   createArtboard(file, shape);
 };
