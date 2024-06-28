@@ -1,10 +1,10 @@
 import { SyncGroups } from '@ui/lib/types/utils/syncGroups';
 
-export type SyncAttributes = {
+type SyncAttributes = {
   [key in NodeChangeProperty]: SyncGroups[];
 };
 
-export const syncAttributes: SyncAttributes = {
+const syncAttributes: SyncAttributes = {
   name: [':name-group'],
   fills: [':fill-group'],
   backgrounds: [':fill-group'],
@@ -147,4 +147,22 @@ export const syncAttributes: SyncAttributes = {
   linkUnfurlData: [],
   authorName: [],
   code: []
+};
+
+export const translateTouched = (
+  changedProperties: NodeChangeProperty[] | undefined
+): SyncGroups[] => {
+  const syncGroups: Set<SyncGroups> = new Set();
+
+  if (!changedProperties) return [];
+
+  changedProperties.forEach(changedProperty => {
+    const syncGroup = syncAttributes[changedProperty];
+
+    if (syncGroup && syncGroup.length > 0) {
+      syncGroup.forEach(group => syncGroups.add(group));
+    }
+  });
+
+  return Array.from(syncGroups);
 };
