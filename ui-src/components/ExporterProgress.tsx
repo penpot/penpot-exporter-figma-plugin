@@ -15,10 +15,6 @@ const stepMessages: Record<Steps, Messages> = {
     total: 'pages processed 💪',
     current: 'Currently processing layer'
   },
-  remote: {
-    total: 'remote components processed 📦',
-    current: 'Currently processing layer'
-  },
   images: {
     total: 'images downloaded 📸'
   },
@@ -74,7 +70,6 @@ const StepProgress = (): JSX.Element | null => {
 
   switch (step) {
     case 'processing':
-    case 'remote':
     case 'images':
     case 'optimization':
     case 'building':
