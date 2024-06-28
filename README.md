@@ -142,18 +142,13 @@ Things that are currently included in the import are:
 - **Vectors, Lines and Arrows**
 - **Frames and Sections** (Boards in Penpot)
 - **Groups and Boolean groups**
-- **Masks groups**
+- **Masks**
 - **Texts** (you can upload your own fonts too)
 - **All basic shapes properties** (fills, visibility, strokes, corner radius, shadows, rotations,
   effects, etc...)
-- **Components and Components Sets**
-- **Component instances**
-- **Variants and properties**
-- **Variables**
-- **Libraries and local styles**
-- **Files connected to a Library** (exported as a page in exported file)
-- **Remote design systems**
+- **Components, Components sets and Component instances**
 - **Auto Layouts**
+- **Color and Typography libraries**
 
 ## Limitations
 
