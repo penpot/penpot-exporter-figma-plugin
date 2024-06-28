@@ -1,6 +1,5 @@
 import { sleep } from '@common/sleep';
 
-import { remoteComponents } from '@plugin/libraries';
 import { transformGroupNodeLike, transformSceneNode } from '@plugin/transformers';
 import { transformMaskFigmaIds } from '@plugin/transformers/partials';
 
@@ -56,38 +55,6 @@ export const translateChildren = async (children: readonly SceneNode[]): Promise
     const penpotNode = await transformSceneNode(child);
 
     if (penpotNode) transformedChildren.push(penpotNode);
-
-    await sleep(0);
-  }
-
-  return transformedChildren;
-};
-
-export const translateRemoteChildren = async (): Promise<PenpotNode[]> => {
-  const transformedChildren: PenpotNode[] = [];
-  let currentRemote = 1;
-
-  figma.ui.postMessage({
-    type: 'PROGRESS_STEP',
-    data: 'remote'
-  });
-
-  while (remoteComponents.remaining() > 0) {
-    figma.ui.postMessage({
-      type: 'PROGRESS_TOTAL_ITEMS',
-      data: remoteComponents.total()
-    });
-
-    const child = remoteComponents.next();
-
-    const penpotNode = await transformSceneNode(child);
-
-    if (penpotNode) transformedChildren.push(penpotNode);
-
-    figma.ui.postMessage({
-      type: 'PROGRESS_PROCESSED_ITEMS',
-      data: currentRemote++
-    });
 
     await sleep(0);
   }

@@ -1,31 +1,10 @@
 import { sleep } from '@common/sleep';
 
-import { remoteComponents } from '@plugin/libraries';
 import { transformPageNode } from '@plugin/transformers';
-import { translateRemoteChildren } from '@plugin/translators';
 
 import { PenpotPage } from '@ui/lib/types/penpotPage';
 
 export const processPages = async (node: DocumentNode): Promise<PenpotPage[]> => {
-  const children = await processLocalDocument(node);
-  const remoteComponents = await processRemoteComponents();
-  if (remoteComponents) {
-    children.push(remoteComponents);
-  }
-
-  return children;
-};
-
-const processRemoteComponents = async (): Promise<PenpotPage | undefined> => {
-  if (remoteComponents.remaining() > 0) {
-    return {
-      name: 'External Components',
-      children: await translateRemoteChildren()
-    };
-  }
-};
-
-const processLocalDocument = async (node: DocumentNode): Promise<PenpotPage[]> => {
   const children = [];
   let currentPage = 1;
 

@@ -21,7 +21,6 @@ export type UseFigmaHook = {
 
 export type Steps =
   | 'processing'
-  | 'remote'
   | 'images'
   | 'optimization'
   | 'building'
