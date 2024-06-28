@@ -15,22 +15,20 @@ export const symbolTouched = (
   const propertyReferenceVisible = componentPropertyReferences.visible;
   const propertyReferenceCharacters = componentPropertyReferences.characters;
 
-  if (propertyReferenceVisible) {
-    if (
-      visible !== componentProperties.get(propertyReferenceVisible)?.defaultValue &&
-      !touched?.includes(':visibility-group')
-    ) {
-      touched?.push(':visibility-group');
-    }
+  if (
+    propertyReferenceVisible &&
+    visible !== componentProperties.get(propertyReferenceVisible)?.defaultValue &&
+    !touched?.includes(':visibility-group')
+  ) {
+    touched?.push(':visibility-group');
   }
 
-  if (propertyReferenceCharacters) {
-    if (
-      characters !== componentProperties.get(propertyReferenceCharacters)?.defaultValue &&
-      !touched?.includes(':content-group')
-    ) {
-      touched?.push(':content-group');
-    }
+  if (
+    propertyReferenceCharacters &&
+    characters !== componentProperties.get(propertyReferenceCharacters)?.defaultValue &&
+    !touched?.includes(':content-group')
+  ) {
+    touched?.push(':content-group');
   }
 
   return touched;
