@@ -1,5 +1,17 @@
 # penpot-exporter
 
+## 0.9.0
+
+### Minor Changes
+
+- [#197](https://github.com/penpot/penpot-exporter-figma-plugin/pull/197) [`c5dd5d0`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/c5dd5d011e165bf00f3c01f76de4a797618c7fcb) Thanks [@Cenadros](https://github.com/Cenadros)! - Rework remote components
+
+- [#200](https://github.com/penpot/penpot-exporter-figma-plugin/pull/200) [`303cc83`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/303cc833a002f709e70e533cb641b720dad0ffd9) Thanks [@Cenadros](https://github.com/Cenadros)! - Improvements in overrides management
+
+### Patch Changes
+
+- [#201](https://github.com/penpot/penpot-exporter-figma-plugin/pull/201) [`bd36496`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/bd36496023bb6afead8180c77284fb4ee3df1f63) Thanks [@Cenadros](https://github.com/Cenadros)! - Improve registering component properties
+
 ## 0.8.1
 
 ### Patch Changes
