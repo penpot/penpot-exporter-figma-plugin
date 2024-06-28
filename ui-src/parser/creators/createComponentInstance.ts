@@ -1,9 +1,12 @@
 import { PenpotFile } from '@ui/lib/types/penpotFile';
+import { Uuid } from '@ui/lib/types/utils/uuid';
 import { components, parseFigmaId } from '@ui/parser';
 import { symbolTouched } from '@ui/parser/creators/symbols';
 import { ComponentInstance } from '@ui/types';
 
 import { createArtboard } from '.';
+
+let remoteFileId: Uuid | undefined = undefined;
 
 export const createComponentInstance = (
   file: PenpotFile,
@@ -19,7 +22,7 @@ export const createComponentInstance = (
   if (!shape.figmaRelatedId) {
     shape.shapeRef = uiComponent.mainInstanceId;
   }
-  shape.componentFile = file.getId();
+  shape.componentFile = shape.isOrphan ? getRemoteFileId(file) : file.getId();
   shape.componentRoot = isComponentRoot;
   shape.componentId = uiComponent.componentId;
   shape.touched = symbolTouched(
@@ -47,4 +50,12 @@ const createUiComponent = (file: PenpotFile, mainComponentFigmaId: string) => {
   components.set(mainComponentFigmaId, uiComponent);
 
   return uiComponent;
+};
+
+const getRemoteFileId = (file: PenpotFile): Uuid => {
+  if (!remoteFileId) {
+    remoteFileId = file.newId();
+  }
+
+  return remoteFileId;
 };

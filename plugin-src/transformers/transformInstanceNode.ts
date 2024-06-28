@@ -1,4 +1,4 @@
-import { overrides, remoteComponents } from '@plugin/libraries';
+import { overrides } from '@plugin/libraries';
 import {
   transformAutoLayout,
   transformBlend,
@@ -28,16 +28,11 @@ export const transformInstanceNode = async (
   }
 
   const primaryComponent = getPrimaryComponent(mainComponent);
-  if (isUnprocessableComponent(primaryComponent)) {
-    return;
-  }
-
-  if (primaryComponent.remote) {
-    registerExternalComponents(primaryComponent);
-  }
-
-  if (node.overrides.length > 0) {
+  const isOrphan = isOrphanInstance(primaryComponent);
+  let nodeOverrides = {};
+  if (!isOrphan && node.overrides.length > 0) {
     node.overrides.forEach(override => overrides.set(override.id, override.overriddenFields));
+    nodeOverrides = transformOverrides(node);
   }
 
   if (node.visible !== mainComponent.visible) {
@@ -53,6 +48,7 @@ export const transformInstanceNode = async (
     mainComponentFigmaId: mainComponent.id,
     isComponentRoot: isComponentRoot(node),
     showContent: !node.clipsContent,
+    isOrphan,
     ...transformFigmaIds(node),
     ...transformFills(node),
     ...transformEffects(node),
@@ -67,7 +63,7 @@ export const transformInstanceNode = async (
     ...transformConstraints(node),
     ...transformAutoLayout(node),
     ...(await transformChildren(node)),
-    ...transformOverrides(node)
+    ...nodeOverrides
   };
 };
 
@@ -79,22 +75,8 @@ const getPrimaryComponent = (mainComponent: ComponentNode): ComponentNode | Comp
   return mainComponent;
 };
 
-const registerExternalComponents = (primaryComponent: ComponentNode | ComponentSetNode): void => {
-  if (remoteComponents.has(primaryComponent.id)) {
-    return;
-  }
-
-  remoteComponents.register(primaryComponent.id, primaryComponent);
-};
-
-/**
- * We do not want to process component instances in the following scenarios:
- *
- * 1. If the component does not have a parent. (it's been removed)
- * 2. Main component can be in a ComponentSet (the same logic applies to the parent).
- */
-const isUnprocessableComponent = (primaryComponent: ComponentNode | ComponentSetNode): boolean => {
-  return primaryComponent.parent === null && !primaryComponent.remote;
+const isOrphanInstance = (primaryComponent: ComponentNode | ComponentSetNode): boolean => {
+  return primaryComponent.parent === null || primaryComponent.remote;
 };
 
 const isComponentRoot = (node: InstanceNode): boolean => {

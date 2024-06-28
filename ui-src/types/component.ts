@@ -26,6 +26,7 @@ export type ComponentInstance = ShapeGeomAttributes &
     figmaRelatedId?: string;
     isComponentRoot: boolean;
     showContent?: boolean;
+    isOrphan: boolean;
     type: 'instance';
   };
 

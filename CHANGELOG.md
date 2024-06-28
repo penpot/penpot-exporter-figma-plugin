@@ -1,5 +1,29 @@
 # penpot-exporter
 
+## 0.8.1
+
+### Patch Changes
+
+- [#194](https://github.com/penpot/penpot-exporter-figma-plugin/pull/194) [`53672d8`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/53672d8b43111efa1dedc5deac358410943c2bc5) Thanks [@jordisala1991](https://github.com/jordisala1991)! - Fix local styles categorization system
+
+## 0.8.0
+
+### Minor Changes
+
+- [#185](https://github.com/penpot/penpot-exporter-figma-plugin/pull/185) [`d3c144e`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/d3c144e5e99777bc54635ad3f0067c6927041a90) Thanks [@Cenadros](https://github.com/Cenadros)! - Add support for typographies
+
+- [#183](https://github.com/penpot/penpot-exporter-figma-plugin/pull/183) [`a58f9e9`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/a58f9e913de800047207dc86e4df01e3e3b3f235) Thanks [@Cenadros](https://github.com/Cenadros)! - Support for color libraries
+
+### Patch Changes
+
+- [#190](https://github.com/penpot/penpot-exporter-figma-plugin/pull/190) [`511b842`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/511b842b129a9c97c917f5991acfbf1927494b7d) Thanks [@Cenadros](https://github.com/Cenadros)! - Add additional layout properties
+
+- [#185](https://github.com/penpot/penpot-exporter-figma-plugin/pull/185) [`d3c144e`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/d3c144e5e99777bc54635ad3f0067c6927041a90) Thanks [@Cenadros](https://github.com/Cenadros)! - Improve font weight translation
+
+- [#185](https://github.com/penpot/penpot-exporter-figma-plugin/pull/185) [`d3c144e`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/d3c144e5e99777bc54635ad3f0067c6927041a90) Thanks [@Cenadros](https://github.com/Cenadros)! - Fix letter spacing
+
+- [#191](https://github.com/penpot/penpot-exporter-figma-plugin/pull/191) [`b003704`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/b00370410c0b50f4a177dc1a53c87bdad964d368) Thanks [@jordisala1991](https://github.com/jordisala1991)! - Improve paragraph indent using letter spacing
+
 ## 0.7.1
 
 ### Patch Changes

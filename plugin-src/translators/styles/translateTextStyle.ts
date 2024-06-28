@@ -9,11 +9,11 @@ import {
 
 import { TypographyStyle } from '@ui/lib/types/shapes/textShape';
 
-export const translateTextStyle = (figmaStyle: TextStyle): TypographyStyle => {
-  const name = (figmaStyle.remote ? 'Remote / ' : '') + figmaStyle.name;
+import { translateStyleName, translateStylePath } from '.';
 
+export const translateTextStyle = (figmaStyle: TextStyle): TypographyStyle => {
   return {
-    name: figmaStyle.name,
+    name: translateStyleName(figmaStyle),
     textStyle: {
       ...translateFontName(figmaStyle.fontName),
       fontFamily: figmaStyle.fontName.family,
@@ -25,8 +25,8 @@ export const translateTextStyle = (figmaStyle: TextStyle): TypographyStyle => {
       lineHeight: translateLineHeight(figmaStyle)
     },
     typography: {
-      path: '',
-      name
+      path: translateStylePath(figmaStyle),
+      name: translateStyleName(figmaStyle)
     }
   };
 };
