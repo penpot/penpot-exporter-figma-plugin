@@ -1,5 +1,11 @@
 # penpot-exporter
 
+## 0.8.1
+
+### Patch Changes
+
+- [#194](https://github.com/penpot/penpot-exporter-figma-plugin/pull/194) [`53672d8`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/53672d8b43111efa1dedc5deac358410943c2bc5) Thanks [@jordisala1991](https://github.com/jordisala1991)! - Fix local styles categorization system
+
 ## 0.8.0
 
 ### Minor Changes
