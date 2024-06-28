@@ -47,6 +47,7 @@ export type ComponentProperty = {
   variantOptions?: string[];
 };
 
+// This type comes directly from Figma. We have it here because we need to reference it from the UI
 export type ComponentPropertyReference =
   | {
       [nodeProperty in 'visible' | 'characters' | 'mainComponent']?: string;
