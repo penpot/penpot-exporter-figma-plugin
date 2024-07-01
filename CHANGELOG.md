@@ -1,5 +1,11 @@
 # penpot-exporter
 
+## 0.9.2
+
+### Patch Changes
+
+- [#207](https://github.com/penpot/penpot-exporter-figma-plugin/pull/207) [`e5c2886`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/e5c2886a87d96ca3642d23111d17eb30bd73bc2e) Thanks [@Cenadros](https://github.com/Cenadros)! - Rollback to previous version of penpot lib
+
 ## 0.9.1
 
 ### Patch Changes
