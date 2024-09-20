@@ -1,5 +1,18 @@
 # penpot-exporter
 
+## 0.10.1
+
+### Patch Changes
+
+- [#221](https://github.com/penpot/penpot-exporter-figma-plugin/pull/221)
+  [`638817a`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/638817a1d6f5b4a21b266d73d797b677ce2ebac7)
+  Thanks [@Cenadros](https://github.com/Cenadros)! - Figma typings update
+
+- [#220](https://github.com/penpot/penpot-exporter-figma-plugin/pull/220)
+  [`c95d442`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/c95d442e74b2e59ab8873dab808f9f95cdfb4021)
+  Thanks [@Cenadros](https://github.com/Cenadros)! - Fixed issue where big vectors are making the
+  plugin crash
+
 ## 0.10.0
 
 ### Minor Changes
