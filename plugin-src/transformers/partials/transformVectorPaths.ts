@@ -19,9 +19,9 @@ export const transformVectorPaths = (node: VectorNode): PathShape[] => {
 
   const pathShapes = node.vectorPaths
     .filter((vectorPath, index) => {
-      return nodeHasFills(node, vectorPath, (regions ?? [])[index]) || strokeLength > 0;
+      return nodeHasFills(node, vectorPath, regions[index]) || strokeLength > 0;
     })
-    .map((vectorPath, index) => transformVectorPath(node, vectorPath, (regions ?? [])[index]));
+    .map((vectorPath, index) => transformVectorPath(node, vectorPath, regions[index]));
 
   const geometryShapes = node.fillGeometry
     .filter(
