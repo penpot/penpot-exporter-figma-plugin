@@ -14,16 +14,14 @@ import { translateCommands, translateWindingRule } from '@plugin/translators/vec
 import { PathShape } from '@ui/lib/types/shapes/pathShape';
 
 export const transformVectorPaths = (node: VectorNode): PathShape[] => {
+  const regions = node.vectorNetwork?.regions ?? [];
+  const strokeLength = node.strokes.length;
+
   const pathShapes = node.vectorPaths
     .filter((vectorPath, index) => {
-      return (
-        nodeHasFills(node, vectorPath, (node.vectorNetwork.regions ?? [])[index]) ||
-        node.strokes.length > 0
-      );
+      return nodeHasFills(node, vectorPath, regions[index]) || strokeLength > 0;
     })
-    .map((vectorPath, index) =>
-      transformVectorPath(node, vectorPath, (node.vectorNetwork.regions ?? [])[index])
-    );
+    .map((vectorPath, index) => transformVectorPath(node, vectorPath, regions[index]));
 
   const geometryShapes = node.fillGeometry
     .filter(
