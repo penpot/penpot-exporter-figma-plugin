@@ -37,7 +37,7 @@
     "@changesets/changelog-github": "^0.5",
     "@changesets/cli": "^2.27",
     "@figma/eslint-plugin-figma-plugins": "^0.15",
-    "@figma/plugin-typings": "^1.98",
+    "@figma/plugin-typings": "^1.100",
     "@trivago/prettier-plugin-sort-imports": "^4.3",
     "@types/svg-path-parser": "^1.1",
     "@typescript-eslint/eslint-plugin": "^7.18",
