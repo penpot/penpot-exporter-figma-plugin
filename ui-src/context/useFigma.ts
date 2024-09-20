@@ -62,9 +62,16 @@ export const useFigma = (): UseFigmaHook => {
           data: 'exporting'
         });
 
-        const blob = await file.export();
+        const blob = await file.export().catch(error => {
+          sendMessage({
+            type: 'ERROR',
+            data: error.message
+          });
+        });
 
-        download(blob, `${pluginMessage.data.name}.zip`);
+        if (blob) {
+          download(blob, `${pluginMessage.data.name}.zip`);
+        }
 
         setExporting(false);
         setStep(undefined);
@@ -96,6 +103,11 @@ export const useFigma = (): UseFigmaHook => {
       }
       case 'PROGRESS_PROCESSED_ITEMS': {
         setProcessedItems(pluginMessage.data);
+        break;
+      }
+      case 'ERROR': {
+        //TODO: show error message in UI
+        console.error(pluginMessage.data);
         break;
       }
     }
