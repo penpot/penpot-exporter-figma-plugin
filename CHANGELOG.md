@@ -1,5 +1,14 @@
 # penpot-exporter
 
+## 0.10.2
+
+### Patch Changes
+
+- [#225](https://github.com/penpot/penpot-exporter-figma-plugin/pull/225)
+  [`2d0b63d`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/2d0b63d5cd0579d1c2aef0694ed6624edc288fb2)
+  Thanks [@jordisala1991](https://github.com/jordisala1991)! - Fix vector network error on invalid
+  access to the property
+
 ## 0.10.1
 
 ### Patch Changes
