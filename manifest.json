@@ -5,6 +5,6 @@
   "main": "dist/code.js",
   "ui": "dist/index.html",
   "editorType": ["figma"],
-  "networkAccess": { "allowedDomains": ["none"] },
+  "networkAccess": { "allowedDomains": ["https://o4508138256007168.ingest.de.sentry.io"] },
   "documentAccess": "dynamic-page"
 }
