@@ -13,18 +13,19 @@ export const LibraryError = () => {
     <Stack space="small">
       <Stack space="xsmall">
         <Banner icon={<IconWarning32 />} variant="warning">
-          Oops! It looks like there was an <b>error generating the export file</b>. Please open an
-          issue in our{' '}
+          Oops! It looks like there was an <b>error generating the export file</b>.
+        </Banner>
+        <span>
+          Please open an issue in our{' '}
           <Link
             href="https://github.com/penpot/penpot-exporter-figma-plugin/issues"
             target="_blank"
             rel="noreferrer"
-            style="color: black; text-decoration-line: underline;"
           >
-            <b>Github repository</b>
+            Github repository
           </Link>
           , and we&apos;ll be happy to assist you!
-        </Banner>
+        </span>
         <Stack space="xsmall" direction="row">
           <Button onClick={reload} fullWidth>
             Reload
