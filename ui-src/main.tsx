@@ -11,7 +11,7 @@ const options = {
   init: {
     distributed_tracing: { enabled: false },
     privacy: { cookies_enabled: true },
-    ajax: { deny_list: [import.meta.env.VITE_BEACON] }
+    ajax: { deny_list: ['bam.eu01.nr-data.net'] }
   },
   loader_config: {
     accountID: import.meta.env.VITE_ACCOUNT_ID,
@@ -21,8 +21,8 @@ const options = {
     applicationID: import.meta.env.VITE_APPLICATION_ID
   },
   info: {
-    beacon: import.meta.env.VITE_BEACON,
-    errorBeacon: import.meta.env.VITE_ERROR_BEACON,
+    beacon: 'bam.eu01.nr-data.net',
+    errorBeacon: 'bam.eu01.nr-data.net',
     licenseKey: import.meta.env.VITE_LICENSE_KEY,
     applicationID: import.meta.env.VITE_APPLICATION_ID,
     sa: 1

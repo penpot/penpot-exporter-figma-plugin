@@ -5,6 +5,9 @@
   "main": "dist/code.js",
   "ui": "dist/index.html",
   "editorType": ["figma"],
-  "networkAccess": { "allowedDomains": ["https://bam.eu01.nr-data.net"] },
+  "networkAccess": {
+    "allowedDomains": ["https://bam.eu01.nr-data.net"],
+    "reasoning": "We use New Relic to monitor the performance of our application and get errors information."
+  },
   "documentAccess": "dynamic-page"
 }
