@@ -23,6 +23,7 @@
   "license": "MPL2.0",
   "dependencies": {
     "@create-figma-plugin/ui": "^3.2",
+    "@newrelic/browser-agent": "^1.269.0",
     "base64-js": "^1.5",
     "classnames": "^2.5",
     "lru-cache": "^11.0",

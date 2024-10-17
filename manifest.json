@@ -5,6 +5,6 @@
   "main": "dist/code.js",
   "ui": "dist/index.html",
   "editorType": ["figma"],
-  "networkAccess": { "allowedDomains": ["none"] },
+  "networkAccess": { "allowedDomains": ["https://bam.eu01.nr-data.net"] },
   "documentAccess": "dynamic-page"
 }

@@ -69,6 +69,8 @@ export const useFigma = (): UseFigmaHook => {
         setExporting(false);
         setStep(undefined);
 
+        window.newrelic.addPageAction('document-exported');
+
         break;
       }
       case 'CUSTOM_FONTS': {
