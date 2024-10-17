@@ -10,7 +10,7 @@ import './reset.css';
 const options = {
   init: {
     distributed_tracing: { enabled: false },
-    privacy: { cookies_enabled: true },
+    privacy: { cookies_enabled: false },
     ajax: { deny_list: ['bam.eu01.nr-data.net'] }
   },
   loader_config: {
