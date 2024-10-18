@@ -14,7 +14,14 @@ import { translateCommands, translateWindingRule } from '@plugin/translators/vec
 import { PathShape } from '@ui/lib/types/shapes/pathShape';
 
 export const transformVectorPaths = (node: VectorNode): PathShape[] => {
-  const regions = node.vectorNetwork?.regions ?? [];
+  let regions: readonly VectorRegion[] = [];
+
+  try {
+    regions = node.vectorNetwork?.regions ?? [];
+  } catch (error) {
+    console.error('Error accessing vector network', node, error);
+  }
+
   const strokeLength = node.strokes.length;
 
   const pathShapes = node.vectorPaths
