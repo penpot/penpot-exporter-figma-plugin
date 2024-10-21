@@ -1,5 +1,13 @@
 # penpot-exporter
 
+## 0.11.0
+
+### Minor Changes
+
+- [#229](https://github.com/penpot/penpot-exporter-figma-plugin/pull/229)
+  [`f77bc46`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/f77bc463acdb9c12ca45f0ac7e908761eef454e9)
+  Thanks [@Cenadros](https://github.com/Cenadros)! - Basic Error Management
+
 ## 0.10.2
 
 ### Patch Changes
