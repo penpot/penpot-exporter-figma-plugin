@@ -1,7 +1,7 @@
 import mixpanel from 'mixpanel-figma';
 
 export const track = (name: string, opts = {}) => {
-  if (import.meta.env.VITE_MIXPANEL_TOKEN) {
+  if (import.meta.env.VITE_MIXPANEL_TOKEN && import.meta.env.PROD) {
     opts = {
       ...opts,
       'Plugin Version': APP_VERSION
@@ -11,7 +11,7 @@ export const track = (name: string, opts = {}) => {
 };
 
 export const identify = ({ userId }: { userId: string }) => {
-  if (import.meta.env.VITE_MIXPANEL_TOKEN) {
+  if (import.meta.env.VITE_MIXPANEL_TOKEN && import.meta.env.PROD) {
     mixpanel.identify(userId);
 
     mixpanel.people.set({
@@ -22,7 +22,7 @@ export const identify = ({ userId }: { userId: string }) => {
 };
 
 export const initializeMixpanel = () => {
-  if (import.meta.env.VITE_MIXPANEL_TOKEN) {
+  if (import.meta.env.VITE_MIXPANEL_TOKEN && import.meta.env.PROD) {
     mixpanel.init(import.meta.env.VITE_MIXPANEL_TOKEN, {
       disable_cookie: true,
       disable_persistence: true,

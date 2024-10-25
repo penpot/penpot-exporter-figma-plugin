@@ -4,7 +4,8 @@
   "description": "Penpot exporter",
   "type": "module",
   "scripts": {
-    "build": "concurrently -n widget,iframe 'npm:build:main' 'npm:build:ui'",
+    "build": "concurrently -n widget,iframe 'npm:build:main' 'npm:build:ui -- --mode development'",
+    "build:prod": "concurrently -n widget,iframe 'npm:build:main' 'npm:build:ui -- --mode production'",
     "build:main": "esbuild plugin-src/code.ts --bundle --outfile=dist/code.js --target=es2016 --minify",
     "build:ui": "vite build",
     "build:watch": "concurrently -n widget,iframe 'npm:build:main -- --watch' 'npm:build:ui -- --watch'",
