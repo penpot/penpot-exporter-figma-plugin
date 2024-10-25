@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 
 import { FormValues } from '@ui/components/ExportForm';
+import { identify, track } from '@ui/metrics/mixpanel';
 import { parse } from '@ui/parser';
 
 import { MessageData, sendMessage } from '.';
@@ -56,6 +57,11 @@ export const useFigma = (): UseFigmaHook => {
     const { pluginMessage } = event.data;
 
     switch (pluginMessage.type) {
+      case 'USER_DATA': {
+        identify({ userId: pluginMessage.data.userId, name: pluginMessage.data.name });
+        track('Plugin Loaded');
+        break;
+      }
       case 'PENPOT_DOCUMENT': {
         const file = await parse(pluginMessage.data);
 
@@ -77,6 +83,8 @@ export const useFigma = (): UseFigmaHook => {
 
         setExporting(false);
         setStep(undefined);
+
+        track('File Exported');
 
         break;
       }
@@ -111,6 +119,7 @@ export const useFigma = (): UseFigmaHook => {
         setError(true);
         setLoading(false);
         setExporting(false);
+        track('Error', { message: pluginMessage.data });
         break;
       }
     }

@@ -28,6 +28,7 @@
     "base64-js": "^1.5",
     "classnames": "^2.5",
     "lru-cache": "^11.0",
+    "mixpanel-figma": "^2.0.4",
     "preact": "^10.23",
     "react-hook-form": "^7.52",
     "romans": "^2.0",
