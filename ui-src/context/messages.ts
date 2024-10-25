@@ -58,7 +58,6 @@ type UserDataMessage = {
   type: 'USER_DATA';
   data: {
     userId: string;
-    name: string;
   };
 };
 
