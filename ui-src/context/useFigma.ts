@@ -79,12 +79,14 @@ export const useFigma = (): UseFigmaHook => {
 
         if (blob) {
           download(blob, `${pluginMessage.data.name}.zip`);
+
+          // get size of the file in Mb rounded to 2 decimal places
+          const size = Math.round((blob.size / 1024 / 1024) * 100) / 100;
+          track('File Exported', { 'Exported File Size': size + ' Mb' });
         }
 
         setExporting(false);
         setStep(undefined);
-
-        track('File Exported');
 
         break;
       }
@@ -119,7 +121,7 @@ export const useFigma = (): UseFigmaHook => {
         setError(true);
         setLoading(false);
         setExporting(false);
-        track('Error', { message: pluginMessage.data });
+        track('Error', { 'Error Message': pluginMessage.data });
         break;
       }
     }

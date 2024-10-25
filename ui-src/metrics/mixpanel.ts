@@ -2,6 +2,10 @@ import mixpanel from 'mixpanel-figma';
 
 export const track = (name: string, opts = {}) => {
   if (import.meta.env.VITE_MIXPANEL_TOKEN) {
+    opts = {
+      ...opts,
+      'Plugin Version': APP_VERSION
+    };
     mixpanel.track(name, opts);
   }
 };
@@ -11,9 +15,9 @@ export const identify = ({ userId, name }: { userId: string; name: string }) => 
     mixpanel.identify(userId);
 
     mixpanel.people.set({
-      USER_ID: userId,
-      $name: name,
-      version: APP_VERSION
+      'USER_ID': userId,
+      '$name': name,
+      'Plugin Version': APP_VERSION
     });
   }
 };
