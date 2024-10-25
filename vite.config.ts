@@ -14,7 +14,7 @@ export default defineConfig({
     viteSingleFile({ removeViteModuleLoader: true }),
     tsconfigPaths(),
     sentryVitePlugin({
-      org: 'runroom',
+      org: 'runroom-sl',
       project: 'penpot-exporter'
     })
   ],
