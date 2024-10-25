@@ -3,6 +3,7 @@
 declare module ViteEnv {
   interface ImportMetaEnv {
     VITE_SENTRY_DSN: string;
+    VITE_MIXPANEL_TOKEN: string;
   }
 }
 
