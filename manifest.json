@@ -10,7 +10,7 @@
       "https://o4508138256007168.ingest.de.sentry.io",
       "https://api-js.mixpanel.com"
     ],
-    "reasoning": "We use Sentry and Mixpanel to monitor the performance of our application and get errors information."
+    "reasoning": "We use Sentry and Mixpanel to monitor the performance of the plugin and get information about errors to continue improving the experience."
   },
   "permissions": ["currentuser"],
   "documentAccess": "dynamic-page"
