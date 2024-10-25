@@ -10,6 +10,7 @@ export type UseFigmaHook = {
   needsReload: boolean;
   loading: boolean;
   exporting: boolean;
+  error: boolean;
   step: Steps | undefined;
   currentItem: string | undefined;
   totalItems: number;
@@ -38,6 +39,7 @@ export const useFigma = (): UseFigmaHook => {
   const [needsReload, setNeedsReload] = useState(false);
   const [loading, setLoading] = useState(true);
   const [exporting, setExporting] = useState(false);
+  const [error, setError] = useState(false);
 
   const [step, setStep] = useState<Steps>();
   const [currentItem, setCurrentItem] = useState<string | undefined>();
@@ -62,9 +64,16 @@ export const useFigma = (): UseFigmaHook => {
           data: 'exporting'
         });
 
-        const blob = await file.export();
+        const blob = await file.export().catch(error => {
+          sendMessage({
+            type: 'ERROR',
+            data: error.message
+          });
+        });
 
-        download(blob, `${pluginMessage.data.name}.zip`);
+        if (blob) {
+          download(blob, `${pluginMessage.data.name}.zip`);
+        }
 
         setExporting(false);
         setStep(undefined);
@@ -98,6 +107,12 @@ export const useFigma = (): UseFigmaHook => {
         setProcessedItems(pluginMessage.data);
         break;
       }
+      case 'ERROR': {
+        setError(true);
+        setLoading(false);
+        setExporting(false);
+        break;
+      }
     }
   };
 
@@ -113,6 +128,7 @@ export const useFigma = (): UseFigmaHook => {
 
   const reload = () => {
     setLoading(true);
+    setError(false);
     postMessage('reload');
   };
 
@@ -143,6 +159,7 @@ export const useFigma = (): UseFigmaHook => {
     needsReload,
     loading,
     exporting,
+    error,
     step,
     currentItem,
     totalItems,
