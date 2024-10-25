@@ -34,7 +34,6 @@ export default defineConfig({
     rollupOptions: {
       external: ['!../css/base.css']
     },
-
     sourcemap: true
   },
   define: {
