@@ -122,7 +122,7 @@ export const useFigma = (): UseFigmaHook => {
         setLoading(false);
         setExporting(false);
         track('Error', { 'Error Message': pluginMessage.data });
-        break;
+        throw new Error(pluginMessage.data);
       }
     }
   };

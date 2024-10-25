@@ -19,7 +19,7 @@ export const transformVectorPaths = (node: VectorNode): PathShape[] => {
   try {
     regions = node.vectorNetwork?.regions ?? [];
   } catch (error) {
-    console.error('Error accessing vector network', node, error);
+    console.warn('Could not access the vector network', node, error);
   }
 
   const strokeLength = node.strokes.length;

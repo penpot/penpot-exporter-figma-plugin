@@ -62,7 +62,7 @@ export const transformSceneNode = async (node: SceneNode): Promise<PenpotNode | 
   }
 
   if (penpotNode === undefined) {
-    console.error(`Unsupported node type: ${node.type}`);
+    console.warn(`Unsupported node type: ${node.type}`);
   }
 
   return penpotNode;

@@ -8,6 +8,6 @@ export const getUserData = async () => {
       }
     });
   } else {
-    console.error('Could not get user data');
+    console.warn('Could not get user data');
   }
 };
