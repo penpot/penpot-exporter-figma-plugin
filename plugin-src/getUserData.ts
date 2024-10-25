@@ -4,8 +4,7 @@ export const getUserData = async () => {
     figma.ui.postMessage({
       type: 'USER_DATA',
       data: {
-        userId: user.id,
-        name: user.name
+        userId: user.id
       }
     });
   } else {

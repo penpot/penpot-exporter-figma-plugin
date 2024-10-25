@@ -10,13 +10,12 @@ export const track = (name: string, opts = {}) => {
   }
 };
 
-export const identify = ({ userId, name }: { userId: string; name: string }) => {
+export const identify = ({ userId }: { userId: string }) => {
   if (import.meta.env.VITE_MIXPANEL_TOKEN) {
     mixpanel.identify(userId);
 
     mixpanel.people.set({
       'USER_ID': userId,
-      '$name': name,
       'Plugin Version': APP_VERSION
     });
   }
@@ -27,6 +26,8 @@ export const initializeMixpanel = () => {
     mixpanel.init(import.meta.env.VITE_MIXPANEL_TOKEN, {
       disable_cookie: true,
       disable_persistence: true,
+      opt_out_tracking_by_default: true,
+      ip: false,
       track_pageview: true
     });
   }

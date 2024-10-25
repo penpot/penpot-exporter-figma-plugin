@@ -58,7 +58,7 @@ export const useFigma = (): UseFigmaHook => {
 
     switch (pluginMessage.type) {
       case 'USER_DATA': {
-        identify({ userId: pluginMessage.data.userId, name: pluginMessage.data.name });
+        identify({ userId: pluginMessage.data.userId });
         track('Plugin Loaded');
         break;
       }
