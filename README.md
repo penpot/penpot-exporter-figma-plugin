@@ -97,6 +97,7 @@ then selecting "Download ZIP". Extract the ZIP file to a location on your comput
     dependencies, and then the `npm run build` command to build the plugin.
 
 #### Building for production:
+
 Follow the same steps as above, but instead of running `npm run build`, run `npm run build:prod`.
 
 ### Add to Figma
