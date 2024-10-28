@@ -1,5 +1,14 @@
 # penpot-exporter
 
+## 0.12.0
+
+### Minor Changes
+
+- [#228](https://github.com/penpot/penpot-exporter-figma-plugin/pull/228)
+  [`a079f16`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/a079f168df4f0d3cbd15ea58097f6763380d72a4)
+  Thanks [@Cenadros](https://github.com/Cenadros)! - Added basic analytics and error tracking using
+  MixPanel and Sentry
+
 ## 0.11.0
 
 ### Minor Changes
