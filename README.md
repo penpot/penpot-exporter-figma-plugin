@@ -16,7 +16,7 @@
     <a href="https://penpot.app/"><b>Penpot Website</b></a> •
     <a href="https://community.penpot.app/t/figma-to-penpot-export-plugin/5554"><b>Export Figma to Penpot (Penpot community)</b></a> •
     <a href="https://community.penpot.app/"><b>Penpot Community</b></a> •
-      <a href="https://www.figma.com/community/plugin/1219369440655168734/penpot-exporter"><b>Plugin in Figma community</b></a> 
+      <a href="https://www.figma.com/community/plugin/1219369440655168734/penpot-exporter"><b>Plugin in Figma community</b></a>
 </p>
 
 <p align="center">
@@ -95,6 +95,10 @@ then selecting "Download ZIP". Extract the ZIP file to a location on your comput
     command: `cd Downloads/penpot-exporter-figma-plugin`.
 3.  Once you are in the correct folder, you can run the `npm install` command to install the
     dependencies, and then the `npm run build` command to build the plugin.
+
+#### Building for production:
+
+Follow the same steps as above, but instead of running `npm run build`, run `npm run build:prod`.
 
 ### Add to Figma
 

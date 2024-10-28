@@ -20,7 +20,7 @@ export const translateFill = (fill: Paint): Fill | undefined => {
       return translateImageFill(fill);
   }
 
-  console.error(`Unsupported fill type: ${fill.type}`);
+  console.warn(`Unsupported fill type: ${fill.type}`);
 };
 
 export const translateFills = (
@@ -60,5 +60,5 @@ export const translatePageFill = (fill: Paint): string | undefined => {
       return rgbToHex(fill.color);
   }
 
-  console.error(`Unsupported page fill type: ${fill.type}`);
+  console.warn(`Unsupported page fill type: ${fill.type}`);
 };

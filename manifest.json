@@ -5,6 +5,13 @@
   "main": "dist/code.js",
   "ui": "dist/index.html",
   "editorType": ["figma"],
-  "networkAccess": { "allowedDomains": ["none"] },
+  "networkAccess": {
+    "allowedDomains": [
+      "https://o4508183201316864.ingest.de.sentry.io",
+      "https://api-js.mixpanel.com"
+    ],
+    "reasoning": "We use Sentry and Mixpanel to monitor the performance of the plugin and get information about errors to continue improving the experience."
+  },
+  "permissions": ["currentuser"],
   "documentAccess": "dynamic-page"
 }
