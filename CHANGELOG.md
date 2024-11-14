@@ -1,5 +1,14 @@
 # penpot-exporter
 
+## 0.12.1
+
+### Patch Changes
+
+- [#236](https://github.com/penpot/penpot-exporter-figma-plugin/pull/236)
+  [`3da80b4`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/3da80b4c266cf21e3123f8bf8a80bf2318c48c38)
+  Thanks [@Cenadros](https://github.com/Cenadros)! - Fixed transformed shapes when flipped
+  horizontally/vertically
+
 ## 0.12.0
 
 ### Minor Changes
