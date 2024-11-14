@@ -1,8 +1,6 @@
 import { ClosePath, CurveTo, Segment } from '@ui/lib/types/shapes/pathShape';
 import { Point } from '@ui/lib/types/utils/point';
 
-const ROTATION_TOLERANCE = 0.000001;
-
 export const applyRotation = (point: Point, transform: Transform, boundingBox: Rect): Point => {
   const centerPoint = calculateCenter(boundingBox);
 
