@@ -8,7 +8,7 @@
     "build:prod": "concurrently -n widget,iframe 'npm:build:main' 'npm:build:ui -- --mode production'",
     "build:main": "esbuild plugin-src/code.ts --bundle --outfile=dist/code.js --target=es2016 --minify",
     "build:ui": "vite build",
-    "build:watch": "concurrently -n widget,iframe 'npm:build:main -- --watch' 'npm:build:ui -- --watch'",
+    "build:watch": "concurrently -n widget,iframe 'npm:build:main -- --watch' 'npm:build:ui -- --watch --mode development'",
     "lint": "concurrently 'npm:lint:*'",
     "lint:eslint": "eslint .",
     "lint:stylelint": "stylelint ui-src/**.css",

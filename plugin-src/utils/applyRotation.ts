@@ -1,8 +1,6 @@
 import { ClosePath, CurveTo, Segment } from '@ui/lib/types/shapes/pathShape';
 import { Point } from '@ui/lib/types/utils/point';
 
-const ROTATION_TOLERANCE = 0.000001;
-
 export const applyRotation = (point: Point, transform: Transform, boundingBox: Rect): Point => {
   const centerPoint = calculateCenter(boundingBox);
 
@@ -61,7 +59,13 @@ export const applyInverseRotation = (
 export const getRotation = (transform: Transform): number =>
   Math.acos(transform[0][0]) * (180 / Math.PI);
 
-export const hasRotation = (rotation: number): boolean => rotation > ROTATION_TOLERANCE;
+export const isTransformed = (transform: Transform, boundingBox: Rect | null): boolean => {
+  if (!boundingBox) {
+    return false;
+  }
+
+  return transform[0][2] !== boundingBox.x || transform[1][2] !== boundingBox.y;
+};
 
 const inverseMatrix = (matrix: Transform): Transform => [
   [matrix[0][0], matrix[1][0], matrix[0][2]],

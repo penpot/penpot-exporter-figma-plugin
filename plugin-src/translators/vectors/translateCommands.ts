@@ -1,14 +1,12 @@
 import { Command } from 'svg-path-parser';
 
-import { getRotation, hasRotation } from '@plugin/utils';
+import { isTransformed } from '@plugin/utils';
 
 import { translateNonRotatedCommands } from '.';
 import { translateRotatedCommands } from './translateRotatedCommands';
 
 export const translateCommands = (node: LayoutMixin, commands: Command[]) => {
-  const rotation = getRotation(node.absoluteTransform);
-
-  if (hasRotation(rotation) && node.absoluteBoundingBox) {
+  if (node.absoluteBoundingBox && isTransformed(node.absoluteTransform, node.absoluteBoundingBox)) {
     return translateRotatedCommands(commands, node.absoluteTransform, node.absoluteBoundingBox);
   }
 
