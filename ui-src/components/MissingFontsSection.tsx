@@ -21,11 +21,7 @@ export const MissingFontsSection = () => {
           <li>
             Before exporting the file, upload your custom local fonts in Penpot.
             <br />
-            <Link
-              href="https://help.penpot.app/user-guide/custom-fonts/"
-              target="_blank"
-              rel="noreferrer"
-            >
+            <Link href="https://help.penpot.app/user-guide/custom-fonts/" target="_blank">
               Learn how to do it.
             </Link>
           </li>
@@ -34,7 +30,6 @@ export const MissingFontsSection = () => {
             <Link
               href="https://github.com/penpot/penpot-exporter-figma-plugin/wiki/Step-by-Step-guide-to-finding-Font-Ids-in-Penpot"
               target="_blank"
-              rel="noreferrer"
             >
               step-by-step guide
             </Link>{' '}
