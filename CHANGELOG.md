@@ -1,5 +1,53 @@
 # penpot-exporter
 
+## 0.12.1
+
+### Patch Changes
+
+- [#236](https://github.com/penpot/penpot-exporter-figma-plugin/pull/236)
+  [`3da80b4`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/3da80b4c266cf21e3123f8bf8a80bf2318c48c38)
+  Thanks [@Cenadros](https://github.com/Cenadros)! - Fixed transformed shapes when flipped
+  horizontally/vertically
+
+## 0.12.0
+
+### Minor Changes
+
+- [#228](https://github.com/penpot/penpot-exporter-figma-plugin/pull/228)
+  [`a079f16`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/a079f168df4f0d3cbd15ea58097f6763380d72a4)
+  Thanks [@Cenadros](https://github.com/Cenadros)! - Added basic analytics and error tracking using
+  MixPanel and Sentry
+
+## 0.11.0
+
+### Minor Changes
+
+- [#229](https://github.com/penpot/penpot-exporter-figma-plugin/pull/229)
+  [`f77bc46`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/f77bc463acdb9c12ca45f0ac7e908761eef454e9)
+  Thanks [@Cenadros](https://github.com/Cenadros)! - Basic Error Management
+
+## 0.10.2
+
+### Patch Changes
+
+- [#225](https://github.com/penpot/penpot-exporter-figma-plugin/pull/225)
+  [`2d0b63d`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/2d0b63d5cd0579d1c2aef0694ed6624edc288fb2)
+  Thanks [@jordisala1991](https://github.com/jordisala1991)! - Fix vector network error on invalid
+  access to the property
+
+## 0.10.1
+
+### Patch Changes
+
+- [#221](https://github.com/penpot/penpot-exporter-figma-plugin/pull/221)
+  [`638817a`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/638817a1d6f5b4a21b266d73d797b677ce2ebac7)
+  Thanks [@Cenadros](https://github.com/Cenadros)! - Figma typings update
+
+- [#220](https://github.com/penpot/penpot-exporter-figma-plugin/pull/220)
+  [`c95d442`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/c95d442e74b2e59ab8873dab808f9f95cdfb4021)
+  Thanks [@Cenadros](https://github.com/Cenadros)! - Fixed issue where big vectors are making the
+  plugin crash
+
 ## 0.10.0
 
 ### Minor Changes

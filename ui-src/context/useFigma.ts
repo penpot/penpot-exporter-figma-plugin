@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 
 import { FormValues } from '@ui/components/ExportForm';
+import { identify, track } from '@ui/metrics/mixpanel';
 import { parse } from '@ui/parser';
 
 import { MessageData, sendMessage } from '.';
@@ -10,6 +11,7 @@ export type UseFigmaHook = {
   needsReload: boolean;
   loading: boolean;
   exporting: boolean;
+  error: boolean;
   step: Steps | undefined;
   currentItem: string | undefined;
   totalItems: number;
@@ -38,6 +40,7 @@ export const useFigma = (): UseFigmaHook => {
   const [needsReload, setNeedsReload] = useState(false);
   const [loading, setLoading] = useState(true);
   const [exporting, setExporting] = useState(false);
+  const [error, setError] = useState(false);
 
   const [step, setStep] = useState<Steps>();
   const [currentItem, setCurrentItem] = useState<string | undefined>();
@@ -54,6 +57,11 @@ export const useFigma = (): UseFigmaHook => {
     const { pluginMessage } = event.data;
 
     switch (pluginMessage.type) {
+      case 'USER_DATA': {
+        identify({ userId: pluginMessage.data.userId });
+        track('Plugin Loaded');
+        break;
+      }
       case 'PENPOT_DOCUMENT': {
         const file = await parse(pluginMessage.data);
 
@@ -62,9 +70,20 @@ export const useFigma = (): UseFigmaHook => {
           data: 'exporting'
         });
 
-        const blob = await file.export();
+        const blob = await file.export().catch(error => {
+          sendMessage({
+            type: 'ERROR',
+            data: error.message
+          });
+        });
 
-        download(blob, `${pluginMessage.data.name}.zip`);
+        if (blob) {
+          download(blob, `${pluginMessage.data.name}.zip`);
+
+          // get size of the file in Mb rounded to 2 decimal places
+          const size = Math.round((blob.size / 1024 / 1024) * 100) / 100;
+          track('File Exported', { 'Exported File Size': size + ' Mb' });
+        }
 
         setExporting(false);
         setStep(undefined);
@@ -98,6 +117,13 @@ export const useFigma = (): UseFigmaHook => {
         setProcessedItems(pluginMessage.data);
         break;
       }
+      case 'ERROR': {
+        setError(true);
+        setLoading(false);
+        setExporting(false);
+        track('Error', { 'Error Message': pluginMessage.data });
+        throw new Error(pluginMessage.data);
+      }
     }
   };
 
@@ -113,6 +139,7 @@ export const useFigma = (): UseFigmaHook => {
 
   const reload = () => {
     setLoading(true);
+    setError(false);
     postMessage('reload');
   };
 
@@ -143,6 +170,7 @@ export const useFigma = (): UseFigmaHook => {
     needsReload,
     loading,
     exporting,
+    error,
     step,
     currentItem,
     totalItems,

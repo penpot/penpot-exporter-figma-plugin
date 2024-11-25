@@ -11,7 +11,9 @@ type PluginMessage =
   | ProgressStepMessage
   | ProgressCurrentItemMessage
   | ProgressTotalItemsMessage
-  | ProgressProcessedItemsMessage;
+  | ProgressProcessedItemsMessage
+  | ErrorMessage
+  | UserDataMessage;
 
 type PenpotDocumentMessage = {
   type: 'PENPOT_DOCUMENT';
@@ -45,6 +47,18 @@ type ProgressTotalItemsMessage = {
 type ProgressProcessedItemsMessage = {
   type: 'PROGRESS_PROCESSED_ITEMS';
   data: number;
+};
+
+type ErrorMessage = {
+  type: 'ERROR';
+  data: string;
+};
+
+type UserDataMessage = {
+  type: 'USER_DATA';
+  data: {
+    userId: string;
+  };
 };
 
 export const sendMessage = (pluginMessage: PluginMessage) => {

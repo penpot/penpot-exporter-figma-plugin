@@ -8,6 +8,6 @@ export const registerComponentProperties = (node: ComponentSetNode | ComponentNo
       }
     });
   } catch (error) {
-    console.error('Error registering component properties', node, error);
+    console.warn('Could not register component properties', node, error);
   }
 };
