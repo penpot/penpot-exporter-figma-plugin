@@ -18,9 +18,7 @@ export const ExportForm = () => {
         <Stack>
           <MissingFontsSection />
           <Stack space="xsmall" direction="row">
-            <Button type="submit" fullWidth>
-              Export to Penpot
-            </Button>
+            <Button fullWidth>Export to Penpot</Button>
             <Button secondary onClick={cancel} fullWidth>
               Cancel
             </Button>

@@ -20,7 +20,6 @@ export const LibraryError = () => {
           <Link
             href="https://github.com/penpot/penpot-exporter-figma-plugin/issues"
             target="_blank"
-            rel="noreferrer"
           >
             Github repository
           </Link>
