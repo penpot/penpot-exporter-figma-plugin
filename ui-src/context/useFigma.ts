@@ -147,12 +147,12 @@ export const useFigma = (): UseFigmaHook => {
     postMessage('cancel');
   };
 
-  const exportPenpot = (data: FormValues) => {
+  const exportPenpot = () => {
     setExporting(true);
     setStep('processing');
     setProcessedItems(0);
 
-    postMessage('export', data);
+    postMessage('export');
   };
 
   useEffect(() => {
