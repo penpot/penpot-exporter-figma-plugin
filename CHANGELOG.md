@@ -1,5 +1,20 @@
 # penpot-exporter
 
+## 0.13.0
+
+### Minor Changes
+
+- [#243](https://github.com/penpot/penpot-exporter-figma-plugin/pull/243)
+  [`b44cbf2`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/b44cbf2052e18d5d8a77447af48a77e2c3f54b9a)
+  Thanks [@Cenadros](https://github.com/Cenadros)! - Remove custom font form since penpot now
+  matches the fonts by fontName and fontFamily
+
+### Patch Changes
+
+- [#239](https://github.com/penpot/penpot-exporter-figma-plugin/pull/239)
+  [`570aeee`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/570aeee7b0a5298ca7ed4e99aaaf216ecd621cc8)
+  Thanks [@Cenadros](https://github.com/Cenadros)! - Minor updates
+
 ## 0.12.1
 
 ### Patch Changes
