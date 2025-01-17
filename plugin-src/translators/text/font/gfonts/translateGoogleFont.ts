@@ -11,9 +11,11 @@ import { GoogleFont } from './googleFont';
 const fontsCache = new Cache<string, GoogleFont>({ max: 30 });
 
 export const translateGoogleFont = (
-  fontName: FontName,
+  fontName: FontName | undefined,
   fontWeight: string
 ): Pick<TextTypography, 'fontId' | 'fontVariantId' | 'fontWeight'> | undefined => {
+  if (!fontName) return;
+
   const googleFont = getGoogleFont(fontName);
 
   if (googleFont === undefined) return;
@@ -25,11 +27,13 @@ export const translateGoogleFont = (
   };
 };
 
-export const isGoogleFont = (fontName: FontName): boolean => {
+export const isGoogleFont = (fontName: FontName | undefined): boolean => {
   return getGoogleFont(fontName) !== undefined;
 };
 
-const getGoogleFont = (fontName: FontName): GoogleFont | undefined => {
+const getGoogleFont = (fontName: FontName | undefined): GoogleFont | undefined => {
+  if (!fontName) return;
+
   return fontsCache.get(fontName.family, () =>
     gfonts.find(font => font.family === fontName.family)
   );

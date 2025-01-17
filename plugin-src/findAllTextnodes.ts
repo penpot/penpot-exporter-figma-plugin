@@ -29,6 +29,8 @@ export const findMissingFonts = (node: TextNode): FontName[] => {
   const styledTextSegments = node.getStyledTextSegments(['fontName']);
 
   styledTextSegments.map(segment => {
+    if (!segment.fontName) return;
+
     if (isKnownFont(segment.fontName)) return;
 
     missingFonts.push(segment.fontName);
@@ -45,6 +47,6 @@ const extractMissingFonts = (node: TextNode, fonts: Set<string>) => {
   });
 };
 
-const isKnownFont = (fontName: FontName): boolean => {
+const isKnownFont = (fontName: FontName | undefined): boolean => {
   return isGoogleFont(fontName) || isLocalFont(fontName);
 };

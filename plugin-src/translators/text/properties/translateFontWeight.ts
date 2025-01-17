@@ -1,4 +1,6 @@
-export const translateFontWeight = (fontName: FontName): string => {
+export const translateFontWeight = (fontName: FontName | undefined): string => {
+  if (!fontName) return '400';
+
   switch (fontName.style) {
     case 'Thin':
     case 'Thin Italic':
