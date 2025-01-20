@@ -1,5 +1,13 @@
 # penpot-exporter
 
+## 0.13.1
+
+### Patch Changes
+
+- [#246](https://github.com/penpot/penpot-exporter-figma-plugin/pull/246)
+  [`05ec8ea`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/05ec8ea2bc6f381a670beb84f16fb18713ef42f1)
+  Thanks [@Cenadros](https://github.com/Cenadros)! - Fixes undefined fontnames while fetching fonts
+
 ## 0.13.0
 
 ### Minor Changes
