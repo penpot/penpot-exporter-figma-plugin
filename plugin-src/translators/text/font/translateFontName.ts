@@ -7,7 +7,7 @@ import { translateGoogleFont } from './gfonts';
 import { translateLocalFont } from './local';
 
 export const translateFontName = (
-  fontName: FontName
+  fontName: FontName | undefined
 ): Pick<TextTypography, 'fontId' | 'fontVariantId' | 'fontWeight'> | undefined => {
   const fontWeight = translateFontWeight(fontName);
 
