@@ -10,6 +10,7 @@ import {
   transformFigmaIds,
   transformFills,
   transformLayoutAttributes,
+  transformLayoutGrids,
   transformOverrides,
   transformProportion,
   transformRotationAndPosition,
@@ -58,6 +59,7 @@ export const transformFrameNode = async (
       ...transformEffects(node),
       ...transformConstraints(node),
       ...transformAutoLayout(node),
+      ...transformLayoutGrids(node),
       ...transformAndRotation
     };
   }

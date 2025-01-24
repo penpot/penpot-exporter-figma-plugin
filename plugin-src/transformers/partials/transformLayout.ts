@@ -1,4 +1,5 @@
 import {
+  translateGrids,
   translateLayoutAlignContent,
   translateLayoutAlignItems,
   translateLayoutFlexDir,
@@ -13,6 +14,7 @@ import {
 } from '@plugin/translators';
 
 import { LayoutAttributes, LayoutChildAttributes } from '@ui/lib/types/shapes/layout';
+import { ShapeAttributes } from '@ui/lib/types/shapes/shape';
 
 export const transformAutoLayout = (node: BaseFrameMixin): LayoutAttributes => {
   return {
@@ -56,5 +58,11 @@ export const transformLayoutAttributes = (
     'layoutItemMinH': node.minHeight ?? undefined,
     'layoutItemMaxW': node.maxWidth ?? undefined,
     'layoutItemMinW': node.minWidth ?? undefined
+  };
+};
+
+export const transformLayoutGrids = (node: BaseFrameMixin): Pick<ShapeAttributes, 'grids'> => {
+  return {
+    grids: translateGrids(node.layoutGrids)
   };
 };

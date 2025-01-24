@@ -1,4 +1,4 @@
-export const rgbToHex = (color: RGB) => {
+export const rgbToHex = (color: RGB | RGBA) => {
   const r = Math.round(255 * color.r);
   const g = Math.round(255 * color.g);
   const b = Math.round(255 * color.b);

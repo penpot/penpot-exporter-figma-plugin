@@ -10,6 +10,7 @@ import {
   transformFigmaIds,
   transformFills,
   transformLayoutAttributes,
+  transformLayoutGrids,
   transformOverrides,
   transformProportion,
   transformRotationAndPosition,
@@ -64,6 +65,7 @@ export const transformInstanceNode = async (
     ...transformRotationAndPosition(node),
     ...transformConstraints(node),
     ...transformAutoLayout(node),
+    ...transformLayoutGrids(node),
     ...(await transformChildren(node)),
     ...nodeOverrides
   };
