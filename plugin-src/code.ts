@@ -16,7 +16,7 @@ figma.ui.onmessage = message => {
   }
 
   if (message.type === 'export') {
-    handleExportMessage(message.data as Record<string, string>);
+    handleExportMessage();
   }
 
   if (message.type === 'cancel') {

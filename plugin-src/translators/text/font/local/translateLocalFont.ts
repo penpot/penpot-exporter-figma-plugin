@@ -5,9 +5,11 @@ import { TextTypography } from '@ui/lib/types/shapes/textShape';
 import { items as localFonts } from './localFonts.json';
 
 export const translateLocalFont = (
-  fontName: FontName,
+  fontName: FontName | undefined,
   fontWeight: string
 ): Pick<TextTypography, 'fontId' | 'fontVariantId' | 'fontWeight'> | undefined => {
+  if (!fontName) return;
+
   const localFont = getLocalFont(fontName);
 
   if (localFont === undefined) return;
@@ -19,10 +21,12 @@ export const translateLocalFont = (
   };
 };
 
-export const isLocalFont = (fontName: FontName): boolean => {
+export const isLocalFont = (fontName: FontName | undefined): boolean => {
   return getLocalFont(fontName) !== undefined;
 };
 
-const getLocalFont = (fontName: FontName): LocalFont | undefined => {
+const getLocalFont = (fontName: FontName | undefined): LocalFont | undefined => {
+  if (!fontName) return;
+
   return localFonts.find(localFont => localFont.name === fontName.family);
 };
