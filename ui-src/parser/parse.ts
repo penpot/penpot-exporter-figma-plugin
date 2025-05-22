@@ -1,8 +1,9 @@
+import { createBuildContext } from '@penpot/library';
+
 import { init } from '@common/map';
 import { sleep } from '@common/sleep';
 
 import { sendMessage } from '@ui/context';
-import { createBuildContext } from '@ui/lib/penpot';
 import { PenpotContext } from '@ui/lib/types/penpotContext';
 import { TypographyStyle } from '@ui/lib/types/shapes/textShape';
 import { FillStyle } from '@ui/lib/types/utils/fill';

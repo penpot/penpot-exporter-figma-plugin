@@ -1,7 +1,7 @@
+import { exportAsBytes } from '@penpot/library';
 import { useEffect, useState } from 'react';
 
 import { FormValues } from '@ui/components/ExportForm';
-import { exportAsBytes } from '@ui/lib/penpot';
 import { identify, track } from '@ui/metrics/mixpanel';
 import { parse } from '@ui/parser';
 
@@ -75,7 +75,7 @@ export const useFigma = (): UseFigmaHook => {
 
         if (binary) {
           const blob = new Blob([binary], { type: 'application/zip' });
-          download(blob, `${pluginMessage.data.name}.zip`);
+          download(blob, `${pluginMessage.data.name}.penpot`);
 
           // get size of the file in Mb rounded to 2 decimal places
           const size = Math.round((binary.length / 1024 / 1024) * 100) / 100;
