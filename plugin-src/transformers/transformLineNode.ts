@@ -12,7 +12,6 @@ import {
 import { translateCommands } from '@plugin/translators/vectors';
 
 import { PathShape } from '@ui/lib/types/shapes/pathShape';
-import { Segment } from '@ui/lib/types/shapes/pathShape';
 
 /**
  * In order to match the normal representation of a line in Penpot, we will assume that
@@ -37,7 +36,7 @@ export const transformLineNode = (node: LineNode): PathShape => {
   };
 };
 
-const translateLineNode = (node: LineNode): Segment[] => {
+const translateLineNode = (node: LineNode): string => {
   return translateCommands(node, [
     {
       x: 0,

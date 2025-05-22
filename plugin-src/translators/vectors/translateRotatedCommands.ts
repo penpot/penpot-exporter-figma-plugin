@@ -1,31 +1,36 @@
-import { Command } from 'svg-path-parser';
+import { ClosePathCommand, Command } from 'svg-path-parser';
 
 import { applyInverseRotation, applyRotationToSegment } from '@plugin/utils';
 
-import { ClosePath, Segment } from '@ui/lib/types/shapes/pathShape';
+import { translateCommandsToPathString, translateNonRotatedCommand } from '.';
 
-import { translateNonRotatedCommand } from '.';
-
-const isClosePath = (segment: Segment): segment is ClosePath => segment.command === 'close-path';
+const isClosePath = (command: Command): command is ClosePathCommand =>
+  command.command === 'closepath';
 
 export const translateRotatedCommands = (
   commands: Command[],
   transform: Transform,
   boundingBox: Rect
-): Segment[] => {
+): string => {
   const referencePoint = applyInverseRotation(
     { x: transform[0][2], y: transform[1][2] },
     transform,
     boundingBox
   );
 
-  return commands.map(command => {
-    const segment = translateNonRotatedCommand(command, referencePoint.x, referencePoint.y);
+  return translateCommandsToPathString(
+    commands.map(command => {
+      const translatedCommand = translateNonRotatedCommand(
+        command,
+        referencePoint.x,
+        referencePoint.y
+      );
 
-    if (isClosePath(segment)) {
-      return segment;
-    }
+      if (isClosePath(translatedCommand)) {
+        return translatedCommand;
+      }
 
-    return applyRotationToSegment(segment, transform, boundingBox);
-  });
+      return applyRotationToSegment(translatedCommand, transform, boundingBox);
+    })
+  );
 };

@@ -1,6 +1,6 @@
 import { translateFill } from '@plugin/translators/fills';
 
-import { Stroke, StrokeAlignment, StrokeCaps } from '@ui/lib/types/utils/stroke';
+import { Stroke, StrokeAlignment, StrokeCaps, StrokeImage } from '@ui/lib/types/utils/stroke';
 
 export const translateStrokes = (
   node: MinimalStrokesMixin | (MinimalStrokesMixin & IndividualStrokesMixin),
@@ -22,15 +22,21 @@ export const translateStroke = (
   sharedStrokeProperties: Stroke,
   strokeCaps: (stroke: Stroke) => Stroke,
   firstStroke: boolean
-): Stroke => {
+): Stroke | StrokeImage => {
   const fill = translateFill(paint);
 
-  let stroke: Stroke = {
+  let stroke: Stroke | StrokeImage = {
     strokeColor: fill?.fillColor,
     strokeOpacity: fill?.fillOpacity,
-    strokeImage: fill?.fillImage,
     ...sharedStrokeProperties
   };
+
+  if (fill?.fillImage) {
+    stroke = {
+      ...stroke,
+      strokeImage: fill.fillImage
+    };
+  }
 
   if (firstStroke) {
     stroke = strokeCaps(stroke);

@@ -1,15 +1,22 @@
-import { Stroke } from '@ui/lib/types/utils/stroke';
+import { Stroke, StrokeImage } from '@ui/lib/types/utils/stroke';
 
 import { symbolFillImage } from '.';
 
-export const symbolStrokes = (strokes?: Stroke[]): Stroke[] | undefined => {
+export const symbolStrokes = (strokes?: Stroke[]): Stroke[] | StrokeImage[] | undefined => {
   if (!strokes) return;
 
   return strokes.map(stroke => {
-    if (stroke.strokeImage) {
-      stroke.strokeImage = symbolFillImage(stroke.strokeImage);
+    if (isStrokeImage(stroke)) {
+      const strokeImage = symbolFillImage(stroke.strokeImage);
+      if (strokeImage) {
+        stroke.strokeImage = strokeImage;
+      }
     }
 
     return stroke;
   });
+};
+
+const isStrokeImage = (stroke: Stroke): stroke is StrokeImage => {
+  return !!(stroke as StrokeImage).strokeImage;
 };

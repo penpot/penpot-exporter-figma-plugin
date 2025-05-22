@@ -13,7 +13,10 @@ export type Stroke = {
   strokeCapStart?: StrokeCaps;
   strokeCapEnd?: StrokeCaps;
   strokeColorGradient?: Gradient;
-  strokeImage?: ImageColor | PartialImageColor;
+};
+
+export type StrokeImage = Stroke & {
+  strokeImage: ImageColor | PartialImageColor;
 };
 
 export type StrokeAlignment = 'center' | 'inner' | 'outer';
