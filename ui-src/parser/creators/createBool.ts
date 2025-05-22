@@ -1,4 +1,4 @@
-import { PenpotFile } from '@ui/lib/types/penpotFile';
+import { PenpotContext } from '@ui/lib/types/penpotContext';
 import { BoolShape } from '@ui/lib/types/shapes/boolShape';
 import { parseFigmaId } from '@ui/parser';
 import {
@@ -11,11 +11,11 @@ import {
 import { createItems } from '.';
 
 export const createBool = (
-  file: PenpotFile,
+  context: PenpotContext,
   { type, figmaId, figmaRelatedId, children = [], ...shape }: BoolShape
 ) => {
-  shape.id = parseFigmaId(file, figmaId);
-  shape.shapeRef = parseFigmaId(file, figmaRelatedId, true);
+  shape.id = parseFigmaId(context, figmaId);
+  shape.shapeRef = parseFigmaId(context, figmaRelatedId, true);
   shape.fills = symbolFills(shape.fillStyleId, shape.fills);
   shape.strokes = symbolStrokes(shape.strokes);
   shape.boolType = symbolBoolType(shape.boolType);
@@ -26,9 +26,9 @@ export const createBool = (
     shape.componentPropertyReferences
   );
 
-  file.addBool(shape);
+  context.addBool(shape);
 
-  createItems(file, children);
+  createItems(context, children);
 
-  file.closeBool();
+  context.closeBool();
 };

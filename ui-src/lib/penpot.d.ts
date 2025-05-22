@@ -1,3 +1,4 @@
-import { PenpotFile } from '@ui/lib/types/penpotFile';
+import { PenpotContext } from '@ui/lib/types/penpotContext';
 
-export function createFile(name: string): PenpotFile;
+export function createBuildContext(): PenpotContext;
+export function exportAsBytes(context: PenpotContext): Uint8Array;

@@ -3,8 +3,9 @@ import { SavedGrids } from '@ui/lib/types/utils/grid';
 import { Uuid } from '@ui/lib/types/utils/uuid';
 
 export type PenpotPage = {
+  id?: Uuid;
   name: string;
-  options?: PenpotPageOptions;
+  background?: string;
 } & Children;
 
 export type PenpotPageOptions = {

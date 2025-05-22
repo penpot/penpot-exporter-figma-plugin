@@ -2,10 +2,10 @@ import { toArray } from '@common/map';
 import { sleep } from '@common/sleep';
 
 import { sendMessage } from '@ui/context';
-import { PenpotFile } from '@ui/lib/types/penpotFile';
+import { PenpotContext } from '@ui/lib/types/penpotContext';
 import { colors } from '@ui/parser';
 
-export const createColorsLibrary = async (file: PenpotFile) => {
+export const createColorsLibrary = async (context: PenpotContext) => {
   let librariesBuilt = 1;
   const libraries = toArray(colors);
 
@@ -21,7 +21,7 @@ export const createColorsLibrary = async (file: PenpotFile) => {
 
   for (const [_, library] of libraries) {
     for (let index = 0; index < library.fills.length; index++) {
-      file.addLibraryColor({
+      context.addLibraryColor({
         ...library.colors[index],
         id: library.fills[index].fillColorRefId,
         refFile: library.fills[index].fillColorRefFile,

@@ -2,10 +2,10 @@ import { toArray } from '@common/map';
 import { sleep } from '@common/sleep';
 
 import { sendMessage } from '@ui/context';
-import { PenpotFile } from '@ui/lib/types/penpotFile';
+import { PenpotContext } from '@ui/lib/types/penpotContext';
 import { typographies } from '@ui/parser';
 
-export const createTextLibrary = async (file: PenpotFile) => {
+export const createTextLibrary = async (context: PenpotContext) => {
   let librariesBuilt = 1;
   const libraries = toArray(typographies);
 
@@ -20,7 +20,7 @@ export const createTextLibrary = async (file: PenpotFile) => {
   });
 
   for (const [_, library] of libraries) {
-    file.addLibraryTypography({
+    context.addLibraryTypography({
       ...library.typography,
       fontId: library.textStyle.fontId,
       fontVariantId: library.textStyle.fontVariantId,

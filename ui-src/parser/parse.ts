@@ -2,8 +2,8 @@ import { init } from '@common/map';
 import { sleep } from '@common/sleep';
 
 import { sendMessage } from '@ui/context';
-import { createFile } from '@ui/lib/penpot';
-import { PenpotFile } from '@ui/lib/types/penpotFile';
+import { createBuildContext } from '@ui/lib/penpot';
+import { PenpotContext } from '@ui/lib/types/penpotContext';
 import { TypographyStyle } from '@ui/lib/types/shapes/textShape';
 import { FillStyle } from '@ui/lib/types/utils/fill';
 import {
@@ -50,7 +50,7 @@ const optimizeImages = async (binaryImages: Record<string, Uint8Array>) => {
 };
 
 const prepareTypographyLibraries = async (
-  file: PenpotFile,
+  context: PenpotContext,
   styles: Record<string, TypographyStyle>
 ) => {
   const stylesToRegister = Object.entries(styles);
@@ -70,9 +70,9 @@ const prepareTypographyLibraries = async (
   });
 
   for (const [key, style] of stylesToRegister) {
-    const typographyId = file.newId();
+    const typographyId = context.genId();
     style.textStyle.typographyRefId = typographyId;
-    style.textStyle.typographyRefFile = file.getId();
+    style.textStyle.typographyRefFile = context.currentFileId;
     style.typography.id = typographyId;
 
     typographies.set(key, style);
@@ -86,7 +86,7 @@ const prepareTypographyLibraries = async (
   }
 };
 
-const prepareColorLibraries = async (file: PenpotFile, styles: Record<string, FillStyle>) => {
+const prepareColorLibraries = async (context: PenpotContext, styles: Record<string, FillStyle>) => {
   const stylesToRegister = Object.entries(styles);
 
   if (stylesToRegister.length === 0) return;
@@ -105,11 +105,11 @@ const prepareColorLibraries = async (file: PenpotFile, styles: Record<string, Fi
 
   for (const [key, fillStyle] of stylesToRegister) {
     for (let index = 0; index < fillStyle.fills.length; index++) {
-      const colorId = file.newId();
+      const colorId = context.genId();
       fillStyle.fills[index].fillColorRefId = colorId;
-      fillStyle.fills[index].fillColorRefFile = file.getId();
+      fillStyle.fills[index].fillColorRefFile = context.currentFileId;
       fillStyle.colors[index].id = colorId;
-      fillStyle.colors[index].refFile = file.getId();
+      fillStyle.colors[index].refFile = context.currentFileId;
     }
 
     colors.set(key, fillStyle);
@@ -131,15 +131,16 @@ export const parse = async ({
   paintStyles,
   textStyles,
   componentProperties
-}: PenpotDocument) => {
+}: PenpotDocument): Promise<PenpotContext> => {
   init(componentShapes, components);
   init(uiComponentProperties, componentProperties);
 
-  const file = createFile(name);
+  const context = createBuildContext();
+  context.addFile({ name });
 
   await optimizeImages(images);
-  await prepareColorLibraries(file, paintStyles);
-  await prepareTypographyLibraries(file, textStyles);
+  await prepareColorLibraries(context, paintStyles);
+  await prepareTypographyLibraries(context, textStyles);
 
-  return buildFile(file, children);
+  return buildFile(context, children);
 };

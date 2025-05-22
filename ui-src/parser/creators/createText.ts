@@ -1,14 +1,14 @@
-import { PenpotFile } from '@ui/lib/types/penpotFile';
+import { PenpotContext } from '@ui/lib/types/penpotContext';
 import { Paragraph, TextContent, TextNode, TextShape } from '@ui/lib/types/shapes/textShape';
 import { parseFigmaId, typographies } from '@ui/parser';
 import { symbolFills, symbolStrokes, symbolTouched } from '@ui/parser/creators/symbols';
 
 export const createText = (
-  file: PenpotFile,
+  context: PenpotContext,
   { type, figmaId, figmaRelatedId, characters, ...shape }: TextShape
 ) => {
-  shape.id = parseFigmaId(file, figmaId);
-  shape.shapeRef = parseFigmaId(file, figmaRelatedId, true);
+  shape.id = parseFigmaId(context, figmaId);
+  shape.shapeRef = parseFigmaId(context, figmaRelatedId, true);
   shape.content = parseContent(shape.content);
   shape.strokes = symbolStrokes(shape.strokes);
   shape.touched = symbolTouched(
@@ -18,7 +18,7 @@ export const createText = (
     shape.componentPropertyReferences
   );
 
-  file.createText(shape);
+  context.addText(shape);
 };
 
 const parseContent = (content: TextContent | undefined): TextContent | undefined => {

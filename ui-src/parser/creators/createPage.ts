@@ -1,12 +1,15 @@
-import { PenpotFile } from '@ui/lib/types/penpotFile';
+import { PenpotContext } from '@ui/lib/types/penpotContext';
 import { PenpotPage } from '@ui/lib/types/penpotPage';
 
 import { createItems } from '.';
 
-export const createPage = (file: PenpotFile, { name, options, children = [] }: PenpotPage) => {
-  file.addPage(name, options);
+export const createPage = (
+  context: PenpotContext,
+  { name, background, children = [] }: PenpotPage
+) => {
+  context.addPage({ name, background });
 
-  createItems(file, children);
+  createItems(context, children);
 
-  file.closePage();
+  context.closePage();
 };

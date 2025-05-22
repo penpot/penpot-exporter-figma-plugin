@@ -1,14 +1,14 @@
-import { PenpotFile } from '@ui/lib/types/penpotFile';
+import { PenpotContext } from '@ui/lib/types/penpotContext';
 import { RectShape } from '@ui/lib/types/shapes/rectShape';
 import { parseFigmaId } from '@ui/parser';
 import { symbolFills, symbolStrokes, symbolTouched } from '@ui/parser/creators/symbols';
 
 export const createRectangle = (
-  file: PenpotFile,
+  context: PenpotContext,
   { type, figmaId, figmaRelatedId, ...shape }: RectShape
 ) => {
-  shape.id = parseFigmaId(file, figmaId);
-  shape.shapeRef = parseFigmaId(file, figmaRelatedId, true);
+  shape.id = parseFigmaId(context, figmaId);
+  shape.shapeRef = parseFigmaId(context, figmaRelatedId, true);
   shape.fills = symbolFills(shape.fillStyleId, shape.fills);
   shape.strokes = symbolStrokes(shape.strokes);
   shape.touched = symbolTouched(
@@ -18,5 +18,5 @@ export const createRectangle = (
     shape.componentPropertyReferences
   );
 
-  file.createRect(shape);
+  context.addRect(shape);
 };

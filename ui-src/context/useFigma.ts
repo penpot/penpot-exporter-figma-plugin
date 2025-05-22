@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 
 import { FormValues } from '@ui/components/ExportForm';
+import { exportAsBytes } from '@ui/lib/penpot';
 import { identify, track } from '@ui/metrics/mixpanel';
 import { parse } from '@ui/parser';
 
@@ -63,25 +64,21 @@ export const useFigma = (): UseFigmaHook => {
         break;
       }
       case 'PENPOT_DOCUMENT': {
-        const file = await parse(pluginMessage.data);
+        const context = await parse(pluginMessage.data);
 
         sendMessage({
           type: 'PROGRESS_STEP',
           data: 'exporting'
         });
 
-        const blob = await file.export().catch(error => {
-          sendMessage({
-            type: 'ERROR',
-            data: error.message
-          });
-        });
+        const binary = await exportAsBytes(context);
 
-        if (blob) {
+        if (binary) {
+          const blob = new Blob([binary], { type: 'application/zip' });
           download(blob, `${pluginMessage.data.name}.zip`);
 
           // get size of the file in Mb rounded to 2 decimal places
-          const size = Math.round((blob.size / 1024 / 1024) * 100) / 100;
+          const size = Math.round((binary.length / 1024 / 1024) * 100) / 100;
           track('File Exported', { 'Exported File Size': size + ' Mb' });
         }
 

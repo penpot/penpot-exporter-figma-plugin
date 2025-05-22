@@ -1,4 +1,4 @@
-import { PenpotFile } from '@ui/lib/types/penpotFile';
+import { PenpotContext } from '@ui/lib/types/penpotContext';
 import { PathShape } from '@ui/lib/types/shapes/pathShape';
 import { parseFigmaId } from '@ui/parser';
 import {
@@ -9,11 +9,11 @@ import {
 } from '@ui/parser/creators/symbols';
 
 export const createPath = (
-  file: PenpotFile,
+  context: PenpotContext,
   { type, figmaId, figmaRelatedId, ...shape }: PathShape
 ) => {
-  shape.id = parseFigmaId(file, figmaId);
-  shape.shapeRef = parseFigmaId(file, figmaRelatedId, true);
+  shape.id = parseFigmaId(context, figmaId);
+  shape.shapeRef = parseFigmaId(context, figmaRelatedId, true);
   shape.fills = symbolFills(shape.fillStyleId, shape.fills);
   shape.strokes = symbolStrokes(shape.strokes);
   shape.content = symbolPathContent(shape.content);
@@ -24,5 +24,5 @@ export const createPath = (
     shape.componentPropertyReferences
   );
 
-  file.createPath(shape);
+  context.addPath(shape);
 };
