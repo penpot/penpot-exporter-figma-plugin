@@ -2,7 +2,7 @@ import { PenpotFile } from '@ui/lib/types/penpotFile';
 import { PenpotPage } from '@ui/lib/types/penpotPage';
 import { BoolShape } from '@ui/lib/types/shapes/boolShape';
 import { CircleShape } from '@ui/lib/types/shapes/circleShape';
-import { ComponentShape } from '@ui/lib/types/shapes/componentShape';
+import { PenpotComponent } from '@ui/lib/types/shapes/componentShape';
 import { FrameShape } from '@ui/lib/types/shapes/frameShape';
 import { GroupShape } from '@ui/lib/types/shapes/groupShape';
 import { PathShape } from '@ui/lib/types/shapes/pathShape';
@@ -30,8 +30,7 @@ export interface PenpotContext {
   addText(options: TextShape): Uuid;
   addLibraryColor(color: Color): Uuid;
   addLibraryTypography(typography: Typography): void;
-  addComponent(component: ComponentShape): Uuid;
-  finishComponent(): void;
+  addComponent(component: PenpotComponent): Uuid;
   addFileMedia(media: Media, blob: Blob): Uuid;
   getMediaAsImage(mediaId: Uuid): ImageColor;
   genId(): Uuid;

@@ -3,11 +3,9 @@ import { sleep } from '@common/sleep';
 
 import { sendMessage } from '@ui/context';
 import { PenpotContext } from '@ui/lib/types/penpotContext';
+import { PenpotComponent } from '@ui/lib/types/shapes/componentShape';
 import { componentShapes, components as uiComponents } from '@ui/parser';
-import { symbolBlur, symbolFills, symbolStrokes } from '@ui/parser/creators/symbols';
 import { UiComponent } from '@ui/types';
-
-import { createItems } from '.';
 
 export const createComponentsLibrary = async (context: PenpotContext) => {
   let componentsBuilt = 1;
@@ -42,22 +40,13 @@ const createComponentLibrary = (context: PenpotContext, uiComponent: UiComponent
     return;
   }
 
-  const { children = [], ...shape } = componentShape;
+  const penpotComponent = {
+    componentId: uiComponent.componentId,
+    fileId: context.currentFileId,
+    name: componentShape.name,
+    frameId: uiComponent.mainInstanceId,
+    pageId: uiComponent.mainInstancePage
+  } as PenpotComponent;
 
-  shape.fills = symbolFills(context, shape.fillStyleId, shape.fills);
-  shape.strokes = symbolStrokes(context, shape.strokes);
-  shape.blur = symbolBlur(context, shape.blur);
-  shape.id = uiComponent.componentId;
-  shape.componentId = uiComponent.componentId;
-  shape.mainInstancePage = uiComponent.mainInstancePage;
-  shape.mainInstanceId = uiComponent.mainInstanceId;
-  shape.componentRoot = true;
-  shape.mainInstance = true;
-  shape.componentFile = context.currentFileId;
-
-  context.addComponent(shape);
-
-  createItems(context, children);
-
-  context.finishComponent();
+  context.addComponent(penpotComponent);
 };
