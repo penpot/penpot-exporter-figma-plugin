@@ -75,7 +75,7 @@ export const useFigma = (): UseFigmaHook => {
 
         if (binary) {
           const blob = new Blob([binary], { type: 'application/zip' });
-          download(blob, `${pluginMessage.data.name}.penpot`);
+          download(blob, `${pluginMessage.data.name}.zip`);
 
           // get size of the file in Mb rounded to 2 decimal places
           const size = Math.round((binary.length / 1024 / 1024) * 100) / 100;

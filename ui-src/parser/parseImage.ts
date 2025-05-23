@@ -1,18 +1,23 @@
-import { ImageColor } from '@ui/lib/types/utils/imageColor';
+import { PenpotContext } from '@ui/lib/types/penpotContext';
+import { Uuid } from '@ui/lib/types/utils/uuid';
 import { detectMimeType } from '@ui/utils';
 
 const IMAGE_QUALITY = 0.8;
 
-export const parseImage = async (bytes: Uint8Array): Promise<ImageColor> => {
+export const parseImage = async (
+  context: PenpotContext,
+  key: string,
+  bytes: Uint8Array
+): Promise<Uuid> => {
   const image = await extractFromBytes(bytes);
-
-  return {
-    width: image.width,
-    height: image.height,
-    dataUri: image.dataURL,
-    keepAspectRatio: true,
-    id: '00000000-0000-0000-0000-000000000000'
-  };
+  return context.addFileMedia(
+    {
+      name: key,
+      width: image.width,
+      height: image.height
+    },
+    image.blob
+  );
 };
 
 async function extractFromBytes(bytes: Uint8Array) {
@@ -35,18 +40,10 @@ async function extractFromBytes(bytes: Uint8Array) {
 
   context.drawImage(image, 0, 0);
 
-  const dataURL = await canvas
-    .convertToBlob({ type: mymeType, quality: IMAGE_QUALITY })
-    .then(blob => {
-      return new Promise<string>(resolve => {
-        const reader = new FileReader();
-        reader.onload = () => resolve(reader.result as string);
-        reader.readAsDataURL(blob);
-      });
-    });
+  const blob = await canvas.convertToBlob({ type: mymeType, quality: IMAGE_QUALITY });
 
   return {
-    dataURL,
+    blob,
     width: image.width,
     height: image.height
   };

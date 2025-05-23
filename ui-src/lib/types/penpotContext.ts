@@ -9,6 +9,8 @@ import { PathShape } from '@ui/lib/types/shapes/pathShape';
 import { RectShape } from '@ui/lib/types/shapes/rectShape';
 import { TextShape } from '@ui/lib/types/shapes/textShape';
 import { Color } from '@ui/lib/types/utils/color';
+import { ImageColor } from '@ui/lib/types/utils/imageColor';
+import { Media } from '@ui/lib/types/utils/media';
 import { Typography } from '@ui/lib/types/utils/typography';
 import { Uuid } from '@ui/lib/types/utils/uuid';
 
@@ -26,10 +28,12 @@ export interface PenpotContext {
   addCircle(circle: CircleShape): Uuid;
   addPath(path: PathShape): Uuid;
   addText(options: TextShape): Uuid;
-  addLibraryColor(color: Color): void;
+  addLibraryColor(color: Color): Uuid;
   addLibraryTypography(typography: Typography): void;
   addComponent(component: ComponentShape): Uuid;
   finishComponent(): void;
+  addFileMedia(media: Media, blob: Blob): Uuid;
+  getMediaAsImage(mediaId: Uuid): ImageColor;
   genId(): Uuid;
   currentPageId: Uuid;
   currentFileId: Uuid;

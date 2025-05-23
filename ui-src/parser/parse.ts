@@ -19,7 +19,7 @@ import { PenpotDocument } from '@ui/types';
 
 import { parseImage } from '.';
 
-const optimizeImages = async (binaryImages: Record<string, Uint8Array>) => {
+const optimizeImages = async (context: PenpotContext, binaryImages: Record<string, Uint8Array>) => {
   const imagesToOptimize = Object.entries(binaryImages);
 
   if (imagesToOptimize.length === 0) return;
@@ -38,7 +38,7 @@ const optimizeImages = async (binaryImages: Record<string, Uint8Array>) => {
 
   for (const [key, bytes] of imagesToOptimize) {
     if (bytes) {
-      images.set(key, await parseImage(bytes));
+      images.set(key, await parseImage(context, key, bytes));
     }
 
     sendMessage({
@@ -139,7 +139,7 @@ export const parse = async ({
   const context = createBuildContext();
   context.addFile({ name });
 
-  await optimizeImages(images);
+  await optimizeImages(context, images);
   await prepareColorLibraries(context, paintStyles);
   await prepareTypographyLibraries(context, textStyles);
 

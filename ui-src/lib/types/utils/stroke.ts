@@ -3,7 +3,7 @@ import { ImageColor, PartialImageColor } from './imageColor';
 import { Uuid } from './uuid';
 
 export type Stroke = {
-  strokeColor?: string;
+  strokeColor: string;
   strokeColorRefFile?: Uuid;
   strokeColorRefId?: Uuid;
   strokeOpacity?: number;

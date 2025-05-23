@@ -14,8 +14,8 @@ export const createArtboard = (
 
   shape.id = id;
   shape.shapeRef ??= parseFigmaId(context, figmaRelatedId, true);
-  shape.fills = symbolFills(shape.fillStyleId, shape.fills);
-  shape.strokes = symbolStrokes(shape.strokes);
+  shape.fills = symbolFills(context, shape.fillStyleId, shape.fills);
+  shape.strokes = symbolStrokes(context, shape.strokes);
   shape.touched = symbolTouched(
     !shape.hidden,
     undefined,

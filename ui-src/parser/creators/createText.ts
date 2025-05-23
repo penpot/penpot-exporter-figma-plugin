@@ -9,8 +9,8 @@ export const createText = (
 ) => {
   shape.id = parseFigmaId(context, figmaId);
   shape.shapeRef = parseFigmaId(context, figmaRelatedId, true);
-  shape.content = parseContent(shape.content);
-  shape.strokes = symbolStrokes(shape.strokes);
+  shape.content = parseContent(context, shape.content);
+  shape.strokes = symbolStrokes(context, shape.strokes);
   shape.touched = symbolTouched(
     !shape.hidden,
     characters,
@@ -21,15 +21,18 @@ export const createText = (
   context.addText(shape);
 };
 
-const parseContent = (content: TextContent | undefined): TextContent | undefined => {
+const parseContent = (
+  context: PenpotContext,
+  content: TextContent | undefined
+): TextContent | undefined => {
   if (!content) return;
 
   content.children = content.children?.map(paragraphSet => {
     paragraphSet.children = paragraphSet.children.map(paragraph => {
       paragraph.children = paragraph.children.map(textNode => {
-        return parseTextStyle(textNode, textNode.textStyleId) as TextNode;
+        return parseTextStyle(context, textNode, textNode.textStyleId) as TextNode;
       });
-      return parseTextStyle(paragraph, paragraph.textStyleId) as Paragraph;
+      return parseTextStyle(context, paragraph, paragraph.textStyleId) as Paragraph;
     });
     return paragraphSet;
   });
@@ -37,9 +40,13 @@ const parseContent = (content: TextContent | undefined): TextContent | undefined
   return content;
 };
 
-const parseTextStyle = (text: Paragraph | TextNode, textStyleId?: string): Paragraph | TextNode => {
+const parseTextStyle = (
+  context: PenpotContext,
+  text: Paragraph | TextNode,
+  textStyleId?: string
+): Paragraph | TextNode => {
   let textStyle = text;
-  textStyle.fills = symbolFills(text.fillStyleId, text.fills);
+  textStyle.fills = symbolFills(context, text.fillStyleId, text.fills);
 
   const libraryStyle = textStyleId ? typographies.get(textStyleId) : undefined;
 

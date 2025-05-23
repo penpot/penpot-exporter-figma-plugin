@@ -44,8 +44,8 @@ const createComponentLibrary = (context: PenpotContext, uiComponent: UiComponent
 
   const { children = [], ...shape } = componentShape;
 
-  shape.fills = symbolFills(shape.fillStyleId, shape.fills);
-  shape.strokes = symbolStrokes(shape.strokes);
+  shape.fills = symbolFills(context, shape.fillStyleId, shape.fills);
+  shape.strokes = symbolStrokes(context, shape.strokes);
   shape.id = uiComponent.componentId;
   shape.componentId = uiComponent.componentId;
   shape.mainInstancePage = uiComponent.mainInstancePage;
