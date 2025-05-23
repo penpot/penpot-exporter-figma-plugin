@@ -4,7 +4,7 @@ import { sleep } from '@common/sleep';
 import { sendMessage } from '@ui/context';
 import { PenpotContext } from '@ui/lib/types/penpotContext';
 import { componentShapes, components as uiComponents } from '@ui/parser';
-import { symbolFills, symbolStrokes } from '@ui/parser/creators/symbols';
+import { symbolBlur, symbolFills, symbolStrokes } from '@ui/parser/creators/symbols';
 import { UiComponent } from '@ui/types';
 
 import { createItems } from '.';
@@ -46,6 +46,7 @@ const createComponentLibrary = (context: PenpotContext, uiComponent: UiComponent
 
   shape.fills = symbolFills(context, shape.fillStyleId, shape.fills);
   shape.strokes = symbolStrokes(context, shape.strokes);
+  shape.blur = symbolBlur(context, shape.blur);
   shape.id = uiComponent.componentId;
   shape.componentId = uiComponent.componentId;
   shape.mainInstancePage = uiComponent.mainInstancePage;

@@ -1,3 +1,4 @@
+export * from './symbolBlur';
 export * from './symbolBoolType';
 export * from './symbolFills';
 export * from './symbolPathContent';

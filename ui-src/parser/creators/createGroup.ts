@@ -1,7 +1,7 @@
 import { PenpotContext } from '@ui/lib/types/penpotContext';
 import { GroupShape } from '@ui/lib/types/shapes/groupShape';
 import { parseFigmaId } from '@ui/parser';
-import { symbolTouched } from '@ui/parser/creators/symbols';
+import { symbolBlur, symbolTouched } from '@ui/parser/creators/symbols';
 
 import { createItems } from '.';
 
@@ -11,6 +11,7 @@ export const createGroup = (
 ) => {
   shape.id = parseFigmaId(context, figmaId);
   shape.shapeRef = parseFigmaId(context, figmaRelatedId, true);
+  shape.blur = symbolBlur(context, shape.blur);
   shape.touched = symbolTouched(
     !shape.hidden,
     undefined,

@@ -2,6 +2,7 @@ import { PenpotContext } from '@ui/lib/types/penpotContext';
 import { BoolShape } from '@ui/lib/types/shapes/boolShape';
 import { parseFigmaId } from '@ui/parser';
 import {
+  symbolBlur,
   symbolBoolType,
   symbolFills,
   symbolStrokes,
@@ -19,6 +20,7 @@ export const createBool = (
   shape.fills = symbolFills(context, shape.fillStyleId, shape.fills);
   shape.strokes = symbolStrokes(context, shape.strokes);
   shape.boolType = symbolBoolType(shape.boolType);
+  shape.blur = symbolBlur(context, shape.blur);
   shape.touched = symbolTouched(
     !shape.hidden,
     undefined,
