@@ -97,8 +97,14 @@ const StepProgress = (): JSX.Element | null => {
       return (
         <>
           {stepMessages[step].total}
-          <br />
-          {currentText}
+          {currentItem && currentText ? (
+            <>
+              <br />
+              {currentText}
+              <br />
+              {'Export: "' + currentItem + '"'}
+            </>
+          ) : undefined}
         </>
       );
   }

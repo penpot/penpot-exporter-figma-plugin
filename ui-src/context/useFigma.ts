@@ -71,11 +71,22 @@ export const useFigma = (): UseFigmaHook => {
           data: 'exporting'
         });
 
+        // Override console.log to capture progress messages
+        const originalConsoleLog = console.log;
+        console.log = (message: string, params: unknown) => {
+          if (message === 'export') {
+            if (params && typeof params === 'string') {
+              setCurrentItem(params.split('/').pop());
+            }
+          }
+          originalConsoleLog(message, params);
+        };
+
         const binary = await exportAsBytes(context);
 
         if (binary) {
           const blob = new Blob([binary], { type: 'application/zip' });
-          download(blob, `${pluginMessage.data.name}.zip`);
+          download(blob, `${pluginMessage.data.name}.penpot`);
 
           // get size of the file in Mb rounded to 2 decimal places
           const size = Math.round((binary.length / 1024 / 1024) * 100) / 100;
