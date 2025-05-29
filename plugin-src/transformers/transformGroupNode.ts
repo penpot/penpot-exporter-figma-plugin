@@ -22,9 +22,7 @@ export const transformGroupNode = async (node: GroupNode): Promise<GroupShape> =
   };
 };
 
-export const transformGroupNodeLike = (
-  node: BaseNodeMixin & LayoutMixin & SceneNodeMixin
-): GroupShape => {
+export const transformGroupNodeLike = (node: SceneNode): GroupShape => {
   return {
     type: 'group',
     name: node.name,
