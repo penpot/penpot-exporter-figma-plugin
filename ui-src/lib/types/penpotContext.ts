@@ -1,6 +1,6 @@
 import { PenpotFile } from '@ui/lib/types/penpotFile';
 import { PenpotPage } from '@ui/lib/types/penpotPage';
-import { BoolShape } from '@ui/lib/types/shapes/boolShape';
+import { PenpotBool } from '@ui/lib/types/shapes/boolShape';
 import { CircleShape } from '@ui/lib/types/shapes/circleShape';
 import { PenpotComponent } from '@ui/lib/types/shapes/componentShape';
 import { FrameShape } from '@ui/lib/types/shapes/frameShape';
@@ -22,8 +22,7 @@ export interface PenpotContext {
   closeBoard(): void;
   addGroup(group: GroupShape): Uuid;
   closeGroup(): void;
-  addBool(bool: BoolShape): Uuid;
-  closeBool(): void;
+  addBool(bool: PenpotBool): Uuid;
   addRect(rect: RectShape): Uuid;
   addCircle(circle: CircleShape): Uuid;
   addPath(path: PathShape): Uuid;

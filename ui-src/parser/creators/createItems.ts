@@ -4,7 +4,7 @@ import { PenpotNode } from '@ui/types';
 
 import {
   createArtboard,
-  /* createBool, */
+  createBool,
   createCircle,
   createComponent,
   createComponentInstance,
@@ -39,9 +39,8 @@ const createItem = (context: PenpotContext, node: PenpotNode) => {
       return createPath(context, node);
     case 'text':
       return createText(context, node);
-    // TODO: fix this
-    /* case 'bool':
-      return createBool(context, node); */
+    case 'bool':
+      return createBool(context, node);
     case 'component':
       return createComponent(context, node);
     case 'instance':
