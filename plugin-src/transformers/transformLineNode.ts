@@ -5,7 +5,6 @@ import {
   transformFigmaIds,
   transformLayoutAttributes,
   transformOverrides,
-  transformProportion,
   transformSceneNode,
   transformStrokes
 } from '@plugin/transformers/partials';
@@ -29,7 +28,6 @@ export const transformLineNode = (node: LineNode): PathShape => {
     ...transformEffects(node),
     ...transformSceneNode(node),
     ...transformBlend(node),
-    ...transformProportion(node),
     ...transformLayoutAttributes(node),
     ...transformConstraints(node),
     ...transformOverrides(node)
