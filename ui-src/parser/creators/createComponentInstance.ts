@@ -1,9 +1,8 @@
 import { PenpotContext } from '@ui/lib/types/penpotContext';
 import { Uuid } from '@ui/lib/types/utils/uuid';
 import { components, parseFigmaId } from '@ui/parser';
+import { createArtboard } from '@ui/parser/creators';
 import { ComponentInstance } from '@ui/types';
-
-import { createArtboard } from '.';
 
 let remoteFileId: Uuid | undefined = undefined;
 

@@ -2,10 +2,9 @@ import { exportAsBytes } from '@penpot/library';
 import { useEffect, useState } from 'react';
 
 import { FormValues } from '@ui/components/ExportForm';
+import { MessageData, sendMessage } from '@ui/context/messages';
 import { identify, track } from '@ui/metrics/mixpanel';
 import { parse } from '@ui/parser';
-
-import { MessageData, sendMessage } from '.';
 
 export type UseFigmaHook = {
   missingFonts: string[] | undefined;

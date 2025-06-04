@@ -1,9 +1,8 @@
 import { PenpotContext } from '@ui/lib/types/penpotContext';
 import { BoolShape } from '@ui/lib/types/shapes/boolShape';
 import { parseFigmaId } from '@ui/parser';
+import { createItems } from '@ui/parser/creators';
 import { symbolBlur, symbolFills, symbolStrokes, symbolTouched } from '@ui/parser/creators/symbols';
-
-import { createItems } from '.';
 
 export const createBool = (
   context: PenpotContext,

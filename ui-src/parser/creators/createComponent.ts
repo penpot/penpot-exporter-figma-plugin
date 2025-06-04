@@ -1,8 +1,7 @@
 import { PenpotContext } from '@ui/lib/types/penpotContext';
 import { componentShapes, components } from '@ui/parser';
+import { createArtboard } from '@ui/parser/creators';
 import { ComponentRoot } from '@ui/types';
-
-import { createArtboard } from '.';
 
 export const createComponent = (context: PenpotContext, { figmaId }: ComponentRoot) => {
   const componentShape = componentShapes.get(figmaId);

@@ -1,11 +1,10 @@
 import { LoadingIndicator } from '@create-figma-plugin/ui';
 
+import { ExportForm } from '@ui/components/ExportForm';
+import { ExporterProgress } from '@ui/components/ExporterProgress';
 import { LibraryError } from '@ui/components/LibraryError';
+import { PluginReload } from '@ui/components/PluginReload';
 import { useFigmaContext } from '@ui/context';
-
-import { ExportForm } from './ExportForm';
-import { ExporterProgress } from './ExporterProgress';
-import { PluginReload } from './PluginReload';
 
 export const PenpotExporter = () => {
   const { loading, needsReload, exporting, error } = useFigmaContext();

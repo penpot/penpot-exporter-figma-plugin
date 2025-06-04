@@ -1,9 +1,8 @@
 import { LoadingIndicator } from '@create-figma-plugin/ui';
 import { JSX } from 'react';
 
+import { Stack } from '@ui/components/Stack';
 import { Steps, useFigmaContext } from '@ui/context';
-
-import { Stack } from './Stack';
 
 type Messages = {
   total: string;
@@ -68,46 +67,19 @@ const StepProgress = (): JSX.Element | null => {
 
   const currentText = stepMessages[step].current;
 
-  switch (step) {
-    case 'processing':
-    case 'images':
-    case 'optimization':
-    case 'building':
-    case 'fills':
-    case 'components':
-    case 'format':
-    case 'libraries':
-    case 'typographies':
-    case 'typoFormat':
-    case 'typoLibraries':
-      return (
+  return (
+    <>
+      {processedItems} of {totalItems} {stepMessages[step].total}
+      {currentText && currentItem ? (
         <>
-          {processedItems} of {totalItems} {stepMessages[step].total}
-          {currentItem && currentText ? (
-            <>
-              <br />
-              {currentText}
-              <br />
-              {'“' + truncateText(currentItem, 35) + '”'}
-            </>
-          ) : undefined}
+          <br />
+          {currentText}
+          <br />
+          {'“' + truncateText(currentItem, 35) + '”'}
         </>
-      );
-    case 'exporting':
-      return (
-        <>
-          {stepMessages[step].total}
-          {currentItem && currentText ? (
-            <>
-              <br />
-              {currentText}
-              <br />
-              {'Export: "' + currentItem + '"'}
-            </>
-          ) : undefined}
-        </>
-      );
-  }
+      ) : undefined}
+    </>
+  );
 };
 
 export const ExporterProgress = () => {

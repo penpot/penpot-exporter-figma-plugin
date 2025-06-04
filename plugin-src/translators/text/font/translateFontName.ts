@@ -1,10 +1,9 @@
+import { translateCustomFont } from '@plugin/translators/text/font/custom';
+import { translateGoogleFont } from '@plugin/translators/text/font/gfonts';
+import { translateLocalFont } from '@plugin/translators/text/font/local';
 import { translateFontWeight } from '@plugin/translators/text/properties';
 
 import { TextTypography } from '@ui/lib/types/shapes/textShape';
-
-import { translateCustomFont } from './custom';
-import { translateGoogleFont } from './gfonts';
-import { translateLocalFont } from './local';
 
 export const translateFontName = (
   fontName: FontName | undefined

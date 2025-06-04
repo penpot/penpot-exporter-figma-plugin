@@ -1,6 +1,6 @@
-import { ListType } from './ListType';
-import { OrderedListType } from './OrderedListType';
-import { UnorderedListType } from './UnorderedListType';
+import { ListType } from '@plugin/translators/text/paragraph/ListType';
+import { OrderedListType } from '@plugin/translators/text/paragraph/OrderedListType';
+import { UnorderedListType } from '@plugin/translators/text/paragraph/UnorderedListType';
 
 export class ListTypeFactory {
   private unorderedList = new UnorderedListType();

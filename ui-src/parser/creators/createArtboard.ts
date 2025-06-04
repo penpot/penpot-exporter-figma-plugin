@@ -2,9 +2,8 @@ import { PenpotContext } from '@ui/lib/types/penpotContext';
 import { FrameShape } from '@ui/lib/types/shapes/frameShape';
 import { Uuid } from '@ui/lib/types/utils/uuid';
 import { parseFigmaId } from '@ui/parser';
+import { createItems } from '@ui/parser/creators';
 import { symbolBlur, symbolFills, symbolStrokes, symbolTouched } from '@ui/parser/creators/symbols';
-
-import { createItems } from '.';
 
 export const createArtboard = (
   context: PenpotContext,

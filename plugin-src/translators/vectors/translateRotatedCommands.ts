@@ -1,8 +1,10 @@
 import { ClosePathCommand, Command } from 'svg-path-parser';
 
+import {
+  translateCommandsToPathString,
+  translateNonRotatedCommand
+} from '@plugin/translators/vectors';
 import { applyInverseRotation, applyRotationToSegment } from '@plugin/utils';
-
-import { translateCommandsToPathString, translateNonRotatedCommand } from '.';
 
 const isClosePath = (command: Command): command is ClosePathCommand =>
   command.command === 'closepath';

@@ -1,9 +1,8 @@
 import { PenpotContext } from '@ui/lib/types/penpotContext';
 import { GroupShape } from '@ui/lib/types/shapes/groupShape';
 import { parseFigmaId } from '@ui/parser';
+import { createItems } from '@ui/parser/creators';
 import { symbolBlur, symbolTouched } from '@ui/parser/creators/symbols';
-
-import { createItems } from '.';
 
 export const createGroup = (
   context: PenpotContext,

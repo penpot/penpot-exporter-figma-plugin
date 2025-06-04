@@ -1,4 +1,4 @@
-import { findMissingFonts } from './findAllTextnodes';
+import { findMissingFonts } from '@plugin/findAllTextnodes';
 
 export const registerChange = (event: NodeChangeEvent) => {
   if (!changesAreRelevant(event.nodeChanges)) return;

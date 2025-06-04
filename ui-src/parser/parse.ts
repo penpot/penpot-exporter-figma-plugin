@@ -15,9 +15,8 @@ import {
   componentProperties as uiComponentProperties
 } from '@ui/parser';
 import { buildFile } from '@ui/parser/creators';
+import { parseImage } from '@ui/parser/parseImage';
 import { PenpotDocument } from '@ui/types';
-
-import { parseImage } from '.';
 
 const optimizeImages = async (context: PenpotContext, binaryImages: Record<string, Uint8Array>) => {
   const imagesToOptimize = Object.entries(binaryImages);

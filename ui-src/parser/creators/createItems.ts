@@ -1,7 +1,5 @@
 import { sendMessage } from '@ui/context';
 import { PenpotContext } from '@ui/lib/types/penpotContext';
-import { PenpotNode } from '@ui/types';
-
 import {
   createArtboard,
   createBool,
@@ -12,7 +10,8 @@ import {
   createPath,
   createRectangle,
   createText
-} from '.';
+} from '@ui/parser/creators';
+import { PenpotNode } from '@ui/types';
 
 export const createItems = (context: PenpotContext, nodes: PenpotNode[]) => {
   for (const node of nodes) {

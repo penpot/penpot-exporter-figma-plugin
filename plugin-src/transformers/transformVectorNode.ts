@@ -1,3 +1,4 @@
+import { transformGroupNodeLike } from '@plugin/transformers';
 import {
   transformConstraints,
   transformFigmaIds,
@@ -7,8 +8,6 @@ import {
 
 import { GroupShape } from '@ui/lib/types/shapes/groupShape';
 import { PathShape } from '@ui/lib/types/shapes/pathShape';
-
-import { transformGroupNodeLike } from '.';
 
 /*
  * Vector nodes can have multiple vector paths, each with its own fills.

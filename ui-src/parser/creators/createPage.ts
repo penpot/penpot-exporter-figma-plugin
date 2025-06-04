@@ -1,7 +1,6 @@
 import { PenpotContext } from '@ui/lib/types/penpotContext';
 import { PenpotPage } from '@ui/lib/types/penpotPage';
-
-import { createItems } from '.';
+import { createItems } from '@ui/parser/creators';
 
 export const createPage = (
   context: PenpotContext,

@@ -1,7 +1,6 @@
 import { PenpotContext } from '@ui/lib/types/penpotContext';
 import { Stroke, StrokeImage } from '@ui/lib/types/utils/stroke';
-
-import { symbolFillImage } from '.';
+import { symbolFillImage } from '@ui/parser/creators/symbols';
 
 export const symbolStrokes = (
   context: PenpotContext,

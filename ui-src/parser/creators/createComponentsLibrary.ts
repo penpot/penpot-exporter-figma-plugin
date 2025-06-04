@@ -40,13 +40,13 @@ const createComponentLibrary = (context: PenpotContext, uiComponent: UiComponent
     return;
   }
 
-  const penpotComponent = {
+  const penpotComponent: PenpotComponent = {
     componentId: uiComponent.componentId,
     fileId: context.currentFileId,
     name: componentShape.name,
     frameId: uiComponent.mainInstanceId,
     pageId: uiComponent.mainInstancePage
-  } as PenpotComponent;
+  };
 
   context.addComponent(penpotComponent);
 };
