@@ -78,7 +78,6 @@ export const useFigma = (): UseFigmaHook => {
               setCurrentItem(params.split('/').pop());
             }
           }
-          originalConsoleLog(message, params);
         };
 
         const binary = await exportAsBytes(context);
@@ -94,6 +93,9 @@ export const useFigma = (): UseFigmaHook => {
 
         setExporting(false);
         setStep(undefined);
+
+        // Restore console.log
+        console.log = originalConsoleLog;
 
         break;
       }
