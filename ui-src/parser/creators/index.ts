@@ -1,7 +1,6 @@
 export * from './createArtboard';
 export * from './createBool';
 export * from './createCircle';
-export * from './createColorsLibrary';
 export * from './createComponent';
 export * from './createComponentInstance';
 export * from './createComponentsLibrary';
@@ -12,4 +11,6 @@ export * from './createPage';
 export * from './createPath';
 export * from './createRectangle';
 export * from './createText';
-export * from './createTextLibrary';
+export * from './registerColorLibraries';
+export * from './registerFileMedias';
+export * from './registerTypographyLibraries';

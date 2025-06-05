@@ -1,5 +1,9 @@
 declare module '@penpot/library' {
   import { PenpotContext } from '@ui/lib/types/penpotContext';
+  import { ExportOptions } from '@ui/lib/types/exportOptions';
   export function createBuildContext(): PenpotContext;
-  export async function exportAsBytes(context: PenpotContext): Promise<Uint8Array>;
+  export async function exportAsBytes(
+    context: PenpotContext,
+    options?: ExportOptions
+  ): Promise<Uint8Array>;
 }

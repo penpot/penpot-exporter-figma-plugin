@@ -28,7 +28,7 @@ export interface PenpotContext {
   addPath(path: PathShape): Uuid;
   addText(options: TextShape): Uuid;
   addLibraryColor(color: Color): Uuid;
-  addLibraryTypography(typography: Typography): void;
+  addLibraryTypography(typography: Typography): Uuid;
   addComponent(component: PenpotComponent): Uuid;
   addFileMedia(media: Media, blob: Blob): Uuid;
   getMediaAsImage(mediaId: Uuid): ImageColor;

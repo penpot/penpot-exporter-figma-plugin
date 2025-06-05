@@ -4,12 +4,7 @@ import { sendMessage } from '@ui/context';
 import { PenpotContext } from '@ui/lib/types/penpotContext';
 import { PenpotPage } from '@ui/lib/types/penpotPage';
 import { components, identifiers } from '@ui/parser';
-import {
-  createColorsLibrary,
-  createComponentsLibrary,
-  createPage,
-  createTextLibrary
-} from '@ui/parser/creators';
+import { createComponentsLibrary, createPage } from '@ui/parser/creators';
 
 export const buildFile = async (
   context: PenpotContext,
@@ -40,9 +35,6 @@ export const buildFile = async (
 
     await sleep(0);
   }
-
-  await createColorsLibrary(context);
-  await createTextLibrary(context);
 
   await createComponentsLibrary(context);
 

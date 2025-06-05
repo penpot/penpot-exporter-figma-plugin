@@ -2,7 +2,7 @@ import { exportAsBytes } from '@penpot/library';
 import { useEffect, useState } from 'react';
 
 import { FormValues } from '@ui/components/ExportForm';
-import { MessageData, sendMessage } from '@ui/context/messages';
+import { MessageData, sendMessage } from '@ui/context';
 import { identify, track } from '@ui/metrics/mixpanel';
 import { parse } from '@ui/parser';
 
@@ -29,10 +29,8 @@ export type Steps =
   | 'components'
   | 'exporting'
   | 'fills'
-  | 'format'
-  | 'libraries'
+  | 'colorLibraries'
   | 'typographies'
-  | 'typoFormat'
   | 'typoLibraries';
 
 export const useFigma = (): UseFigmaHook => {
@@ -70,17 +68,13 @@ export const useFigma = (): UseFigmaHook => {
           data: 'exporting'
         });
 
-        // Override console.log to capture progress messages
-        const originalConsoleLog = console.log;
-        console.log = (message: string, params: unknown) => {
-          if (message === 'export') {
-            if (params && typeof params === 'string') {
-              setCurrentItem(params.split('/').pop());
-            }
+        const binary = await exportAsBytes(context, {
+          onProgress: ({ item, total, path }) => {
+            setCurrentItem(path.split('/').pop());
+            setTotalItems(total);
+            setProcessedItems(item);
           }
-        };
-
-        const binary = await exportAsBytes(context);
+        });
 
         if (binary) {
           const blob = new Blob([binary], { type: 'application/zip' });
@@ -93,9 +87,6 @@ export const useFigma = (): UseFigmaHook => {
 
         setExporting(false);
         setStep(undefined);
-
-        // Restore console.log
-        console.log = originalConsoleLog;
 
         break;
       }

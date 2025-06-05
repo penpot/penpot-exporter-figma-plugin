@@ -27,10 +27,7 @@ const stepMessages: Record<Steps, Messages> = {
   fills: {
     total: 'color libraries fetched 🎨'
   },
-  format: {
-    total: 'formatting color libraries 🎨'
-  },
-  libraries: {
+  colorLibraries: {
     total: 'color libraries built 🎨'
   },
   components: {
@@ -38,17 +35,14 @@ const stepMessages: Record<Steps, Messages> = {
     current: 'Currently processing layer'
   },
   exporting: {
-    total: 'Generating Penpot file 🚀',
-    current: 'Please wait, this process might take a while...'
+    total: 'Penpot file generated 🚀',
+    current: 'Currently exporting item'
   },
   typographies: {
-    total: 'text styles fetched 📝'
-  },
-  typoFormat: {
-    total: 'formatting text styles 📝'
+    total: 'text libraries fetched 📝'
   },
   typoLibraries: {
-    total: 'text styles built 📝'
+    total: 'text libraries built 📝'
   }
 };
 
@@ -74,28 +68,13 @@ const StepProgress = (): JSX.Element | null => {
     case 'building':
     case 'fills':
     case 'components':
-    case 'format':
-    case 'libraries':
+    case 'colorLibraries':
     case 'typographies':
-    case 'typoFormat':
     case 'typoLibraries':
-      return (
-        <>
-          {processedItems} of {totalItems} {stepMessages[step].total}
-          {currentItem && currentText ? (
-            <>
-              <br />
-              {currentText}
-              <br />
-              {'“' + truncateText(currentItem, 35) + '”'}
-            </>
-          ) : undefined}
-        </>
-      );
     case 'exporting':
       return (
         <>
-          {stepMessages[step].total}
+          {processedItems} of {totalItems} {stepMessages[step].total}
           {currentItem && currentText ? (
             <>
               <br />
