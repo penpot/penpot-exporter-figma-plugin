@@ -1,5 +1,36 @@
 # penpot-exporter
 
+## 0.14.0
+
+### Minor Changes
+
+- [#254](https://github.com/penpot/penpot-exporter-figma-plugin/pull/254)
+  [`5c13fe9`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/5c13fe962bbbfdb2007b20c80d06c512e2e58ad1)
+  Thanks [@Cenadros](https://github.com/Cenadros)! - Upgrade to work with latest Penpot 2.7
+
+- [#254](https://github.com/penpot/penpot-exporter-figma-plugin/pull/254)
+  [`5c13fe9`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/5c13fe962bbbfdb2007b20c80d06c512e2e58ad1)
+  Thanks [@Cenadros](https://github.com/Cenadros)! - Increase export speed and stability on most
+  scenarios
+
+- [#254](https://github.com/penpot/penpot-exporter-figma-plugin/pull/254)
+  [`5c13fe9`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/5c13fe962bbbfdb2007b20c80d06c512e2e58ad1)
+  Thanks [@Cenadros](https://github.com/Cenadros)! - Improve parsing of SVGs paths from Figma
+
+- [#254](https://github.com/penpot/penpot-exporter-figma-plugin/pull/254)
+  [`5c13fe9`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/5c13fe962bbbfdb2007b20c80d06c512e2e58ad1)
+  Thanks [@Cenadros](https://github.com/Cenadros)! - Change export format to the new .penpot file
+  format
+
+- [#254](https://github.com/penpot/penpot-exporter-figma-plugin/pull/254)
+  [`5c13fe9`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/5c13fe962bbbfdb2007b20c80d06c512e2e58ad1)
+  Thanks [@Cenadros](https://github.com/Cenadros)! - Reduce export file size for Figma files with
+  lots of images
+
+- [#254](https://github.com/penpot/penpot-exporter-figma-plugin/pull/254)
+  [`5c13fe9`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/5c13fe962bbbfdb2007b20c80d06c512e2e58ad1)
+  Thanks [@Cenadros](https://github.com/Cenadros)! - Add progress bar for the final file generation
+
 ## 0.13.1
 
 ### Patch Changes
