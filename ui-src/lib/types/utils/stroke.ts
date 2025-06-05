@@ -3,7 +3,7 @@ import { ImageColor, PartialImageColor } from './imageColor';
 import { Uuid } from './uuid';
 
 export type Stroke = {
-  strokeColor?: string;
+  strokeColor: string;
   strokeColorRefFile?: Uuid;
   strokeColorRefId?: Uuid;
   strokeOpacity?: number;
@@ -13,7 +13,10 @@ export type Stroke = {
   strokeCapStart?: StrokeCaps;
   strokeCapEnd?: StrokeCaps;
   strokeColorGradient?: Gradient;
-  strokeImage?: ImageColor | PartialImageColor;
+};
+
+export type StrokeImage = Stroke & {
+  strokeImage: ImageColor | PartialImageColor;
 };
 
 export type StrokeAlignment = 'center' | 'inner' | 'outer';

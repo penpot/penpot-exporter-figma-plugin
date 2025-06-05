@@ -1,9 +1,8 @@
 import { LoadingIndicator } from '@create-figma-plugin/ui';
 import { JSX } from 'react';
 
+import { Stack } from '@ui/components/Stack';
 import { Steps, useFigmaContext } from '@ui/context';
-
-import { Stack } from './Stack';
 
 type Messages = {
   total: string;
@@ -28,10 +27,7 @@ const stepMessages: Record<Steps, Messages> = {
   fills: {
     total: 'color libraries fetched 🎨'
   },
-  format: {
-    total: 'formatting color libraries 🎨'
-  },
-  libraries: {
+  colorLibraries: {
     total: 'color libraries built 🎨'
   },
   components: {
@@ -39,17 +35,14 @@ const stepMessages: Record<Steps, Messages> = {
     current: 'Currently processing layer'
   },
   exporting: {
-    total: 'Generating Penpot file 🚀',
-    current: 'Please wait, this process might take a while...'
+    total: 'Penpot file generated 🚀',
+    current: 'Currently exporting item'
   },
   typographies: {
-    total: 'text styles fetched 📝'
-  },
-  typoFormat: {
-    total: 'formatting text styles 📝'
+    total: 'text libraries fetched 📝'
   },
   typoLibraries: {
-    total: 'text styles built 📝'
+    total: 'text libraries built 📝'
   }
 };
 
@@ -75,11 +68,10 @@ const StepProgress = (): JSX.Element | null => {
     case 'building':
     case 'fills':
     case 'components':
-    case 'format':
-    case 'libraries':
+    case 'colorLibraries':
     case 'typographies':
-    case 'typoFormat':
     case 'typoLibraries':
+    case 'exporting':
       return (
         <>
           {processedItems} of {totalItems} {stepMessages[step].total}
@@ -91,14 +83,6 @@ const StepProgress = (): JSX.Element | null => {
               {'“' + truncateText(currentItem, 35) + '”'}
             </>
           ) : undefined}
-        </>
-      );
-    case 'exporting':
-      return (
-        <>
-          {stepMessages[step].total}
-          <br />
-          {currentText}
         </>
       );
   }

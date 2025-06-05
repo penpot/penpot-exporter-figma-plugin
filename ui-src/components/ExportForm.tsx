@@ -1,10 +1,9 @@
 import { Button } from '@create-figma-plugin/ui';
 import { FormProvider, useForm } from 'react-hook-form';
 
+import { MissingFontsSection } from '@ui/components/MissingFontsSection';
 import { Stack } from '@ui/components/Stack';
 import { useFigmaContext } from '@ui/context';
-
-import { MissingFontsSection } from './MissingFontsSection';
 
 export type FormValues = Record<string, string>;
 

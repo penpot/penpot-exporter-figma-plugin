@@ -1,8 +1,7 @@
+import { findAllTextNodes } from '@plugin/findAllTextnodes';
 import { getUserData } from '@plugin/getUserData';
-
-import { findAllTextNodes } from './findAllTextnodes';
-import { handleExportMessage } from './handleExportMessage';
-import { registerChange } from './registerChange';
+import { handleExportMessage } from '@plugin/handleExportMessage';
+import { registerChange } from '@plugin/registerChange';
 
 const BASE_HEIGHT = 135;
 const BASE_WIDTH = 290;

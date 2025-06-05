@@ -1,59 +1,54 @@
-import { Command, CurveToCommand, LineToCommand, MoveToCommand } from 'svg-path-parser';
-
-import { Segment } from '@ui/lib/types/shapes/pathShape';
+import { Command } from 'svg-path-parser';
 
 export const translateNonRotatedCommands = (
   commands: Command[],
   baseX: number = 0,
   baseY: number = 0
-): Segment[] => {
-  return commands.map(command => translateNonRotatedCommand(command, baseX, baseY));
+): string => {
+  return commands
+    .reduce((svgPath, command) => {
+      const pathString = translateCommandToPathString(applyBase(command, baseX, baseY));
+
+      return svgPath + pathString + ' ';
+    }, '')
+    .trimEnd();
 };
 
-export const translateNonRotatedCommand = (
-  command: Command,
-  baseX: number,
-  baseY: number
-): Segment => {
+export const translateCommandToPathString = (command: Command): string => {
   switch (command.command) {
     case 'moveto':
-      return translateMoveTo(command, baseX, baseY);
+      return `M ${command.x} ${command.y}`;
     case 'lineto':
-      return translateLineTo(command, baseX, baseY);
+      return `L ${command.x} ${command.y}`;
     case 'curveto':
-      return translateCurveTo(command, baseX, baseY);
+      return `C ${command.x1} ${command.y1}, ${command.x2} ${command.y2}, ${command.x} ${command.y}`;
     case 'closepath':
+      return 'Z';
     default:
-      return {
-        command: 'close-path'
-      };
+      return '';
   }
 };
 
-const translateMoveTo = (command: MoveToCommand, baseX: number, baseY: number): Segment => {
-  return {
-    command: 'move-to',
-    params: { x: command.x + baseX, y: command.y + baseY }
-  };
-};
-
-const translateLineTo = (command: LineToCommand, baseX: number, baseY: number): Segment => {
-  return {
-    command: 'line-to',
-    params: { x: command.x + baseX, y: command.y + baseY }
-  };
-};
-
-const translateCurveTo = (command: CurveToCommand, baseX: number, baseY: number): Segment => {
-  return {
-    command: 'curve-to',
-    params: {
-      c1x: command.x1 + baseX,
-      c1y: command.y1 + baseY,
-      c2x: command.x2 + baseX,
-      c2y: command.y2 + baseY,
-      x: command.x + baseX,
-      y: command.y + baseY
-    }
-  };
+export const applyBase = (command: Command, baseX: number, baseY: number): Command => {
+  switch (command.command) {
+    case 'lineto':
+    case 'moveto':
+      return {
+        ...command,
+        x: command.x + baseX,
+        y: command.y + baseY
+      };
+    case 'curveto':
+      return {
+        ...command,
+        x1: command.x1 + baseX,
+        y1: command.y1 + baseY,
+        x2: command.x2 + baseX,
+        y2: command.y2 + baseY,
+        x: command.x + baseX,
+        y: command.y + baseY
+      };
+    default:
+      return command;
+  }
 };

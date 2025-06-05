@@ -1,8 +1,7 @@
+import { ListTypeFactory } from '@plugin/translators/text/paragraph/ListTypeFactory';
 import { TextSegment } from '@plugin/translators/text/paragraph/translateParagraphProperties';
 
 import { TextNode as PenpotTextNode } from '@ui/lib/types/shapes/textShape';
-
-import { ListTypeFactory } from './ListTypeFactory';
 
 type Level = {
   style: PenpotTextNode;

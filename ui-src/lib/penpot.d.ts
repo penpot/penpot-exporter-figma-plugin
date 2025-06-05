@@ -1,3 +1,9 @@
-import { PenpotFile } from '@ui/lib/types/penpotFile';
-
-export function createFile(name: string): PenpotFile;
+declare module '@penpot/library' {
+  import { PenpotContext } from '@ui/lib/types/penpotContext';
+  import { ExportOptions } from '@ui/lib/types/exportOptions';
+  export function createBuildContext(): PenpotContext;
+  export async function exportAsBytes(
+    context: PenpotContext,
+    options?: ExportOptions
+  ): Promise<Uint8Array>;
+}

@@ -1,8 +1,7 @@
 import { Banner, Button, IconWarning32, Link } from '@create-figma-plugin/ui';
 
+import { Stack } from '@ui/components/Stack';
 import { useFigmaContext } from '@ui/context';
-
-import { Stack } from './Stack';
 
 export const LibraryError = () => {
   const { reload, cancel, error } = useFigmaContext();

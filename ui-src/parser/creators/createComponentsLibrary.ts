@@ -2,14 +2,12 @@ import { toArray } from '@common/map';
 import { sleep } from '@common/sleep';
 
 import { sendMessage } from '@ui/context';
-import { PenpotFile } from '@ui/lib/types/penpotFile';
+import { PenpotContext } from '@ui/lib/types/penpotContext';
+import { PenpotComponent } from '@ui/lib/types/shapes/componentShape';
 import { componentShapes, components as uiComponents } from '@ui/parser';
-import { symbolFills, symbolStrokes } from '@ui/parser/creators/symbols';
 import { UiComponent } from '@ui/types';
 
-import { createItems } from '.';
-
-export const createComponentsLibrary = async (file: PenpotFile) => {
+export const createComponentsLibrary = async (context: PenpotContext) => {
   let componentsBuilt = 1;
   const components = toArray(uiComponents);
 
@@ -24,7 +22,7 @@ export const createComponentsLibrary = async (file: PenpotFile) => {
   });
 
   for (const [_, uiComponent] of components) {
-    createComponentLibrary(file, uiComponent);
+    createComponentLibrary(context, uiComponent);
 
     sendMessage({
       type: 'PROGRESS_PROCESSED_ITEMS',
@@ -35,28 +33,20 @@ export const createComponentsLibrary = async (file: PenpotFile) => {
   }
 };
 
-const createComponentLibrary = (file: PenpotFile, uiComponent: UiComponent) => {
+const createComponentLibrary = (context: PenpotContext, uiComponent: UiComponent) => {
   const componentShape = componentShapes.get(uiComponent.componentFigmaId);
 
   if (!componentShape) {
     return;
   }
 
-  const { children = [], ...shape } = componentShape;
+  const penpotComponent: PenpotComponent = {
+    componentId: uiComponent.componentId,
+    fileId: context.currentFileId,
+    name: componentShape.name,
+    frameId: uiComponent.mainInstanceId,
+    pageId: uiComponent.mainInstancePage
+  };
 
-  shape.fills = symbolFills(shape.fillStyleId, shape.fills);
-  shape.strokes = symbolStrokes(shape.strokes);
-  shape.id = uiComponent.componentId;
-  shape.componentId = uiComponent.componentId;
-  shape.mainInstancePage = uiComponent.mainInstancePage;
-  shape.mainInstanceId = uiComponent.mainInstanceId;
-  shape.componentRoot = true;
-  shape.mainInstance = true;
-  shape.componentFile = file.getId();
-
-  file.startComponent(shape);
-
-  createItems(file, children);
-
-  file.finishComponent();
+  context.addComponent(penpotComponent);
 };

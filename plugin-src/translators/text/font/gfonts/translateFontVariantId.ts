@@ -1,4 +1,4 @@
-import { GoogleFont } from './googleFont';
+import { GoogleFont } from '@plugin/translators/text/font/gfonts/googleFont';
 
 export const translateFontVariantId = (
   googleFont: GoogleFont,

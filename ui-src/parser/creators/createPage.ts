@@ -1,12 +1,14 @@
-import { PenpotFile } from '@ui/lib/types/penpotFile';
+import { PenpotContext } from '@ui/lib/types/penpotContext';
 import { PenpotPage } from '@ui/lib/types/penpotPage';
+import { createItems } from '@ui/parser/creators';
 
-import { createItems } from '.';
+export const createPage = (
+  context: PenpotContext,
+  { name, background, children = [] }: PenpotPage
+) => {
+  context.addPage({ name, background });
 
-export const createPage = (file: PenpotFile, { name, options, children = [] }: PenpotPage) => {
-  file.addPage(name, options);
+  createItems(context, children);
 
-  createItems(file, children);
-
-  file.closePage();
+  context.closePage();
 };

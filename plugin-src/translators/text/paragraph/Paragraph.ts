@@ -1,7 +1,7 @@
-import { TextNode as PenpotTextNode } from '@ui/lib/types/shapes/textShape';
+import { List } from '@plugin/translators/text/paragraph/List';
+import { TextSegment } from '@plugin/translators/text/paragraph/translateParagraphProperties';
 
-import { List } from './List';
-import { TextSegment } from './translateParagraphProperties';
+import { TextNode as PenpotTextNode } from '@ui/lib/types/shapes/textShape';
 
 export class Paragraph {
   private isParagraphStarting = false;

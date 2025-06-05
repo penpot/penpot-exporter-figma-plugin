@@ -18,17 +18,17 @@ export const symbolTouched = (
   if (
     propertyReferenceVisible &&
     visible !== componentProperties.get(propertyReferenceVisible)?.defaultValue &&
-    !touched?.includes(':visibility-group')
+    !touched?.includes('visibility-group')
   ) {
-    touched?.push(':visibility-group');
+    touched?.push('visibility-group');
   }
 
   if (
     propertyReferenceCharacters &&
     characters !== componentProperties.get(propertyReferenceCharacters)?.defaultValue &&
-    !touched?.includes(':content-group')
+    !touched?.includes('content-group')
   ) {
-    touched?.push(':content-group');
+    touched?.push('content-group');
   }
 
   return touched;

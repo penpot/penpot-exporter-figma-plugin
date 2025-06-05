@@ -1,5 +1,3 @@
-import { PenpotNode } from '@ui/types';
-
 import {
   transformBooleanNode,
   transformComponentNode,
@@ -12,7 +10,9 @@ import {
   transformRectangleNode,
   transformTextNode,
   transformVectorNode
-} from '.';
+} from '@plugin/transformers';
+
+import { PenpotNode } from '@ui/types';
 
 export const transformSceneNode = async (node: SceneNode): Promise<PenpotNode | undefined> => {
   let penpotNode: PenpotNode | undefined;

@@ -1,6 +1,5 @@
+import { Steps } from '@ui/context';
 import { PenpotDocument } from '@ui/types';
-
-import { Steps } from '.';
 
 export type MessageData = { pluginMessage?: PluginMessage };
 

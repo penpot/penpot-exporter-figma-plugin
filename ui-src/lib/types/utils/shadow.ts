@@ -4,7 +4,7 @@ import { Uuid } from './uuid';
 export type ShadowStyle = 'drop-shadow' | 'inner-shadow';
 
 export type Shadow = {
-  id?: Uuid;
+  id: Uuid | null;
   style: ShadowStyle;
   offsetX: number;
   offsetY: number;

@@ -1,8 +1,7 @@
 import { translateFill } from '@plugin/translators/fills/translateFills';
+import { translateStyleName, translateStylePath } from '@plugin/translators/styles';
 
 import { FillStyle } from '@ui/lib/types/utils/fill';
-
-import { translateStyleName, translateStylePath } from '.';
 
 export const translatePaintStyle = (figmaStyle: PaintStyle): FillStyle => {
   const fillStyle: FillStyle = {

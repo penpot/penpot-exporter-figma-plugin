@@ -23,3 +23,12 @@ export type ComponentAttributes = {
   mainInstanceId?: Uuid;
   mainInstancePage?: Uuid;
 };
+
+export type PenpotComponent = {
+  componentId: Uuid;
+  fileId?: Uuid;
+  name?: string;
+  path?: string;
+  frameId?: Uuid;
+  pageId?: Uuid;
+};

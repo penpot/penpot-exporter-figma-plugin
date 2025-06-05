@@ -1,25 +1,24 @@
-import { PenpotFile } from '@ui/lib/types/penpotFile';
+import { PenpotContext } from '@ui/lib/types/penpotContext';
 import { componentShapes, components } from '@ui/parser';
+import { createArtboard } from '@ui/parser/creators';
 import { ComponentRoot } from '@ui/types';
 
-import { createArtboard } from '.';
-
-export const createComponent = (file: PenpotFile, { figmaId }: ComponentRoot) => {
+export const createComponent = (context: PenpotContext, { figmaId }: ComponentRoot) => {
   const componentShape = componentShapes.get(figmaId);
 
   if (!componentShape) {
     return;
   }
 
-  const componentId = getComponentId(file, figmaId);
+  const componentId = getComponentId(context, figmaId);
   const { type, ...shape } = componentShape;
 
-  shape.componentFile = file.getId();
+  shape.componentFile = context.currentFileId;
   shape.componentId = componentId;
   shape.componentRoot = true;
   shape.mainInstance = true;
 
-  const frameId = createArtboard(file, shape);
+  const frameId = createArtboard(context, shape);
 
   if (!frameId) {
     return;
@@ -27,14 +26,14 @@ export const createComponent = (file: PenpotFile, { figmaId }: ComponentRoot) =>
 
   components.set(figmaId, {
     componentId,
-    mainInstancePage: file.getCurrentPageId(),
+    mainInstancePage: context.currentPageId,
     componentFigmaId: figmaId,
     mainInstanceId: frameId
   });
 };
 
-const getComponentId = (file: PenpotFile, figmaId: string) => {
+const getComponentId = (context: PenpotContext, figmaId: string) => {
   const component = components.get(figmaId);
 
-  return component?.componentId ?? file.newId();
+  return component?.componentId ?? context.genId();
 };

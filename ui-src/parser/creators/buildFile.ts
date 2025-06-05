@@ -1,17 +1,15 @@
 import { sleep } from '@common/sleep';
 
 import { sendMessage } from '@ui/context';
-import { PenpotFile } from '@ui/lib/types/penpotFile';
+import { PenpotContext } from '@ui/lib/types/penpotContext';
 import { PenpotPage } from '@ui/lib/types/penpotPage';
 import { components, identifiers } from '@ui/parser';
-import {
-  createColorsLibrary,
-  createComponentsLibrary,
-  createPage,
-  createTextLibrary
-} from '@ui/parser/creators';
+import { createComponentsLibrary, createPage } from '@ui/parser/creators';
 
-export const buildFile = async (file: PenpotFile, children: PenpotPage[]) => {
+export const buildFile = async (
+  context: PenpotContext,
+  children: PenpotPage[]
+): Promise<PenpotContext> => {
   let pagesBuilt = 1;
 
   components.clear();
@@ -28,7 +26,7 @@ export const buildFile = async (file: PenpotFile, children: PenpotPage[]) => {
   });
 
   for (const page of children) {
-    createPage(file, page);
+    createPage(context, page);
 
     sendMessage({
       type: 'PROGRESS_PROCESSED_ITEMS',
@@ -38,10 +36,7 @@ export const buildFile = async (file: PenpotFile, children: PenpotPage[]) => {
     await sleep(0);
   }
 
-  await createColorsLibrary(file);
-  await createTextLibrary(file);
+  await createComponentsLibrary(context);
 
-  await createComponentsLibrary(file);
-
-  return file;
+  return context;
 };

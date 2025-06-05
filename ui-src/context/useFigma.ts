@@ -1,10 +1,10 @@
+import { exportAsBytes } from '@penpot/library';
 import { useEffect, useState } from 'react';
 
 import { FormValues } from '@ui/components/ExportForm';
+import { MessageData, sendMessage } from '@ui/context';
 import { identify, track } from '@ui/metrics/mixpanel';
 import { parse } from '@ui/parser';
-
-import { MessageData, sendMessage } from '.';
 
 export type UseFigmaHook = {
   missingFonts: string[] | undefined;
@@ -29,10 +29,8 @@ export type Steps =
   | 'components'
   | 'exporting'
   | 'fills'
-  | 'format'
-  | 'libraries'
+  | 'colorLibraries'
   | 'typographies'
-  | 'typoFormat'
   | 'typoLibraries';
 
 export const useFigma = (): UseFigmaHook => {
@@ -63,25 +61,27 @@ export const useFigma = (): UseFigmaHook => {
         break;
       }
       case 'PENPOT_DOCUMENT': {
-        const file = await parse(pluginMessage.data);
+        const context = await parse(pluginMessage.data);
 
         sendMessage({
           type: 'PROGRESS_STEP',
           data: 'exporting'
         });
 
-        const blob = await file.export().catch(error => {
-          sendMessage({
-            type: 'ERROR',
-            data: error.message
-          });
+        const binary = await exportAsBytes(context, {
+          onProgress: ({ item, total, path }) => {
+            setCurrentItem(path.split('/').pop());
+            setTotalItems(total);
+            setProcessedItems(item);
+          }
         });
 
-        if (blob) {
-          download(blob, `${pluginMessage.data.name}.zip`);
+        if (binary) {
+          const blob = new Blob([binary], { type: 'application/zip' });
+          download(blob, `${pluginMessage.data.name}.penpot`);
 
           // get size of the file in Mb rounded to 2 decimal places
-          const size = Math.round((blob.size / 1024 / 1024) * 100) / 100;
+          const size = Math.round((binary.length / 1024 / 1024) * 100) / 100;
           track('File Exported', { 'Exported File Size': size + ' Mb' });
         }
 

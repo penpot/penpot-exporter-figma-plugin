@@ -1,6 +1,6 @@
 import * as romans from 'romans';
 
-import { ListType } from './ListType';
+import { ListType } from '@plugin/translators/text/paragraph/ListType';
 
 export class OrderedListType implements ListType {
   public getCurrentSymbol(number: number, indentation: number): string {

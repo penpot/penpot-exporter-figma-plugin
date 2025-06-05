@@ -15,7 +15,7 @@ import {
 } from '@plugin/transformers/partials';
 import { translateCommands } from '@plugin/translators/vectors';
 
-import { PathShape, Segment } from '@ui/lib/types/shapes/pathShape';
+import { PathShape } from '@ui/lib/types/shapes/pathShape';
 
 export const transformPathNode = (node: StarNode | PolygonNode): PathShape => {
   return {
@@ -36,5 +36,5 @@ export const transformPathNode = (node: StarNode | PolygonNode): PathShape => {
   };
 };
 
-const translatePathNode = (node: StarNode | PolygonNode): Segment[] =>
+const translatePathNode = (node: StarNode | PolygonNode): string =>
   translateCommands(node, parseSVG(node.fillGeometry[0].data));

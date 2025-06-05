@@ -8,6 +8,7 @@ export const translateShadowEffect = (effect: Effect): Shadow | undefined => {
   }
 
   return {
+    id: null,
     style: translateShadowType(effect),
     offsetX: effect.offset.x,
     offsetY: effect.offset.y,

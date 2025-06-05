@@ -1,3 +1,4 @@
+import { translateStyleName, translateStylePath } from '@plugin/translators/styles';
 import { translateFontName } from '@plugin/translators/text/font';
 import {
   translateFontStyle,
@@ -8,8 +9,6 @@ import {
 } from '@plugin/translators/text/properties';
 
 import { TypographyStyle } from '@ui/lib/types/shapes/textShape';
-
-import { translateStyleName, translateStylePath } from '.';
 
 export const translateTextStyle = (figmaStyle: TextStyle): TypographyStyle => {
   return {

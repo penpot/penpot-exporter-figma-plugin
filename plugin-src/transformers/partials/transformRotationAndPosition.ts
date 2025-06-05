@@ -12,7 +12,7 @@ export const transformRotation = (
 };
 
 export const transformRotationAndPosition = (
-  node: LayoutMixin
+  node: SceneNode
 ): Pick<ShapeBaseAttributes, 'transform' | 'transformInverse' | 'rotation'> &
   Pick<ShapeGeomAttributes, 'x' | 'y'> => {
   const x = node.absoluteTransform[0][2];

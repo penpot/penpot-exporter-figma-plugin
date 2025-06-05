@@ -1,4 +1,4 @@
-export const detectMimeType = (bytes: Uint8Array): string | undefined => {
+export const detectMimeType = (bytes: Uint8Array): string => {
   const length = 4;
 
   if (bytes.length >= length) {
@@ -19,7 +19,9 @@ export const detectMimeType = (bytes: Uint8Array): string | undefined => {
       case 'FFD8FFE0':
         return 'image/jpeg';
       default:
-        return;
+        return 'image/png';
     }
   }
+
+  return 'image/png';
 };
