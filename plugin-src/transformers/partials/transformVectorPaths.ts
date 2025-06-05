@@ -22,11 +22,16 @@ export const transformVectorPaths = (node: VectorNode): PathShape[] => {
     console.warn('Could not access the vector network', node, error);
   }
 
-  const strokeLength = node.strokes.length;
+  const hasStrokes = node.strokes.length > 0;
+  const hasGeometry = node.fillGeometry.length > 0;
 
   const pathShapes = node.vectorPaths
     .filter((vectorPath, index) => {
-      return strokeLength > 0 || nodeHasFills(node, vectorPath, regions[index]);
+      return (
+        hasStrokes ||
+        (!hasStrokes && !hasGeometry) ||
+        nodeHasFills(node, vectorPath, regions[index])
+      );
     })
     .map((vectorPath, index) => transformVectorPath(node, vectorPath, regions[index]));
 
