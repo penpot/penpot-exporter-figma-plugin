@@ -1,5 +1,14 @@
 # penpot-exporter
 
+## 0.14.2
+
+### Patch Changes
+
+- [#260](https://github.com/penpot/penpot-exporter-figma-plugin/pull/260)
+  [`fa586c0`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/fa586c0df7a8b0167a25e3e4d1e2357db3f3c1fb)
+  Thanks [@jordisala1991](https://github.com/jordisala1991)! - Fix using Google fonts with variants
+  that are not present on Penpot
+
 ## 0.14.1
 
 ### Patch Changes
