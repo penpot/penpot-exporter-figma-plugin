@@ -1,5 +1,17 @@
 # penpot-exporter
 
+## 0.14.1
+
+### Patch Changes
+
+- [#257](https://github.com/penpot/penpot-exporter-figma-plugin/pull/257)
+  [`fcdfefb`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/fcdfefbcf09f0ea21dfa7eb78e0cd7106e9a7d6b)
+  Thanks [@jordisala1991](https://github.com/jordisala1991)! - Fix color libraries with image fills
+
+- [#257](https://github.com/penpot/penpot-exporter-figma-plugin/pull/257)
+  [`fcdfefb`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/fcdfefbcf09f0ea21dfa7eb78e0cd7106e9a7d6b)
+  Thanks [@jordisala1991](https://github.com/jordisala1991)! - Fix stroke fills with gradients
+
 ## 0.14.0
 
 ### Minor Changes
