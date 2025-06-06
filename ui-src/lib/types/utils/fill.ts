@@ -4,13 +4,25 @@ import { Gradient } from './gradient';
 import { ImageColor, PartialImageColor } from './imageColor';
 import { Uuid } from './uuid';
 
-export type Fill = {
+export type Fill = FigmaFill | PenpotFill;
+
+// @TODO: move to any other place
+type FigmaFill = {
   fillColor?: string;
   fillOpacity?: number;
   fillColorGradient?: Gradient;
   fillColorRefFile?: Uuid;
   fillColorRefId?: Uuid;
-  fillImage?: ImageColor | PartialImageColor; // @TODO: move to any other place
+  fillImage?: PartialImageColor;
+};
+
+type PenpotFill = {
+  fillColor?: string;
+  fillOpacity?: number;
+  fillColorGradient?: Gradient;
+  fillColorRefFile?: Uuid;
+  fillColorRefId?: Uuid;
+  fillImage?: ImageColor;
 };
 
 export type FillStyle = {

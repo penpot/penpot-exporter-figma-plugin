@@ -4,6 +4,7 @@ import { sendMessage } from '@ui/context';
 import { PenpotContext } from '@ui/lib/types/penpotContext';
 import { FillStyle } from '@ui/lib/types/utils/fill';
 import { colors } from '@ui/parser';
+import { symbolFillImage } from '@ui/parser/creators/symbols/symbolFills';
 
 export const registerColorLibraries = async (
   context: PenpotContext,
@@ -34,7 +35,7 @@ export const registerColorLibraries = async (
         ...color,
         color: fill.fillColor,
         opacity: fill.fillOpacity,
-        image: fill.fillImage,
+        image: fill.fillImage ? symbolFillImage(context, fill.fillImage) : undefined,
         gradient: fill.fillColorGradient
       });
 
