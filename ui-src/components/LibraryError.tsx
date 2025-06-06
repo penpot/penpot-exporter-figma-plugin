@@ -1,4 +1,4 @@
-import { Banner, Button, IconWarning32, Link } from '@create-figma-plugin/ui';
+import { Banner, Button, IconWarningSmall24, Link } from '@create-figma-plugin/ui';
 
 import { Stack } from '@ui/components/Stack';
 import { useFigmaContext } from '@ui/context';
@@ -11,7 +11,7 @@ export const LibraryError = () => {
   return (
     <Stack space="small">
       <Stack space="xsmall">
-        <Banner icon={<IconWarning32 />} variant="warning">
+        <Banner icon={<IconWarningSmall24 />} variant="warning">
           Oops! It looks like there was an <b>error generating the export file</b>.
         </Banner>
         <span>
