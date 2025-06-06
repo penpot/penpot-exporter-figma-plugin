@@ -1,4 +1,4 @@
-import { Banner, IconInfo32, Link } from '@create-figma-plugin/ui';
+import { Banner, IconInfoSmall24, Link } from '@create-figma-plugin/ui';
 
 import { Stack } from '@ui/components/Stack';
 import { useFigmaContext } from '@ui/context';
@@ -11,7 +11,7 @@ export const MissingFontsSection = () => {
   return (
     <Stack space="small">
       <Stack space="xsmall">
-        <Banner icon={<IconInfo32 />}>
+        <Banner icon={<IconInfoSmall24 />}>
           {missingFonts.length} custom font{missingFonts.length > 1 ? 's' : ''} detected:
           <ul style={{ paddingLeft: 20 }}>
             {missingFonts.map(font => (

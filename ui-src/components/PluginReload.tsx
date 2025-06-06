@@ -1,4 +1,4 @@
-import { Banner, Button, IconInfo32 } from '@create-figma-plugin/ui';
+import { Banner, Button, IconInfoSmall24 } from '@create-figma-plugin/ui';
 
 import { Stack } from '@ui/components/Stack';
 import { useFigmaContext } from '@ui/context';
@@ -8,7 +8,7 @@ export const PluginReload = () => {
 
   return (
     <Stack space="small">
-      <Banner icon={<IconInfo32 />}>
+      <Banner icon={<IconInfoSmall24 />}>
         Changes detected in fonts.
         <br />
         Please reload the plug-in to ensure all modifications are included in the exported file.
