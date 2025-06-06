@@ -1,5 +1,13 @@
 # penpot-exporter
 
+## 0.14.3
+
+### Patch Changes
+
+- [#263](https://github.com/penpot/penpot-exporter-figma-plugin/pull/263)
+  [`dc64e91`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/dc64e91dd7f444ddeb47cdf052aa1058162f28da)
+  Thanks [@jordisala1991](https://github.com/jordisala1991)! - Update internal dependencies
+
 ## 0.14.2
 
 ### Patch Changes
