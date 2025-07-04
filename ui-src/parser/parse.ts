@@ -24,7 +24,7 @@ export const parse = async ({
   init(componentShapes, components);
   init(uiComponentProperties, componentProperties);
 
-  const context = createBuildContext();
+  const context = createBuildContext({ referer: `penpot-exporter-figma-plugin@${APP_VERSION}` });
   context.addFile({ name });
 
   await registerFileMedias(context, images);
