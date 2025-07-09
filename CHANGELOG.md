@@ -1,5 +1,14 @@
 # penpot-exporter
 
+## 0.14.4
+
+### Patch Changes
+
+- [#266](https://github.com/penpot/penpot-exporter-figma-plugin/pull/266)
+  [`2916a54`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/2916a5400b8785c0b88cd834f19b7e3abf3ec259)
+  Thanks [@jordisala1991](https://github.com/jordisala1991)! - Added referer and fixed translate
+  stroke
+
 ## 0.14.3
 
 ### Patch Changes
