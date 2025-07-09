@@ -24,7 +24,7 @@ export const translateStroke = (
   firstStroke: boolean
 ): Stroke | undefined => {
   const fill = translateFill(paint);
-  let stroke: Stroke = sharedStrokeProperties;
+  let stroke: Stroke = { ...sharedStrokeProperties };
 
   if (!fill) {
     return;
