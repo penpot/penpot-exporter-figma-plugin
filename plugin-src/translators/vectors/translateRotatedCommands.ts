@@ -1,4 +1,4 @@
-import { Command } from 'svg-path-parser';
+import type { Command } from 'svg-path-parser';
 
 import { applyBase, translateCommandToPathString } from '@plugin/translators/vectors';
 import { applyInverseRotation, applyRotationToSegment } from '@plugin/utils';

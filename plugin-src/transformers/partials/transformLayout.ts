@@ -12,7 +12,7 @@ import {
   translateLayoutWrapType
 } from '@plugin/translators';
 
-import { LayoutAttributes, LayoutChildAttributes } from '@ui/lib/types/shapes/layout';
+import type { LayoutAttributes, LayoutChildAttributes } from '@ui/lib/types/shapes/layout';
 
 export const transformAutoLayout = (node: BaseFrameMixin): LayoutAttributes => {
   return {

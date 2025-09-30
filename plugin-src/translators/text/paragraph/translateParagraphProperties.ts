@@ -1,6 +1,6 @@
 import { Paragraph } from '@plugin/translators/text/paragraph/Paragraph';
 
-import { TextNode as PenpotTextNode } from '@ui/lib/types/shapes/textShape';
+import type { TextNode as PenpotTextNode } from '@ui/lib/types/shapes/textShape';
 
 export type TextSegment = Pick<
   StyledTextSegment,

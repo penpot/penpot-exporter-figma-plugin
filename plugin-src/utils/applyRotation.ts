@@ -1,4 +1,4 @@
-import {
+import type {
   ClosePathCommand,
   Command,
   CurveToCommand,
@@ -6,7 +6,7 @@ import {
   VerticalLineToCommand
 } from 'svg-path-parser';
 
-import { Point } from '@ui/lib/types/utils/point';
+import type { Point } from '@ui/lib/types/utils/point';
 
 export const applyRotation = (point: Point, transform: Transform, boundingBox: Rect): Point => {
   const centerPoint = calculateCenter(boundingBox);

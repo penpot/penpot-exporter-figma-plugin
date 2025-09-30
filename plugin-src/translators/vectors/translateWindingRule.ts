@@ -1,4 +1,4 @@
-import { FillRules } from '@ui/lib/types/shapes/pathShape';
+import type { FillRules } from '@ui/lib/types/shapes/pathShape';
 
 export const translateWindingRule = (windingRule: WindingRule | 'NONE'): FillRules | undefined => {
   switch (windingRule) {

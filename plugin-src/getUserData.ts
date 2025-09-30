@@ -1,4 +1,4 @@
-export const getUserData = async () => {
+export const getUserData = (): void => {
   const user = figma.currentUser;
   if (user) {
     figma.ui.postMessage({

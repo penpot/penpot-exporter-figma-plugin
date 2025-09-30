@@ -1,15 +1,15 @@
-import { PenpotContext } from '@ui/lib/types/penpotContext';
-import { Uuid } from '@ui/lib/types/utils/uuid';
+import type { PenpotContext } from '@ui/lib/types/penpotContext';
+import type { Uuid } from '@ui/lib/types/utils/uuid';
 import { components, parseFigmaId } from '@ui/parser';
 import { createArtboard } from '@ui/parser/creators';
-import { ComponentInstance } from '@ui/types';
+import type { ComponentInstance, UiComponent } from '@ui/types';
 
 let remoteFileId: Uuid | undefined = undefined;
 
 export const createComponentInstance = (
   context: PenpotContext,
-  { type, mainComponentFigmaId, isComponentRoot, ...shape }: ComponentInstance
-) => {
+  { type: _type, mainComponentFigmaId, isComponentRoot, ...shape }: ComponentInstance
+): void => {
   const uiComponent =
     components.get(mainComponentFigmaId) ?? createUiComponent(context, mainComponentFigmaId);
 
@@ -27,7 +27,10 @@ export const createComponentInstance = (
   createArtboard(context, shape);
 };
 
-const createUiComponent = (context: PenpotContext, mainComponentFigmaId: string) => {
+const createUiComponent = (
+  context: PenpotContext,
+  mainComponentFigmaId: string
+): UiComponent | undefined => {
   const mainInstanceId = parseFigmaId(context, mainComponentFigmaId);
   if (!mainInstanceId) {
     return;

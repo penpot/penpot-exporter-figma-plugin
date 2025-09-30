@@ -3,7 +3,7 @@ import { translateGoogleFont } from '@plugin/translators/text/font/gfonts';
 import { translateLocalFont } from '@plugin/translators/text/font/local';
 import { translateFontWeight } from '@plugin/translators/text/properties';
 
-import { TextTypography } from '@ui/lib/types/shapes/textShape';
+import type { TextTypography } from '@ui/lib/types/shapes/textShape';
 
 export const translateFontName = (
   fontName: FontName | undefined

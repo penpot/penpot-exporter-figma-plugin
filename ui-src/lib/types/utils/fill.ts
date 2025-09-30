@@ -1,8 +1,8 @@
-import { Color } from '@ui/lib/types/utils/color';
+import type { Color } from '@ui/lib/types/utils/color';
 
-import { Gradient } from './gradient';
-import { ImageColor, PartialImageColor } from './imageColor';
-import { Uuid } from './uuid';
+import type { Gradient } from './gradient';
+import type { ImageColor, PartialImageColor } from './imageColor';
+import type { Uuid } from './uuid';
 
 export type Fill = FigmaFill | PenpotFill;
 

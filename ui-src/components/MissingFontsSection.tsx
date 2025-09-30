@@ -1,9 +1,10 @@
 import { Banner, IconInfoSmall24, Link } from '@create-figma-plugin/ui';
+import type { JSX } from 'preact';
 
 import { Stack } from '@ui/components/Stack';
 import { useFigmaContext } from '@ui/context';
 
-export const MissingFontsSection = () => {
+export const MissingFontsSection = (): JSX.Element | null => {
   const { missingFonts } = useFigmaContext();
 
   if (!missingFonts || !missingFonts.length) return null;

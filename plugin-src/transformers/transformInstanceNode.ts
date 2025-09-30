@@ -17,7 +17,7 @@ import {
   transformStrokes
 } from '@plugin/transformers/partials';
 
-import { ComponentInstance } from '@ui/types';
+import type { ComponentInstance } from '@ui/types';
 
 export const transformInstanceNode = async (
   node: InstanceNode

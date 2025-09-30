@@ -1,8 +1,8 @@
 import { exportAsBytes } from '@penpot/library';
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from 'preact/hooks';
 
-import { FormValues } from '@ui/components/ExportForm';
-import { MessageData, sendMessage } from '@ui/context';
+import type { FormValues } from '@ui/components/ExportForm';
+import { type MessageData, sendMessage } from '@ui/context';
 import { identify, track } from '@ui/metrics/mixpanel';
 import { parse } from '@ui/parser';
 
@@ -45,11 +45,11 @@ export const useFigma = (): UseFigmaHook => {
   const [totalItems, setTotalItems] = useState<number>(0);
   const [processedItems, setProcessedItems] = useState<number>(0);
 
-  const postMessage = (type: string, data?: unknown) => {
+  const postMessage = (type: string, data?: unknown): void => {
     parent.postMessage({ pluginMessage: { type, data } }, '*');
   };
 
-  const onMessage = async (event: MessageEvent<MessageData>) => {
+  const onMessage = async (event: MessageEvent<MessageData>): Promise<void> => {
     if (!event.data.pluginMessage) return;
 
     const { pluginMessage } = event.data;
@@ -127,7 +127,7 @@ export const useFigma = (): UseFigmaHook => {
     }
   };
 
-  const download = (blob: Blob, name: string) => {
+  const download = (blob: Blob, name: string): void => {
     const url = window.URL.createObjectURL(blob);
     const a = document.createElement('a');
 
@@ -137,17 +137,17 @@ export const useFigma = (): UseFigmaHook => {
     a.click();
   };
 
-  const reload = () => {
+  const reload = (): void => {
     setLoading(true);
     setError(false);
     postMessage('reload');
   };
 
-  const cancel = () => {
+  const cancel = (): void => {
     postMessage('cancel');
   };
 
-  const exportPenpot = () => {
+  const exportPenpot = (): void => {
     setExporting(true);
     setStep('processing');
     setProcessedItems(0);
@@ -160,7 +160,7 @@ export const useFigma = (): UseFigmaHook => {
 
     postMessage('ready');
 
-    return () => {
+    return (): void => {
       window.removeEventListener('message', onMessage);
     };
   }, []);

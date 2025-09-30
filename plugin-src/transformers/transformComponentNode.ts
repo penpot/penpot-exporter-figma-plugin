@@ -17,7 +17,7 @@ import {
   transformStrokes
 } from '@plugin/transformers/partials';
 
-import { ComponentRoot } from '@ui/types';
+import type { ComponentRoot } from '@ui/types';
 
 const isNonVariantComponentNode = (node: ComponentNode): boolean => {
   return node.parent?.type !== 'COMPONENT_SET';

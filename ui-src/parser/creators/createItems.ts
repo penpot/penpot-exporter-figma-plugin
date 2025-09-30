@@ -1,5 +1,5 @@
 import { sendMessage } from '@ui/context';
-import { PenpotContext } from '@ui/lib/types/penpotContext';
+import type { PenpotContext } from '@ui/lib/types/penpotContext';
 import {
   createArtboard,
   createBool,
@@ -11,15 +11,15 @@ import {
   createRectangle,
   createText
 } from '@ui/parser/creators';
-import { PenpotNode } from '@ui/types';
+import type { PenpotNode } from '@ui/types';
 
-export const createItems = (context: PenpotContext, nodes: PenpotNode[]) => {
+export const createItems = (context: PenpotContext, nodes: PenpotNode[]): void => {
   for (const node of nodes) {
     createItem(context, node);
   }
 };
 
-const createItem = (context: PenpotContext, node: PenpotNode) => {
+const createItem = (context: PenpotContext, node: PenpotNode): void => {
   sendMessage({
     type: 'PROGRESS_CURRENT_ITEM',
     data: node.name
@@ -31,7 +31,9 @@ const createItem = (context: PenpotContext, node: PenpotNode) => {
     case 'circle':
       return createCircle(context, node);
     case 'frame':
-      return createArtboard(context, node);
+      createArtboard(context, node);
+
+      return;
     case 'group':
       return createGroup(context, node);
     case 'path':

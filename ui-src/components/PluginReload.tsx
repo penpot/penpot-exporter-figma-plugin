@@ -1,9 +1,10 @@
 import { Banner, Button, IconInfoSmall24 } from '@create-figma-plugin/ui';
+import type { JSX } from 'preact';
 
 import { Stack } from '@ui/components/Stack';
 import { useFigmaContext } from '@ui/context';
 
-export const PluginReload = () => {
+export const PluginReload = (): JSX.Element => {
   const { reload, cancel } = useFigmaContext();
 
   return (

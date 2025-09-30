@@ -1,5 +1,5 @@
-import { LayoutChildAttributes } from '@ui/lib/types/shapes/layout';
-import { ShapeAttributes, ShapeBaseAttributes } from '@ui/lib/types/shapes/shape';
+import type { LayoutChildAttributes } from '@ui/lib/types/shapes/layout';
+import type { ShapeAttributes, ShapeBaseAttributes } from '@ui/lib/types/shapes/shape';
 
 export type PathShape = ShapeBaseAttributes &
   ShapeAttributes &

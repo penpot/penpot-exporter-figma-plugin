@@ -1,4 +1,4 @@
-import { BlendMode as PenpotBlendMode } from '@ui/lib/types/utils/blendModes';
+import type { BlendMode as PenpotBlendMode } from '@ui/lib/types/utils/blendModes';
 
 export const translateBlendMode = (blendMode: BlendMode): PenpotBlendMode => {
   switch (blendMode) {

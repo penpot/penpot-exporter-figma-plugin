@@ -1,6 +1,6 @@
-import { PenpotContext } from '@ui/lib/types/penpotContext';
-import { Fill } from '@ui/lib/types/utils/fill';
-import { ImageColor, PartialImageColor } from '@ui/lib/types/utils/imageColor';
+import type { PenpotContext } from '@ui/lib/types/penpotContext';
+import type { Fill } from '@ui/lib/types/utils/fill';
+import type { ImageColor, PartialImageColor } from '@ui/lib/types/utils/imageColor';
 import { colors, images } from '@ui/parser';
 
 export const symbolFills = (

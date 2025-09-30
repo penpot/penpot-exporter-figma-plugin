@@ -1,8 +1,8 @@
 import { sleep } from '@common/sleep';
 
 import { sendMessage } from '@ui/context';
-import { PenpotContext } from '@ui/lib/types/penpotContext';
-import { Uuid } from '@ui/lib/types/utils/uuid';
+import type { PenpotContext } from '@ui/lib/types/penpotContext';
+import type { Uuid } from '@ui/lib/types/utils/uuid';
 import { images } from '@ui/parser';
 import { detectMimeType } from '@ui/utils';
 
@@ -10,8 +10,8 @@ const IMAGE_QUALITY = 0.8;
 
 export const registerFileMedias = async (
   context: PenpotContext,
-  binaryImages: Record<string, Uint8Array>
-) => {
+  binaryImages: Record<string, Uint8Array<ArrayBuffer>>
+): Promise<void> => {
   const imagesToOptimize = Object.entries(binaryImages);
 
   if (imagesToOptimize.length === 0) return;
@@ -45,7 +45,7 @@ export const registerFileMedias = async (
 const registerFileMedia = async (
   context: PenpotContext,
   key: string,
-  bytes: Uint8Array
+  bytes: Uint8Array<ArrayBuffer>
 ): Promise<Uuid> => {
   const image = await optimizeImage(bytes);
 
@@ -59,15 +59,19 @@ const registerFileMedia = async (
   );
 };
 
-async function optimizeImage(bytes: Uint8Array) {
+async function optimizeImage(bytes: Uint8Array<ArrayBuffer>): Promise<{
+  blob: Blob;
+  width: number;
+  height: number;
+}> {
   const mimeType = detectMimeType(bytes);
   const url = URL.createObjectURL(new Blob([bytes]));
 
   try {
     const image = await new Promise<HTMLImageElement>((resolve, reject) => {
       const img = new Image();
-      img.onload = () => resolve(img);
-      img.onerror = () => reject();
+      img.onload = (): void => resolve(img);
+      img.onerror = (): void => reject();
       img.src = url;
     });
 

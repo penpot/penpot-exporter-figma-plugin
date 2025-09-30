@@ -1,8 +1,8 @@
 import { LoadingIndicator } from '@create-figma-plugin/ui';
-import { JSX } from 'react';
+import type { JSX } from 'preact';
 
 import { Stack } from '@ui/components/Stack';
-import { Steps, useFigmaContext } from '@ui/context';
+import { type Steps, useFigmaContext } from '@ui/context';
 
 type Messages = {
   total: string;
@@ -49,7 +49,7 @@ const stepMessages: Record<Steps, Messages> = {
 const StepProgress = (): JSX.Element | null => {
   const { currentItem, totalItems, processedItems, step } = useFigmaContext();
 
-  const truncateText = (text: string, maxChars: number) => {
+  const truncateText = (text: string, maxChars: number): string => {
     if (text.length <= maxChars) {
       return text;
     }
@@ -88,7 +88,7 @@ const StepProgress = (): JSX.Element | null => {
   }
 };
 
-export const ExporterProgress = () => {
+export const ExporterProgress = (): JSX.Element => {
   return (
     <Stack space="small" horizontalAlign="center">
       <LoadingIndicator />

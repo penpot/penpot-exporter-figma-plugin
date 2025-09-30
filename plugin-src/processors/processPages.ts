@@ -2,7 +2,7 @@ import { sleep } from '@common/sleep';
 
 import { transformPageNode } from '@plugin/transformers';
 
-import { PenpotPage } from '@ui/lib/types/penpotPage';
+import type { PenpotPage } from '@ui/lib/types/penpotPage';
 
 export const processPages = async (node: DocumentNode): Promise<PenpotPage[]> => {
   const children = [];

@@ -1,8 +1,8 @@
 import { translateFillStyleId, translateFills } from '@plugin/translators/fills';
-import { TextSegment } from '@plugin/translators/text/paragraph';
+import type { TextSegment } from '@plugin/translators/text/paragraph';
 
-import { ShapeAttributes } from '@ui/lib/types/shapes/shape';
-import { TextStyle } from '@ui/lib/types/shapes/textShape';
+import type { ShapeAttributes } from '@ui/lib/types/shapes/shape';
+import type { TextStyle } from '@ui/lib/types/shapes/textShape';
 
 export const transformFills = (
   node: (MinimalFillsMixin & DimensionAndPositionMixin) | VectorRegion | VectorNode | TextSegment

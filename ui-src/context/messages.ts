@@ -1,5 +1,5 @@
-import { Steps } from '@ui/context';
-import { PenpotDocument } from '@ui/types';
+import type { Steps } from '@ui/context';
+import type { PenpotDocument } from '@ui/types';
 
 export type MessageData = { pluginMessage?: PluginMessage };
 
@@ -60,7 +60,7 @@ type UserDataMessage = {
   };
 };
 
-export const sendMessage = (pluginMessage: PluginMessage) => {
+export const sendMessage = (pluginMessage: PluginMessage): void => {
   window.dispatchEvent(
     new MessageEvent<MessageData>('message', {
       data: {

@@ -1,7 +1,7 @@
 import { List } from '@plugin/translators/text/paragraph/List';
-import { TextSegment } from '@plugin/translators/text/paragraph/translateParagraphProperties';
+import type { TextSegment } from '@plugin/translators/text/paragraph/translateParagraphProperties';
 
-import { TextNode as PenpotTextNode } from '@ui/lib/types/shapes/textShape';
+import type { TextNode as PenpotTextNode } from '@ui/lib/types/shapes/textShape';
 
 export class Paragraph {
   private isParagraphStarting = false;
@@ -50,9 +50,10 @@ export class Paragraph {
     }
   }
 
-  private isFirstTextNode(textNode: PenpotTextNode) {
+  private isFirstTextNode(textNode: PenpotTextNode): boolean {
     if (this.firstTextNode === null) {
       this.firstTextNode = textNode;
+
       return true;
     }
 

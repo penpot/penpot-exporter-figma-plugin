@@ -1,15 +1,15 @@
 import { sleep } from '@common/sleep';
 
 import { sendMessage } from '@ui/context';
-import { PenpotContext } from '@ui/lib/types/penpotContext';
-import { FillStyle } from '@ui/lib/types/utils/fill';
+import type { PenpotContext } from '@ui/lib/types/penpotContext';
+import type { FillStyle } from '@ui/lib/types/utils/fill';
 import { colors } from '@ui/parser';
 import { symbolFillImage } from '@ui/parser/creators/symbols/symbolFills';
 
 export const registerColorLibraries = async (
   context: PenpotContext,
   styles: Record<string, FillStyle>
-) => {
+): Promise<void> => {
   const stylesToRegister = Object.entries(styles);
 
   if (stylesToRegister.length === 0) return;

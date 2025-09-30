@@ -4,13 +4,13 @@ import { sleep } from '@common/sleep';
 import { paintStyles } from '@plugin/libraries';
 import { translatePaintStyle } from '@plugin/translators/styles';
 
-import { FillStyle } from '@ui/lib/types/utils/fill';
+import type { FillStyle } from '@ui/lib/types/utils/fill';
 
 const isPaintStyle = (style: BaseStyle): style is PaintStyle => {
   return style.type === 'PAINT';
 };
 
-export const registerPaintStyles = async () => {
+export const registerPaintStyles = async (): Promise<void> => {
   const localPaintStyles = await figma.getLocalPaintStylesAsync();
   localPaintStyles.forEach(style => {
     paintStyles.set(style.id, style);

@@ -2,9 +2,9 @@ import slugify from 'slugify';
 
 import { Cache } from '@plugin/Cache';
 import { translateFontVariantId } from '@plugin/translators/text/font/gfonts';
-import { GoogleFont } from '@plugin/translators/text/font/gfonts/googleFont';
+import type { GoogleFont } from '@plugin/translators/text/font/gfonts/googleFont';
 
-import { TextTypography } from '@ui/lib/types/shapes/textShape';
+import type { TextTypography } from '@ui/lib/types/shapes/textShape';
 
 import { items as gfonts } from './gfonts.json';
 

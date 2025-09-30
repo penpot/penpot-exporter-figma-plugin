@@ -1,6 +1,6 @@
 import { translateFill } from '@plugin/translators/fills';
 
-import { Stroke, StrokeAlignment, StrokeCaps } from '@ui/lib/types/utils/stroke';
+import type { Stroke, StrokeAlignment, StrokeCaps } from '@ui/lib/types/utils/stroke';
 
 export const translateStrokes = (
   node: MinimalStrokesMixin | (MinimalStrokesMixin & IndividualStrokesMixin),

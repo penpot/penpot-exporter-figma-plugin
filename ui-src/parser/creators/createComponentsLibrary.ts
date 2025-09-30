@@ -2,12 +2,12 @@ import { toArray } from '@common/map';
 import { sleep } from '@common/sleep';
 
 import { sendMessage } from '@ui/context';
-import { PenpotContext } from '@ui/lib/types/penpotContext';
-import { PenpotComponent } from '@ui/lib/types/shapes/componentShape';
+import type { PenpotContext } from '@ui/lib/types/penpotContext';
+import type { PenpotComponent } from '@ui/lib/types/shapes/componentShape';
 import { componentShapes, components as uiComponents } from '@ui/parser';
-import { UiComponent } from '@ui/types';
+import type { UiComponent } from '@ui/types';
 
-export const createComponentsLibrary = async (context: PenpotContext) => {
+export const createComponentsLibrary = async (context: PenpotContext): Promise<void> => {
   let componentsBuilt = 1;
   const components = toArray(uiComponents);
 
@@ -33,7 +33,7 @@ export const createComponentsLibrary = async (context: PenpotContext) => {
   }
 };
 
-const createComponentLibrary = (context: PenpotContext, uiComponent: UiComponent) => {
+const createComponentLibrary = (context: PenpotContext, uiComponent: UiComponent): void => {
   const componentShape = componentShapes.get(uiComponent.componentFigmaId);
 
   if (!componentShape) {

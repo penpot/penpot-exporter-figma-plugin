@@ -8,7 +8,7 @@ import {
   translateTextTransform
 } from '@plugin/translators/text/properties';
 
-import { TypographyStyle } from '@ui/lib/types/shapes/textShape';
+import type { TypographyStyle } from '@ui/lib/types/shapes/textShape';
 
 export const translateTextStyle = (figmaStyle: TextStyle): TypographyStyle => {
   return {

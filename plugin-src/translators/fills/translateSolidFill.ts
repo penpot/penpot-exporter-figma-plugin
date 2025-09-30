@@ -1,6 +1,6 @@
 import { rgbToHex } from '@plugin/utils';
 
-import { Fill } from '@ui/lib/types/utils/fill';
+import type { Fill } from '@ui/lib/types/utils/fill';
 
 export const translateSolidFill = (fill: SolidPaint): Fill => {
   return {

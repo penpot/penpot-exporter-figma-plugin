@@ -1,12 +1,12 @@
 import { sentryVitePlugin } from '@sentry/vite-plugin';
 import react from '@vitejs/plugin-react-swc';
 import * as process from 'node:process';
-import { defineConfig } from 'vite';
+import { type UserConfig, defineConfig } from 'vite';
 import { viteSingleFile } from 'vite-plugin-singlefile';
 import svgr from 'vite-plugin-svgr';
 import tsconfigPaths from 'vite-tsconfig-paths';
 
-export default ({ mode }) => {
+export default ({ mode }): UserConfig => {
   return defineConfig({
     root: './ui-src',
     plugins: [

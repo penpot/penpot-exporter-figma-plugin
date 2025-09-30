@@ -1,4 +1,4 @@
-import { GrowType } from '@ui/lib/types/shapes/shape';
+import type { GrowType } from '@ui/lib/types/shapes/shape';
 
 export const translateGrowType = (node: TextNode): GrowType => {
   if (node.leadingTrim === 'CAP_HEIGHT') {

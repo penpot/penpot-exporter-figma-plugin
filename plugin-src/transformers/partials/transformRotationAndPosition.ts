@@ -1,7 +1,7 @@
 import { translateRotation, translateZeroRotation } from '@plugin/translators';
 import { applyInverseRotation, getRotation, isTransformed } from '@plugin/utils';
 
-import { ShapeBaseAttributes, ShapeGeomAttributes } from '@ui/lib/types/shapes/shape';
+import type { ShapeBaseAttributes, ShapeGeomAttributes } from '@ui/lib/types/shapes/shape';
 
 export const transformRotation = (
   node: LayoutMixin

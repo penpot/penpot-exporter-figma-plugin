@@ -1,7 +1,7 @@
 import { isGoogleFont } from '@plugin/translators/text/font/gfonts';
 import { isLocalFont } from '@plugin/translators/text/font/local';
 
-export const findAllTextNodes = async () => {
+export const findAllTextNodes = async (): Promise<void> => {
   const fonts = new Set<string>();
 
   for (const page of figma.root.children) {
@@ -39,7 +39,7 @@ export const findMissingFonts = (node: TextNode): FontName[] => {
   return missingFonts;
 };
 
-const extractMissingFonts = (node: TextNode, fonts: Set<string>) => {
+const extractMissingFonts = (node: TextNode, fonts: Set<string>): void => {
   const missingFonts = findMissingFonts(node);
 
   missingFonts.forEach(font => {

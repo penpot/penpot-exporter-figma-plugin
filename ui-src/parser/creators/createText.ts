@@ -1,12 +1,12 @@
-import { PenpotContext } from '@ui/lib/types/penpotContext';
-import { Paragraph, TextContent, TextNode, TextShape } from '@ui/lib/types/shapes/textShape';
+import type { PenpotContext } from '@ui/lib/types/penpotContext';
+import type { Paragraph, TextContent, TextNode, TextShape } from '@ui/lib/types/shapes/textShape';
 import { parseFigmaId, typographies } from '@ui/parser';
 import { symbolBlur, symbolFills, symbolStrokes, symbolTouched } from '@ui/parser/creators/symbols';
 
 export const createText = (
   context: PenpotContext,
-  { type, figmaId, figmaRelatedId, characters, ...shape }: TextShape
-) => {
+  { type: _type, figmaId, figmaRelatedId, characters, ...shape }: TextShape
+): void => {
   shape.id = parseFigmaId(context, figmaId);
   shape.shapeRef = parseFigmaId(context, figmaRelatedId, true);
   shape.content = parseContent(context, shape.content);

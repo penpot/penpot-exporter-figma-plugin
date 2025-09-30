@@ -14,7 +14,7 @@ import {
 } from '@plugin/transformers/partials';
 import { translateBoolType } from '@plugin/translators';
 
-import { BoolShape } from '@ui/lib/types/shapes/boolShape';
+import type { BoolShape } from '@ui/lib/types/shapes/boolShape';
 
 export const transformBooleanNode = async (node: BooleanOperationNode): Promise<BoolShape> => {
   return {

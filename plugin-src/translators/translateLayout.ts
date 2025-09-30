@@ -1,4 +1,4 @@
-import {
+import type {
   JustifyAlignContent,
   JustifyAlignItems,
   LayoutAlignSelf,
@@ -9,27 +9,26 @@ import {
   LayoutWrapType
 } from '@ui/lib/types/shapes/layout';
 
-type FigmaLayoutMode = 'NONE' | 'HORIZONTAL' | 'VERTICAL';
-
-type FigmaWrap = 'NO_WRAP' | 'WRAP';
-
 type FigmaLayoutSizing = 'FIXED' | 'HUG' | 'FILL';
 
 type FigmaLayoutAlign = 'MIN' | 'CENTER' | 'MAX' | 'STRETCH' | 'INHERIT';
 
-export const translateLayoutFlexDir = (layoutMode: FigmaLayoutMode): LayoutFlexDir | undefined => {
+export const translateLayoutFlexDir = (
+  layoutMode: AutoLayoutMixin['layoutMode']
+): LayoutFlexDir | undefined => {
   switch (layoutMode) {
     case 'HORIZONTAL':
       return 'row-reverse';
     case 'VERTICAL':
       return 'column-reverse';
+    case 'GRID':
     default:
       return;
   }
 };
 
 export const translateLayoutGap = (
-  layoutMode: FigmaLayoutMode,
+  layoutMode: AutoLayoutMixin['layoutMode'],
   itemSpacing: number,
   auto: boolean = false
 ): LayoutGap => {
@@ -46,7 +45,7 @@ export const translateLayoutGap = (
   };
 };
 
-export const translateLayoutWrapType = (wrap: FigmaWrap): LayoutWrapType => {
+export const translateLayoutWrapType = (wrap: AutoLayoutMixin['layoutWrap']): LayoutWrapType => {
   switch (wrap) {
     case 'NO_WRAP':
       return 'nowrap';

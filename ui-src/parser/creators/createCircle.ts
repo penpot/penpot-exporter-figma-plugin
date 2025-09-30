@@ -1,12 +1,12 @@
-import { PenpotContext } from '@ui/lib/types/penpotContext';
-import { CircleShape } from '@ui/lib/types/shapes/circleShape';
+import type { PenpotContext } from '@ui/lib/types/penpotContext';
+import type { CircleShape } from '@ui/lib/types/shapes/circleShape';
 import { parseFigmaId } from '@ui/parser';
 import { symbolBlur, symbolFills, symbolStrokes, symbolTouched } from '@ui/parser/creators/symbols';
 
 export const createCircle = (
   context: PenpotContext,
-  { type, figmaId, figmaRelatedId, ...shape }: CircleShape
-) => {
+  { type: _type, figmaId, figmaRelatedId, ...shape }: CircleShape
+): void => {
   shape.id = parseFigmaId(context, figmaId);
   shape.shapeRef = parseFigmaId(context, figmaRelatedId, true);
   shape.fills = symbolFills(context, shape.fillStyleId, shape.fills);

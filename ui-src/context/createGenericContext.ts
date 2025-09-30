@@ -1,6 +1,6 @@
-import { Provider } from 'preact';
-// @TODO: Try to use react
-import { createContext, useContext } from 'react';
+import type { Provider } from 'preact';
+import { createContext } from 'preact/compat';
+import { useContext } from 'preact/hooks';
 
 export const createGenericContext = <T>(): [<K extends T>() => K, Provider<T | undefined>] => {
   const genericContext = createContext<T | undefined>(undefined);
