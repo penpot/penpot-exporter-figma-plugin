@@ -1,3 +1,3 @@
-import { PenpotNode } from '@ui/types';
+import type { PenpotNode } from '@ui/types';
 
 export type Children = { children?: PenpotNode[] };

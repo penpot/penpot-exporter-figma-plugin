@@ -1,9 +1,10 @@
 import { Banner, Button, IconWarningSmall24, Link } from '@create-figma-plugin/ui';
+import type { JSX } from 'preact';
 
 import { Stack } from '@ui/components/Stack';
 import { useFigmaContext } from '@ui/context';
 
-export const LibraryError = () => {
+export const LibraryError = (): JSX.Element | null => {
   const { reload, cancel, error } = useFigmaContext();
 
   if (!error) return null;

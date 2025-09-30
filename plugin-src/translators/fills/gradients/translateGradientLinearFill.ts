@@ -1,6 +1,6 @@
 import { calculateLinearGradient, rgbToHex } from '@plugin/utils';
 
-import { Fill } from '@ui/lib/types/utils/fill';
+import type { Fill } from '@ui/lib/types/utils/fill';
 
 export const translateGradientLinearFill = (fill: GradientPaint): Fill => {
   const points = calculateLinearGradient(fill.gradientTransform);

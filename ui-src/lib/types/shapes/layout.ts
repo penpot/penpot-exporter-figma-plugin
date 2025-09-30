@@ -1,4 +1,4 @@
-import { Uuid } from '@ui/lib/types/utils/uuid';
+import type { Uuid } from '@ui/lib/types/utils/uuid';
 
 export type LayoutSizing = 'fill' | 'fix' | 'auto';
 

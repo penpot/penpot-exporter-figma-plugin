@@ -13,7 +13,7 @@ import {
   transformText
 } from '@plugin/transformers/partials';
 
-import { TextShape } from '@ui/lib/types/shapes/textShape';
+import type { TextShape } from '@ui/lib/types/shapes/textShape';
 
 export const transformTextNode = (node: TextNode): TextShape => {
   return {

@@ -1,5 +1,5 @@
-import { PenpotContext } from '@ui/lib/types/penpotContext';
-import { Uuid } from '@ui/lib/types/utils/uuid';
+import type { PenpotContext } from '@ui/lib/types/penpotContext';
+import type { Uuid } from '@ui/lib/types/utils/uuid';
 import { identifiers } from '@ui/parser';
 
 export const parseFigmaId = (

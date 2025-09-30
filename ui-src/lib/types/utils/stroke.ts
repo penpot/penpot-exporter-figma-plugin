@@ -1,6 +1,6 @@
-import { Gradient } from './gradient';
-import { ImageColor, PartialImageColor } from './imageColor';
-import { Uuid } from './uuid';
+import type { Gradient } from './gradient';
+import type { ImageColor, PartialImageColor } from './imageColor';
+import type { Uuid } from './uuid';
 
 export type Stroke = {
   strokeColor?: string;

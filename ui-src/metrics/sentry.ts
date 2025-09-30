@@ -1,6 +1,6 @@
 import * as Sentry from '@sentry/react';
 
-export const initializeSentry = () => {
+export const initializeSentry = (): void => {
   if (import.meta.env.VITE_SENTRY_DSN && import.meta.env.PROD) {
     Sentry.init({
       dsn: import.meta.env.VITE_SENTRY_DSN,

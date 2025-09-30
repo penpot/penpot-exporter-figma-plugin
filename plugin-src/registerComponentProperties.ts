@@ -1,6 +1,6 @@
 import { componentProperties } from '@plugin/libraries';
 
-export const registerComponentProperties = (node: ComponentSetNode | ComponentNode) => {
+export const registerComponentProperties = (node: ComponentSetNode | ComponentNode): void => {
   try {
     Object.entries(node.componentPropertyDefinitions).forEach(([key, value]) => {
       if (value.type === 'TEXT' || value.type === 'BOOLEAN') {

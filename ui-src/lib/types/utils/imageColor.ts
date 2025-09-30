@@ -1,4 +1,4 @@
-import { Uuid } from './uuid';
+import type { Uuid } from './uuid';
 
 export type ImageColor = {
   name?: string;

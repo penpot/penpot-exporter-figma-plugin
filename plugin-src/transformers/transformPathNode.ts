@@ -15,7 +15,7 @@ import {
 } from '@plugin/transformers/partials';
 import { translateCommands } from '@plugin/translators/vectors';
 
-import { PathShape } from '@ui/lib/types/shapes/pathShape';
+import type { PathShape } from '@ui/lib/types/shapes/pathShape';
 
 export const transformPathNode = (node: StarNode | PolygonNode): PathShape => {
   return {

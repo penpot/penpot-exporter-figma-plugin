@@ -2,7 +2,7 @@ import { createBuildContext } from '@penpot/library';
 
 import { init } from '@common/map';
 
-import { PenpotContext } from '@ui/lib/types/penpotContext';
+import type { PenpotContext } from '@ui/lib/types/penpotContext';
 import { componentShapes, componentProperties as uiComponentProperties } from '@ui/parser';
 import {
   buildFile,
@@ -10,7 +10,7 @@ import {
   registerFileMedias,
   registerTypographyLibraries
 } from '@ui/parser/creators';
-import { PenpotDocument } from '@ui/types';
+import type { PenpotDocument } from '@ui/types';
 
 export const parse = async ({
   name,

@@ -9,7 +9,7 @@ import {
 } from '@plugin/transformers/partials';
 import { transformChildren } from '@plugin/transformers/partials';
 
-import { GroupShape } from '@ui/lib/types/shapes/groupShape';
+import type { GroupShape } from '@ui/lib/types/shapes/groupShape';
 
 export const transformGroupNode = async (node: GroupNode): Promise<GroupShape> => {
   return {

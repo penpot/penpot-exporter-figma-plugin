@@ -1,4 +1,4 @@
-import { Command } from 'svg-path-parser';
+import type { Command } from 'svg-path-parser';
 
 export const translateNonRotatedCommands = (
   commands: Command[],

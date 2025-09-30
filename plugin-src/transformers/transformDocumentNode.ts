@@ -10,7 +10,7 @@ import {
   registerTextStyles
 } from '@plugin/processors';
 
-import { PenpotDocument } from '@ui/types';
+import type { PenpotDocument } from '@ui/types';
 
 export const transformDocumentNode = async (node: DocumentNode): Promise<PenpotDocument> => {
   await registerPaintStyles();

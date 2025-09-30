@@ -1,7 +1,7 @@
 import { images } from '@plugin/libraries';
 
-import { Fill } from '@ui/lib/types/utils/fill';
-import { PartialImageColor } from '@ui/lib/types/utils/imageColor';
+import type { Fill } from '@ui/lib/types/utils/fill';
+import type { PartialImageColor } from '@ui/lib/types/utils/imageColor';
 
 export const translateImageFill = (fill: ImagePaint): Fill | undefined => {
   const fillImage = translateImage(fill.imageHash);

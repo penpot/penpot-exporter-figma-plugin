@@ -1,12 +1,12 @@
-import { PenpotContext } from '@ui/lib/types/penpotContext';
-import { RectShape } from '@ui/lib/types/shapes/rectShape';
+import type { PenpotContext } from '@ui/lib/types/penpotContext';
+import type { RectShape } from '@ui/lib/types/shapes/rectShape';
 import { parseFigmaId } from '@ui/parser';
 import { symbolBlur, symbolFills, symbolStrokes, symbolTouched } from '@ui/parser/creators/symbols';
 
 export const createRectangle = (
   context: PenpotContext,
-  { type, figmaId, figmaRelatedId, ...shape }: RectShape
-) => {
+  { type: _type, figmaId, figmaRelatedId, ...shape }: RectShape
+): void => {
   shape.id = parseFigmaId(context, figmaId);
   shape.shapeRef = parseFigmaId(context, figmaRelatedId, true);
   shape.fills = symbolFills(context, shape.fillStyleId, shape.fills);

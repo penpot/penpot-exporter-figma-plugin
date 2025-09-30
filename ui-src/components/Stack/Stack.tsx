@@ -1,5 +1,6 @@
 import classNames from 'classnames';
-import { CSSProperties, PropsWithChildren } from 'react';
+import type { CSSProperties, JSX } from 'preact';
+import type { PropsWithChildren } from 'preact/compat';
 
 import styles from './Stack.module.css';
 
@@ -18,7 +19,7 @@ export const Stack = ({
   style,
   as = 'div',
   children
-}: StackProps) => {
+}: StackProps): JSX.Element => {
   const Tag = as;
 
   return (

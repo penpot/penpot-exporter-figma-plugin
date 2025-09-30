@@ -1,4 +1,5 @@
-import { useEffect } from 'react';
+import type { JSX } from 'preact';
+import { useEffect } from 'preact/hooks';
 import useResizeObserver from 'use-resize-observer';
 
 import Penpot from '@ui/assets/penpot.svg?react';
@@ -10,7 +11,7 @@ import { FigmaProvider } from '@ui/context/FigmaContext';
 // Safe default value to avoid overflowing from the screen
 const MAX_HEIGHT = 800;
 
-export const App = () => {
+export const App = (): JSX.Element => {
   const { ref, height } = useResizeObserver<HTMLDivElement>({ box: 'border-box' });
 
   useEffect(() => {

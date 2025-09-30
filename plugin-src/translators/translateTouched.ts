@@ -1,4 +1,4 @@
-import { SyncGroups } from '@ui/lib/types/utils/syncGroups';
+import type { SyncGroups } from '@ui/lib/types/utils/syncGroups';
 
 type SyncAttributes = {
   [key in NodeChangeProperty]: SyncGroups[];

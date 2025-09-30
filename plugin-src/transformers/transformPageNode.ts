@@ -1,7 +1,7 @@
 import { translateChildren } from '@plugin/translators';
 import { translatePageFill } from '@plugin/translators/fills';
 
-import { PenpotPage } from '@ui/lib/types/penpotPage';
+import type { PenpotPage } from '@ui/lib/types/penpotPage';
 
 export const transformPageNode = async (node: PageNode): Promise<PenpotPage> => {
   return {

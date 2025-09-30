@@ -6,8 +6,8 @@ import {
   transformVectorPaths
 } from '@plugin/transformers/partials';
 
-import { GroupShape } from '@ui/lib/types/shapes/groupShape';
-import { PathShape } from '@ui/lib/types/shapes/pathShape';
+import type { GroupShape } from '@ui/lib/types/shapes/groupShape';
+import type { PathShape } from '@ui/lib/types/shapes/pathShape';
 
 /*
  * Vector nodes can have multiple vector paths, each with its own fills.

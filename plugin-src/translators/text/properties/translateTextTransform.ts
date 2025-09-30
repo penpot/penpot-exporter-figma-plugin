@@ -1,4 +1,6 @@
-export const translateTextTransform = (segment: Pick<StyledTextSegment, 'textCase'>) => {
+export const translateTextTransform = (
+  segment: Pick<StyledTextSegment, 'textCase'>
+): 'uppercase' | 'lowercase' | 'capitalize' | 'none' => {
   switch (segment.textCase) {
     case 'UPPER':
       return 'uppercase';

@@ -11,7 +11,7 @@ import {
 } from '@plugin/transformers/partials';
 import { translateCommands, translateWindingRule } from '@plugin/translators/vectors';
 
-import { PathShape } from '@ui/lib/types/shapes/pathShape';
+import type { PathShape } from '@ui/lib/types/shapes/pathShape';
 
 export const transformVectorPaths = (node: VectorNode): PathShape[] => {
   let regions: readonly VectorRegion[] = [];

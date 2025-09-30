@@ -1,14 +1,14 @@
 import { sleep } from '@common/sleep';
 
 import { sendMessage } from '@ui/context';
-import { PenpotContext } from '@ui/lib/types/penpotContext';
-import { TypographyStyle } from '@ui/lib/types/shapes/textShape';
+import type { PenpotContext } from '@ui/lib/types/penpotContext';
+import type { TypographyStyle } from '@ui/lib/types/shapes/textShape';
 import { typographies } from '@ui/parser';
 
 export const registerTypographyLibraries = async (
   context: PenpotContext,
   styles: Record<string, TypographyStyle>
-) => {
+): Promise<void> => {
   const stylesToRegister = Object.entries(styles);
 
   if (stylesToRegister.length === 0) return;

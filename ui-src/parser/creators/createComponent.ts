@@ -1,9 +1,10 @@
-import { PenpotContext } from '@ui/lib/types/penpotContext';
+import type { PenpotContext } from '@ui/lib/types/penpotContext';
+import type { Uuid } from '@ui/lib/types/utils/uuid';
 import { componentShapes, components } from '@ui/parser';
 import { createArtboard } from '@ui/parser/creators';
-import { ComponentRoot } from '@ui/types';
+import type { ComponentRoot } from '@ui/types';
 
-export const createComponent = (context: PenpotContext, { figmaId }: ComponentRoot) => {
+export const createComponent = (context: PenpotContext, { figmaId }: ComponentRoot): void => {
   const componentShape = componentShapes.get(figmaId);
 
   if (!componentShape) {
@@ -11,7 +12,7 @@ export const createComponent = (context: PenpotContext, { figmaId }: ComponentRo
   }
 
   const componentId = getComponentId(context, figmaId);
-  const { type, ...shape } = componentShape;
+  const { type: _type, ...shape } = componentShape;
 
   shape.componentFile = context.currentFileId;
   shape.componentId = componentId;
@@ -32,7 +33,7 @@ export const createComponent = (context: PenpotContext, { figmaId }: ComponentRo
   });
 };
 
-const getComponentId = (context: PenpotContext, figmaId: string) => {
+const getComponentId = (context: PenpotContext, figmaId: string): string | Uuid => {
   const component = components.get(figmaId);
 
   return component?.componentId ?? context.genId();

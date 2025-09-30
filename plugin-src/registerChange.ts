@@ -1,6 +1,6 @@
 import { findMissingFonts } from '@plugin/findAllTextnodes';
 
-export const registerChange = (event: NodeChangeEvent) => {
+export const registerChange = (event: NodeChangeEvent): void => {
   if (!changesAreRelevant(event.nodeChanges)) return;
 
   figma.ui.postMessage({ type: 'CHANGES_DETECTED' });

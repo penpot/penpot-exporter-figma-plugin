@@ -13,7 +13,7 @@ import {
   transformStrokes
 } from '@plugin/transformers/partials';
 
-import { CircleShape } from '@ui/lib/types/shapes/circleShape';
+import type { CircleShape } from '@ui/lib/types/shapes/circleShape';
 
 export const transformEllipseNode = (node: EllipseNode): CircleShape => {
   return {

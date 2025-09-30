@@ -1,5 +1,5 @@
-import { ComponentShape } from '@ui/lib/types/shapes/componentShape';
-import { ComponentProperty } from '@ui/types';
+import type { ComponentShape } from '@ui/lib/types/shapes/componentShape';
+import type { ComponentProperty } from '@ui/types';
 
 export const textStyles: Map<string, TextStyle | undefined> = new Map();
 export const paintStyles: Map<string, PaintStyle | undefined> = new Map();

@@ -1,7 +1,7 @@
 import { overrides } from '@plugin/libraries';
 import { translateTouched } from '@plugin/translators';
 
-import { ShapeAttributes } from '@ui/lib/types/shapes/shape';
+import type { ShapeAttributes } from '@ui/lib/types/shapes/shape';
 
 export const transformOverrides = (
   node: SceneNode

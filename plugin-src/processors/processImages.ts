@@ -3,9 +3,9 @@ import { sleep } from '@common/sleep';
 
 import { images as imagesLibrary } from '@plugin/libraries';
 
-export const processImages = async (): Promise<Record<string, Uint8Array>> => {
+export const processImages = async (): Promise<Record<string, Uint8Array<ArrayBuffer>>> => {
   const imageToDownload = toArray(imagesLibrary);
-  const images: Record<string, Uint8Array> = {};
+  const images: Record<string, Uint8Array<ArrayBuffer>> = {};
 
   if (imageToDownload.length === 0) return images;
 
@@ -25,7 +25,7 @@ export const processImages = async (): Promise<Record<string, Uint8Array>> => {
     const bytes = await image?.getBytesAsync();
 
     if (bytes) {
-      images[key] = bytes;
+      images[key] = bytes as Uint8Array<ArrayBuffer>;
     }
 
     figma.ui.postMessage({

@@ -1,6 +1,6 @@
-import { SyncGroups } from '@ui/lib/types/utils/syncGroups';
+import type { SyncGroups } from '@ui/lib/types/utils/syncGroups';
 import { componentProperties } from '@ui/parser';
-import { ComponentPropertyReference } from '@ui/types';
+import type { ComponentPropertyReference } from '@ui/types';
 
 export const symbolTouched = (
   visible: boolean | undefined,

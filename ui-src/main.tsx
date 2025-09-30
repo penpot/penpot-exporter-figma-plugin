@@ -1,5 +1,5 @@
 import 'node_modules/@create-figma-plugin/ui/lib/css/base.css';
-import { StrictMode } from 'react';
+import { StrictMode } from 'preact/compat';
 import { createRoot } from 'react-dom/client';
 
 import { App } from '@ui/App';

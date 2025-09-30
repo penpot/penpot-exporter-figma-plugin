@@ -1,4 +1,4 @@
-import { ShapeBaseAttributes } from '@ui/lib/types/shapes/shape';
+import type { ShapeBaseAttributes } from '@ui/lib/types/shapes/shape';
 
 export const translateRotation = (
   transform: Transform,

@@ -1,11 +1,11 @@
-import { LayoutAttributes, LayoutChildAttributes } from '@ui/lib/types/shapes/layout';
-import {
+import type { LayoutAttributes, LayoutChildAttributes } from '@ui/lib/types/shapes/layout';
+import type {
   ShapeAttributes,
   ShapeBaseAttributes,
   ShapeGeomAttributes
 } from '@ui/lib/types/shapes/shape';
-import { Children } from '@ui/lib/types/utils/children';
-import { Uuid } from '@ui/lib/types/utils/uuid';
+import type { Children } from '@ui/lib/types/utils/children';
+import type { Uuid } from '@ui/lib/types/utils/uuid';
 
 export type ComponentShape = ShapeBaseAttributes &
   ShapeAttributes &

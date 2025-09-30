@@ -1,4 +1,5 @@
 import { Button } from '@create-figma-plugin/ui';
+import type { JSX } from 'preact';
 import { FormProvider, useForm } from 'react-hook-form';
 
 import { MissingFontsSection } from '@ui/components/MissingFontsSection';
@@ -7,7 +8,7 @@ import { useFigmaContext } from '@ui/context';
 
 export type FormValues = Record<string, string>;
 
-export const ExportForm = () => {
+export const ExportForm = (): JSX.Element => {
   const { cancel, exportPenpot } = useFigmaContext();
   const methods = useForm<FormValues>();
 

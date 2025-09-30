@@ -1,7 +1,8 @@
-import { JSX, PropsWithChildren } from 'react';
+import type { JSX } from 'preact';
+import type { PropsWithChildren } from 'preact/compat';
 
 import { createGenericContext } from '@ui/context/createGenericContext';
-import { UseFigmaHook, useFigma } from '@ui/context/useFigma';
+import { type UseFigmaHook, useFigma } from '@ui/context/useFigma';
 
 const [useFigmaContext, StateContextProvider] = createGenericContext<UseFigmaHook>();
 

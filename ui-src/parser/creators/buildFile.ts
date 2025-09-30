@@ -1,8 +1,8 @@
 import { sleep } from '@common/sleep';
 
 import { sendMessage } from '@ui/context';
-import { PenpotContext } from '@ui/lib/types/penpotContext';
-import { PenpotPage } from '@ui/lib/types/penpotPage';
+import type { PenpotContext } from '@ui/lib/types/penpotContext';
+import type { PenpotPage } from '@ui/lib/types/penpotPage';
 import { components, identifiers } from '@ui/parser';
 import { createComponentsLibrary, createPage } from '@ui/parser/creators';
 

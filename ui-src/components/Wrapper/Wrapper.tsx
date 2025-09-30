@@ -1,4 +1,5 @@
-import { CSSProperties, PropsWithChildren, forwardRef } from 'react';
+import type { CSSProperties } from 'preact';
+import { type PropsWithChildren, forwardRef } from 'preact/compat';
 
 import styles from './Wrapper.module.css';
 

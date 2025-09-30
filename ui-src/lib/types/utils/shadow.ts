@@ -1,5 +1,5 @@
-import { Color } from './color';
-import { Uuid } from './uuid';
+import type { Color } from './color';
+import type { Uuid } from './uuid';
 
 export type ShadowStyle = 'drop-shadow' | 'inner-shadow';
 

@@ -1,6 +1,6 @@
-import { Animation } from './animation';
-import { Point } from './point';
-import { Uuid } from './uuid';
+import type { Animation } from './animation';
+import type { Point } from './point';
+import type { Uuid } from './uuid';
 
 export type Interaction =
   | InteractionNavigate

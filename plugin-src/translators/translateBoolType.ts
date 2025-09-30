@@ -1,4 +1,4 @@
-import { BoolOperations } from '@ui/lib/types/shapes/boolShape';
+import type { BoolOperations } from '@ui/lib/types/shapes/boolShape';
 
 type BooleanOperation = 'UNION' | 'INTERSECT' | 'SUBTRACT' | 'EXCLUDE';
 export const translateBoolType = (booleanOperation: BooleanOperation): BoolOperations => {

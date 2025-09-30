@@ -1,18 +1,18 @@
-import { PenpotFile } from '@ui/lib/types/penpotFile';
-import { PenpotPage } from '@ui/lib/types/penpotPage';
-import { PenpotBool } from '@ui/lib/types/shapes/boolShape';
-import { CircleShape } from '@ui/lib/types/shapes/circleShape';
-import { PenpotComponent } from '@ui/lib/types/shapes/componentShape';
-import { FrameShape } from '@ui/lib/types/shapes/frameShape';
-import { GroupShape } from '@ui/lib/types/shapes/groupShape';
-import { PathShape } from '@ui/lib/types/shapes/pathShape';
-import { RectShape } from '@ui/lib/types/shapes/rectShape';
-import { TextShape } from '@ui/lib/types/shapes/textShape';
-import { Color } from '@ui/lib/types/utils/color';
-import { ImageColor } from '@ui/lib/types/utils/imageColor';
-import { Media } from '@ui/lib/types/utils/media';
-import { Typography } from '@ui/lib/types/utils/typography';
-import { Uuid } from '@ui/lib/types/utils/uuid';
+import type { PenpotFile } from '@ui/lib/types/penpotFile';
+import type { PenpotPage } from '@ui/lib/types/penpotPage';
+import type { PenpotBool } from '@ui/lib/types/shapes/boolShape';
+import type { CircleShape } from '@ui/lib/types/shapes/circleShape';
+import type { PenpotComponent } from '@ui/lib/types/shapes/componentShape';
+import type { FrameShape } from '@ui/lib/types/shapes/frameShape';
+import type { GroupShape } from '@ui/lib/types/shapes/groupShape';
+import type { PathShape } from '@ui/lib/types/shapes/pathShape';
+import type { RectShape } from '@ui/lib/types/shapes/rectShape';
+import type { TextShape } from '@ui/lib/types/shapes/textShape';
+import type { Color } from '@ui/lib/types/utils/color';
+import type { ImageColor } from '@ui/lib/types/utils/imageColor';
+import type { Media } from '@ui/lib/types/utils/media';
+import type { Typography } from '@ui/lib/types/utils/typography';
+import type { Uuid } from '@ui/lib/types/utils/uuid';
 
 export interface PenpotContext {
   addFile(file: PenpotFile): Uuid;

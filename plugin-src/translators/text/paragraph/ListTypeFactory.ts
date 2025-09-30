@@ -1,4 +1,4 @@
-import { ListType } from '@plugin/translators/text/paragraph/ListType';
+import type { ListType } from '@plugin/translators/text/paragraph/ListType';
 import { OrderedListType } from '@plugin/translators/text/paragraph/OrderedListType';
 import { UnorderedListType } from '@plugin/translators/text/paragraph/UnorderedListType';
 

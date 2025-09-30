@@ -1,4 +1,4 @@
-export const translateStylePath = (figmaStyle: BaseStyleMixin) => {
+export const translateStylePath = (figmaStyle: BaseStyleMixin): string => {
   const path = [];
 
   if (figmaStyle.remote) {
