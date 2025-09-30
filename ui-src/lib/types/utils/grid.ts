@@ -1,24 +1,26 @@
 export type Grid = ColumnGrid | RowGrid | SquareGrid;
 
+export type GridAlignment = 'stretch' | 'left' | 'center' | 'right';
+
 export type SavedGrids = {
   square?: SquareParams;
   row?: ColumnParams;
   column?: ColumnParams;
 };
 
-type ColumnGrid = {
+export type ColumnGrid = {
   type: 'column';
   display: boolean;
   params: ColumnParams;
 };
 
-type RowGrid = {
+export type RowGrid = {
   type: 'row';
   display: boolean;
   params: ColumnParams;
 };
 
-type SquareGrid = {
+export type SquareGrid = {
   type: 'square';
   display: boolean;
   params: SquareParams;
@@ -26,7 +28,7 @@ type SquareGrid = {
 
 type ColumnParams = {
   color: GridColor;
-  type?: 'stretch' | 'left' | 'center' | 'right';
+  type?: GridAlignment;
   size?: number;
   margin?: number;
   itemLength?: number;

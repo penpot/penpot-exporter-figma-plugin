@@ -11,6 +11,7 @@ import {
   transformFigmaIds,
   transformFills,
   transformLayoutAttributes,
+  transformLayoutGrids,
   transformProportion,
   transformRotationAndPosition,
   transformSceneNode,
@@ -42,7 +43,8 @@ export const transformComponentNode = async (node: ComponentNode): Promise<Compo
     ...transformDimension(node),
     ...transformRotationAndPosition(node),
     ...transformConstraints(node),
-    ...transformAutoLayout(node)
+    ...transformAutoLayout(node),
+    ...transformLayoutGrids(node)
   });
 
   if (isNonVariantComponentNode(node)) {
