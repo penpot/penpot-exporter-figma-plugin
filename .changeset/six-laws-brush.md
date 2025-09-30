@@ -1,5 +1,5 @@
 ---
-'penpot-exporter': patch
+'penpot-exporter': minor
 ---
 
 Upgrade internal dependencies
