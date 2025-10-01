@@ -14,3 +14,4 @@ export * from './transformSceneNode';
 export * from './transformStrokes';
 export * from './transformText';
 export * from './transformVectorPaths';
+export * from './transformVariantProperties';

@@ -38,6 +38,10 @@ export const transformFrameNode = async (
 
   if (isComponentSetNode(node)) {
     registerComponentProperties(node);
+
+    frameSpecificAttributes = {
+      isVariantContainer: true
+    };
   }
 
   if (!isSectionNode(node)) {

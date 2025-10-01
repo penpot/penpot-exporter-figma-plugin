@@ -14,7 +14,8 @@ import {
   transformProportion,
   transformRotationAndPosition,
   transformSceneNode,
-  transformStrokes
+  transformStrokes,
+  transformVariantProperties
 } from '@plugin/transformers/partials';
 
 import type { ComponentRoot } from '@ui/types';
@@ -42,7 +43,8 @@ export const transformComponentNode = async (node: ComponentNode): Promise<Compo
     ...transformDimension(node),
     ...transformRotationAndPosition(node),
     ...transformConstraints(node),
-    ...transformAutoLayout(node)
+    ...transformAutoLayout(node),
+    ...transformVariantProperties(node)
   });
 
   if (isNonVariantComponentNode(node)) {
@@ -52,6 +54,7 @@ export const transformComponentNode = async (node: ComponentNode): Promise<Compo
   return {
     figmaId: node.id,
     type: 'component',
-    name: node.name
+    name: node.name,
+    figmaVariantId: node.parent?.type === 'COMPONENT_SET' ? node.parent.id : undefined
   };
 };

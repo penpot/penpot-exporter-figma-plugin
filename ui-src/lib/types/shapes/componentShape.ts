@@ -7,13 +7,25 @@ import type {
 import type { Children } from '@ui/lib/types/utils/children';
 import type { Uuid } from '@ui/lib/types/utils/uuid';
 
+export type VariantProperty = {
+  name: string;
+  value: string;
+};
+
+export type VariantAttributes = {
+  variantId?: Uuid;
+  variantName?: string;
+  variantProperties?: VariantProperty[];
+};
+
 export type ComponentShape = ShapeBaseAttributes &
   ShapeAttributes &
   ShapeGeomAttributes &
   ComponentAttributes &
   LayoutAttributes &
   LayoutChildAttributes &
-  Children;
+  Children &
+  VariantAttributes;
 
 export type ComponentAttributes = {
   type?: 'component';
@@ -31,4 +43,5 @@ export type PenpotComponent = {
   path?: string;
   frameId?: Uuid;
   pageId?: Uuid;
+  variantId?: Uuid;
 };

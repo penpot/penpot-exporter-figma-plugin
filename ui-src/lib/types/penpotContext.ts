@@ -15,7 +15,12 @@ import type { Typography } from '@ui/lib/types/utils/typography';
 import type { Uuid } from '@ui/lib/types/utils/uuid';
 
 export interface PenpotContext {
+  currentFileId: Uuid;
+  currentFrameId: Uuid;
+  currentPageId: Uuid;
+  lastId: Uuid;
   addFile(file: PenpotFile): Uuid;
+  closeFile(): void;
   addPage(page: PenpotPage): Uuid;
   closePage(): void;
   addBoard(artboard: FrameShape): Uuid;
@@ -33,7 +38,4 @@ export interface PenpotContext {
   addFileMedia(media: Media, blob: Blob): Uuid;
   getMediaAsImage(mediaId: Uuid): ImageColor;
   genId(): Uuid;
-  currentPageId: Uuid;
-  currentFileId: Uuid;
-  currentFrameId: Uuid;
 }

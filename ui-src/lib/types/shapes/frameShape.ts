@@ -13,7 +13,9 @@ export type FrameShape = ShapeBaseAttributes &
   FrameAttributes &
   LayoutAttributes &
   LayoutChildAttributes &
-  Children;
+  Children & {
+    isVariantContainer?: boolean;
+  };
 
 type FrameAttributes = {
   type?: 'frame';
