@@ -24,7 +24,7 @@
   "license": "MPL2.0",
   "dependencies": {
     "@create-figma-plugin/ui": "^4.0",
-    "@penpot/library": "1.0.7",
+    "@penpot/library": "1.0.9",
     "@sentry/react": "^10.16",
     "@sentry/vite-plugin": "^4.3",
     "base64-js": "^1.5",
