@@ -47,7 +47,7 @@ const stepMessages: Record<Steps, Messages> = {
 };
 
 const StepProgress = (): JSX.Element | null => {
-  const { currentItem, totalItems, processedItems, step } = useFigmaContext();
+  const { progress, step } = useFigmaContext();
 
   const truncateText = (text: string, maxChars: number): string => {
     if (text.length <= maxChars) {
@@ -74,13 +74,13 @@ const StepProgress = (): JSX.Element | null => {
     case 'exporting':
       return (
         <>
-          {processedItems} of {totalItems} {stepMessages[step].total}
-          {currentItem && currentText ? (
+          {progress.processedItems} of {progress.totalItems} {stepMessages[step].total}
+          {progress.currentItem && currentText ? (
             <>
               <br />
               {currentText}
               <br />
-              {'“' + truncateText(currentItem, 35) + '”'}
+              {'“' + truncateText(progress.currentItem, 35) + '”'}
             </>
           ) : undefined}
         </>

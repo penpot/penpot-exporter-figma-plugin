@@ -13,9 +13,11 @@ export type UseFigmaHook = {
   exporting: boolean;
   error: boolean;
   step: Steps | undefined;
-  currentItem: string | undefined;
-  totalItems: number;
-  processedItems: number;
+  progress: {
+    currentItem: string | undefined;
+    totalItems: number;
+    processedItems: number;
+  };
   reload: () => void;
   cancel: () => void;
   exportPenpot: (data: FormValues) => void;
@@ -41,9 +43,15 @@ export const useFigma = (): UseFigmaHook => {
   const [error, setError] = useState(false);
 
   const [step, setStep] = useState<Steps>();
-  const [currentItem, setCurrentItem] = useState<string | undefined>();
-  const [totalItems, setTotalItems] = useState<number>(0);
-  const [processedItems, setProcessedItems] = useState<number>(0);
+  const [progress, setProgress] = useState<{
+    currentItem: string | undefined;
+    totalItems: number;
+    processedItems: number;
+  }>({
+    currentItem: undefined,
+    totalItems: 0,
+    processedItems: 0
+  });
 
   const postMessage = (type: string, data?: unknown): void => {
     parent.postMessage({ pluginMessage: { type, data } }, '*');
@@ -58,6 +66,7 @@ export const useFigma = (): UseFigmaHook => {
       case 'USER_DATA': {
         identify({ userId: pluginMessage.data.userId });
         track('Plugin Loaded');
+
         break;
       }
       case 'PENPOT_DOCUMENT': {
@@ -70,9 +79,11 @@ export const useFigma = (): UseFigmaHook => {
 
         const binary = await exportAsBytes(context, {
           onProgress: ({ item, total, path }) => {
-            setCurrentItem(path.split('/').pop());
-            setTotalItems(total);
-            setProcessedItems(item);
+            setProgress({
+              currentItem: path.split('/').pop(),
+              totalItems: total,
+              processedItems: item
+            });
           }
         });
 
@@ -94,27 +105,49 @@ export const useFigma = (): UseFigmaHook => {
         setMissingFonts(pluginMessage.data);
         setLoading(false);
         setNeedsReload(false);
+
         break;
       }
       case 'CHANGES_DETECTED': {
         setNeedsReload(true);
+
         break;
       }
       case 'PROGRESS_STEP': {
         setStep(pluginMessage.data);
-        setProcessedItems(0);
+        setProgress(prev => ({
+          currentItem: prev.currentItem,
+          totalItems: prev.totalItems,
+          processedItems: 0
+        }));
+
         break;
       }
       case 'PROGRESS_CURRENT_ITEM': {
-        setCurrentItem(pluginMessage.data);
+        setProgress(prev => ({
+          currentItem: pluginMessage.data,
+          totalItems: prev.totalItems,
+          processedItems: prev.processedItems
+        }));
+
         break;
       }
       case 'PROGRESS_TOTAL_ITEMS': {
-        setTotalItems(pluginMessage.data);
+        setProgress(prev => ({
+          currentItem: prev.currentItem,
+          totalItems: pluginMessage.data,
+          processedItems: prev.processedItems
+        }));
+
         break;
       }
       case 'PROGRESS_PROCESSED_ITEMS': {
-        setProcessedItems(pluginMessage.data);
+        setProgress(prev => ({
+          currentItem: prev.currentItem,
+          totalItems: prev.totalItems,
+          processedItems: pluginMessage.data
+        }));
+
         break;
       }
       case 'ERROR': {
@@ -122,6 +155,7 @@ export const useFigma = (): UseFigmaHook => {
         setLoading(false);
         setExporting(false);
         track('Error', { 'Error Message': pluginMessage.data });
+
         throw new Error(pluginMessage.data);
       }
     }
@@ -150,7 +184,11 @@ export const useFigma = (): UseFigmaHook => {
   const exportPenpot = (): void => {
     setExporting(true);
     setStep('processing');
-    setProcessedItems(0);
+    setProgress(prev => ({
+      currentItem: prev.currentItem,
+      totalItems: prev.totalItems,
+      processedItems: 0
+    }));
 
     postMessage('export');
   };
@@ -172,9 +210,7 @@ export const useFigma = (): UseFigmaHook => {
     exporting,
     error,
     step,
-    currentItem,
-    totalItems,
-    processedItems,
+    progress,
     reload,
     cancel,
     exportPenpot
