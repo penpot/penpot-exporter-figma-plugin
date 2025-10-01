@@ -1,5 +1,27 @@
 # penpot-exporter
 
+## 0.15.0
+
+### Minor Changes
+
+- [#275](https://github.com/penpot/penpot-exporter-figma-plugin/pull/275)
+  [`db22ac4`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/db22ac41ab5991fd4c1ddc45729ce295abf5b120)
+  Thanks [@jordisala1991](https://github.com/jordisala1991)! - Upgrade internal dependencies
+
+### Patch Changes
+
+- [#276](https://github.com/penpot/penpot-exporter-figma-plugin/pull/276)
+  [`3cd6dae`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/3cd6daeba89da39b0e53860fb2981b8aa072a2ec)
+  Thanks [@SpykeRel04D](https://github.com/SpykeRel04D)! - Update version of penpot sdk
+
+- [#277](https://github.com/penpot/penpot-exporter-figma-plugin/pull/277)
+  [`2f21297`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/2f212977cfb1081b1ad3ccbd5a883fd21f51502f)
+  Thanks [@jordisala1991](https://github.com/jordisala1991)! - Minor performance improvements
+
+- [#273](https://github.com/penpot/penpot-exporter-figma-plugin/pull/273)
+  [`e8743e3`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/e8743e3c2f620b90c37075419b4c3c06b08a30ea)
+  Thanks [@jordisala1991](https://github.com/jordisala1991)! - Disable Sentry in development mode
+
 ## 0.14.4
 
 ### Patch Changes
