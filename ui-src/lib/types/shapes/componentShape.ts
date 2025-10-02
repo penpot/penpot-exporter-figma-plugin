@@ -44,4 +44,5 @@ export type PenpotComponent = {
   frameId?: Uuid;
   pageId?: Uuid;
   variantId?: Uuid;
+  variantProperties?: VariantProperty[];
 };

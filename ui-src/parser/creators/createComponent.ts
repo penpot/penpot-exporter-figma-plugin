@@ -15,13 +15,14 @@ export const createComponent = (
   }
 
   const componentId = getComponentId(context, figmaId);
-  const { type: _type, ...shape } = componentShape;
+  const { type: _type, variantProperties, ...shape } = componentShape;
+  const variantId = parseFigmaId(context, figmaVariantId);
 
   shape.componentFile = context.currentFileId;
   shape.componentId = componentId;
   shape.componentRoot = true;
   shape.mainInstance = true;
-  shape.variantId = parseFigmaId(context, figmaVariantId);
+  shape.variantId = variantId;
 
   const frameId = createArtboard(context, shape);
 
@@ -33,7 +34,9 @@ export const createComponent = (
     componentId,
     mainInstancePage: context.currentPageId,
     componentFigmaId: figmaId,
-    mainInstanceId: frameId
+    mainInstanceId: frameId,
+    variantId,
+    variantProperties
   });
 };
 

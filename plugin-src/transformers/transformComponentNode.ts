@@ -27,8 +27,8 @@ const isNonVariantComponentNode = (node: ComponentNode): boolean => {
 export const transformComponentNode = async (node: ComponentNode): Promise<ComponentRoot> => {
   components.set(node.id, {
     type: 'component',
-    name: node.name,
-    path: node.parent?.type === 'COMPONENT_SET' ? node.parent.name : '',
+    name: node.parent?.type === 'COMPONENT_SET' ? node.parent.name : node.name,
+    path: '',
     showContent: !node.clipsContent,
     ...transformFigmaIds(node),
     ...transformFills(node),
@@ -52,9 +52,8 @@ export const transformComponentNode = async (node: ComponentNode): Promise<Compo
   }
 
   return {
-    figmaId: node.id,
     type: 'component',
-    name: node.name,
+    figmaId: node.id,
     figmaVariantId: node.parent?.type === 'COMPONENT_SET' ? node.parent.id : undefined
   };
 };

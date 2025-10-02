@@ -1,3 +1,4 @@
+import type { VariantProperty } from '@ui/lib/types/shapes/componentShape';
 import type { LayoutAttributes, LayoutChildAttributes } from '@ui/lib/types/shapes/layout';
 import type { ShapeAttributes, ShapeGeomAttributes } from '@ui/lib/types/shapes/shape';
 import type { Children } from '@ui/lib/types/utils/children';
@@ -6,7 +7,6 @@ import type { Uuid } from '@ui/lib/types/utils/uuid';
 export type ComponentRoot = {
   figmaId: string;
   type: 'component';
-  name: string;
   figmaVariantId?: string;
 };
 
@@ -36,6 +36,8 @@ export type UiComponent = {
   mainInstancePage?: Uuid;
   mainInstanceId: Uuid;
   componentFigmaId: string;
+  variantId?: string;
+  variantProperties?: VariantProperty[];
 };
 
 export type ComponentProperty = {
