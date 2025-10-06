@@ -5,7 +5,7 @@ import { parseFigmaId } from '@ui/parser/parseFigmaId';
 export const symbolBlur = (context: PenpotContext, blur: Blur | undefined): Blur | undefined => {
   if (!blur) return;
 
-  const blurId = parseFigmaId(context);
+  const blurId = parseFigmaId(context, undefined, true);
 
   return {
     ...blur,

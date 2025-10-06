@@ -31,7 +31,7 @@ const createUiComponent = (
   context: PenpotContext,
   mainComponentFigmaId: string
 ): UiComponent | undefined => {
-  const mainInstanceId = parseFigmaId(context, mainComponentFigmaId);
+  const mainInstanceId = parseFigmaId(context, mainComponentFigmaId, true);
   if (!mainInstanceId) {
     return;
   }

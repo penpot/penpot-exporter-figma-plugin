@@ -45,10 +45,16 @@ const createComponentLibrary = (context: PenpotContext, uiComponent: UiComponent
     fileId: context.currentFileId,
     name: componentShape.name,
     frameId: uiComponent.mainInstanceId,
-    pageId: uiComponent.mainInstancePage,
-    variantId: uiComponent.variantId,
-    variantProperties: uiComponent.variantProperties
+    pageId: uiComponent.mainInstancePage
   };
+
+  if (uiComponent.variantId) {
+    penpotComponent.variantId = uiComponent.variantId;
+  }
+
+  if (uiComponent.variantProperties) {
+    penpotComponent.variantProperties = uiComponent.variantProperties;
+  }
 
   context.addComponent(penpotComponent);
 };
