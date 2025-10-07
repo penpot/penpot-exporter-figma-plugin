@@ -28,6 +28,7 @@ export const transformComponentNode = async (node: ComponentNode): Promise<Compo
   components.set(node.id, {
     type: 'component',
     name: node.parent?.type === 'COMPONENT_SET' ? node.parent.name : node.name,
+    path: '',
     showContent: !node.clipsContent,
     ...transformFigmaIds(node),
     ...transformFills(node),

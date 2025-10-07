@@ -15,7 +15,7 @@ export const createComponent = (
   }
 
   const componentId = getComponentId(context, figmaId);
-  const { type: _type, variantProperties, ...shape } = componentShape;
+  const { type: _type, path, variantProperties, ...shape } = componentShape;
   const variantId = parseFigmaId(context, figmaVariantId);
 
   shape.componentFile = context.currentFileId;
@@ -32,6 +32,7 @@ export const createComponent = (
 
   components.set(figmaId, {
     componentId,
+    path,
     mainInstancePage: context.currentPageId,
     componentFigmaId: figmaId,
     mainInstanceId: frameId,

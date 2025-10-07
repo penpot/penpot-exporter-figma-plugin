@@ -38,6 +38,7 @@ export type UiComponent = {
   componentFigmaId: string;
   variantId?: string;
   variantProperties?: VariantProperty[];
+  path?: string;
 };
 
 export type ComponentProperty = {
