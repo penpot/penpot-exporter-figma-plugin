@@ -45,7 +45,8 @@ const createComponentLibrary = (context: PenpotContext, uiComponent: UiComponent
     fileId: context.currentFileId,
     name: componentShape.name,
     frameId: uiComponent.mainInstanceId,
-    pageId: uiComponent.mainInstancePage
+    pageId: uiComponent.mainInstancePage,
+    path: '\0'
   };
 
   if (uiComponent.variantId) {
