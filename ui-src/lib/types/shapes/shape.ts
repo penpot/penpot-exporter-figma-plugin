@@ -15,8 +15,7 @@ import type { ComponentPropertyReference } from '@ui/types';
 
 export type ShapeBaseAttributes = {
   id?: Uuid;
-  figmaId?: string; // @TODO: move to any other place
-  figmaRelatedId?: string; // @TODO: move to any other place
+  name: string;
   type?:
     | 'frame'
     | 'group'
@@ -29,38 +28,39 @@ export type ShapeBaseAttributes = {
     | 'image'
     | 'component'
     | 'instance';
+  selrect?: Selrect;
+  points?: Point[];
   transform?: Matrix;
   transformInverse?: Matrix;
   parentId?: Uuid;
   frameId?: Uuid;
+
   rotation?: number;
+
+  figmaId?: string; // @TODO: move to any other place
+  figmaRelatedId?: string; // @TODO: move to any other place
 };
 
 export type ShapeAttributes = {
-  name: string;
-  componentId?: string;
-  componentFile?: string;
+  pageId?: Uuid;
+  componentId?: Uuid;
+  componentFile?: Uuid;
   componentRoot?: boolean;
   mainInstance?: boolean;
   remoteSynced?: boolean;
-  shapeRef?: string;
-  selrect?: Selrect;
-  points?: Point[];
+  shapeRef?: Uuid;
+  touched?: SyncGroups[];
   blocked?: boolean;
   collapsed?: boolean;
   locked?: boolean;
   hidden?: boolean;
   maskedGroup?: boolean;
   fills?: Fill[];
-  fillStyleId?: string; // @TODO: move to any other place
-  hideFillOnExport?: boolean;
   proportion?: number;
   proportionLock?: boolean;
   constraintsH?: ConstraintH;
   constraintsV?: ConstraintV;
   fixedScroll?: boolean;
-  rx?: number;
-  ry?: number;
   r1?: number;
   r2?: number;
   r3?: number;
@@ -74,7 +74,11 @@ export type ShapeAttributes = {
   shadow?: Shadow[];
   blur?: Blur;
   growType?: GrowType;
-  touched?: SyncGroups[];
+
+  rx?: number;
+  ry?: number;
+
+  fillStyleId?: string; // @TODO: move to any other place
   componentPropertyReferences?: ComponentPropertyReference; // @TODO: move to any other place
 };
 

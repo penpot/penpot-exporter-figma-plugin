@@ -55,6 +55,7 @@ export type TextStyle = TextTypography & {
   textAlign?: TextHorizontalAlign;
   textDirection?: 'ltr' | 'rtl' | 'auto';
   fills?: Fill[];
+
   fillStyleId?: string; // @TODO: move to any other place
   textStyleId?: string; // @TODO: move to any other place
 };
