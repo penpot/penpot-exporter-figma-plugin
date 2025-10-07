@@ -7,6 +7,7 @@ import type { Uuid } from '@ui/lib/types/utils/uuid';
 export type ComponentRoot = {
   figmaId: string;
   type: 'component';
+  name: string;
   figmaVariantId?: string;
 };
 

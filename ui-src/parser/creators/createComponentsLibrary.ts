@@ -40,10 +40,12 @@ const createComponentLibrary = (context: PenpotContext, uiComponent: UiComponent
     return;
   }
 
+  const nameSplit = componentShape.name.split(' / ');
+
   const penpotComponent: PenpotComponent = {
     componentId: uiComponent.componentId,
     fileId: context.currentFileId,
-    name: componentShape.name,
+    name: nameSplit[nameSplit.length - 1],
     frameId: uiComponent.mainInstanceId,
     pageId: uiComponent.mainInstancePage,
     path: uiComponent.path

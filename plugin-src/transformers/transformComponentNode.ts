@@ -4,6 +4,7 @@ import {
   transformAutoLayout,
   transformBlend,
   transformChildren,
+  transformComponentNameAndPath,
   transformConstraints,
   transformCornerRadius,
   transformDimension,
@@ -27,9 +28,8 @@ const isNonVariantComponentNode = (node: ComponentNode): boolean => {
 export const transformComponentNode = async (node: ComponentNode): Promise<ComponentRoot> => {
   components.set(node.id, {
     type: 'component',
-    name: node.parent?.type === 'COMPONENT_SET' ? node.parent.name : node.name,
-    path: '',
     showContent: !node.clipsContent,
+    ...transformComponentNameAndPath(node),
     ...transformFigmaIds(node),
     ...transformFills(node),
     ...transformEffects(node),

@@ -27,9 +27,8 @@ export type ComponentShape = ShapeBaseAttributes &
   Children &
   VariantAttributes;
 
-export type ComponentAttributes = {
+type ComponentAttributes = {
   type?: 'component';
-  name: string;
   path: string;
   showContent?: boolean;
   mainInstanceId?: Uuid;
