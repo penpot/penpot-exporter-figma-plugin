@@ -1,6 +1,6 @@
-import type { VariantProperty } from '@ui/lib/types/shapes/componentShape';
 import type { LayoutAttributes, LayoutChildAttributes } from '@ui/lib/types/shapes/layout';
 import type { ShapeAttributes, ShapeGeomAttributes } from '@ui/lib/types/shapes/shape';
+import type { VariantProperty } from '@ui/lib/types/shapes/variant';
 import type { Children } from '@ui/lib/types/utils/children';
 import type { Uuid } from '@ui/lib/types/utils/uuid';
 

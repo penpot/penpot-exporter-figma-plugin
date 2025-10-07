@@ -1,14 +1,4 @@
-import type { VariantAttributes, VariantProperty } from '@ui/lib/types/shapes/componentShape';
-
-const generateName = (properties: { [property: string]: string } | null): string | undefined => {
-  if (!properties) {
-    return undefined;
-  }
-
-  return Object.entries(properties)
-    .map(([_key, value]) => value)
-    .join(', ');
-};
+import type { VariantComponent, VariantProperty } from '@ui/lib/types/shapes/variant';
 
 const generateProperties = (
   properties: { [property: string]: string } | null
@@ -22,9 +12,8 @@ const generateProperties = (
 
 export const transformVariantProperties = ({
   variantProperties
-}: ComponentNode): VariantAttributes => {
+}: ComponentNode): VariantComponent => {
   return {
-    variantName: generateName(variantProperties),
     variantProperties: generateProperties(variantProperties)
   };
 };

@@ -4,19 +4,9 @@ import type {
   ShapeBaseAttributes,
   ShapeGeomAttributes
 } from '@ui/lib/types/shapes/shape';
+import type { VariantComponent, VariantProperty, VariantShape } from '@ui/lib/types/shapes/variant';
 import type { Children } from '@ui/lib/types/utils/children';
 import type { Uuid } from '@ui/lib/types/utils/uuid';
-
-export type VariantProperty = {
-  name: string;
-  value: string;
-};
-
-export type VariantAttributes = {
-  variantId?: Uuid;
-  variantName?: string;
-  variantProperties?: VariantProperty[];
-};
 
 export type ComponentShape = ShapeBaseAttributes &
   ShapeAttributes &
@@ -24,8 +14,9 @@ export type ComponentShape = ShapeBaseAttributes &
   ComponentAttributes &
   LayoutAttributes &
   LayoutChildAttributes &
-  Children &
-  VariantAttributes;
+  VariantShape &
+  VariantComponent &
+  Children;
 
 type ComponentAttributes = {
   type?: 'component';

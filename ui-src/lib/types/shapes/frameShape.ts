@@ -4,6 +4,7 @@ import type {
   ShapeBaseAttributes,
   ShapeGeomAttributes
 } from '@ui/lib/types/shapes/shape';
+import type { VariantContainer, VariantShape } from '@ui/lib/types/shapes/variant';
 import type { Children } from '@ui/lib/types/utils/children';
 import type { Uuid } from '@ui/lib/types/utils/uuid';
 
@@ -13,9 +14,9 @@ export type FrameShape = ShapeBaseAttributes &
   FrameAttributes &
   LayoutAttributes &
   LayoutChildAttributes &
-  Children & {
-    isVariantContainer?: boolean;
-  };
+  VariantShape &
+  VariantContainer &
+  Children;
 
 type FrameAttributes = {
   type?: 'frame';
