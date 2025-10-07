@@ -53,6 +53,7 @@ export const transformComponentNode = async (node: ComponentNode): Promise<Compo
 
   return {
     type: 'component',
+    name: node.name,
     figmaId: node.id,
     figmaVariantId: node.parent?.type === 'COMPONENT_SET' ? node.parent.id : undefined
   };
