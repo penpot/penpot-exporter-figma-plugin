@@ -1,19 +1,17 @@
-import { toArray } from '@common/map';
 import { sleep } from '@common/sleep';
 
-import { images as imagesLibrary } from '@plugin/libraries';
+import { images } from '@plugin/libraries';
 
 export const processImages = async (): Promise<Record<string, Uint8Array<ArrayBuffer>>> => {
-  const imageToDownload = toArray(imagesLibrary);
-  const images: Record<string, Uint8Array<ArrayBuffer>> = {};
+  const processedImages: Record<string, Uint8Array<ArrayBuffer>> = {};
 
-  if (imageToDownload.length === 0) return images;
+  if (images.size === 0) return processedImages;
 
   let currentImage = 1;
 
   figma.ui.postMessage({
     type: 'PROGRESS_TOTAL_ITEMS',
-    data: imageToDownload.length
+    data: images.size
   });
 
   figma.ui.postMessage({
@@ -21,11 +19,11 @@ export const processImages = async (): Promise<Record<string, Uint8Array<ArrayBu
     data: 'images'
   });
 
-  for (const [key, image] of imageToDownload) {
+  for (const [key, image] of images.entries()) {
     const bytes = await image?.getBytesAsync();
 
     if (bytes) {
-      images[key] = bytes as Uint8Array<ArrayBuffer>;
+      processedImages[key] = bytes as Uint8Array<ArrayBuffer>;
     }
 
     figma.ui.postMessage({
@@ -38,5 +36,5 @@ export const processImages = async (): Promise<Record<string, Uint8Array<ArrayBu
 
   await sleep(20);
 
-  return images;
+  return processedImages;
 };

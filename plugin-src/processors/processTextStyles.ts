@@ -1,4 +1,3 @@
-import { toArray } from '@common/map';
 import { sleep } from '@common/sleep';
 
 import { textStyles } from '@plugin/libraries';
@@ -18,16 +17,15 @@ export const registerTextStyles = async (): Promise<void> => {
 };
 
 export const processTextStyles = async (): Promise<Record<string, TypographyStyle>> => {
-  const stylesToFetch = toArray(textStyles);
   const styles: Record<string, TypographyStyle> = {};
 
-  if (stylesToFetch.length === 0) return styles;
+  if (textStyles.size === 0) return styles;
 
   let currentStyle = 1;
 
   figma.ui.postMessage({
     type: 'PROGRESS_TOTAL_ITEMS',
-    data: stylesToFetch.length
+    data: textStyles.size
   });
 
   figma.ui.postMessage({
@@ -35,7 +33,7 @@ export const processTextStyles = async (): Promise<Record<string, TypographyStyl
     data: 'typographies'
   });
 
-  for (const [styleId, style] of stylesToFetch) {
+  for (const [styleId, style] of textStyles.entries()) {
     const figmaStyle = style ?? (await figma.getStyleByIdAsync(styleId));
     if (figmaStyle && isTextStyle(figmaStyle)) {
       styles[styleId] = translateTextStyle(figmaStyle);

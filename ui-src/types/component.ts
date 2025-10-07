@@ -9,9 +9,9 @@ import type { Children } from '@ui/lib/types/utils/children';
 import type { Uuid } from '@ui/lib/types/utils/uuid';
 
 export type ComponentRoot = {
-  figmaId: string;
   type: 'component';
   name: string;
+  figmaId: string;
   figmaVariantId?: string;
 };
 
