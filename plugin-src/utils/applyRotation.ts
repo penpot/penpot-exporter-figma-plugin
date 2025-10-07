@@ -64,8 +64,8 @@ export const applyInverseRotation = (
 export const getRotation = (transform: Transform): number =>
   Math.acos(transform[0][0]) * (180 / Math.PI);
 
-export const isTransformed = (transform: Transform, boundingBox: Rect | null): boolean => {
-  return boundingBox !== null && !isIdentityMatrix(transform);
+export const isTransformed = (transform: Transform): boolean => {
+  return !isIdentityMatrix(transform);
 };
 
 const inverseMatrix = (matrix: Transform): Transform => [

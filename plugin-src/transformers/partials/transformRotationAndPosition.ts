@@ -19,10 +19,7 @@ export const transformRotationAndPosition = (
   const y = node.absoluteTransform[1][2];
   const rotation = getRotation(node.absoluteTransform);
 
-  if (
-    !node.absoluteBoundingBox ||
-    !isTransformed(node.absoluteTransform, node.absoluteBoundingBox)
-  ) {
+  if (!node.absoluteBoundingBox || !isTransformed(node.absoluteTransform)) {
     return {
       x,
       y,
