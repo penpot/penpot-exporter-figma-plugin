@@ -24,7 +24,10 @@ export const transformVariantProperties = (node: ComponentNode): VariantComponen
       error
     );
     return {
-      variantProperties: []
+      variantProperties: node.name.split(',').map(pair => {
+        const [name, value] = pair.split('=').map(s => s.trim());
+        return { name, value };
+      })
     };
   }
 };
