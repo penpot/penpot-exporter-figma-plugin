@@ -6,4 +6,9 @@ declare module '@penpot/library' {
     context: PenpotContext,
     options?: ExportOptions
   ): Promise<Uint8Array<ArrayBuffer>>;
+  export async function exportStream(
+    context: PenpotContext,
+    stream: WritableStream,
+    options?: ExportOptions
+  ): Promise<void>;
 }

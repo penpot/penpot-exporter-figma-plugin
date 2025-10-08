@@ -1,8 +1,8 @@
-import { exportAsBytes } from '@penpot/library';
+import { exportStream } from '@penpot/library';
 import { useEffect, useState } from 'preact/hooks';
 
 import type { FormValues } from '@ui/components/ExportForm';
-import { type MessageData, sendMessage } from '@ui/context';
+import { type MessageData, createInMemoryWritable, sendMessage } from '@ui/context';
 import { identify, track } from '@ui/metrics/mixpanel';
 import { parse } from '@ui/parser';
 
@@ -18,6 +18,7 @@ export type UseFigmaHook = {
     totalItems: number;
     processedItems: number;
   };
+  progressPercentage: number;
   reload: () => void;
   cancel: () => void;
   exportPenpot: (data: FormValues) => void;
@@ -52,6 +53,7 @@ export const useFigma = (): UseFigmaHook => {
     totalItems: 0,
     processedItems: 0
   });
+  const [progressPercentage, setProgressPercentage] = useState<number>(0);
 
   const postMessage = (type: string, data?: unknown): void => {
     parent.postMessage({ pluginMessage: { type, data } }, '*');
@@ -77,24 +79,23 @@ export const useFigma = (): UseFigmaHook => {
           data: 'exporting'
         });
 
-        const binary = await exportAsBytes(context, {
-          onProgress: ({ item, total, path }) => {
-            setProgress({
-              currentItem: path.split('/').pop(),
-              totalItems: total,
-              processedItems: item
-            });
+        const { writable, getBlob } = createInMemoryWritable();
+
+        await exportStream(context, writable, {
+          onProgress: ({ item, total }) => {
+            const percentage = Math.round((item / total) * 100);
+
+            setProgressPercentage(percentage);
           }
         });
 
-        if (binary) {
-          const blob = new Blob([binary], { type: 'application/zip' });
-          download(blob, `${pluginMessage.data.name}.penpot`);
+        const blob = getBlob();
 
-          // get size of the file in Mb rounded to 2 decimal places
-          const size = Math.round((binary.length / 1024 / 1024) * 100) / 100;
-          track('File Exported', { 'Exported File Size': size + ' Mb' });
-        }
+        download(blob, `${pluginMessage.data.name}.penpot`);
+
+        // get size of the file in Mb rounded to 2 decimal places
+        const size = Math.round((blob.size / 1024 / 1024) * 100) / 100;
+        track('File Exported', { 'Exported File Size': size + ' Mb' });
 
         setExporting(false);
         setStep(undefined);
@@ -116,7 +117,7 @@ export const useFigma = (): UseFigmaHook => {
       case 'PROGRESS_STEP': {
         setStep(pluginMessage.data);
         setProgress(prev => ({
-          currentItem: prev.currentItem,
+          currentItem: undefined,
           totalItems: prev.totalItems,
           processedItems: 0
         }));
@@ -211,6 +212,7 @@ export const useFigma = (): UseFigmaHook => {
     error,
     step,
     progress,
+    progressPercentage,
     reload,
     cancel,
     exportPenpot
