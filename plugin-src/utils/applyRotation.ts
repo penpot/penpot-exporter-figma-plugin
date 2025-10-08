@@ -64,12 +64,8 @@ export const applyInverseRotation = (
 export const getRotation = (transform: Transform): number =>
   Math.acos(transform[0][0]) * (180 / Math.PI);
 
-export const isTransformed = (transform: Transform, boundingBox: Rect | null): boolean => {
-  if (!boundingBox) {
-    return false;
-  }
-
-  return transform[0][2] !== boundingBox.x || transform[1][2] !== boundingBox.y;
+export const isTransformed = (transform: Transform): boolean => {
+  return !isIdentityMatrix(transform);
 };
 
 const inverseMatrix = (matrix: Transform): Transform => [
@@ -81,6 +77,15 @@ const applyMatrix = (matrix: Transform, point: Point): Point => ({
   x: point.x * matrix[0][0] + point.y * matrix[0][1],
   y: point.x * matrix[1][0] + point.y * matrix[1][1]
 });
+
+const isIdentityMatrix = (matrix: Transform): boolean => {
+  return (
+    cleanNumber(matrix[0][0]) === 1 &&
+    cleanNumber(matrix[0][1]) === 0 &&
+    cleanNumber(matrix[1][0]) === 0 &&
+    cleanNumber(matrix[1][1]) === 1
+  );
+};
 
 const calculateCenter = (boundingBox: Rect): Point => ({
   x: boundingBox.x + boundingBox.width / 2,
@@ -97,3 +102,7 @@ const isVerticalLineTo = (command: Command): command is VerticalLineToCommand =>
 
 const isClosePath = (command: Command): command is ClosePathCommand =>
   command.command === 'closepath';
+
+const cleanNumber = (value: number, epsilon = 1e-6, decimals = 6): number => {
+  return Math.abs(value) < epsilon ? 0 : +value.toFixed(decimals);
+};

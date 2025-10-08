@@ -5,7 +5,7 @@ import { translateRotatedCommands } from '@plugin/translators/vectors/translateR
 import { isTransformed } from '@plugin/utils';
 
 export const translateCommands = (node: LayoutMixin, commands: Command[]): string => {
-  if (node.absoluteBoundingBox && isTransformed(node.absoluteTransform, node.absoluteBoundingBox)) {
+  if (node.absoluteBoundingBox && isTransformed(node.absoluteTransform)) {
     return translateRotatedCommands(commands, node.absoluteTransform, node.absoluteBoundingBox);
   }
 
