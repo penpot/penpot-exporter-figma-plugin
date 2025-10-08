@@ -27,6 +27,8 @@ const isNonVariantComponentNode = (node: ComponentNode): boolean => {
 };
 
 export const transformComponentNode = async (node: ComponentNode): Promise<ComponentRoot> => {
+  const isVariant = node.parent?.type === 'COMPONENT_SET';
+
   components.set(node.id, {
     type: 'component',
     showContent: !node.clipsContent,
@@ -45,8 +47,8 @@ export const transformComponentNode = async (node: ComponentNode): Promise<Compo
     ...transformRotationAndPosition(node),
     ...transformConstraints(node),
     ...transformAutoLayout(node),
-    ...transformVariantName(node),
-    ...transformVariantProperties(node)
+    ...(isVariant ? transformVariantName(node) : {}),
+    ...(isVariant ? transformVariantProperties(node) : {})
   });
 
   if (isNonVariantComponentNode(node)) {
