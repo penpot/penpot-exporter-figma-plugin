@@ -1,10 +1,8 @@
-import { exportAsBytes, exportStream } from '@penpot/library';
-import { createWriteStream } from 'fs';
+import { exportStream } from '@penpot/library';
 import { useEffect, useState } from 'preact/hooks';
-import { Writable } from 'stream';
 
 import type { FormValues } from '@ui/components/ExportForm';
-import { type MessageData, sendMessage } from '@ui/context';
+import { type MessageData, createInMemoryWritable, sendMessage } from '@ui/context';
 import { identify, track } from '@ui/metrics/mixpanel';
 import { parse } from '@ui/parser';
 
@@ -79,41 +77,25 @@ export const useFigma = (): UseFigmaHook => {
           data: 'exporting'
         });
 
-        // This creates a WHATWG WritableStream that writes to memory
-        function createInMemoryWritable(): {
-          writable: WritableStream;
-          getBlob: (type?: string) => Blob;
-        } {
-          const chunks: Uint8Array<ArrayBuffer>[] = [];
-
-          const writable = new WritableStream({
-            write(chunk: Uint8Array<ArrayBuffer>): void {
-              chunks.push(chunk);
-            },
-            close(): void {
-              console.log('Writable closed, total chunks:', chunks.length);
-            },
-            abort(err: Error): void {
-              console.error('Writable aborted:', err);
-            }
-          });
-
-          // Provide both the stream and a way to get the final data
-          return {
-            writable,
-            getBlob: (type = 'application/zip') => new Blob(chunks, { type })
-          };
-        }
-
         const { writable, getBlob } = createInMemoryWritable();
 
-        await exportStream(context, writable);
+        await exportStream(context, writable, {
+          onProgress: ({ item, total, path }) => {
+            setProgress({
+              currentItem: path.split('/').pop(),
+              totalItems: total,
+              processedItems: item
+            });
+          }
+        });
 
-        download(getBlob(), `${pluginMessage.data.name}.penpot`);
+        const blob = getBlob();
 
-        // // get size of the file in Mb rounded to 2 decimal places
-        // const size = Math.round((binary.length / 1024 / 1024) * 100) / 100;
-        // track('File Exported', { 'Exported File Size': size + ' Mb' });
+        download(blob, `${pluginMessage.data.name}.penpot`);
+
+        // get size of the file in Mb rounded to 2 decimal places
+        const size = Math.round((blob.size / 1024 / 1024) * 100) / 100;
+        track('File Exported', { 'Exported File Size': size + ' Mb' });
 
         setExporting(false);
         setStep(undefined);
