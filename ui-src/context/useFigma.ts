@@ -18,6 +18,7 @@ export type UseFigmaHook = {
     totalItems: number;
     processedItems: number;
   };
+  progressPercentage: number;
   reload: () => void;
   cancel: () => void;
   exportPenpot: (data: FormValues) => void;
@@ -52,6 +53,7 @@ export const useFigma = (): UseFigmaHook => {
     totalItems: 0,
     processedItems: 0
   });
+  const [progressPercentage, setProgressPercentage] = useState<number>(0);
 
   const postMessage = (type: string, data?: unknown): void => {
     parent.postMessage({ pluginMessage: { type, data } }, '*');
@@ -80,12 +82,10 @@ export const useFigma = (): UseFigmaHook => {
         const { writable, getBlob } = createInMemoryWritable();
 
         await exportStream(context, writable, {
-          onProgress: ({ item, total, path }) => {
-            setProgress({
-              currentItem: path.split('/').pop(),
-              totalItems: total,
-              processedItems: item
-            });
+          onProgress: ({ item, total }) => {
+            const percentage = Math.round((item / total) * 100);
+
+            setProgressPercentage(percentage);
           }
         });
 
@@ -212,6 +212,7 @@ export const useFigma = (): UseFigmaHook => {
     error,
     step,
     progress,
+    progressPercentage,
     reload,
     cancel,
     exportPenpot
