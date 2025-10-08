@@ -34,7 +34,6 @@ export type ShapeBaseAttributes = {
   transformInverse?: Matrix;
   parentId?: Uuid;
   frameId?: Uuid;
-
   rotation?: number;
 
   figmaId?: string; // @TODO: move to any other place
@@ -74,9 +73,6 @@ export type ShapeAttributes = {
   shadow?: Shadow[];
   blur?: Blur;
   growType?: GrowType;
-
-  rx?: number;
-  ry?: number;
 
   fillStyleId?: string; // @TODO: move to any other place
   componentPropertyReferences?: ComponentPropertyReference; // @TODO: move to any other place

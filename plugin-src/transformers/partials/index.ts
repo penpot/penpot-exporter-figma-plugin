@@ -1,6 +1,7 @@
 export * from './transformBlend';
 export * from './transformChildren';
 export * from './transformComponentNameAndPath';
+export * from './transformComponentSetStrokesAndCornerRadius';
 export * from './transformConstraints';
 export * from './transformCornerRadius';
 export * from './transformDimensionAndPosition';

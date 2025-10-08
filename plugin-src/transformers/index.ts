@@ -1,5 +1,6 @@
 export * from './transformBooleanNode';
 export * from './transformComponentNode';
+export * from './transformComponentSetNode';
 export * from './transformDocumentNode';
 export * from './transformEllipseNode';
 export * from './transformFrameNode';

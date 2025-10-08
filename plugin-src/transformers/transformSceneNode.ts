@@ -1,6 +1,7 @@
 import {
   transformBooleanNode,
   transformComponentNode,
+  transformComponentSetNode,
   transformEllipseNode,
   transformFrameNode,
   transformGroupNode,
@@ -29,9 +30,11 @@ export const transformSceneNode = async (node: SceneNode): Promise<PenpotNode | 
     case 'ELLIPSE':
       penpotNode = transformEllipseNode(node);
       break;
+    case 'COMPONENT_SET':
+      penpotNode = await transformComponentSetNode(node);
+      break;
     case 'SECTION':
     case 'FRAME':
-    case 'COMPONENT_SET':
       penpotNode = await transformFrameNode(node);
       break;
     case 'GROUP':
