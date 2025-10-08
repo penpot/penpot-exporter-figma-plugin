@@ -117,7 +117,7 @@ export const useFigma = (): UseFigmaHook => {
       case 'PROGRESS_STEP': {
         setStep(pluginMessage.data);
         setProgress(prev => ({
-          currentItem: prev.currentItem,
+          currentItem: undefined,
           totalItems: prev.totalItems,
           processedItems: 0
         }));
