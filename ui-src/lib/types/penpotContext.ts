@@ -16,6 +16,7 @@ import type { Uuid } from '@ui/lib/types/utils/uuid';
 
 export interface PenpotContext {
   addFile(file: PenpotFile): Uuid;
+  closeFile(): void;
   addPage(page: PenpotPage): Uuid;
   closePage(): void;
   addBoard(artboard: FrameShape): Uuid;

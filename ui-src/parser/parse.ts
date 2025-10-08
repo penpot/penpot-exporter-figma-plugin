@@ -30,6 +30,9 @@ export const parse = async ({
   await registerFileMedias(context, images);
   await registerColorLibraries(context, paintStyles);
   await registerTypographyLibraries(context, textStyles);
+  await buildFile(context, children);
 
-  return buildFile(context, children);
+  context.closeFile();
+
+  return context;
 };

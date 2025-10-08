@@ -6,10 +6,7 @@ import type { PenpotPage } from '@ui/lib/types/penpotPage';
 import { components, identifiers } from '@ui/parser';
 import { createComponentsLibrary, createPage } from '@ui/parser/creators';
 
-export const buildFile = async (
-  context: PenpotContext,
-  children: PenpotPage[]
-): Promise<PenpotContext> => {
+export const buildFile = async (context: PenpotContext, children: PenpotPage[]): Promise<void> => {
   let pagesBuilt = 1;
 
   components.clear();
@@ -37,6 +34,4 @@ export const buildFile = async (
   }
 
   await createComponentsLibrary(context);
-
-  return context;
 };
