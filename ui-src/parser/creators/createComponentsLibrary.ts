@@ -3,7 +3,7 @@ import { sleep } from '@common/sleep';
 import { sendMessage } from '@ui/context';
 import type { PenpotContext } from '@ui/lib/types/penpotContext';
 import type { PenpotComponent } from '@ui/lib/types/shapes/componentShape';
-import { componentShapes, components } from '@ui/parser';
+import { componentShapes, components, variantProperties } from '@ui/parser';
 import type { UiComponent } from '@ui/types';
 
 export const createComponentsLibrary = async (context: PenpotContext): Promise<void> => {
@@ -55,6 +55,21 @@ const createComponentLibrary = (context: PenpotContext, component: UiComponent):
 
   if (component.variantProperties) {
     penpotComponent.variantProperties = component.variantProperties;
+  }
+
+  if (variantProperties.size > 0) {
+    const currentPropertyNames = new Set(component.variantProperties?.map(prop => prop.name) || []);
+
+    const missingProperties = Array.from(variantProperties.values())
+      .filter(globalProp => !currentPropertyNames.has(globalProp.name))
+      .map(globalProp => ({ name: globalProp.name, value: '' }));
+
+    if (missingProperties.length > 0) {
+      penpotComponent.variantProperties = [
+        ...(component.variantProperties || []),
+        ...missingProperties
+      ];
+    }
   }
 
   context.addComponent(penpotComponent);

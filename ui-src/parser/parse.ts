@@ -3,7 +3,7 @@ import { createBuildContext } from '@penpot/library';
 import { init } from '@common/map';
 
 import type { PenpotContext } from '@ui/lib/types/penpotContext';
-import { componentProperties, componentShapes } from '@ui/parser';
+import { componentProperties, componentShapes, variantProperties } from '@ui/parser';
 import {
   buildFile,
   registerColorLibraries,
@@ -19,10 +19,12 @@ export const parse = async ({
   images,
   paintStyles,
   textStyles,
-  componentProperties: recordComponentProperties
+  componentProperties: recordComponentProperties,
+  variantProperties: recordVariantProperties
 }: PenpotDocument): Promise<PenpotContext> => {
   init(componentShapes, components);
   init(componentProperties, recordComponentProperties);
+  init(variantProperties, recordVariantProperties);
 
   const context = createBuildContext({ referer: `penpot-exporter-figma-plugin/${APP_VERSION}` });
   context.addFile({ name });
