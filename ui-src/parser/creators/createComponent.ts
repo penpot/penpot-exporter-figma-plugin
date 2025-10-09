@@ -2,6 +2,7 @@ import type { PenpotContext } from '@ui/lib/types/penpotContext';
 import type { Uuid } from '@ui/lib/types/utils/uuid';
 import { componentShapes, components, parseFigmaId } from '@ui/parser';
 import { createArtboard } from '@ui/parser/creators';
+import { symbolVariantProperties } from '@ui/parser/creators/symbols';
 import type { ComponentRoot } from '@ui/types';
 
 export const createComponent = (
@@ -37,7 +38,7 @@ export const createComponent = (
     componentFigmaId: figmaId,
     mainInstanceId: frameId,
     variantId,
-    variantProperties
+    ...symbolVariantProperties(variantProperties, figmaVariantId ?? '')
   });
 };
 
