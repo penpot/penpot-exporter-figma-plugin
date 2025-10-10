@@ -3,12 +3,13 @@ import { useEffect } from 'preact/hooks';
 import useResizeObserver from 'use-resize-observer';
 
 import Penpot from '@ui/assets/penpot.svg?react';
+import { AppFooter } from '@ui/components/AppFooter';
 import { PenpotExporter } from '@ui/components/PenpotExporter';
+import { PluginContainer } from '@ui/components/PluginContainer';
 import { Stack } from '@ui/components/Stack';
 import { Wrapper } from '@ui/components/Wrapper';
 import { FigmaProvider } from '@ui/context/FigmaContext';
 
-declare const APP_VERSION: string;
 declare const __DEV__: boolean;
 
 // Safe default value to avoid overflowing from the screen
@@ -27,22 +28,21 @@ export const App = (): JSX.Element => {
 
   return (
     <FigmaProvider>
-      <Wrapper ref={ref} overflowing={(height ?? 0) > MAX_HEIGHT}>
-        <Stack>
-          <Penpot
-            style={{
-              alignSelf: 'center',
-              height: 'auto',
-              width: '8.125rem',
-              fill: 'var(--figma-color-icon)'
-            }}
-          />
-          <span style={{ alignSelf: 'center' }}>
-            v{APP_VERSION}
+      <PluginContainer ref={ref} overflowing={(height ?? 0) > MAX_HEIGHT}>
+        <Wrapper>
+          <Stack>
+            <Penpot
+              style={{
+                alignSelf: 'center',
+                height: 'auto',
+                width: '8.125rem',
+                fill: 'var(--figma-color-icon)'
+              }}
+            />
             {__DEV__ && (
               <span
                 style={{
-                  marginLeft: '0.5rem',
+                  alignSelf: 'center',
                   padding: '0.125rem 0.375rem',
                   backgroundColor: '#ff6b35',
                   color: 'white',
@@ -54,10 +54,11 @@ export const App = (): JSX.Element => {
                 DEV
               </span>
             )}
-          </span>
-          <PenpotExporter />
-        </Stack>
-      </Wrapper>
+            <PenpotExporter />
+          </Stack>
+        </Wrapper>
+        <AppFooter />
+      </PluginContainer>
     </FigmaProvider>
   );
 };
