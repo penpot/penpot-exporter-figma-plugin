@@ -8,6 +8,8 @@ import { Stack } from '@ui/components/Stack';
 import { Wrapper } from '@ui/components/Wrapper';
 import { FigmaProvider } from '@ui/context/FigmaContext';
 
+declare const APP_VERSION: string;
+
 // Safe default value to avoid overflowing from the screen
 const MAX_HEIGHT = 800;
 
@@ -34,6 +36,7 @@ export const App = (): JSX.Element => {
               fill: 'var(--figma-color-icon)'
             }}
           />
+          <span style={{ alignSelf: 'center' }}>v{APP_VERSION}</span>
           <PenpotExporter />
         </Stack>
       </Wrapper>
