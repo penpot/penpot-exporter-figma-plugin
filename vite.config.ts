@@ -39,7 +39,8 @@ export default ({ mode }): UserConfig => {
       sourcemap: true
     },
     define: {
-      APP_VERSION: JSON.stringify(process.env.npm_package_version)
+      APP_VERSION: JSON.stringify(process.env.npm_package_version),
+      __DEV__: JSON.stringify(mode === 'development')
     }
   });
 };
