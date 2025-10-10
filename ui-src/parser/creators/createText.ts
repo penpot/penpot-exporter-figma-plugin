@@ -8,7 +8,7 @@ export const createText = (
   { type: _type, figmaId, figmaRelatedId, characters, ...shape }: TextShape
 ): void => {
   shape.id = parseFigmaId(context, figmaId);
-  shape.shapeRef = parseFigmaId(context, figmaRelatedId, true);
+  shape.shapeRef = parseFigmaId(context, figmaRelatedId);
   shape.content = parseContent(context, shape.content);
   shape.strokes = symbolStrokes(context, shape.strokes);
   shape.blur = symbolBlur(context, shape.blur);

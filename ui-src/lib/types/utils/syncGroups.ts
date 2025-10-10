@@ -14,9 +14,9 @@ export type SyncGroups =
   | 'blur-group'
   | 'mask-group'
   | 'constraints-group'
-  | 'bool-group'
   | 'exports-group'
   | 'grids-group'
+  | 'show-content'
   | 'layout-container'
   | 'layout-align-content'
   | 'layout-align-items'
@@ -39,4 +39,7 @@ export type SyncGroups =
   | 'layout-item-min-w'
   | 'layout-item-absolute'
   | 'layout-item-z-index'
-  | 'layout-item-align-self';
+  | 'layout-item-align-self'
+  | 'text-content-text'
+  | 'text-content-attribute'
+  | 'text-content-structure';

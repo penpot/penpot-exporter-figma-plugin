@@ -1,5 +1,7 @@
 export * from './transformBlend';
 export * from './transformChildren';
+export * from './transformComponentNameAndPath';
+export * from './transformComponentSetStrokesAndCornerRadius';
 export * from './transformConstraints';
 export * from './transformCornerRadius';
 export * from './transformDimensionAndPosition';
@@ -14,3 +16,4 @@ export * from './transformSceneNode';
 export * from './transformStrokes';
 export * from './transformText';
 export * from './transformVectorPaths';
+export * from './transformVariantNameAndProperties';

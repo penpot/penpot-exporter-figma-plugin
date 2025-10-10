@@ -4,6 +4,7 @@ import {
   transformAutoLayout,
   transformBlend,
   transformChildren,
+  transformComponentNameAndPath,
   transformConstraints,
   transformCornerRadius,
   transformDimension,
@@ -14,21 +15,19 @@ import {
   transformProportion,
   transformRotationAndPosition,
   transformSceneNode,
-  transformStrokes
+  transformStrokes,
+  transformVariantNameAndProperties
 } from '@plugin/transformers/partials';
 
 import type { ComponentRoot } from '@ui/types';
 
-const isNonVariantComponentNode = (node: ComponentNode): boolean => {
-  return node.parent?.type !== 'COMPONENT_SET';
-};
-
 export const transformComponentNode = async (node: ComponentNode): Promise<ComponentRoot> => {
+  const isVariant = node.parent?.type === 'COMPONENT_SET';
+
   components.set(node.id, {
     type: 'component',
-    name: node.name,
-    path: node.parent?.type === 'COMPONENT_SET' ? node.parent.name : '',
     showContent: !node.clipsContent,
+    ...transformComponentNameAndPath(node),
     ...transformFigmaIds(node),
     ...transformFills(node),
     ...transformEffects(node),
@@ -42,16 +41,18 @@ export const transformComponentNode = async (node: ComponentNode): Promise<Compo
     ...transformDimension(node),
     ...transformRotationAndPosition(node),
     ...transformConstraints(node),
-    ...transformAutoLayout(node)
+    ...transformAutoLayout(node),
+    ...(isVariant ? transformVariantNameAndProperties(node) : {})
   });
 
-  if (isNonVariantComponentNode(node)) {
+  if (!isVariant) {
     registerComponentProperties(node);
   }
 
   return {
-    figmaId: node.id,
     type: 'component',
-    name: node.name
+    name: node.name,
+    figmaId: node.id,
+    figmaVariantId: isVariant ? node.parent.id : undefined
   };
 };

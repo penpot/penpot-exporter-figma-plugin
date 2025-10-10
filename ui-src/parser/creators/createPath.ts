@@ -8,7 +8,7 @@ export const createPath = (
   { type: _type, figmaId, figmaRelatedId, ...shape }: PathShape
 ): void => {
   shape.id = parseFigmaId(context, figmaId);
-  shape.shapeRef = parseFigmaId(context, figmaRelatedId, true);
+  shape.shapeRef = parseFigmaId(context, figmaRelatedId);
   shape.fills = symbolFills(context, shape.fillStyleId, shape.fills);
   shape.strokes = symbolStrokes(context, shape.strokes);
   shape.blur = symbolBlur(context, shape.blur);

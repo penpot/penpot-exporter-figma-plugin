@@ -9,7 +9,7 @@ export const createGroup = (
   { type: _type, children = [], figmaId, figmaRelatedId, ...shape }: GroupShape
 ): void => {
   shape.id = parseFigmaId(context, figmaId);
-  shape.shapeRef = parseFigmaId(context, figmaRelatedId, true);
+  shape.shapeRef = parseFigmaId(context, figmaRelatedId);
   shape.blur = symbolBlur(context, shape.blur);
   shape.touched = symbolTouched(
     !shape.hidden,

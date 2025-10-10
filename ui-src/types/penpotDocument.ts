@@ -12,4 +12,5 @@ export type PenpotDocument = {
   paintStyles: Record<string, FillStyle>;
   textStyles: Record<string, TypographyStyle>;
   componentProperties: Record<string, ComponentProperty>;
+  variantProperties: Record<string, string[]>;
 };

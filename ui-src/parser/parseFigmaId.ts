@@ -5,10 +5,10 @@ import { identifiers } from '@ui/parser';
 export const parseFigmaId = (
   context: PenpotContext,
   figmaId?: string,
-  shapeRef: boolean = false
+  generateOnMissing: boolean = false
 ): Uuid | undefined => {
   if (!figmaId) {
-    if (shapeRef) return;
+    if (!generateOnMissing) return;
 
     return context.genId();
   }

@@ -1,4 +1,3 @@
-import { toArray } from '@common/map';
 import { sleep } from '@common/sleep';
 
 import { paintStyles } from '@plugin/libraries';
@@ -18,16 +17,15 @@ export const registerPaintStyles = async (): Promise<void> => {
 };
 
 export const processPaintStyles = async (): Promise<Record<string, FillStyle>> => {
-  const stylesToFetch = toArray(paintStyles);
   const styles: Record<string, FillStyle> = {};
 
-  if (stylesToFetch.length === 0) return styles;
+  if (paintStyles.size === 0) return styles;
 
   let currentStyle = 1;
 
   figma.ui.postMessage({
     type: 'PROGRESS_TOTAL_ITEMS',
-    data: stylesToFetch.length
+    data: paintStyles.size
   });
 
   figma.ui.postMessage({
@@ -35,7 +33,7 @@ export const processPaintStyles = async (): Promise<Record<string, FillStyle>> =
     data: 'fills'
   });
 
-  for (const [styleId, paintStyle] of stylesToFetch) {
+  for (const [styleId, paintStyle] of paintStyles.entries()) {
     const figmaStyle = paintStyle ?? (await figma.getStyleByIdAsync(styleId));
     if (figmaStyle && isPaintStyle(figmaStyle)) {
       styles[styleId] = translatePaintStyle(figmaStyle);

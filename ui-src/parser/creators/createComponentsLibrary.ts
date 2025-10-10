@@ -1,19 +1,17 @@
-import { toArray } from '@common/map';
 import { sleep } from '@common/sleep';
 
 import { sendMessage } from '@ui/context';
 import type { PenpotContext } from '@ui/lib/types/penpotContext';
 import type { PenpotComponent } from '@ui/lib/types/shapes/componentShape';
-import { componentShapes, components as uiComponents } from '@ui/parser';
+import { componentShapes, components } from '@ui/parser';
 import type { UiComponent } from '@ui/types';
 
 export const createComponentsLibrary = async (context: PenpotContext): Promise<void> => {
   let componentsBuilt = 1;
-  const components = toArray(uiComponents);
 
   sendMessage({
     type: 'PROGRESS_TOTAL_ITEMS',
-    data: components.length
+    data: components.size
   });
 
   sendMessage({
@@ -21,8 +19,8 @@ export const createComponentsLibrary = async (context: PenpotContext): Promise<v
     data: 'components'
   });
 
-  for (const [_, uiComponent] of components) {
-    createComponentLibrary(context, uiComponent);
+  for (const [_, component] of components.entries()) {
+    createComponentLibrary(context, component);
 
     sendMessage({
       type: 'PROGRESS_PROCESSED_ITEMS',
@@ -33,20 +31,31 @@ export const createComponentsLibrary = async (context: PenpotContext): Promise<v
   }
 };
 
-const createComponentLibrary = (context: PenpotContext, uiComponent: UiComponent): void => {
-  const componentShape = componentShapes.get(uiComponent.componentFigmaId);
+const createComponentLibrary = (context: PenpotContext, component: UiComponent): void => {
+  const componentShape = componentShapes.get(component.componentFigmaId);
 
   if (!componentShape) {
     return;
   }
 
+  const nameSplit = componentShape.name.split(' / ');
+
   const penpotComponent: PenpotComponent = {
-    componentId: uiComponent.componentId,
+    componentId: component.componentId,
     fileId: context.currentFileId,
-    name: componentShape.name,
-    frameId: uiComponent.mainInstanceId,
-    pageId: uiComponent.mainInstancePage
+    name: nameSplit[nameSplit.length - 1],
+    frameId: component.mainInstanceId,
+    pageId: component.mainInstancePage,
+    path: component.path
   };
+
+  if (component.variantId) {
+    penpotComponent.variantId = component.variantId;
+  }
+
+  if (component.variantProperties) {
+    penpotComponent.variantProperties = component.variantProperties;
+  }
 
   context.addComponent(penpotComponent);
 };

@@ -4,6 +4,7 @@ import type {
   ShapeBaseAttributes,
   ShapeGeomAttributes
 } from '@ui/lib/types/shapes/shape';
+import type { VariantComponent, VariantProperty, VariantShape } from '@ui/lib/types/shapes/variant';
 import type { Children } from '@ui/lib/types/utils/children';
 import type { Uuid } from '@ui/lib/types/utils/uuid';
 
@@ -13,11 +14,12 @@ export type ComponentShape = ShapeBaseAttributes &
   ComponentAttributes &
   LayoutAttributes &
   LayoutChildAttributes &
+  VariantShape &
+  VariantComponent &
   Children;
 
-export type ComponentAttributes = {
+type ComponentAttributes = {
   type?: 'component';
-  name: string;
   path: string;
   showContent?: boolean;
   mainInstanceId?: Uuid;
@@ -31,4 +33,6 @@ export type PenpotComponent = {
   path?: string;
   frameId?: Uuid;
   pageId?: Uuid;
+  variantId?: Uuid;
+  variantProperties?: VariantProperty[];
 };
