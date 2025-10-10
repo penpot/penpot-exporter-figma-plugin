@@ -1,5 +1,34 @@
 # penpot-exporter
 
+## 0.15.0
+
+### Minor Changes
+
+- [#275](https://github.com/penpot/penpot-exporter-figma-plugin/pull/275)
+  [`db22ac4`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/db22ac41ab5991fd4c1ddc45729ce295abf5b120)
+  Thanks [@jordisala1991](https://github.com/jordisala1991)! - Upgrade internal dependencies and
+  update Penpot SDK to 1.0.11
+
+- [#278](https://github.com/penpot/penpot-exporter-figma-plugin/pull/278)
+  [`3ef7087`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/3ef7087b1fd867b0d8b51de95ec758cd3c9aa3e6)
+  Thanks [@SpykeRel04D](https://github.com/SpykeRel04D)! - Implement Penpot Variants translation
+
+- [#280](https://github.com/penpot/penpot-exporter-figma-plugin/pull/280)
+  [`10fcb29`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/10fcb29904f20f4a8e6af4cee903ca6466af4c9e)
+  Thanks [@jordisala1991](https://github.com/jordisala1991)! - Improve the performance of the export
+  process, especially when exporting large files
+
+### Patch Changes
+
+- [#273](https://github.com/penpot/penpot-exporter-figma-plugin/pull/273)
+  [`e8743e3`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/e8743e3c2f620b90c37075419b4c3c06b08a30ea)
+  Thanks [@jordisala1991](https://github.com/jordisala1991)! - Disable Sentry in development mode
+
+- [#279](https://github.com/penpot/penpot-exporter-figma-plugin/pull/279)
+  [`a5f9204`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/a5f92041cf80934cbf45db2f3c419e6f50312025)
+  Thanks [@jordisala1991](https://github.com/jordisala1991)! - Fix some cases where an SVG might not
+  be correctly rotated
+
 ## 0.14.4
 
 ### Patch Changes
