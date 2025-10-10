@@ -1,4 +1,4 @@
-import { toObject } from '@common/map';
+import { toObject, toPlainObject } from '@common/map';
 
 import { componentProperties, components, variantProperties } from '@plugin/libraries';
 import {
@@ -29,6 +29,6 @@ export const transformDocumentNode = async (node: DocumentNode): Promise<PenpotD
     paintStyles,
     textStyles,
     componentProperties: toObject(componentProperties),
-    variantProperties: toObject(variantProperties)
+    variantProperties: toPlainObject(variantProperties)
   };
 };

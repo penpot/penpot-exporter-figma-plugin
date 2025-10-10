@@ -7,4 +7,4 @@ export const overrides: Map<string, NodeChangeProperty[]> = new Map();
 export const images: Map<string, Image | null> = new Map();
 export const components: Map<string, ComponentShape> = new Map();
 export const componentProperties: Map<string, ComponentProperty> = new Map();
-export const variantProperties: Map<string, string[]> = new Map();
+export const variantProperties: Map<string, Set<string>> = new Map();
