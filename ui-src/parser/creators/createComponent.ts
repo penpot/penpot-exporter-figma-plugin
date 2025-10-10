@@ -38,7 +38,7 @@ export const createComponent = (
     componentFigmaId: figmaId,
     mainInstanceId: frameId,
     variantId,
-    ...symbolVariantProperties(variantProperties, figmaVariantId ?? '')
+    variantProperties: symbolVariantProperties(variantProperties, figmaVariantId)
   });
 };
 

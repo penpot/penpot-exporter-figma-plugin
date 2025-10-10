@@ -3,25 +3,24 @@ import { variantProperties } from '@ui/parser';
 
 export const symbolVariantProperties = (
   currentVariantProperties: VariantProperty[] | undefined,
-  componentId: string
-): { variantProperties?: VariantProperty[] } => {
+  componentId: string | undefined
+): VariantProperty[] | undefined => {
+  if (!componentId) {
+    return currentVariantProperties;
+  }
+
   const componentPropertyNames = variantProperties.get(componentId);
 
   if (!componentPropertyNames || componentPropertyNames.length === 0) {
-    return currentVariantProperties ? { variantProperties: currentVariantProperties } : {};
+    return currentVariantProperties;
   }
 
-  const currentPropertyNames = new Set(currentVariantProperties?.map(prop => prop.name) || []);
-
-  const missingProperties = componentPropertyNames
-    .filter(propName => !currentPropertyNames.has(propName))
-    .map(propName => ({ name: propName, value: '' }));
-
-  if (missingProperties.length > 0) {
-    return {
-      variantProperties: [...(currentVariantProperties || []), ...missingProperties]
-    };
+  const currentPropertyNames = new Map<string, VariantProperty>();
+  for (const prop of currentVariantProperties ?? []) {
+    currentPropertyNames.set(prop.name, prop);
   }
 
-  return currentVariantProperties ? { variantProperties: currentVariantProperties } : {};
+  return componentPropertyNames.map(
+    propName => currentPropertyNames.get(propName) ?? { name: propName, value: '' }
+  );
 };
