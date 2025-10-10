@@ -1,5 +1,5 @@
 ---
-'penpot-exporter': patch
+'penpot-exporter': minor
 ---
 
-Export using streams, improving the performance of the export process
+Improve the performance of the export process, especially when exporting large files
