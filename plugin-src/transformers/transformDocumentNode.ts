@@ -6,6 +6,7 @@ import {
   processPages,
   processPaintStyles,
   processTextStyles,
+  processTokens,
   registerPaintStyles,
   registerTextStyles
 } from '@plugin/processors';
@@ -13,6 +14,10 @@ import {
 import type { PenpotDocument } from '@ui/types';
 
 export const transformDocumentNode = async (node: DocumentNode): Promise<PenpotDocument> => {
+  const tokens = await processTokens();
+  console.log(tokens);
+  console.log(JSON.stringify(tokens, null, 2));
+
   await registerPaintStyles();
   await registerTextStyles();
 
