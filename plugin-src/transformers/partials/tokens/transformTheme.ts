@@ -5,9 +5,14 @@ export const transformTheme = (
   modeName: string,
   setName: string
 ): Theme => {
+  const hasMultipleModes = collection.modes.length > 1;
+
+  const name = hasMultipleModes ? modeName : collection.name;
+  const group = hasMultipleModes ? collection.name : '';
+
   return {
-    'name': modeName,
-    'group': collection.name,
+    'name': name,
+    'group': group,
     'description': '',
     'is-source': false,
     'modified-at': new Date().toISOString(),

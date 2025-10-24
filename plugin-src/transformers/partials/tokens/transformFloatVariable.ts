@@ -2,34 +2,29 @@ import { transformScope, transformVariableName } from '@plugin/transformers/part
 
 import type { Token, TokenType } from '@ui/lib/types/shapes/tokens';
 
-const getFloatScopes = (variable: Variable): VariableScope[] => {
-  if (variable.scopes[0] === 'ALL_SCOPES') {
-    return [
-      'CORNER_RADIUS',
-      'WIDTH_HEIGHT',
-      'GAP',
-      'TEXT_CONTENT',
-      'STROKE_FLOAT',
-      'OPACITY',
-      'EFFECT_FLOAT',
-      'FONT_WEIGHT',
-      'FONT_SIZE',
-      'LINE_HEIGHT',
-      'LETTER_SPACING',
-      'PARAGRAPH_SPACING',
-      'PARAGRAPH_INDENT'
-    ];
-  }
-
-  return variable.scopes;
-};
-
 const transformFloatValue = (value: number, tokenType: TokenType): number => {
   if (tokenType === 'opacity') {
     return value / 100;
   }
 
   return value;
+};
+
+const transformScopes = (variable: Variable): TokenType[] => {
+  if (variable.scopes[0] === 'ALL_SCOPES') {
+    return [
+      'borderRadius',
+      'sizing',
+      'spacing',
+      'borderWidth',
+      'opacity',
+      'fontWeights',
+      'fontSizes',
+      'letterSpacing'
+    ];
+  }
+
+  return variable.scopes.map(scope => transformScope(scope)).filter(scope => scope !== null);
 };
 
 export const transformFloatVariable = (
@@ -41,15 +36,10 @@ export const transformFloatVariable = (
   if (typeof value !== 'number') return null;
 
   const tokens: Record<string, Token> = {};
+  const tokenTypes = transformScopes(variable);
 
-  const scopes = getFloatScopes(variable);
-  const hasMoreThanOneScope = scopes.length > 1;
-
-  for (const scope of scopes) {
-    const tokenType = transformScope(scope);
-    if (!tokenType) continue;
-
-    tokens[transformVariableName(variable, hasMoreThanOneScope ? tokenType : null)] = {
+  for (const tokenType of tokenTypes) {
+    tokens[transformVariableName(variable, tokenTypes.length > 1 ? tokenType : undefined)] = {
       $value: transformFloatValue(value, tokenType),
       $type: tokenType,
       $description: variable.description

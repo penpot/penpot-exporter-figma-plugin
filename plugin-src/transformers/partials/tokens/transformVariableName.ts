@@ -35,6 +35,6 @@ const printType = (type: TokenType): string => {
   }
 };
 
-export const transformVariableName = (variable: Variable, type: TokenType | null): string => {
+export const transformVariableName = (variable: Variable, type?: TokenType): string => {
   return `${variable.name.replace(/[-,/\s]/g, '.').replace(/[\][:\\]/g, '')}${type ? `.${printType(type)}` : ''}`;
 };

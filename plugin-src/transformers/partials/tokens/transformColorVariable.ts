@@ -16,7 +16,7 @@ export const transformColorVariable = (
   if (!isColorValue(value)) return null;
 
   return {
-    [transformVariableName(variable, 'color')]: {
+    [transformVariableName(variable)]: {
       $value: rgbToString(value),
       $type: 'color',
       $description: variable.description
