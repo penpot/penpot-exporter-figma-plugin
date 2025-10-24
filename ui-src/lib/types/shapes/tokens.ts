@@ -1,3 +1,5 @@
+import type { Uuid } from '@ui/lib/types/utils/uuid';
+
 export type Tokens = {
   $metadata: Metadata;
   $themes: Theme[];
@@ -39,6 +41,7 @@ export type Metadata = {
 };
 
 export type Theme = {
+  'id'?: Uuid;
   'name': string;
   'group': string;
   'description': string;
