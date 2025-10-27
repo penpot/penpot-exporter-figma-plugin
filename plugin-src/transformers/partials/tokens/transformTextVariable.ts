@@ -2,38 +2,30 @@ import { transformScope, transformVariableName } from '@plugin/transformers/part
 
 import type { Token, TokenType } from '@ui/lib/types/shapes/tokens';
 
-const transformFloatValue = (value: number, tokenType: TokenType): string => {
-  if (tokenType === 'opacity') {
-    return (value / 100).toString();
+const transformTextValue = (value: string, tokenType: TokenType): string | string[] => {
+  if (tokenType === 'fontFamilies') {
+    // @TODO: Change to return [value]; when Penpot SDK supports array values
+    return value;
   }
 
-  return value.toString();
+  return value;
 };
 
 const transformScopes = (variable: Variable): TokenType[] => {
   if (variable.scopes[0] === 'ALL_SCOPES') {
-    return [
-      'borderRadius',
-      'sizing',
-      'spacing',
-      'borderWidth',
-      'opacity',
-      'fontWeights',
-      'fontSizes',
-      'letterSpacing'
-    ];
+    return ['fontWeights', 'fontFamilies'];
   }
 
   return variable.scopes.map(scope => transformScope(scope)).filter(scope => scope !== null);
 };
 
-export const transformFloatVariable = (
+export const transformTextVariable = (
   variable: Variable,
   modeId: string
 ): [string, Token | Record<string, Token>] | null => {
   const value = variable.valuesByMode[modeId];
 
-  if (typeof value !== 'number') return null;
+  if (typeof value !== 'string') return null;
 
   const tokens: Record<string, Token> = {};
   const tokenTypes = transformScopes(variable);
@@ -43,7 +35,7 @@ export const transformFloatVariable = (
     return [
       variableName,
       {
-        $value: transformFloatValue(value, tokenTypes[0]),
+        $value: transformTextValue(value, tokenTypes[0]),
         $type: tokenTypes[0],
         $description: variable.description
       }
@@ -52,7 +44,7 @@ export const transformFloatVariable = (
 
   for (const tokenType of tokenTypes) {
     tokens[tokenType] = {
-      $value: transformFloatValue(value, tokenType),
+      $value: transformTextValue(value, tokenType),
       $type: tokenType,
       $description: variable.description
     };

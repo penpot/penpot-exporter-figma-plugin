@@ -16,9 +16,9 @@ export const transformSet = (
     const result = transformVariable(variable, modeId);
     if (!result) continue;
 
-    Object.entries(result).forEach(([name, token]) => {
-      set[name] = token;
-    });
+    const [name, token] = result;
+
+    set[name] = token;
   }
 
   return [setName, set];

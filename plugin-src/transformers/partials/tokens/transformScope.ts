@@ -12,12 +12,15 @@ export const transformScope = (scope: VariableScope): TokenType | null => {
       return 'borderWidth';
     case 'OPACITY':
       return 'opacity';
+    case 'FONT_STYLE':
     case 'FONT_WEIGHT':
       return 'fontWeights';
     case 'FONT_SIZE':
       return 'fontSizes';
     case 'LETTER_SPACING':
       return 'letterSpacing';
+    case 'FONT_FAMILY':
+      return 'fontFamilies';
     default:
       return null;
   }

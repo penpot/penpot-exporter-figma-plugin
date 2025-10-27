@@ -8,7 +8,7 @@ export type Tokens = {
 export type TokenSets = Record<string, Set>;
 
 export type Set = {
-  [key: string]: Token;
+  [key: string]: Token | Record<string, Token>;
 };
 
 export type TokenType =
@@ -29,7 +29,7 @@ export type TokenType =
   | 'textCase';
 
 export type Token = {
-  $value: string | number;
+  $value: string | string[];
   $type: TokenType;
   $description: string;
 };

@@ -10,16 +10,17 @@ const isColorValue = (value: VariableValue): value is RGB | RGBA => {
 export const transformColorVariable = (
   variable: Variable,
   modeId: string
-): Record<string, Token> | null => {
+): [string, Token] | null => {
   const value = variable.valuesByMode[modeId];
 
   if (!isColorValue(value)) return null;
 
-  return {
-    [transformVariableName(variable)]: {
+  return [
+    transformVariableName(variable),
+    {
       $value: rgbToString(value),
       $type: 'color',
       $description: variable.description
     }
-  };
+  ];
 };
