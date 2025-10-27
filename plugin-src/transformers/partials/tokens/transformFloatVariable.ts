@@ -2,12 +2,12 @@ import { transformScope, transformVariableName } from '@plugin/transformers/part
 
 import type { Token, TokenType } from '@ui/lib/types/shapes/tokens';
 
-const transformFloatValue = (value: number, tokenType: TokenType): number => {
+const transformFloatValue = (value: number, tokenType: TokenType): string => {
   if (tokenType === 'opacity') {
-    return value / 100;
+    return (value / 100).toString();
   }
 
-  return value;
+  return value.toString();
 };
 
 const transformScopes = (variable: Variable): TokenType[] => {

@@ -11,11 +11,10 @@ export const transformTheme = (
   const group = hasMultipleModes ? collection.name : '';
 
   return {
-    'name': name,
-    'group': group,
-    'description': '',
-    'is-source': false,
-    'modified-at': new Date().toISOString(),
-    'selectedTokenSets': { [setName]: 'enabled' }
+    name: name,
+    group: group,
+    description: '',
+    isSource: false,
+    selectedTokenSets: { [setName]: 'enabled' }
   };
 };

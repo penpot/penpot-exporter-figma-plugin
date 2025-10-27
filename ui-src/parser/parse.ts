@@ -19,6 +19,7 @@ export const parse = async ({
   images,
   paintStyles,
   textStyles,
+  tokens,
   componentProperties: recordComponentProperties,
   variantProperties: recordVariantProperties
 }: PenpotDocument): Promise<PenpotContext> => {
@@ -34,6 +35,7 @@ export const parse = async ({
   await registerTypographyLibraries(context, textStyles);
   await buildFile(context, children);
 
+  context.addTokensLib(tokens);
   context.closeFile();
 
   return context;

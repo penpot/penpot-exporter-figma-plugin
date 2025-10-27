@@ -41,11 +41,10 @@ export type Metadata = {
 };
 
 export type Theme = {
-  'id'?: Uuid;
-  'name': string;
-  'group': string;
-  'description': string;
-  'is-source': boolean;
-  'modified-at': string;
-  'selectedTokenSets': Record<string, 'enabled'>;
+  id?: Uuid;
+  name: string;
+  group: string;
+  description: string;
+  isSource: boolean;
+  selectedTokenSets: Record<string, 'enabled'>;
 };

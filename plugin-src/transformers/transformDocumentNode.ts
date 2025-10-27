@@ -15,8 +15,6 @@ import type { PenpotDocument } from '@ui/types';
 
 export const transformDocumentNode = async (node: DocumentNode): Promise<PenpotDocument> => {
   const tokens = await processTokens();
-  console.log(tokens);
-  console.log(JSON.stringify(tokens, null, 2));
 
   await registerPaintStyles();
   await registerTextStyles();
@@ -33,6 +31,7 @@ export const transformDocumentNode = async (node: DocumentNode): Promise<PenpotD
     images,
     paintStyles,
     textStyles,
+    tokens,
     componentProperties: toObject(componentProperties),
     variantProperties: toPlainObject(variantProperties)
   };
