@@ -8,8 +8,7 @@ export const transformSet = (
   variables: Variable[],
   modeId: string
 ): [string, Set] => {
-  const hasMultipleModes = collection.modes.length > 1;
-  const setName = hasMultipleModes ? `${collection.name}/${modeName}` : collection.name;
+  const setName = `${collection.name}/${modeName}`;
   const set: Set = {};
 
   for (const variable of variables) {

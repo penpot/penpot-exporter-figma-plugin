@@ -5,10 +5,8 @@ export const transformTheme = (
   modeName: string,
   setName: string
 ): Theme => {
-  const hasMultipleModes = collection.modes.length > 1;
-
-  const name = hasMultipleModes ? modeName : collection.name;
-  const group = hasMultipleModes ? collection.name : '';
+  const name = modeName;
+  const group = collection.name;
 
   return {
     name: name,
