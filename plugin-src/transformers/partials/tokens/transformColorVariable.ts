@@ -1,3 +1,4 @@
+import { variables } from '@plugin/libraries';
 import { transformVariableName } from '@plugin/transformers/partials/tokens';
 import { rgbToString } from '@plugin/utils/rgbToString';
 
@@ -15,8 +16,12 @@ export const transformColorVariable = (
 
   if (!isColorValue(value)) return null;
 
+  const variableName = transformVariableName(variable);
+
+  variables.set(`${variable.id}.color`, variableName);
+
   return [
-    transformVariableName(variable),
+    variableName,
     {
       $value: rgbToString(value),
       $type: 'color',

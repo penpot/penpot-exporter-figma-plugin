@@ -1,3 +1,4 @@
+import { variables } from '@plugin/libraries';
 import { transformScope, transformVariableName } from '@plugin/transformers/partials/tokens';
 
 import type { Token, TokenType } from '@ui/lib/types/shapes/tokens';
@@ -40,6 +41,8 @@ export const transformFloatVariable = (
   const variableName = transformVariableName(variable);
 
   if (tokenTypes.length === 1) {
+    variables.set(`${variable.id}.${tokenTypes[0]}`, variableName);
+
     return [
       variableName,
       {
@@ -51,6 +54,8 @@ export const transformFloatVariable = (
   }
 
   for (const tokenType of tokenTypes) {
+    variables.set(`${variable.id}.${tokenType}`, `${variableName}.${tokenType}`);
+
     tokens[tokenType] = {
       $value: transformFloatValue(value, tokenType),
       $type: tokenType,
