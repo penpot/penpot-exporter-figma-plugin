@@ -1,5 +1,23 @@
 # penpot-exporter
 
+## 0.15.1
+
+### Patch Changes
+
+- [#287](https://github.com/penpot/penpot-exporter-figma-plugin/pull/287)
+  [`7afad53`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/7afad5398292dfddc2020d0fd795fe190edb0e13)
+  Thanks [@jordisala1991](https://github.com/jordisala1991)! - Reverse order of stokes to match
+  Figma
+
+- [#284](https://github.com/penpot/penpot-exporter-figma-plugin/pull/284)
+  [`5f1e1e7`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/5f1e1e782be1c2f998214ea32bef403747b38d40)
+  Thanks [@jordisala1991](https://github.com/jordisala1991)! - Update Google fonts
+
+- [#286](https://github.com/penpot/penpot-exporter-figma-plugin/pull/286)
+  [`e06b7ea`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/e06b7ea12407ed44931d3f49806b97aa847d6222)
+  Thanks [@jordisala1991](https://github.com/jordisala1991)! - Translate layoutGap to row and column
+  at the same time like how it works on Figma
+
 ## 0.15.0
 
 ### Minor Changes
