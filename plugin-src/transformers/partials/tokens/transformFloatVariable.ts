@@ -12,6 +12,10 @@ const transformFloatValue = (value: number, tokenType: TokenType): string => {
 };
 
 const transformScopes = (variable: Variable): TokenType[] => {
+  if (variable.scopes.length === 0) {
+    return ['number'];
+  }
+
   if (variable.scopes[0] === 'ALL_SCOPES') {
     return [
       'borderRadius',
