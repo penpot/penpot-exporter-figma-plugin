@@ -1,5 +1,5 @@
 import { variables } from '@plugin/libraries';
-import { transformVariableName } from '@plugin/transformers/partials/tokens';
+import { translateVariableName } from '@plugin/translators/tokens';
 import { rgbToString } from '@plugin/utils/rgbToString';
 
 import type { Token } from '@ui/lib/types/shapes/tokens';
@@ -8,7 +8,7 @@ const isColorValue = (value: VariableValue): value is RGB | RGBA => {
   return typeof value === 'object' && 'r' in value && 'g' in value && 'b' in value;
 };
 
-export const transformColorVariable = (
+export const translateColorVariable = (
   variable: Variable,
   modeId: string
 ): [string, Token] | null => {
@@ -16,7 +16,7 @@ export const transformColorVariable = (
 
   if (!isColorValue(value)) return null;
 
-  const variableName = transformVariableName(variable);
+  const variableName = translateVariableName(variable);
 
   variables.set(`${variable.id}.color`, variableName);
 

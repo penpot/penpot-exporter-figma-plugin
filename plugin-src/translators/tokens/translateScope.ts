@@ -1,6 +1,6 @@
 import type { TokenType } from '@ui/lib/types/shapes/tokens';
 
-export const transformScope = (scope: VariableScope): TokenType | null => {
+export const translateScope = (scope: VariableScope): TokenType | null => {
   switch (scope) {
     case 'CORNER_RADIUS':
       return 'borderRadius';

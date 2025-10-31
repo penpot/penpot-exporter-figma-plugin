@@ -1,4 +1,4 @@
-import { transformSet, transformTheme } from '@plugin/transformers/partials/tokens';
+import { translateSet, translateTheme } from '@plugin/translators/tokens';
 
 import type { Theme, TokenSets, Tokens } from '@ui/lib/types/shapes/tokens';
 
@@ -30,8 +30,8 @@ export const processTokens = async (): Promise<Tokens> => {
     const defaultModeId = collection.defaultModeId;
 
     for (const mode of collection.modes) {
-      const [setName, set] = transformSet(collection, mode.name, collectionVariables, mode.modeId);
-      const theme = transformTheme(collection, mode.name, setName);
+      const [setName, set] = translateSet(collection, mode.name, collectionVariables, mode.modeId);
+      const theme = translateTheme(collection, mode.name, setName);
 
       sets[setName] = set;
       themes.push(theme);

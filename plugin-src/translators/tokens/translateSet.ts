@@ -1,8 +1,8 @@
-import { transformVariable } from '@plugin/transformers/partials/tokens';
+import { translateVariable } from '@plugin/translators/tokens';
 
 import type { Set } from '@ui/lib/types/shapes/tokens';
 
-export const transformSet = (
+export const translateSet = (
   collection: VariableCollection,
   modeName: string,
   variables: Variable[],
@@ -12,7 +12,7 @@ export const transformSet = (
   const set: Set = {};
 
   for (const variable of variables) {
-    const result = transformVariable(variable, modeId);
+    const result = translateVariable(variable, modeId);
     if (!result) continue;
 
     const [name, token] = result;

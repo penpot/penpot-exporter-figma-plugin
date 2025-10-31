@@ -1,6 +1,6 @@
 import type { Theme } from '@ui/lib/types/shapes/tokens';
 
-export const transformTheme = (
+export const translateTheme = (
   collection: VariableCollection,
   modeName: string,
   setName: string

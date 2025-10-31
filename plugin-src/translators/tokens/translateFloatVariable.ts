@@ -1,9 +1,9 @@
 import { variables } from '@plugin/libraries';
-import { transformScope, transformVariableName } from '@plugin/transformers/partials/tokens';
+import { translateScope, translateVariableName } from '@plugin/translators/tokens';
 
 import type { Token, TokenType } from '@ui/lib/types/shapes/tokens';
 
-const transformFloatValue = (value: number, tokenType: TokenType): string => {
+const translateFloatValue = (value: number, tokenType: TokenType): string => {
   if (tokenType === 'opacity') {
     return (value / 100).toString();
   }
@@ -11,7 +11,7 @@ const transformFloatValue = (value: number, tokenType: TokenType): string => {
   return value.toString();
 };
 
-const transformScopes = (variable: Variable): TokenType[] => {
+const translateScopes = (variable: Variable): TokenType[] => {
   if (variable.scopes.length === 0) {
     return ['number'];
   }
@@ -29,10 +29,10 @@ const transformScopes = (variable: Variable): TokenType[] => {
     ];
   }
 
-  return variable.scopes.map(scope => transformScope(scope)).filter(scope => scope !== null);
+  return variable.scopes.map(scope => translateScope(scope)).filter(scope => scope !== null);
 };
 
-export const transformFloatVariable = (
+export const translateFloatVariable = (
   variable: Variable,
   modeId: string
 ): [string, Token | Record<string, Token>] | null => {
@@ -41,8 +41,8 @@ export const transformFloatVariable = (
   if (typeof value !== 'number') return null;
 
   const tokens: Record<string, Token> = {};
-  const tokenTypes = transformScopes(variable);
-  const variableName = transformVariableName(variable);
+  const tokenTypes = translateScopes(variable);
+  const variableName = translateVariableName(variable);
 
   if (tokenTypes.length === 1) {
     variables.set(`${variable.id}.${tokenTypes[0]}`, variableName);
@@ -50,7 +50,7 @@ export const transformFloatVariable = (
     return [
       variableName,
       {
-        $value: transformFloatValue(value, tokenTypes[0]),
+        $value: translateFloatValue(value, tokenTypes[0]),
         $type: tokenTypes[0],
         $description: variable.description
       }
@@ -61,7 +61,7 @@ export const transformFloatVariable = (
     variables.set(`${variable.id}.${tokenType}`, `${variableName}.${tokenType}`);
 
     tokens[tokenType] = {
-      $value: transformFloatValue(value, tokenType),
+      $value: translateFloatValue(value, tokenType),
       $type: tokenType,
       $description: variable.description
     };

@@ -5,6 +5,7 @@ import type { TokenProperties } from '@ui/lib/types/shapes/tokens';
 const equivalences = [
   // Color
   { variable: 'fills', token: 'fill', type: 'color' },
+  { variable: 'strokes', token: 'strokeColor', type: 'color' },
 
   // Number
   { variable: 'opacity', token: 'opacity', type: 'opacity' },
@@ -20,7 +21,15 @@ const equivalences = [
   { variable: 'paddingRight', token: 'p2', type: 'spacing' },
   { variable: 'paddingBottom', token: 'p3', type: 'spacing' },
   { variable: 'paddingLeft', token: 'p4', type: 'spacing' },
-  { variable: 'strokes', token: 'strokeColor', type: 'color' }
+  { variable: 'letterSpacing', token: 'letterSpacing', type: 'letterSpacing' },
+  { variable: 'fontSize', token: 'fontSize', type: 'fontSizes' },
+  { variable: 'strokeTopWeight', token: 'strokeWidth', type: 'borderWidth' },
+
+  // Text
+  { variable: 'fontFamily', token: 'fontFamily', type: 'fontFamilies' },
+
+  // Number & Text
+  { variable: 'fontWeight', token: 'fontWeight', type: 'fontWeights' }
 ] as const;
 
 const getBoundVariableIdForPaint = (paints: readonly Paint[]): string | null => {
@@ -33,13 +42,32 @@ const getBoundVariableIdForPaint = (paints: readonly Paint[]): string | null => 
   return paint.boundVariables?.color?.id ?? null;
 };
 
+const isTextNode = (node: SceneNode): node is TextNode => {
+  return node.type === 'TEXT';
+};
+
 const getBoundVariableId = (
   boundVariable: VariableAlias | VariableAlias[],
   variableType: string,
   node: SceneNode
 ): string | null => {
   if (!Array.isArray(boundVariable)) {
+    // Figma exposes strokeTopWeight, strokeRightWeight,
+    // strokeBottomWeight, and strokeLeftWeight but Penpot only supports strokeWidth.
+    // If the strokeWeight is mixed, we will not assign an applied token.
+    if (
+      variableType === 'strokeTopWeight' &&
+      'strokeWeight' in node &&
+      figma.mixed === node.strokeWeight
+    ) {
+      return null;
+    }
+
     return boundVariable.id;
+  }
+
+  if (boundVariable.length === 0) {
+    return null;
   }
 
   if (variableType === 'fills' && 'fills' in node && figma.mixed !== node.fills) {
@@ -48,6 +76,38 @@ const getBoundVariableId = (
 
   if (variableType === 'strokes' && 'strokes' in node) {
     return getBoundVariableIdForPaint(node.strokes);
+  }
+
+  if (isTextNode(node)) {
+    switch (variableType) {
+      case 'letterSpacing':
+        if (figma.mixed !== node.letterSpacing) {
+          return boundVariable[0].id;
+        }
+
+        return null;
+      case 'fontSize':
+        if (figma.mixed !== node.fontSize) {
+          return boundVariable[0].id;
+        }
+
+        return null;
+
+      case 'fontWeight':
+        if (figma.mixed !== node.fontWeight) {
+          return boundVariable[0].id;
+        }
+
+        return null;
+      case 'fontFamily':
+        if (figma.mixed !== node.fontName) {
+          return boundVariable[0].id;
+        }
+
+        return null;
+      default:
+        return null;
+    }
   }
 
   return null;

@@ -1,8 +1,9 @@
-import { transformScope, transformVariableName } from '@plugin/transformers/partials/tokens';
+import { variables } from '@plugin/libraries';
+import { translateScope, translateVariableName } from '@plugin/translators/tokens';
 
 import type { Token, TokenType } from '@ui/lib/types/shapes/tokens';
 
-const transformTextValue = (value: string, tokenType: TokenType): string | string[] => {
+const translateTextValue = (value: string, tokenType: TokenType): string | string[] => {
   if (tokenType === 'fontFamilies') {
     // @TODO: Change to return [value]; when Penpot SDK supports array values
     return value;
@@ -11,15 +12,15 @@ const transformTextValue = (value: string, tokenType: TokenType): string | strin
   return value;
 };
 
-const transformScopes = (variable: Variable): TokenType[] => {
+const translateScopes = (variable: Variable): TokenType[] => {
   if (variable.scopes[0] === 'ALL_SCOPES') {
     return ['fontWeights', 'fontFamilies'];
   }
 
-  return variable.scopes.map(scope => transformScope(scope)).filter(scope => scope !== null);
+  return variable.scopes.map(scope => translateScope(scope)).filter(scope => scope !== null);
 };
 
-export const transformTextVariable = (
+export const translateTextVariable = (
   variable: Variable,
   modeId: string
 ): [string, Token | Record<string, Token>] | null => {
@@ -28,14 +29,16 @@ export const transformTextVariable = (
   if (typeof value !== 'string') return null;
 
   const tokens: Record<string, Token> = {};
-  const tokenTypes = transformScopes(variable);
-  const variableName = transformVariableName(variable);
+  const tokenTypes = translateScopes(variable);
+  const variableName = translateVariableName(variable);
 
   if (tokenTypes.length === 1) {
+    variables.set(`${variable.id}.${tokenTypes[0]}`, variableName);
+
     return [
       variableName,
       {
-        $value: transformTextValue(value, tokenTypes[0]),
+        $value: translateTextValue(value, tokenTypes[0]),
         $type: tokenTypes[0],
         $description: variable.description
       }
@@ -43,8 +46,10 @@ export const transformTextVariable = (
   }
 
   for (const tokenType of tokenTypes) {
+    variables.set(`${variable.id}.${tokenType}`, `${variableName}.${tokenType}`);
+
     tokens[tokenType] = {
-      $value: transformTextValue(value, tokenType),
+      $value: translateTextValue(value, tokenType),
       $type: tokenType,
       $description: variable.description
     };
