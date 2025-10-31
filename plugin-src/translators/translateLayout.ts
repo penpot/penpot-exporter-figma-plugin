@@ -27,11 +27,7 @@ export const translateLayoutFlexDir = (
   }
 };
 
-export const translateLayoutGap = (
-  layoutMode: AutoLayoutMixin['layoutMode'],
-  itemSpacing: number,
-  auto: boolean = false
-): LayoutGap => {
+export const translateLayoutGap = (itemSpacing: number, auto: boolean = false): LayoutGap => {
   if (auto) {
     return {
       rowGap: 0,
@@ -40,8 +36,8 @@ export const translateLayoutGap = (
   }
 
   return {
-    rowGap: layoutMode === 'VERTICAL' ? itemSpacing : 0,
-    columnGap: layoutMode === 'HORIZONTAL' ? itemSpacing : 0
+    rowGap: itemSpacing,
+    columnGap: itemSpacing
   };
 };
 
