@@ -59,9 +59,9 @@ export const transformFrameNode = async (node: FrameNode | SectionNode): Promise
     ...referencePoint,
     ...frameSpecificAttributes,
     ...transformDimension(node),
-    ...(await transformChildren(node)),
     ...transformSceneNode(node),
-    ...transformOverrides(node),
-    ...transformVariableConsumptionMap(node)
+    ...transformVariableConsumptionMap(node),
+    ...(await transformChildren(node)),
+    ...transformOverrides(node)
   };
 };

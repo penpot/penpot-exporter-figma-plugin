@@ -31,7 +31,7 @@ export const transformTextNode = (node: TextNode): TextShape => {
     ...transformLayoutAttributes(node),
     ...transformStrokes(node),
     ...transformConstraints(node),
-    ...transformOverrides(node),
-    ...transformVariableConsumptionMap(node)
+    ...transformVariableConsumptionMap(node),
+    ...transformOverrides(node)
   };
 };

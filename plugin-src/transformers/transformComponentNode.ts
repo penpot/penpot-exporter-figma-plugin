@@ -16,6 +16,7 @@ import {
   transformRotationAndPosition,
   transformSceneNode,
   transformStrokes,
+  transformVariableConsumptionMap,
   transformVariantNameAndProperties
 } from '@plugin/transformers/partials';
 
@@ -37,12 +38,13 @@ export const transformComponentNode = async (node: ComponentNode): Promise<Compo
     ...transformProportion(node),
     ...transformLayoutAttributes(node, true),
     ...transformCornerRadius(node),
-    ...(await transformChildren(node)),
     ...transformDimension(node),
     ...transformRotationAndPosition(node),
     ...transformConstraints(node),
     ...transformAutoLayout(node),
-    ...(isVariant ? transformVariantNameAndProperties(node) : {})
+    ...transformVariableConsumptionMap(node),
+    ...(isVariant ? transformVariantNameAndProperties(node) : {}),
+    ...(await transformChildren(node))
   });
 
   if (!isVariant) {

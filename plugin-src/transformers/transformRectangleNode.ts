@@ -33,7 +33,7 @@ export const transformRectangleNode = (node: RectangleNode): RectShape => {
     ...transformLayoutAttributes(node),
     ...transformCornerRadius(node),
     ...transformConstraints(node),
-    ...transformOverrides(node),
-    ...transformVariableConsumptionMap(node)
+    ...transformVariableConsumptionMap(node),
+    ...transformOverrides(node)
   };
 };

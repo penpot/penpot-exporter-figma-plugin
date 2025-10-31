@@ -5,7 +5,8 @@ import {
   transformFigmaIds,
   transformOverrides,
   transformRotationAndPosition,
-  transformSceneNode
+  transformSceneNode,
+  transformVariableConsumptionMap
 } from '@plugin/transformers/partials';
 import { transformChildren } from '@plugin/transformers/partials';
 
@@ -17,6 +18,7 @@ export const transformGroupNode = async (node: GroupNode): Promise<GroupShape> =
     ...transformGroupNodeLike(node),
     ...transformEffects(node),
     ...transformBlend(node),
+    ...transformVariableConsumptionMap(node),
     ...(await transformChildren(node)),
     ...transformOverrides(node)
   };
