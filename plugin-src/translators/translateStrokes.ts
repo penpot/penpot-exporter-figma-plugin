@@ -12,9 +12,20 @@ export const translateStrokes = (
     strokeStyle: node.dashPattern.length ? 'dashed' : 'solid'
   };
 
-  return node.strokes
-    .map((paint, index) => translateStroke(paint, sharedStrokeProperties, strokeCaps, index === 0))
-    .filter(stroke => stroke !== undefined);
+  const penpotStrokes: Stroke[] = [];
+
+  for (let index = 0; index < node.strokes.length; index++) {
+    const stroke = node.strokes[index];
+    const penpotStroke = translateStroke(stroke, sharedStrokeProperties, strokeCaps, index === 0);
+
+    if (!penpotStroke) {
+      continue;
+    }
+
+    penpotStrokes.unshift(penpotStroke);
+  }
+
+  return penpotStrokes;
 };
 
 export const translateStroke = (
