@@ -1,5 +1,7 @@
+export * from './translateAliasValue';
 export * from './translateColorVariable';
 export * from './translateFloatVariable';
+export * from './translateGenericVariable';
 export * from './translateScope';
 export * from './translateSet';
 export * from './translateTextVariable';

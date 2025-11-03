@@ -30,7 +30,12 @@ export const processTokens = async (): Promise<Tokens> => {
     const defaultModeId = collection.defaultModeId;
 
     for (const mode of collection.modes) {
-      const [setName, set] = translateSet(collection, mode.name, collectionVariables, mode.modeId);
+      const [setName, set] = await translateSet(
+        collection,
+        mode.name,
+        collectionVariables,
+        mode.modeId
+      );
       const theme = translateTheme(collection, mode.name, setName);
 
       sets[setName] = set;
