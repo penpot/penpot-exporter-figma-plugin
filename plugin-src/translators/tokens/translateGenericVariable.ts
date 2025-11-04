@@ -1,57 +1,37 @@
 import { variables } from '@plugin/libraries';
-import { translateVariableName } from '@plugin/translators/tokens/translateVariableName';
+import { translateVariableName } from '@plugin/translators/tokens';
 
 import type { Token, TokenType } from '@ui/lib/types/shapes/tokens';
 
 export const translateGenericVariable = (
   variable: Variable,
   modeId: string,
-  translateScopes: (variable: Variable) => TokenType[],
-  translateValue: (value: VariableValue, tokenType: TokenType) => string | null
+  translateVariableValues: (variable: Variable, modeId: string) => Map<TokenType, string>
 ): [string, Token | Record<string, Token>] | null => {
-  const value = variable.valuesByMode[modeId];
+  const variableValues = translateVariableValues(variable, modeId);
 
-  const tokenTypes = translateScopes(variable);
-  const variableName = translateVariableName(variable);
-  const variableTypes = new Set<TokenType>();
-
-  const tokens: Token[] = [];
-
-  for (const tokenType of tokenTypes) {
-    const $value = translateValue(value, tokenType);
-    if (!$value) continue;
-
-    variableTypes.add(tokenType);
-
-    tokens.push({
-      $value,
-      $type: tokenType,
-      $description: variable.description
-    });
-  }
-
-  if (tokens.length === 0) {
+  if (variableValues.size === 0) {
     return null;
   }
 
-  if (tokens.length === 1) {
-    variables.set(`${variable.id}.${tokens[0].$type}`, variableName);
+  const variableName = translateVariableName(variable);
+  const variableValuesIterator = variableValues.entries();
 
-    return [variableName, tokens[0]];
+  if (variableValues.size === 1) {
+    const [$type, $value] = variableValuesIterator.next().value as [TokenType, string];
+
+    variables.set(`${variable.id}.${$type}`, variableName);
+
+    return [variableName, { $value, $type, $description: variable.description }];
   }
 
-  return [
-    variableName,
-    tokens.reduce(
-      (acc, token) => {
-        const tokenType = token.$type;
-        acc[tokenType] = token;
+  const tokens: Record<string, Token> = {};
 
-        variables.set(`${variable.id}.${tokenType}`, `${variableName}.${tokenType}`);
+  for (const [$type, $value] of variableValuesIterator) {
+    tokens[$type] = { $value, $type, $description: variable.description };
 
-        return acc;
-      },
-      {} as Record<string, Token>
-    )
-  ];
+    variables.set(`${variable.id}.${$type}`, `${variableName}.${$type}`);
+  }
+
+  return [variableName, tokens];
 };

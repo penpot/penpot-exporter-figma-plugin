@@ -8,3 +8,4 @@ export * from './translateTextVariable';
 export * from './translateTheme';
 export * from './translateVariable';
 export * from './translateVariableName';
+export * from './translateVariableValues';
