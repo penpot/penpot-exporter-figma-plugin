@@ -1,10 +1,10 @@
 import { variables } from '@plugin/libraries';
-import { translateVariableName } from '@plugin/translators/tokens';
 
 import type { Token, TokenType } from '@ui/lib/types/shapes/tokens';
 
 export const translateGenericVariable = (
   variable: Variable,
+  variableName: string,
   modeId: string,
   translateVariableValues: (variable: Variable, modeId: string) => Map<TokenType, string>
 ): [string, Token | Record<string, Token>] | null => {
@@ -14,7 +14,6 @@ export const translateGenericVariable = (
     return null;
   }
 
-  const variableName = translateVariableName(variable);
   const variableValuesIterator = variableValues.entries();
 
   if (variableValues.size === 1) {

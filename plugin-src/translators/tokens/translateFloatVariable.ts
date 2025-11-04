@@ -53,9 +53,10 @@ const translateScopes = (variable: Variable): TokenType[] => {
 
 export const translateFloatVariable = (
   variable: Variable,
+  variableName: string,
   modeId: string
 ): [string, Token | Record<string, Token>] | null => {
-  return translateGenericVariable(variable, modeId, (variable, modeId) =>
+  return translateGenericVariable(variable, variableName, modeId, (variable, modeId) =>
     translateVariableValues(variable, modeId, translateScopes, translateValue)
   );
 };

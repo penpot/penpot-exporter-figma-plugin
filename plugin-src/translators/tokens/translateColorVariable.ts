@@ -1,5 +1,4 @@
 import { variables } from '@plugin/libraries';
-import { translateVariableName } from '@plugin/translators/tokens';
 import { isAliasValue, translateAliasValue } from '@plugin/translators/tokens/translateAliasValue';
 import { rgbToString } from '@plugin/utils/rgbToString';
 
@@ -23,11 +22,10 @@ const translateColorValue = async (value: VariableValue): Promise<string | null>
 
 export const translateColorVariable = async (
   variable: Variable,
+  variableName: string,
   modeId: string
 ): Promise<[string, Token | Record<string, Token>] | null> => {
   const value = variable.valuesByMode[modeId];
-
-  const variableName = translateVariableName(variable);
 
   const $value = await translateColorValue(value);
   if (!$value) return null;
