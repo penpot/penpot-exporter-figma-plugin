@@ -1,4 +1,4 @@
-import { translateVariable, translateVariableName } from '@plugin/translators/tokens';
+import { translateVariable } from '@plugin/translators/tokens';
 
 import type { Set } from '@ui/lib/types/shapes/tokens';
 
@@ -12,9 +12,7 @@ export const translateSet = async (
   const set: Set = {};
 
   for (const variable of variables) {
-    const variableName = translateVariableName(variable);
-
-    const result = await translateVariable(variable, variableName, modeId);
+    const result = await translateVariable(variable, modeId);
     if (!result) continue;
 
     const [name, token] = result;

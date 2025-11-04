@@ -1,16 +1,18 @@
 import {
   translateColorVariable,
   translateFloatVariable,
-  translateTextVariable
+  translateTextVariable,
+  translateVariableName
 } from '@plugin/translators/tokens';
 
 import type { Token } from '@ui/lib/types/shapes/tokens';
 
 export const translateVariable = async (
   variable: Variable,
-  variableName: string,
   modeId: string
 ): Promise<[string, Token | Record<string, Token>] | null> => {
+  const variableName = translateVariableName(variable);
+
   switch (variable.resolvedType) {
     case 'COLOR':
       return await translateColorVariable(variable, variableName, modeId);
