@@ -25,6 +25,7 @@ export type UseFigmaHook = {
 };
 
 export type Steps =
+  | 'tokens'
   | 'processing'
   | 'images'
   | 'optimization'
@@ -184,7 +185,6 @@ export const useFigma = (): UseFigmaHook => {
 
   const exportPenpot = (): void => {
     setExporting(true);
-    setStep('processing');
     setProgress(prev => ({
       currentItem: prev.currentItem,
       totalItems: prev.totalItems,

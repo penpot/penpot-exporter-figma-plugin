@@ -87,12 +87,16 @@ const getVariables = async (collection: VariableCollection): Promise<Variable[]>
 };
 
 export const processTokens = async (): Promise<Tokens> => {
+  figma.ui.postMessage({
+    type: 'PROGRESS_STEP',
+    data: 'tokens'
+  });
+
   const localCollections = await figma.variables.getLocalVariableCollectionsAsync();
 
   const sets: TokenSets = {};
   const themes: Theme[] = [];
   const tokenSetOrder: string[] = [];
-  const activeThemes: string[] = [];
   const activeSets: string[] = [];
 
   for (const collection of localCollections) {
@@ -108,14 +112,13 @@ export const processTokens = async (): Promise<Tokens> => {
       tokenSetOrder.push(setName);
 
       if (mode.modeId === defaultModeId) {
-        activeThemes.push(setName);
         activeSets.push(setName);
       }
     }
   }
 
   return {
-    $metadata: { tokenSetOrder, activeThemes, activeSets },
+    $metadata: { tokenSetOrder, activeThemes: [], activeSets },
     $themes: themes,
     ...resolveAliases(sets)
   };

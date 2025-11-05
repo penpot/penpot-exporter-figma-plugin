@@ -13,6 +13,11 @@ export const processPages = async (node: DocumentNode): Promise<PenpotPage[]> =>
     data: node.children.length
   });
 
+  figma.ui.postMessage({
+    type: 'PROGRESS_STEP',
+    data: 'processing'
+  });
+
   for (const page of node.children) {
     await page.loadAsync();
 

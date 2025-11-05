@@ -10,6 +10,9 @@ type Messages = {
 };
 
 const stepMessages: Record<Steps, Messages> = {
+  tokens: {
+    total: 'Processing tokens 📝'
+  },
   processing: {
     total: 'pages processed 💪',
     current: 'Currently processing layer'
@@ -62,6 +65,7 @@ const StepProgress = (): JSX.Element | null => {
   const currentText = stepMessages[step].current;
 
   switch (step) {
+    case 'tokens':
     case 'processing':
     case 'images':
     case 'optimization':
@@ -73,7 +77,8 @@ const StepProgress = (): JSX.Element | null => {
     case 'typoLibraries':
       return (
         <>
-          {progress.processedItems} of {progress.totalItems} {stepMessages[step].total}
+          {progress.totalItems > 0 ? `${progress.processedItems} of ${progress.totalItems}` : ''}{' '}
+          {stepMessages[step].total}
           {progress.currentItem && currentText ? (
             <>
               <br />
