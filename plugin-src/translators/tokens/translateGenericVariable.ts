@@ -19,6 +19,7 @@ export const translateGenericVariable = (
   if (variableValues.size === 1) {
     const [$type, $value] = variableValuesIterator.next().value as [TokenType, string];
 
+    variables.set(variable.id, variableName);
     variables.set(`${variable.id}.${$type}`, variableName);
 
     return [variableName, { $value, $type, $description: variable.description }];
@@ -29,6 +30,7 @@ export const translateGenericVariable = (
   for (const [$type, $value] of variableValuesIterator) {
     tokens[$type] = { $value, $type, $description: variable.description };
 
+    variables.set(variable.id, `${variableName}.${$type}`);
     variables.set(`${variable.id}.${$type}`, `${variableName}.${$type}`);
   }
 

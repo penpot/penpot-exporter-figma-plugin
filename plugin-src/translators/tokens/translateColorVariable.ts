@@ -8,9 +8,9 @@ const isColorValue = (value: VariableValue): value is RGB | RGBA => {
   return typeof value === 'object' && 'r' in value && 'g' in value && 'b' in value;
 };
 
-const translateColorValue = async (value: VariableValue): Promise<string | null> => {
+const translateColorValue = (value: VariableValue): string | null => {
   if (isAliasValue(value)) {
-    return await translateAliasValue(value);
+    return translateAliasValue(value);
   }
 
   if (!isColorValue(value)) {
@@ -20,14 +20,14 @@ const translateColorValue = async (value: VariableValue): Promise<string | null>
   return rgbToString(value);
 };
 
-export const translateColorVariable = async (
+export const translateColorVariable = (
   variable: Variable,
   variableName: string,
   modeId: string
-): Promise<[string, Token | Record<string, Token>] | null> => {
+): [string, Token | Record<string, Token>] | null => {
   const value = variable.valuesByMode[modeId];
 
-  const $value = await translateColorValue(value);
+  const $value = translateColorValue(value);
   if (!$value) return null;
 
   variables.set(`${variable.id}.color`, variableName);

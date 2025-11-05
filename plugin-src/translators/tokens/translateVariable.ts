@@ -7,15 +7,15 @@ import {
 
 import type { Token } from '@ui/lib/types/shapes/tokens';
 
-export const translateVariable = async (
+export const translateVariable = (
   variable: Variable,
   modeId: string
-): Promise<[string, Token | Record<string, Token>] | null> => {
+): [string, Token | Record<string, Token>] | null => {
   const variableName = translateVariableName(variable);
 
   switch (variable.resolvedType) {
     case 'COLOR':
-      return await translateColorVariable(variable, variableName, modeId);
+      return translateColorVariable(variable, variableName, modeId);
     case 'FLOAT':
       return translateFloatVariable(variable, variableName, modeId);
     case 'STRING':

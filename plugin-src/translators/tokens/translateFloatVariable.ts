@@ -1,4 +1,6 @@
 import {
+  isAliasValue,
+  translateAliasValue,
   translateGenericVariable,
   translateScope,
   translateVariableValues
@@ -15,6 +17,10 @@ const isNumberValue = (value: VariableValue): value is number => {
 };
 
 const translateValue = (value: VariableValue, tokenType: TokenType): string | null => {
+  if (isAliasValue(value)) {
+    return translateAliasValue(value);
+  }
+
   if (!isNumberValue(value)) {
     return null;
   }

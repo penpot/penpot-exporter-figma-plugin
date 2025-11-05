@@ -1,4 +1,6 @@
 import {
+  isAliasValue,
+  translateAliasValue,
   translateGenericVariable,
   translateScope,
   translateVariableValues
@@ -34,6 +36,10 @@ const isStringValue = (value: VariableValue): value is string => {
 };
 
 const translateValue = (value: VariableValue, tokenType: TokenType): string | null => {
+  if (isAliasValue(value)) {
+    return translateAliasValue(value);
+  }
+
   if (isStringValue(value)) {
     if (tokenType === 'fontFamilies') {
       // @TODO: Change to return [value]; when Penpot SDK supports array values
