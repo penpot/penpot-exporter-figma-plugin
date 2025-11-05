@@ -3,18 +3,29 @@ import { translateSet, translateTheme } from '@plugin/translators/tokens';
 
 import type { Theme, Token, TokenSets, Tokens } from '@ui/lib/types/shapes/tokens';
 
-const getVariables = async (collection: VariableCollection): Promise<Variable[]> => {
-  const variables: Variable[] = [];
+const valueIsAlias = (value: string): boolean => {
+  return value.startsWith('{') && value.endsWith('}');
+};
 
-  for (const variableId of collection.variableIds) {
-    const variable = await figma.variables.getVariableByIdAsync(variableId);
-
-    if (!variable) continue;
-
-    variables.push(variable);
+const resolveAlias = (token: Token): Token | null => {
+  if (!valueIsAlias(token.$value)) {
+    return token;
   }
 
-  return variables;
+  const { $value, $type, $description } = token;
+
+  const variableId = $value.slice(1, -1);
+
+  const resolvedVariableName = variables.get(variableId + '.' + $type) ?? variables.get(variableId);
+  if (!resolvedVariableName) {
+    return null;
+  }
+
+  return {
+    $value: '{' + resolvedVariableName + '}',
+    $type,
+    $description
+  };
 };
 
 const isToken = (token: Token | Record<string, Token>): token is Token => {
@@ -27,50 +38,24 @@ const resolveAliases = (sets: TokenSets): TokenSets => {
   for (const [setName, set] of Object.entries(sets)) {
     for (const [tokenName, tokenValue] of Object.entries(set)) {
       if (isToken(tokenValue)) {
-        const { $value, $type, $description } = tokenValue;
+        const resolvedToken = resolveAlias(tokenValue);
 
-        if (!$value.startsWith('{')) {
-          continue;
-        }
-
-        const variableId = $value.slice(1, -1);
-
-        const resolvedVariableName =
-          variables.get(variableId + '.' + $type) ?? variables.get(variableId);
-
-        if (!resolvedVariableName) {
+        if (!resolvedToken) {
           delete sets[setName][tokenName];
 
           continue;
         }
 
-        sets[setName][tokenName] = {
-          $value: '{' + resolvedVariableName + '}',
-          $type,
-          $description
-        };
+        sets[setName][tokenName] = resolvedToken;
       } else {
         const resolvedTokens: Record<string, Token> = {};
 
-        for (const [_tokenType, { $value, $type, $description }] of Object.entries(tokenValue)) {
-          if (!$value.startsWith('{')) {
-            resolvedTokens[$type] = { $value, $type, $description };
+        for (const [tokenType, token] of Object.entries(tokenValue)) {
+          const resolvedToken = resolveAlias(token);
 
-            continue;
-          }
+          if (!resolvedToken) continue;
 
-          const variableId = $value.slice(1, -1);
-
-          const resolvedVariableName =
-            variables.get(variableId + '.' + $type) ?? variables.get(variableId);
-
-          if (!resolvedVariableName) continue;
-
-          resolvedTokens[$type] = {
-            $value: '{' + resolvedVariableName + '}',
-            $type,
-            $description
-          };
+          resolvedTokens[tokenType] = resolvedToken;
         }
 
         if (Object.keys(resolvedTokens).length === 0) {
@@ -85,6 +70,20 @@ const resolveAliases = (sets: TokenSets): TokenSets => {
   }
 
   return sets;
+};
+
+const getVariables = async (collection: VariableCollection): Promise<Variable[]> => {
+  const variables: Variable[] = [];
+
+  for (const variableId of collection.variableIds) {
+    const variable = await figma.variables.getVariableByIdAsync(variableId);
+
+    if (!variable) continue;
+
+    variables.push(variable);
+  }
+
+  return variables;
 };
 
 export const processTokens = async (): Promise<Tokens> => {
