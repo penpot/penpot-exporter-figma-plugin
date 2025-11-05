@@ -8,6 +8,10 @@ import {
 
 import type { Token, TokenType } from '@ui/lib/types/shapes/tokens';
 
+const isValidOpacityValue = (value: number): boolean => {
+  return value >= 0 && value <= 100;
+};
+
 const isValidFontWeightValue = (value: number): boolean => {
   return [100, 200, 300, 400, 500, 600, 700, 800, 900, 950].includes(value);
 };
@@ -30,7 +34,7 @@ const translateValue = (value: VariableValue, tokenType: TokenType): string | nu
   }
 
   if (tokenType === 'opacity') {
-    return (value / 100).toString();
+    return isValidOpacityValue(value) ? (value / 100).toString() : null;
   }
 
   return value.toString();

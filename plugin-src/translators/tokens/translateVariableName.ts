@@ -5,7 +5,13 @@ export const translateVariableName = (variable: Variable): string => {
     return variableNames.get(variable.id)!;
   }
 
-  let name = variable.name.replace(/\//g, '.').replace(/[^a-zA-Z0-9\-$_.]/g, '');
+  let name = variable.name
+    .replace(/\//g, '.')
+    .replace(/[^a-zA-Z0-9\-$_.]/g, '')
+    .replace(/^\$/, 'S')
+    .replace(/^\./, 'D')
+    .replace(/\.$/, 'D')
+    .replace(/\.{2,}/g, '.');
 
   if (uniqueVariableNames.has(name)) {
     let i = 0;
