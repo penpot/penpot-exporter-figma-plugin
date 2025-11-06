@@ -1,4 +1,4 @@
-import { Banner, Button, IconInfo16, IconInfoSmall24, Link } from '@create-figma-plugin/ui';
+import { Banner, Button, IconInfoSmall24, Link } from '@create-figma-plugin/ui';
 import type { JSX } from 'preact';
 
 import { Stack } from '@ui/components/Stack';
@@ -17,7 +17,7 @@ export const ExportSummary = (): JSX.Element | null => {
   return (
     <Stack space="medium">
       <Banner icon={<IconInfoSmall24 />} variant="success">
-        Export completed successfully! 🎉
+        <strong>Export completed successfully! 🎉</strong>
       </Banner>
 
       <Stack space="xsmall">
@@ -31,7 +31,7 @@ export const ExportSummary = (): JSX.Element | null => {
 
       {hasMissingFonts && (
         <Stack space="xsmall">
-          <Banner icon={<IconInfo16 />} variant="warning">
+          <Banner icon={<IconInfoSmall24 />} variant="warning">
             <strong>
               {missingFonts.length} custom font{missingFonts.length > 1 ? 's' : ''} detected
             </strong>
