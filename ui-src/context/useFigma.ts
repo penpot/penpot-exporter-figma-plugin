@@ -5,6 +5,7 @@ import type { FormValues } from '@ui/components/ExportForm';
 import { type MessageData, createInMemoryWritable, sendMessage } from '@ui/context';
 import { identify, track } from '@ui/metrics/mixpanel';
 import { parse } from '@ui/parser';
+import { fileSizeInMB } from '@ui/utils/fileSizeInMB';
 
 export type UseFigmaHook = {
   missingFonts: string[] | undefined;
@@ -117,9 +118,7 @@ export const useFigma = (): UseFigmaHook => {
 
         setExportedBlob({ blob, filename });
 
-        // Get size of the file in Mb rounded to 2 decimal places
-        const size = Math.round((blob.size / 1024 / 1024) * 100) / 100;
-        track('File Exported', { 'Exported File Size': size + ' Mb' });
+        track('File Exported', { 'Exported File Size': fileSizeInMB(blob.size) });
 
         setExporting(false);
         setSummary(true);
