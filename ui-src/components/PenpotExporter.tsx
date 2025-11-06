@@ -1,20 +1,17 @@
-import { LoadingIndicator } from '@create-figma-plugin/ui';
 import type { JSX } from 'preact';
 
 import { ExportForm } from '@ui/components/ExportForm';
+import { ExportSummary } from '@ui/components/ExportSummary';
 import { ExporterProgress } from '@ui/components/ExporterProgress';
 import { LibraryError } from '@ui/components/LibraryError';
-import { PluginReload } from '@ui/components/PluginReload';
 import { useFigmaContext } from '@ui/context';
 
 export const PenpotExporter = (): JSX.Element => {
-  const { loading, needsReload, exporting, error } = useFigmaContext();
-
-  if (loading) return <LoadingIndicator />;
+  const { exporting, summary, error } = useFigmaContext();
 
   if (exporting) return <ExporterProgress />;
 
-  if (needsReload) return <PluginReload />;
+  if (summary) return <ExportSummary />;
 
   if (error) return <LibraryError />;
 

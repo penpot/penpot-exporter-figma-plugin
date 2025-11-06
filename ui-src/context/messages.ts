@@ -11,6 +11,7 @@ type PluginMessage =
   | ProgressCurrentItemMessage
   | ProgressTotalItemsMessage
   | ProgressProcessedItemsMessage
+  | ReloadMessage
   | ErrorMessage
   | UserDataMessage;
 
@@ -46,6 +47,10 @@ type ProgressTotalItemsMessage = {
 type ProgressProcessedItemsMessage = {
   type: 'PROGRESS_PROCESSED_ITEMS';
   data: number;
+};
+
+type ReloadMessage = {
+  type: 'RELOAD';
 };
 
 type ErrorMessage = {

@@ -1,6 +1,11 @@
 import { toObject, toPlainObject } from '@common/map';
 
-import { componentProperties, components, variantProperties } from '@plugin/libraries';
+import {
+  componentProperties,
+  components,
+  missingFonts,
+  variantProperties
+} from '@plugin/libraries';
 import {
   processImages,
   processPages,
@@ -29,6 +34,7 @@ export const transformDocumentNode = async (node: DocumentNode): Promise<PenpotD
     paintStyles,
     textStyles,
     componentProperties: toObject(componentProperties),
-    variantProperties: toPlainObject(variantProperties)
+    variantProperties: toPlainObject(variantProperties),
+    missingFonts: Array.from(missingFonts)
   };
 };

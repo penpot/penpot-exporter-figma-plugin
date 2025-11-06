@@ -13,4 +13,5 @@ export type PenpotDocument = {
   textStyles: Record<string, TypographyStyle>;
   componentProperties: Record<string, ComponentProperty>;
   variantProperties: Record<string, string[]>;
+  missingFonts: string[];
 };

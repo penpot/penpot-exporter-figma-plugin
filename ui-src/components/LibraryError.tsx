@@ -5,7 +5,7 @@ import { Stack } from '@ui/components/Stack';
 import { useFigmaContext } from '@ui/context';
 
 export const LibraryError = (): JSX.Element | null => {
-  const { reload, cancel, error } = useFigmaContext();
+  const { retry, cancel, error } = useFigmaContext();
 
   if (!error) return null;
 
@@ -26,8 +26,8 @@ export const LibraryError = (): JSX.Element | null => {
           , and we&apos;ll be happy to assist you!
         </span>
         <Stack space="xsmall" direction="row">
-          <Button onClick={reload} fullWidth>
-            Reload
+          <Button onClick={retry} fullWidth>
+            Retry
           </Button>
           <Button secondary onClick={cancel} fullWidth>
             Cancel
