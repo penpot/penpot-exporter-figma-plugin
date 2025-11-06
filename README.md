@@ -1,29 +1,22 @@
-[uri_license]: https://www.mozilla.org/en-US/MPL/2.0
-[uri_license_image]: https://img.shields.io/badge/MPL-2.0-blue.svg
+<img style="width:100px" src="resources/penpot-exporter.jpeg" alt="Penpot Exporter">
 
-<h1 align="center">
-  <br>
-  <img style="width:100px" src="ui-src/logo.svg" alt="PENPOT">
-  <br>
-  PENPOT EXPORTER
-</h1>
-
-<p align="center"><a href="https://www.mozilla.org/en-US/MPL/2.0" rel="nofollow"><img src="https://camo.githubusercontent.com/3fcf3d6b678ea15fde3cf7d6af0e242160366282d62a7c182d83a50bfee3f45e/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f4d504c2d322e302d626c75652e737667" alt="License: MPL-2.0" data-canonical-src="https://img.shields.io/badge/MPL-2.0-blue.svg" style="max-width:100%;"></a>
-<a href="https://github.com/orgs/penpot/projects/1" title="Managed with GitHub Projects" rel="nofollow"><img src="https://camo.githubusercontent.com/4a1d1112f0272e3393b1e8da312ff4435418e9e2eb4c0964881e3680f90a653c/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f6d616e61676564253230776974682d54414947412e696f2d3730396631342e737667" alt="Managed with GitHub Projects" data-canonical-src="https://img.shields.io/badge/managed%20with-TAIGA.io-709f14.svg" style="max-width:100%;"></a>
-<a href="https://gitpod.io/#https://github.com/penpot/penpot" rel="nofollow"><img src="https://camo.githubusercontent.com/daadb4894128d1e19b72d80236f5959f1f2b47f9fe081373f3246131f0189f6c/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f476974706f642d72656164792d2d746f2d2d636f64652d626c75653f6c6f676f3d676974706f64" alt="Gitpod ready-to-code" data-canonical-src="https://img.shields.io/badge/Gitpod-ready--to--code-blue?logo=gitpod" style="max-width:100%;"></a></p>
+<p align="center">
+    <a href="https://www.mozilla.org/en-US/MPL/2.0" rel="nofollow"><img alt="License: MPL-2.0" src="https://img.shields.io/badge/MPL-2.0-blue.svg" style="max-width:100%;"></a>
+    <a href="https://github.com/orgs/penpot/projects/1" rel="nofollow"><img alt="Managed with GitHub Projects" src="https://img.shields.io/badge/managed_with-Github_Projects-blue"  style="max-width:100%;"></a>
+</p>
 
 <p align="center">
     <a href="https://penpot.app/"><b>Penpot Website</b></a> •
     <a href="https://community.penpot.app/t/figma-to-penpot-export-plugin/5554"><b>Export Figma to Penpot (Penpot community)</b></a> •
     <a href="https://community.penpot.app/"><b>Penpot Community</b></a> •
-      <a href="https://www.figma.com/community/plugin/1219369440655168734/penpot-exporter"><b>Plugin in Figma community</b></a>
+    <a href="https://www.figma.com/community/plugin/1219369440655168734/penpot-exporter"><b>Plugin in Figma community</b></a>
 </p>
 
-<p align="center">
-  <img src="https://user-images.githubusercontent.com/1045247/198583387-5c243c18-8ca9-4b66-9c91-6a30c8787bcc.jpg" alt="Help us">
-</p>
+<br />
 
-https://github.com/penpot/penpot-exporter-figma-plugin/assets/165997885/44208d17-1ca0-4fe8-a541-4e68a24ee554
+[Penpot Exporter video](https://github.com/penpot/penpot-exporter-figma-plugin/assets/165997885/44208d17-1ca0-4fe8-a541-4e68a24ee554)
+
+<br />
 
 ## Table of contents
 
@@ -106,7 +99,7 @@ Follow the same steps as above, but instead of running `npm run build`, run `npm
 Figma, open Figma and go to the `Plugins` menu. Select `Development` and then choose
 `Import plugin from manifest…`.
 
-<img src="resources/Import plugin from manifest.png" alt='Screenshot of the Plugins > Development menus open showing the, "Import plugin from manifest" option.'>
+<img src="resources/import-plugin-from-manifest.png" alt='Screenshot of the Plugins > Development menus open showing the, "Import plugin from manifest" option.'>
 
 Select the `manifest.json` file that is located in the folder where you extracted the source code
 for the plugin.
@@ -153,6 +146,7 @@ Things that are currently included in the import are:
 - **Components, Components sets and Component instances**
 - **Auto Layouts**
 - **Color and Typography libraries**
+- **Variants**
 
 ## Limitations
 
