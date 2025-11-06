@@ -72,7 +72,6 @@ export const useFigma = (): UseFigmaHook => {
         break;
       }
       case 'PENPOT_DOCUMENT': {
-        // Store missing fonts from the document
         if (pluginMessage.data.missingFonts) {
           setMissingFonts(pluginMessage.data.missingFonts);
         }
@@ -99,7 +98,7 @@ export const useFigma = (): UseFigmaHook => {
 
         setExportedBlob({ blob, filename });
 
-        // get size of the file in Mb rounded to 2 decimal places
+        // Get size of the file in Mb rounded to 2 decimal places
         const size = Math.round((blob.size / 1024 / 1024) * 100) / 100;
         track('File Exported', { 'Exported File Size': size + ' Mb' });
 
