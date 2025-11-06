@@ -8,9 +8,8 @@ import { parse } from '@ui/parser';
 
 export type UseFigmaHook = {
   missingFonts: string[] | undefined;
-  needsReload: boolean;
-  loading: boolean;
   exporting: boolean;
+  summary: boolean;
   error: boolean;
   step: Steps | undefined;
   progress: {
@@ -19,9 +18,10 @@ export type UseFigmaHook = {
     processedItems: number;
   };
   progressPercentage: number;
-  reload: () => void;
+  exportedBlob: { blob: Blob; filename: string } | null;
   cancel: () => void;
   exportPenpot: (data: FormValues) => void;
+  downloadBlob: () => void;
 };
 
 export type Steps =
@@ -38,10 +38,10 @@ export type Steps =
 
 export const useFigma = (): UseFigmaHook => {
   const [missingFonts, setMissingFonts] = useState<string[]>();
-  const [needsReload, setNeedsReload] = useState(false);
-  const [loading, setLoading] = useState(true);
   const [exporting, setExporting] = useState(false);
+  const [summary, setSummary] = useState(false);
   const [error, setError] = useState(false);
+  const [exportedBlob, setExportedBlob] = useState<{ blob: Blob; filename: string } | null>(null);
 
   const [step, setStep] = useState<Steps>();
   const [progress, setProgress] = useState<{
@@ -72,6 +72,11 @@ export const useFigma = (): UseFigmaHook => {
         break;
       }
       case 'PENPOT_DOCUMENT': {
+        // Store missing fonts from the document
+        if (pluginMessage.data.missingFonts) {
+          setMissingFonts(pluginMessage.data.missingFonts);
+        }
+
         const context = await parse(pluginMessage.data);
 
         sendMessage({
@@ -90,27 +95,17 @@ export const useFigma = (): UseFigmaHook => {
         });
 
         const blob = getBlob();
+        const filename = `${pluginMessage.data.name}.penpot`;
 
-        download(blob, `${pluginMessage.data.name}.penpot`);
+        setExportedBlob({ blob, filename });
 
         // get size of the file in Mb rounded to 2 decimal places
         const size = Math.round((blob.size / 1024 / 1024) * 100) / 100;
         track('File Exported', { 'Exported File Size': size + ' Mb' });
 
         setExporting(false);
+        setSummary(true);
         setStep(undefined);
-
-        break;
-      }
-      case 'CUSTOM_FONTS': {
-        setMissingFonts(pluginMessage.data);
-        setLoading(false);
-        setNeedsReload(false);
-
-        break;
-      }
-      case 'CHANGES_DETECTED': {
-        setNeedsReload(true);
 
         break;
       }
@@ -153,7 +148,6 @@ export const useFigma = (): UseFigmaHook => {
       }
       case 'ERROR': {
         setError(true);
-        setLoading(false);
         setExporting(false);
         track('Error', { 'Error Message': pluginMessage.data });
 
@@ -170,15 +164,19 @@ export const useFigma = (): UseFigmaHook => {
     a.download = name;
 
     a.click();
+
+    window.URL.revokeObjectURL(url);
   };
 
-  const reload = (): void => {
-    setLoading(true);
-    setError(false);
-    postMessage('reload');
+  const downloadBlob = (): void => {
+    if (exportedBlob) {
+      download(exportedBlob.blob, exportedBlob.filename);
+    }
   };
 
   const cancel = (): void => {
+    setSummary(false);
+    setExportedBlob(null);
     postMessage('cancel');
   };
 
@@ -206,15 +204,15 @@ export const useFigma = (): UseFigmaHook => {
 
   return {
     missingFonts,
-    needsReload,
-    loading,
     exporting,
+    summary,
     error,
     step,
     progress,
     progressPercentage,
-    reload,
+    exportedBlob,
     cancel,
-    exportPenpot
+    exportPenpot,
+    downloadBlob
   };
 };

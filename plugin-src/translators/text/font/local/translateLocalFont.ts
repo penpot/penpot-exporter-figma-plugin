@@ -22,10 +22,6 @@ export const translateLocalFont = (
   };
 };
 
-export const isLocalFont = (fontName: FontName | undefined): boolean => {
-  return getLocalFont(fontName) !== undefined;
-};
-
 const getLocalFont = (fontName: FontName | undefined): LocalFont | undefined => {
   if (!fontName) return;
 
