@@ -1,4 +1,4 @@
-<img style="width:100px" src="resources/penpot-exporter.jpeg" alt="Penpot Exporter">
+<img src="resources/penpot-exporter.jpeg" alt="Penpot Exporter">
 
 <p align="center">
     <a href="https://www.mozilla.org/en-US/MPL/2.0" rel="nofollow"><img alt="License: MPL-2.0" src="https://img.shields.io/badge/MPL-2.0-blue.svg" style="max-width:100%;"></a>
