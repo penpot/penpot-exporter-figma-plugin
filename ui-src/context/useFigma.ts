@@ -19,6 +19,7 @@ export type UseFigmaHook = {
   };
   progressPercentage: number;
   exportedBlob: { blob: Blob; filename: string } | null;
+  retry: () => void;
   cancel: () => void;
   exportPenpot: (data: FormValues) => void;
   downloadBlob: () => void;
@@ -68,6 +69,24 @@ export const useFigma = (): UseFigmaHook => {
       case 'USER_DATA': {
         identify({ userId: pluginMessage.data.userId });
         track('Plugin Loaded');
+
+        break;
+      }
+      case 'RELOAD': {
+        setMissingFonts(undefined);
+        setExporting(false);
+        setSummary(false);
+        setError(false);
+        setExportedBlob(null);
+        setStep(undefined);
+        setProgress({
+          currentItem: undefined,
+          totalItems: 0,
+          processedItems: 0
+        });
+        setProgressPercentage(0);
+
+        track('Plugin Reloaded');
 
         break;
       }
@@ -165,6 +184,8 @@ export const useFigma = (): UseFigmaHook => {
     a.click();
 
     window.URL.revokeObjectURL(url);
+
+    track('File Downloaded');
   };
 
   const downloadBlob = (): void => {
@@ -173,9 +194,17 @@ export const useFigma = (): UseFigmaHook => {
     }
   };
 
+  const retry = (): void => {
+    track('Plugin Retry');
+
+    postMessage('retry');
+  };
+
   const cancel = (): void => {
-    setSummary(false);
     setExportedBlob(null);
+
+    track('Plugin Closed');
+
     postMessage('cancel');
   };
 
@@ -187,6 +216,8 @@ export const useFigma = (): UseFigmaHook => {
       totalItems: prev.totalItems,
       processedItems: 0
     }));
+
+    track('File Export Started');
 
     postMessage('export');
   };
@@ -210,6 +241,7 @@ export const useFigma = (): UseFigmaHook => {
     progress,
     progressPercentage,
     exportedBlob,
+    retry,
     cancel,
     exportPenpot,
     downloadBlob
