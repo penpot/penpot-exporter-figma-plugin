@@ -1,11 +1,4 @@
-import {
-  Banner,
-  Button,
-  IconInfo16,
-  IconInfoSmall24,
-  IconWarning16,
-  Link
-} from '@create-figma-plugin/ui';
+import { Banner, Button, IconInfo16, IconInfoSmall24, Link } from '@create-figma-plugin/ui';
 import type { JSX } from 'preact';
 
 import { Stack } from '@ui/components/Stack';
@@ -20,16 +13,13 @@ export const ExportSummary = (): JSX.Element | null => {
 
   const fileSizeMB = (exportedBlob.blob.size / (1024 * 1024)).toFixed(2);
   const hasMissingFonts = missingFonts && missingFonts.length > 0;
-  const isLargeFile = parseFloat(fileSizeMB) > 150;
 
   return (
     <Stack space="medium">
-      {/* Success Banner */}
       <Banner icon={<IconInfoSmall24 />} variant="success">
         Export completed successfully! 🎉
       </Banner>
 
-      {/* File Information */}
       <Stack space="xsmall">
         <div style={{ fontSize: '13px' }}>
           <strong>{exportedBlob.filename}</strong>
@@ -39,14 +29,6 @@ export const ExportSummary = (): JSX.Element | null => {
         </div>
       </Stack>
 
-      {/* Large File Warning */}
-      {isLargeFile && (
-        <Banner icon={<IconWarning16 />} variant="warning">
-          This is a large file ({fileSizeMB} MB). Download it soon to free up browser memory.
-        </Banner>
-      )}
-
-      {/* Missing Fonts Warning */}
       {hasMissingFonts && (
         <Stack space="xsmall">
           <Banner icon={<IconInfo16 />} variant="warning">
@@ -68,7 +50,6 @@ export const ExportSummary = (): JSX.Element | null => {
         </Stack>
       )}
 
-      {/* Download Instructions */}
       <div style={{ fontSize: '11px', color: 'var(--figma-color-text-secondary)' }}>
         Download your file and import it into Penpot via{' '}
         <strong>Projects → Import Penpot file</strong>.{' '}
@@ -80,7 +61,6 @@ export const ExportSummary = (): JSX.Element | null => {
         </Link>
       </div>
 
-      {/* Action Buttons */}
       <Stack space="xsmall" direction="row">
         <Button fullWidth onClick={downloadBlob}>
           Download File
