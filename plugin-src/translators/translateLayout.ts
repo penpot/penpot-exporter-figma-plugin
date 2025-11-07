@@ -1,9 +1,12 @@
 import type {
+  GridTrack,
   JustifyAlignContent,
   JustifyAlignItems,
   LayoutAlignSelf,
   LayoutFlexDir,
   LayoutGap,
+  LayoutGridDir,
+  LayoutMode,
   LayoutPadding,
   LayoutSizing,
   LayoutWrapType
@@ -13,6 +16,31 @@ type FigmaLayoutSizing = 'FIXED' | 'HUG' | 'FILL';
 
 type FigmaLayoutAlign = 'MIN' | 'CENTER' | 'MAX' | 'STRETCH' | 'INHERIT';
 
+export const translateLayoutMode = (
+  layoutMode: AutoLayoutMixin['layoutMode']
+): LayoutMode | undefined => {
+  switch (layoutMode) {
+    case 'HORIZONTAL':
+    case 'VERTICAL':
+      return 'flex';
+    case 'GRID':
+      return 'grid';
+    default:
+      return;
+  }
+};
+
+export const translateLayoutGridDir = (
+  layoutMode: AutoLayoutMixin['layoutMode']
+): LayoutGridDir | undefined => {
+  switch (layoutMode) {
+    case 'GRID':
+      return 'row';
+    default:
+      return;
+  }
+};
+
 export const translateLayoutFlexDir = (
   layoutMode: AutoLayoutMixin['layoutMode']
 ): LayoutFlexDir | undefined => {
@@ -21,7 +49,6 @@ export const translateLayoutFlexDir = (
       return 'row-reverse';
     case 'VERTICAL':
       return 'column-reverse';
-    case 'GRID':
     default:
       return;
   }
@@ -168,4 +195,15 @@ export const translateLayoutItemAlignSelf = (align: FigmaLayoutAlign): LayoutAli
     default:
       return 'stretch';
   }
+};
+
+const translateGridTrack = (gridTrack: GridTrackSize): GridTrack => {
+  return {
+    type: gridTrack.type === 'FLEX' ? 'flex' : 'fixed',
+    value: gridTrack.value
+  };
+};
+
+export const translateGridTracks = (tracks: GridTrackSize[]): GridTrack[] => {
+  return tracks.map(translateGridTrack);
 };

@@ -1,11 +1,14 @@
 import {
+  translateGridTracks,
   translateLayoutAlignContent,
   translateLayoutAlignItems,
   translateLayoutFlexDir,
   translateLayoutGap,
+  translateLayoutGridDir,
   translateLayoutItemAlignSelf,
   translateLayoutJustifyContent,
   translateLayoutJustifyItems,
+  translateLayoutMode,
   translateLayoutPadding,
   translateLayoutPaddingType,
   translateLayoutSizing,
@@ -15,8 +18,9 @@ import {
 import type { LayoutAttributes, LayoutChildAttributes } from '@ui/lib/types/shapes/layout';
 
 export const transformAutoLayout = (node: BaseFrameMixin): LayoutAttributes => {
+  console.log('node', node.gridRowSizes);
   return {
-    layout: node.layoutMode !== 'NONE' ? 'flex' : undefined,
+    layout: translateLayoutMode(node.layoutMode),
     layoutFlexDir: translateLayoutFlexDir(node.layoutMode),
     layoutGap: translateLayoutGap(node),
     layoutWrapType: translateLayoutWrapType(node.layoutWrap),
@@ -25,7 +29,10 @@ export const transformAutoLayout = (node: BaseFrameMixin): LayoutAttributes => {
     layoutJustifyContent: translateLayoutJustifyContent(node),
     layoutJustifyItems: translateLayoutJustifyItems(node),
     layoutAlignContent: translateLayoutAlignContent(node),
-    layoutAlignItems: translateLayoutAlignItems(node)
+    layoutAlignItems: translateLayoutAlignItems(node),
+    layoutGridDir: translateLayoutGridDir(node.layoutMode),
+    layoutGridRows: translateGridTracks(node.gridRowSizes),
+    layoutGridColumns: translateGridTracks(node.gridColumnSizes)
   };
 };
 

@@ -42,6 +42,8 @@ export type LayoutFlexDir =
   | 'reverse-column'
   | 'column-reverse';
 
+export type LayoutGridDir = 'row' | 'column';
+
 export type LayoutGap = {
   rowGap?: number;
   columnGap?: number;
@@ -56,8 +58,10 @@ export type LayoutPadding = {
   p4?: number;
 };
 
+export type LayoutMode = 'flex' | 'grid';
+
 export type LayoutAttributes = {
-  layout?: 'flex' | 'grid';
+  layout?: LayoutMode;
   layoutFlexDir?: LayoutFlexDir;
   layoutGap?: LayoutGap;
   layoutGapType?: 'simple' | 'multiple';
@@ -68,13 +72,13 @@ export type LayoutAttributes = {
   layoutJustifyItems?: JustifyAlignItems;
   layoutAlignContent?: JustifyAlignContent;
   layoutAlignItems?: JustifyAlignItems;
-  layoutGridDir?: 'row' | 'column';
+  layoutGridDir?: LayoutGridDir;
   layoutGridRows?: GridTrack[];
   layoutGridColumns?: GridTrack[];
   layoutGridCells?: { [uuid: Uuid]: GridCell };
 };
 
-type GridTrack = {
+export type GridTrack = {
   type: 'percent' | 'flex' | 'auto' | 'fixed';
   value?: number;
 };
