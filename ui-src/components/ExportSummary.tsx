@@ -1,4 +1,4 @@
-import { Banner, Button, IconInfoSmall24, Link } from '@create-figma-plugin/ui';
+import { Banner, Button, IconInfoSmall24, Link, Muted } from '@create-figma-plugin/ui';
 import type { JSX } from 'preact';
 
 import { Stack } from '@ui/components/Stack';
@@ -20,13 +20,9 @@ export const ExportSummary = (): JSX.Element | null => {
         <strong>Export completed successfully! 🎉</strong>
       </Banner>
 
-      <Stack space="xsmall">
-        <div style={{ fontSize: '13px' }}>
-          <strong>{exportedBlob.filename}</strong>
-        </div>
-        <div style={{ fontSize: '11px', color: 'var(--figma-color-text-secondary)' }}>
-          File size: {fileSizeInMB(exportedBlob.blob.size)}
-        </div>
+      <Stack space="2xsmall">
+        <strong style={{ fontSize: 13 }}>{exportedBlob.filename}</strong>
+        <Muted>File size: {fileSizeInMB(exportedBlob.blob.size)}</Muted>
       </Stack>
 
       {hasMissingFonts && (
@@ -35,22 +31,22 @@ export const ExportSummary = (): JSX.Element | null => {
             <strong>
               {missingFonts.length} custom font{missingFonts.length > 1 ? 's' : ''} detected
             </strong>
-            <ul style={{ paddingLeft: 20, margin: '4px 0 0 0' }}>
+            <ul style={{ paddingLeft: '1.25rem', marginTop: '0.25rem' }}>
               {missingFonts.map(font => (
                 <li key={font}>{font}</li>
               ))}
             </ul>
           </Banner>
-          <div style={{ fontSize: '11px', color: 'var(--figma-color-text-secondary)' }}>
+          <Muted>
             To use these fonts in Penpot, you&apos;ll need to upload them first.{' '}
             <Link href="https://help.penpot.app/user-guide/custom-fonts/" target="_blank">
               Learn how →
             </Link>
-          </div>
+          </Muted>
         </Stack>
       )}
 
-      <div style={{ fontSize: '11px', color: 'var(--figma-color-text-secondary)' }}>
+      <Muted>
         Download your file and import it into Penpot via{' '}
         <strong>Projects → Import Penpot file</strong>.{' '}
         <Link
@@ -59,7 +55,7 @@ export const ExportSummary = (): JSX.Element | null => {
         >
           Learn more →
         </Link>
-      </div>
+      </Muted>
 
       <Stack space="xsmall" direction="row">
         <Button fullWidth onClick={downloadBlob}>

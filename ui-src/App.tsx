@@ -47,7 +47,6 @@ export const App = (): JSX.Element => {
                   backgroundColor: '#ff6b35',
                   color: 'white',
                   borderRadius: '0.25rem',
-                  fontSize: '0.75rem',
                   fontWeight: 'bold'
                 }}
               >
