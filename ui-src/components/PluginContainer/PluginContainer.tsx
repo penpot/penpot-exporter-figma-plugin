@@ -1,15 +1,13 @@
-import type { CSSProperties } from 'preact';
 import { type PropsWithChildren, forwardRef } from 'preact/compat';
 
-type PluginContainerProps = PropsWithChildren & {
-  style?: CSSProperties;
+type PluginContainerProps = PropsWithChildren<{
   overflowing?: boolean;
-};
+}>;
 
 const PluginContainer = forwardRef<HTMLDivElement, PluginContainerProps>(
-  ({ style, overflowing = false, children }: PluginContainerProps, ref) => {
+  ({ overflowing = false, children }, ref) => {
     return (
-      <div ref={ref} style={style} data-overflowing={overflowing}>
+      <div ref={ref} data-overflowing={overflowing}>
         {children}
       </div>
     );

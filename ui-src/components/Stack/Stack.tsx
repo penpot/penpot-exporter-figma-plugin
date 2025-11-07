@@ -4,13 +4,13 @@ import type { PropsWithChildren } from 'preact/compat';
 
 import styles from './Stack.module.css';
 
-type StackProps = PropsWithChildren & {
+type StackProps = PropsWithChildren<{
   space?: 'medium' | 'small' | 'xsmall' | '2xsmall';
   direction?: 'column' | 'row';
   horizontalAlign?: 'start' | 'center';
   style?: CSSProperties;
   as?: 'div' | 'ol';
-};
+}>;
 
 export const Stack = ({
   space = 'medium',
