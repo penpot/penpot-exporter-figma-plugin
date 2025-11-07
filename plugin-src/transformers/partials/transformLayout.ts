@@ -1,4 +1,5 @@
 import {
+  translateGridCells,
   translateGridTracks,
   translateLayoutAlignContent,
   translateLayoutAlignItems,
@@ -18,7 +19,6 @@ import {
 import type { LayoutAttributes, LayoutChildAttributes } from '@ui/lib/types/shapes/layout';
 
 export const transformAutoLayout = (node: BaseFrameMixin): LayoutAttributes => {
-  console.log('node', node.gridRowSizes);
   return {
     layout: translateLayoutMode(node.layoutMode),
     layoutFlexDir: translateLayoutFlexDir(node.layoutMode),
@@ -32,7 +32,8 @@ export const transformAutoLayout = (node: BaseFrameMixin): LayoutAttributes => {
     layoutAlignItems: translateLayoutAlignItems(node),
     layoutGridDir: translateLayoutGridDir(node.layoutMode),
     layoutGridRows: translateGridTracks(node.gridRowSizes),
-    layoutGridColumns: translateGridTracks(node.gridColumnSizes)
+    layoutGridColumns: translateGridTracks(node.gridColumnSizes),
+    layoutGridCells: translateGridCells(node)
   };
 };
 

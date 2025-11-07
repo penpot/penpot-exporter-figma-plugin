@@ -1,4 +1,7 @@
+import { generateUuid } from '@plugin/utils/generateUuid';
+
 import type {
+  GridCell,
   GridTrack,
   JustifyAlignContent,
   JustifyAlignItems,
@@ -11,6 +14,7 @@ import type {
   LayoutSizing,
   LayoutWrapType
 } from '@ui/lib/types/shapes/layout';
+import type { Uuid } from '@ui/lib/types/utils/uuid';
 
 type FigmaLayoutSizing = 'FIXED' | 'HUG' | 'FILL';
 
@@ -206,4 +210,32 @@ const translateGridTrack = (gridTrack: GridTrackSize): GridTrack => {
 
 export const translateGridTracks = (tracks: GridTrackSize[]): GridTrack[] => {
   return tracks.map(translateGridTrack);
+};
+
+export const translateGridCell = (id: string, row: number, column: number): GridCell => {
+  return {
+    alignSelf: 'auto',
+    column,
+    columnSpan: 1,
+    id,
+    justifySelf: 'auto',
+    position: 'auto',
+    row,
+    rowSpan: 1,
+    shapes: []
+  };
+};
+
+export const translateGridCells = (node: BaseFrameMixin): { [uuid: Uuid]: GridCell } => {
+  const acc: { [uuid: Uuid]: GridCell } = {};
+
+  for (let row = 1; row <= node.gridRowSizes.length; row++) {
+    for (let column = 1; column <= node.gridColumnSizes.length; column++) {
+      const id = generateUuid();
+
+      acc[id] = translateGridCell(id, row, column);
+    }
+  }
+
+  return acc;
 };
