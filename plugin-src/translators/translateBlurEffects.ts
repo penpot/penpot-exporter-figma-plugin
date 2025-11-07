@@ -1,4 +1,4 @@
-import { generateUuid } from '@plugin/utils/generateUuid';
+import { generateUuid } from '@plugin/utils';
 
 import type { Blur } from '@ui/lib/types/utils/blur';
 
