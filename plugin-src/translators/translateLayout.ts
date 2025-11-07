@@ -27,18 +27,38 @@ export const translateLayoutFlexDir = (
   }
 };
 
-export const translateLayoutGap = (itemSpacing: number, auto: boolean = false): LayoutGap => {
-  if (auto) {
+export const translateLayoutGap = (node: BaseFrameMixin): LayoutGap | undefined => {
+  if (node.layoutMode === 'NONE') return;
+
+  if (node.layoutMode === 'GRID') {
     return {
-      rowGap: 0,
-      columnGap: 0
+      rowGap: node.gridRowGap,
+      columnGap: node.gridColumnGap
     };
   }
 
-  return {
-    rowGap: itemSpacing,
-    columnGap: itemSpacing
-  };
+  const primaryAxisSpacing = node.primaryAxisAlignItems === 'SPACE_BETWEEN' ? 0 : node.itemSpacing;
+
+  const counterAxisSpacing =
+    node.layoutWrap === 'WRAP'
+      ? node.counterAxisAlignContent === 'SPACE_BETWEEN'
+        ? 0
+        : (node.counterAxisSpacing ?? undefined)
+      : 0;
+
+  if (node.layoutMode === 'HORIZONTAL') {
+    return {
+      rowGap: counterAxisSpacing,
+      columnGap: primaryAxisSpacing
+    };
+  }
+
+  if (node.layoutMode === 'VERTICAL') {
+    return {
+      rowGap: primaryAxisSpacing,
+      columnGap: counterAxisSpacing
+    };
+  }
 };
 
 export const translateLayoutWrapType = (wrap: AutoLayoutMixin['layoutWrap']): LayoutWrapType => {
@@ -77,8 +97,6 @@ export const translateLayoutJustifyContent = (node: BaseFrameMixin): JustifyAlig
       return 'end';
     case 'SPACE_BETWEEN':
       return 'space-between';
-    default:
-      return 'stretch';
   }
 };
 
@@ -96,6 +114,10 @@ export const translateLayoutJustifyItems = (node: BaseFrameMixin): JustifyAlignI
 };
 
 export const translateLayoutAlignContent = (node: BaseFrameMixin): JustifyAlignContent => {
+  if (node.counterAxisAlignContent === 'SPACE_BETWEEN') {
+    return 'space-between';
+  }
+
   switch (node.counterAxisAlignItems) {
     case 'MIN':
       return 'start';
