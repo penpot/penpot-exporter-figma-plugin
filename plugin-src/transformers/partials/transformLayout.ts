@@ -18,7 +18,7 @@ export const transformAutoLayout = (node: BaseFrameMixin): LayoutAttributes => {
   return {
     layout: node.layoutMode !== 'NONE' ? 'flex' : undefined,
     layoutFlexDir: translateLayoutFlexDir(node.layoutMode),
-    layoutGap: translateLayoutGap(node.itemSpacing, node.primaryAxisAlignItems === 'SPACE_BETWEEN'),
+    layoutGap: translateLayoutGap(node),
     layoutWrapType: translateLayoutWrapType(node.layoutWrap),
     layoutPadding: translateLayoutPadding(node),
     layoutPaddingType: translateLayoutPaddingType(node),
