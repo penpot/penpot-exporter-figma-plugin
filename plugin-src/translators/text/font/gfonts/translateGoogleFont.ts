@@ -27,10 +27,6 @@ export const translateGoogleFont = (
   };
 };
 
-export const isGoogleFont = (fontName: FontName | undefined): boolean => {
-  return getGoogleFont(fontName) !== undefined;
-};
-
 const getGoogleFont = (fontName: FontName | undefined): GoogleFont | undefined => {
   if (!fontName) return;
 
