@@ -1,7 +1,7 @@
 import type { PenpotContext } from '@ui/lib/types/penpotContext';
 import type { Paragraph, TextContent, TextNode, TextShape } from '@ui/lib/types/shapes/textShape';
 import { parseFigmaId, typographies } from '@ui/parser';
-import { symbolBlur, symbolFills, symbolStrokes, symbolTouched } from '@ui/parser/creators/symbols';
+import { symbolFills, symbolStrokes, symbolTouched } from '@ui/parser/creators/symbols';
 
 export const createText = (
   context: PenpotContext,
@@ -11,7 +11,6 @@ export const createText = (
   shape.shapeRef = parseFigmaId(context, figmaRelatedId);
   shape.content = parseContent(context, shape.content);
   shape.strokes = symbolStrokes(context, shape.strokes);
-  shape.blur = symbolBlur(context, shape.blur);
   shape.touched = symbolTouched(
     !shape.hidden,
     characters,
