@@ -26,6 +26,8 @@ import type { ComponentRoot } from '@ui/types';
 export const transformComponentNode = async (node: ComponentNode): Promise<ComponentRoot> => {
   const isVariant = node.parent?.type === 'COMPONENT_SET';
 
+  const variantId = isVariant ? transformId(node.parent) : undefined;
+
   const component: ComponentShape = {
     type: 'component',
     showContent: !node.clipsContent,
@@ -44,7 +46,7 @@ export const transformComponentNode = async (node: ComponentNode): Promise<Compo
     ...transformRotationAndPosition(node),
     ...transformConstraints(node),
     ...transformAutoLayout(node),
-    ...(isVariant ? transformVariantNameAndProperties(node) : {})
+    ...(isVariant ? transformVariantNameAndProperties(node, variantId!) : {})
   };
 
   components.set(component.id, component);
@@ -57,6 +59,6 @@ export const transformComponentNode = async (node: ComponentNode): Promise<Compo
     type: 'component',
     name: node.name,
     id: component.id,
-    variantId: isVariant ? transformId(node.parent) : undefined
+    variantId
   };
 };
