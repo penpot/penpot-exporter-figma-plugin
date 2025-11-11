@@ -49,7 +49,7 @@ export const transformInstanceNode = async (
     type: 'instance',
     name: node.name,
     mainComponentId: transformId(mainComponent),
-    isComponentRoot: isComponentRoot(node),
+    componentRoot: isComponentRoot(node),
     showContent: !node.clipsContent,
     isOrphan,
     ...transformIds(node),

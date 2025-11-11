@@ -9,9 +9,9 @@ import type { Children } from '@ui/lib/types/utils/children';
 import type { Uuid } from '@ui/lib/types/utils/uuid';
 
 export type ComponentRoot = {
-  type: 'component';
   name: string;
-  id: Uuid;
+  componentId: Uuid;
+  frameId: Uuid;
   variantId?: Uuid;
 };
 
@@ -29,7 +29,7 @@ export type ComponentInstance = ShapeBaseAttributes &
   LayoutChildAttributes &
   Children & {
     mainComponentId: string;
-    isComponentRoot: boolean;
+    componentRoot: boolean;
     showContent?: boolean;
     isOrphan: boolean;
     type: 'instance';
@@ -37,8 +37,10 @@ export type ComponentInstance = ShapeBaseAttributes &
 
 export type UiComponent = {
   componentId: Uuid;
-  mainInstancePage?: Uuid;
-  mainInstanceId: Uuid;
+  name: string;
+  pageId?: Uuid;
+  fileId?: Uuid;
+  frameId: Uuid;
   variantId?: string;
   variantProperties?: VariantProperty[];
   path?: string;

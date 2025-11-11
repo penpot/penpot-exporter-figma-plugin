@@ -19,18 +19,21 @@ import {
   transformStrokes,
   transformVariantNameAndProperties
 } from '@plugin/transformers/partials';
+import { generateUuid } from '@plugin/utils';
 
 import type { ComponentShape } from '@ui/lib/types/shapes/componentShape';
-import type { ComponentRoot } from '@ui/types';
 
-export const transformComponentNode = async (node: ComponentNode): Promise<ComponentRoot> => {
+export const transformComponentNode = async (node: ComponentNode): Promise<ComponentShape> => {
   const isVariant = node.parent?.type === 'COMPONENT_SET';
-
   const variantId = isVariant ? transformId(node.parent) : undefined;
 
   const component: ComponentShape = {
     type: 'component',
     showContent: !node.clipsContent,
+    componentId: generateUuid(),
+    componentRoot: true,
+    mainInstance: true,
+    variantId,
     ...transformComponentNameAndPath(node),
     ...transformIds(node),
     ...transformFills(node),
@@ -49,16 +52,18 @@ export const transformComponentNode = async (node: ComponentNode): Promise<Compo
     ...(isVariant ? transformVariantNameAndProperties(node, variantId!) : {})
   };
 
-  components.set(component.id, component);
+  const nameSplit = component.name.split(' / ');
+
+  components.set(component.id, {
+    name: nameSplit[nameSplit.length - 1],
+    componentId: component.componentId!,
+    frameId: component.id,
+    variantId
+  });
 
   if (!isVariant) {
     registerComponentProperties(node);
   }
 
-  return {
-    type: 'component',
-    name: node.name,
-    id: component.id,
-    variantId
-  };
+  return component;
 };

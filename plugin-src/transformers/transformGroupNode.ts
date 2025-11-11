@@ -22,7 +22,7 @@ export const transformGroupNode = async (node: GroupNode): Promise<GroupShape> =
   };
 };
 
-export const transformGroupNodeLike = (node: SceneNode): GroupShape => {
+export const transformGroupNodeLike = (node: SceneNode): Omit<GroupShape, 'id' | 'shapeRef'> => {
   return {
     type: 'group',
     name: node.name,

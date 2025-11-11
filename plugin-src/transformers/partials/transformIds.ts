@@ -59,3 +59,16 @@ export const transformMaskIds = (node: SceneNode): Pick<ShapeBaseAttributes, 'id
     shapeRef: relatedNodeId ? parseFigmaId(`M${relatedNodeId}`) : undefined
   };
 };
+
+export const transformVectorIds = (
+  node: SceneNode,
+  index: number
+): Pick<ShapeBaseAttributes, 'id' | 'shapeRef'> => {
+  const normalizedId = normalizeNodeId(node.id);
+  const relatedNodeId = getRelatedNodeId(node.id);
+
+  return {
+    id: parseFigmaId(`V${index}${normalizedId}`),
+    shapeRef: relatedNodeId ? parseFigmaId(`V${index}${relatedNodeId}`) : undefined
+  };
+};
