@@ -8,6 +8,8 @@
  */
 import { v4 as uuidv4 } from 'uuid';
 
+import type { Uuid } from '@ui/lib/types/utils/uuid';
+
 /**
  * Custom random number generator for uuid library
  * Uses Math.random() instead of crypto.getRandomValues()
@@ -20,6 +22,6 @@ const customRandom = (): Uint8Array => {
   return bytes;
 };
 
-export const generateUuid = (): string => {
+export const generateUuid = (): Uuid => {
   return uuidv4({ random: customRandom() });
 };
