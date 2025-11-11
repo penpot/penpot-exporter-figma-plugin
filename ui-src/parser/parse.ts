@@ -3,7 +3,7 @@ import { createBuildContext } from '@penpot/library';
 import { init } from '@common/map';
 
 import type { PenpotContext } from '@ui/lib/types/penpotContext';
-import { componentProperties, componentShapes, variantProperties } from '@ui/parser';
+import { componentProperties, componentRoots, variantProperties } from '@ui/parser';
 import {
   buildFile,
   registerColorLibraries,
@@ -22,7 +22,7 @@ export const parse = async ({
   componentProperties: recordComponentProperties,
   variantProperties: recordVariantProperties
 }: PenpotDocument): Promise<PenpotContext> => {
-  init(componentShapes, components);
+  init(componentRoots, components);
   init(componentProperties, recordComponentProperties);
   init(variantProperties, recordVariantProperties);
 

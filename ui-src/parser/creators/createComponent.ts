@@ -1,49 +1,36 @@
 import type { PenpotContext } from '@ui/lib/types/penpotContext';
-import type { Uuid } from '@ui/lib/types/utils/uuid';
-import { componentShapes, components, parseFigmaId } from '@ui/parser';
+import type { ComponentShape } from '@ui/lib/types/shapes/componentShape';
+import { componentRoots, components } from '@ui/parser';
 import { createArtboard } from '@ui/parser/creators';
 import { symbolVariantProperties } from '@ui/parser/creators/symbols';
-import type { ComponentRoot } from '@ui/types';
+import type { UiComponent } from '@ui/types';
 
 export const createComponent = (
   context: PenpotContext,
-  { figmaId, figmaVariantId }: ComponentRoot
+  { type: _type, path, variantProperties, ...shape }: ComponentShape
 ): void => {
-  const componentShape = componentShapes.get(figmaId);
+  const componentRoot = componentRoots.get(shape.id);
 
-  if (!componentShape) {
+  if (!componentRoot) {
     return;
   }
 
-  const componentId = getComponentId(context, figmaId);
-  const { type: _type, path, variantProperties, ...shape } = componentShape;
-  const variantId = parseFigmaId(context, figmaVariantId);
+  const { componentId, frameId, name, variantId } = componentRoot;
+
+  const component: UiComponent = {
+    componentId,
+    frameId,
+    name,
+    variantId,
+    path,
+    pageId: context.currentPageId,
+    fileId: context.currentFileId,
+    variantProperties: symbolVariantProperties(variantProperties, variantId)
+  };
+
+  components.set(shape.id, component);
 
   shape.componentFile = context.currentFileId;
-  shape.componentId = componentId;
-  shape.componentRoot = true;
-  shape.mainInstance = true;
-  shape.variantId = variantId;
 
-  const frameId = createArtboard(context, shape);
-
-  if (!frameId) {
-    return;
-  }
-
-  components.set(figmaId, {
-    componentId,
-    path,
-    mainInstancePage: context.currentPageId,
-    componentFigmaId: figmaId,
-    mainInstanceId: frameId,
-    variantId,
-    variantProperties: symbolVariantProperties(variantProperties, figmaVariantId)
-  });
-};
-
-const getComponentId = (context: PenpotContext, figmaId: string): string | Uuid => {
-  const component = components.get(figmaId);
-
-  return component?.componentId ?? context.genId();
+  createArtboard(context, shape);
 };

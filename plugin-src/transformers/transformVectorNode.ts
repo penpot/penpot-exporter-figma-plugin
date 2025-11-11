@@ -1,7 +1,7 @@
 import { transformGroupNodeLike } from '@plugin/transformers';
 import {
   transformConstraints,
-  transformFigmaIds,
+  transformIds,
   transformOverrides,
   transformVectorPaths
 } from '@plugin/transformers/partials';
@@ -26,7 +26,7 @@ export const transformVectorNode = (node: VectorNode): GroupShape | PathShape | 
     return {
       ...children[0],
       name: node.name,
-      ...transformFigmaIds(node),
+      ...transformIds(node),
       ...transformConstraints(node),
       ...transformOverrides(node)
     };
@@ -34,7 +34,7 @@ export const transformVectorNode = (node: VectorNode): GroupShape | PathShape | 
 
   return {
     ...transformGroupNodeLike(node),
-    ...transformFigmaIds(node),
+    ...transformIds(node),
     ...transformConstraints(node),
     ...transformOverrides(node),
     children
