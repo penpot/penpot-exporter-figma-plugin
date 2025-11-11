@@ -1,4 +1,4 @@
-import { sleep } from '@common/sleep';
+import { yieldEvery } from '@common/sleep';
 
 import { sendMessage } from '@ui/context';
 import type { PenpotContext } from '@ui/lib/types/penpotContext';
@@ -7,7 +7,7 @@ import { components } from '@ui/parser';
 import { createComponentsLibrary, createPage } from '@ui/parser/creators';
 
 export const buildFile = async (context: PenpotContext, children: PenpotPage[]): Promise<void> => {
-  let pagesBuilt = 1;
+  let pagesBuilt = 0;
 
   components.clear();
 
@@ -24,12 +24,14 @@ export const buildFile = async (context: PenpotContext, children: PenpotPage[]):
   for (const page of children) {
     createPage(context, page);
 
+    pagesBuilt += 1;
+
     sendMessage({
       type: 'PROGRESS_PROCESSED_ITEMS',
-      data: pagesBuilt++
+      data: pagesBuilt
     });
 
-    await sleep(0);
+    await yieldEvery(pagesBuilt);
   }
 
   await createComponentsLibrary(context);

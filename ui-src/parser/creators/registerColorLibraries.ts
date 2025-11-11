@@ -1,4 +1,4 @@
-import { sleep } from '@common/sleep';
+import { yieldEvery } from '@common/sleep';
 
 import { sendMessage } from '@ui/context';
 import type { PenpotContext } from '@ui/lib/types/penpotContext';
@@ -14,7 +14,7 @@ export const registerColorLibraries = async (
 
   if (stylesToRegister.length === 0) return;
 
-  let stylesRegistered = 1;
+  let stylesRegistered = 0;
 
   sendMessage({
     type: 'PROGRESS_TOTAL_ITEMS',
@@ -47,11 +47,13 @@ export const registerColorLibraries = async (
 
     colors.set(key, fillStyle);
 
+    stylesRegistered += 1;
+
     sendMessage({
       type: 'PROGRESS_PROCESSED_ITEMS',
-      data: stylesRegistered++
+      data: stylesRegistered
     });
 
-    await sleep(0);
+    await yieldEvery(stylesRegistered);
   }
 };

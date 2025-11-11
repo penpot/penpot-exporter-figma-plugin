@@ -1,20 +1,21 @@
-import { sleep } from '@common/sleep';
+import { sleep, yieldEvery } from '@common/sleep';
 
 import { images } from '@plugin/libraries';
+import { flushProgress, reportProgress } from '@plugin/utils';
 
 export const processImages = async (): Promise<Record<string, Uint8Array<ArrayBuffer>>> => {
   const processedImages: Record<string, Uint8Array<ArrayBuffer>> = {};
 
   if (images.size === 0) return processedImages;
 
-  let currentImage = 1;
+  let processedImagesCount = 0;
 
-  figma.ui.postMessage({
+  reportProgress({
     type: 'PROGRESS_TOTAL_ITEMS',
     data: images.size
   });
 
-  figma.ui.postMessage({
+  reportProgress({
     type: 'PROGRESS_STEP',
     data: 'images'
   });
@@ -26,13 +27,17 @@ export const processImages = async (): Promise<Record<string, Uint8Array<ArrayBu
       processedImages[key] = bytes as Uint8Array<ArrayBuffer>;
     }
 
-    figma.ui.postMessage({
+    processedImagesCount += 1;
+
+    reportProgress({
       type: 'PROGRESS_PROCESSED_ITEMS',
-      data: currentImage++
+      data: processedImagesCount
     });
 
-    await sleep(0);
+    await yieldEvery(processedImagesCount);
   }
+
+  flushProgress();
 
   await sleep(20);
 

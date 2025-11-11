@@ -9,11 +9,16 @@ import {
   variantProperties
 } from '@plugin/libraries';
 import { transformDocumentNode } from '@plugin/transformers';
+import { flushProgress } from '@plugin/utils';
 
 export const handleExportMessage = async (): Promise<void> => {
+  const document = await transformDocumentNode(figma.root);
+
+  flushProgress();
+
   figma.ui.postMessage({
     type: 'PENPOT_DOCUMENT',
-    data: await transformDocumentNode(figma.root)
+    data: document
   });
 };
 

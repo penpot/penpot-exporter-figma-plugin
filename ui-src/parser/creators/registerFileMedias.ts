@@ -1,4 +1,4 @@
-import { sleep } from '@common/sleep';
+import { yieldEvery } from '@common/sleep';
 
 import { sendMessage } from '@ui/context';
 import type { PenpotContext } from '@ui/lib/types/penpotContext';
@@ -16,7 +16,7 @@ export const registerFileMedias = async (
 
   if (imagesToOptimize.length === 0) return;
 
-  let imagesOptimized = 1;
+  let imagesOptimized = 0;
 
   sendMessage({
     type: 'PROGRESS_TOTAL_ITEMS',
@@ -33,12 +33,14 @@ export const registerFileMedias = async (
       images.set(key, await registerFileMedia(context, key, bytes));
     }
 
+    imagesOptimized += 1;
+
     sendMessage({
       type: 'PROGRESS_PROCESSED_ITEMS',
-      data: imagesOptimized++
+      data: imagesOptimized
     });
 
-    await sleep(0);
+    await yieldEvery(imagesOptimized);
   }
 };
 

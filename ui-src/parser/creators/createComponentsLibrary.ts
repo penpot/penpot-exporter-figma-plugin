@@ -1,4 +1,4 @@
-import { sleep } from '@common/sleep';
+import { yieldEvery } from '@common/sleep';
 
 import { sendMessage } from '@ui/context';
 import type { PenpotContext } from '@ui/lib/types/penpotContext';
@@ -7,7 +7,7 @@ import { componentRoots, components } from '@ui/parser';
 import type { UiComponent } from '@ui/types';
 
 export const createComponentsLibrary = async (context: PenpotContext): Promise<void> => {
-  let componentsBuilt = 1;
+  let componentsBuilt = 0;
 
   sendMessage({
     type: 'PROGRESS_TOTAL_ITEMS',
@@ -22,12 +22,14 @@ export const createComponentsLibrary = async (context: PenpotContext): Promise<v
   for (const [_, component] of components.entries()) {
     createComponentLibrary(context, component);
 
+    componentsBuilt += 1;
+
     sendMessage({
       type: 'PROGRESS_PROCESSED_ITEMS',
-      data: componentsBuilt++
+      data: componentsBuilt
     });
 
-    await sleep(0);
+    await yieldEvery(componentsBuilt);
   }
 };
 

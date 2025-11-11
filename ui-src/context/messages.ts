@@ -65,7 +65,24 @@ type UserDataMessage = {
   };
 };
 
-export const sendMessage = (pluginMessage: PluginMessage): void => {
+type BufferedPluginMessageType =
+  | ProgressCurrentItemMessage['type']
+  | ProgressProcessedItemsMessage['type']
+  | ProgressTotalItemsMessage['type'];
+
+const BUFFERED_TYPES: Set<BufferedPluginMessageType> = new Set([
+  'PROGRESS_CURRENT_ITEM',
+  'PROGRESS_PROCESSED_ITEMS',
+  'PROGRESS_TOTAL_ITEMS'
+]);
+
+const bufferedMessages = new Map<BufferedPluginMessageType, PluginMessage>();
+
+const FLUSH_INTERVAL = 100;
+
+let flushHandle: number | undefined;
+
+const emitMessage = (pluginMessage: PluginMessage): void => {
   window.dispatchEvent(
     new MessageEvent<MessageData>('message', {
       data: {
@@ -73,4 +90,48 @@ export const sendMessage = (pluginMessage: PluginMessage): void => {
       }
     })
   );
+};
+
+const scheduleFlush = (): void => {
+  if (flushHandle !== undefined) {
+    return;
+  }
+
+  flushHandle = window.setTimeout(() => {
+    flushHandle = undefined;
+    flushBufferedMessages();
+  }, FLUSH_INTERVAL);
+};
+
+const flushBufferedMessages = (): void => {
+  if (flushHandle !== undefined) {
+    window.clearTimeout(flushHandle);
+    flushHandle = undefined;
+  }
+
+  if (bufferedMessages.size === 0) {
+    return;
+  }
+
+  for (const message of bufferedMessages.values()) {
+    emitMessage(message);
+  }
+
+  bufferedMessages.clear();
+};
+
+export const sendMessage = (pluginMessage: PluginMessage): void => {
+  if (BUFFERED_TYPES.has(pluginMessage.type as BufferedPluginMessageType)) {
+    bufferedMessages.set(pluginMessage.type as BufferedPluginMessageType, pluginMessage);
+    scheduleFlush();
+
+    return;
+  }
+
+  flushBufferedMessages();
+  emitMessage(pluginMessage);
+};
+
+export const flushMessageQueue = (): void => {
+  flushBufferedMessages();
 };
