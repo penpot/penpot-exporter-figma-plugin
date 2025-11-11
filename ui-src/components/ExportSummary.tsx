@@ -3,10 +3,10 @@ import type { JSX } from 'preact';
 
 import { Stack } from '@ui/components/Stack';
 import { useFigmaContext } from '@ui/context';
-import { fileSizeInMB } from '@ui/utils/fileSizeInMB';
+import { fileSizeInMB, formatExportTime } from '@ui/utils';
 
 export const ExportSummary = (): JSX.Element | null => {
-  const { exportedBlob, missingFonts, downloadBlob, cancel } = useFigmaContext();
+  const { exportedBlob, exportTime, missingFonts, downloadBlob, cancel } = useFigmaContext();
 
   if (!exportedBlob) {
     return null;
@@ -23,6 +23,7 @@ export const ExportSummary = (): JSX.Element | null => {
       <Stack space="2xsmall">
         <strong style={{ fontSize: 13 }}>{exportedBlob.filename}</strong>
         <Muted>File size: {fileSizeInMB(exportedBlob.blob.size)}</Muted>
+        {exportTime && <Muted>Export time: {formatExportTime(exportTime)}</Muted>}
       </Stack>
 
       {hasMissingFonts && (
