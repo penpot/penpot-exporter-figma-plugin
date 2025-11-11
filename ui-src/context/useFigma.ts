@@ -1,10 +1,11 @@
 import { exportStream } from '@penpot/library';
-import { useEffect, useState } from 'preact/hooks';
+import { useEffect, useRef, useState } from 'preact/hooks';
 
 import type { FormValues } from '@ui/components/ExportForm';
 import { type MessageData, createInMemoryWritable, sendMessage } from '@ui/context';
 import { identify, track } from '@ui/metrics/mixpanel';
 import { parse } from '@ui/parser';
+import { formatExportTime } from '@ui/utils';
 import { fileSizeInMB } from '@ui/utils/fileSizeInMB';
 
 export type UseFigmaHook = {
@@ -20,6 +21,7 @@ export type UseFigmaHook = {
   };
   progressPercentage: number;
   exportedBlob: { blob: Blob; filename: string } | null;
+  exportTime: number | null;
   retry: () => void;
   cancel: () => void;
   exportPenpot: (data: FormValues) => void;
@@ -44,6 +46,8 @@ export const useFigma = (): UseFigmaHook => {
   const [summary, setSummary] = useState(false);
   const [error, setError] = useState(false);
   const [exportedBlob, setExportedBlob] = useState<{ blob: Blob; filename: string } | null>(null);
+  const [exportTime, setExportTime] = useState<number | null>(null);
+  const exportStartTimeRef = useRef<number | null>(null);
 
   const [step, setStep] = useState<Steps>();
   const [progress, setProgress] = useState<{
@@ -79,6 +83,7 @@ export const useFigma = (): UseFigmaHook => {
         setSummary(false);
         setError(false);
         setExportedBlob(null);
+        setExportTime(null);
         setStep(undefined);
         setProgress({
           currentItem: undefined,
@@ -86,6 +91,8 @@ export const useFigma = (): UseFigmaHook => {
           processedItems: 0
         });
         setProgressPercentage(0);
+
+        exportStartTimeRef.current = null;
 
         track('Plugin Reloaded');
 
@@ -118,7 +125,19 @@ export const useFigma = (): UseFigmaHook => {
 
         setExportedBlob({ blob, filename });
 
-        track('File Exported', { 'Exported File Size': fileSizeInMB(blob.size) });
+        let duration: number | undefined = undefined;
+
+        if (exportStartTimeRef.current) {
+          const endTime = Date.now();
+          duration = endTime - exportStartTimeRef.current;
+
+          setExportTime(duration);
+        }
+
+        track('File Exported', {
+          'Exported File Size': fileSizeInMB(blob.size),
+          'Export Time': duration ? formatExportTime(duration) : undefined
+        });
 
         setExporting(false);
         setSummary(true);
@@ -215,6 +234,7 @@ export const useFigma = (): UseFigmaHook => {
       totalItems: prev.totalItems,
       processedItems: 0
     }));
+    exportStartTimeRef.current = Date.now();
 
     track('File Export Started');
 
@@ -240,6 +260,7 @@ export const useFigma = (): UseFigmaHook => {
     progress,
     progressPercentage,
     exportedBlob,
+    exportTime,
     retry,
     cancel,
     exportPenpot,
