@@ -1,18 +1,13 @@
 import type { PenpotContext } from '@ui/lib/types/penpotContext';
 import type { FrameShape } from '@ui/lib/types/shapes/frameShape';
 import type { Uuid } from '@ui/lib/types/utils/uuid';
-import { parseFigmaId } from '@ui/parser';
 import { createItems } from '@ui/parser/creators';
 import { symbolFills, symbolStrokes, symbolTouched } from '@ui/parser/creators/symbols';
 
 export const createArtboard = (
   context: PenpotContext,
-  { type: _type, children = [], figmaId, figmaRelatedId, ...shape }: FrameShape
+  { type: _type, children = [], ...shape }: FrameShape
 ): Uuid | undefined => {
-  const id = parseFigmaId(context, figmaId);
-
-  shape.id = id;
-  shape.shapeRef ??= parseFigmaId(context, figmaRelatedId);
   shape.fills = symbolFills(context, shape.fillStyleId, shape.fills);
   shape.strokes = symbolStrokes(context, shape.strokes);
   shape.touched = symbolTouched(
@@ -28,5 +23,5 @@ export const createArtboard = (
 
   context.closeBoard();
 
-  return id;
+  return shape.id;
 };

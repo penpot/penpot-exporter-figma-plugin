@@ -11,8 +11,8 @@ import type { Uuid } from '@ui/lib/types/utils/uuid';
 export type ComponentRoot = {
   type: 'component';
   name: string;
-  figmaId: string;
-  figmaVariantId?: string;
+  id: Uuid;
+  variantId?: Uuid;
 };
 
 export type ComponentTextPropertyOverride = {
@@ -28,9 +28,7 @@ export type ComponentInstance = ShapeBaseAttributes &
   LayoutAttributes &
   LayoutChildAttributes &
   Children & {
-    mainComponentFigmaId: string;
-    figmaId?: string;
-    figmaRelatedId?: string;
+    mainComponentId: string;
     isComponentRoot: boolean;
     showContent?: boolean;
     isOrphan: boolean;
@@ -41,7 +39,6 @@ export type UiComponent = {
   componentId: Uuid;
   mainInstancePage?: Uuid;
   mainInstanceId: Uuid;
-  componentFigmaId: string;
   variantId?: string;
   variantProperties?: VariantProperty[];
   path?: string;

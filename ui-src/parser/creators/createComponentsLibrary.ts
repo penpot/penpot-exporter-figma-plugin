@@ -32,7 +32,7 @@ export const createComponentsLibrary = async (context: PenpotContext): Promise<v
 };
 
 const createComponentLibrary = (context: PenpotContext, component: UiComponent): void => {
-  const componentShape = componentShapes.get(component.componentFigmaId);
+  const componentShape = componentShapes.get(component.componentId);
 
   if (!componentShape) {
     return;

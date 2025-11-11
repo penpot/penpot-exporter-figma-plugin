@@ -1,6 +1,6 @@
 import type { PenpotContext } from '@ui/lib/types/penpotContext';
 import type { Uuid } from '@ui/lib/types/utils/uuid';
-import { components, parseFigmaId } from '@ui/parser';
+import { components } from '@ui/parser';
 import { createArtboard } from '@ui/parser/creators';
 import type { ComponentInstance, UiComponent } from '@ui/types';
 
@@ -8,16 +8,16 @@ let remoteFileId: Uuid | undefined = undefined;
 
 export const createComponentInstance = (
   context: PenpotContext,
-  { type: _type, mainComponentFigmaId, isComponentRoot, ...shape }: ComponentInstance
+  { type: _type, mainComponentId, isComponentRoot, ...shape }: ComponentInstance
 ): void => {
   const uiComponent =
-    components.get(mainComponentFigmaId) ?? createUiComponent(context, mainComponentFigmaId);
+    components.get(mainComponentId) ?? createUiComponent(context, mainComponentId);
 
   if (!uiComponent) {
     return;
   }
 
-  if (!shape.figmaRelatedId) {
+  if (!shape.shapeRef) {
     shape.shapeRef = uiComponent.mainInstanceId;
   }
   shape.componentFile = shape.isOrphan ? getRemoteFileId(context) : context.currentFileId;
@@ -27,22 +27,13 @@ export const createComponentInstance = (
   createArtboard(context, shape);
 };
 
-const createUiComponent = (
-  context: PenpotContext,
-  mainComponentFigmaId: string
-): UiComponent | undefined => {
-  const mainInstanceId = parseFigmaId(context, mainComponentFigmaId, true);
-  if (!mainInstanceId) {
-    return;
-  }
-
-  const uiComponent = {
+const createUiComponent = (context: PenpotContext, mainComponentId: string): UiComponent => {
+  const uiComponent: UiComponent = {
     componentId: context.genId(),
-    componentFigmaId: mainComponentFigmaId,
-    mainInstanceId
+    mainInstanceId: mainComponentId
   };
 
-  components.set(mainComponentFigmaId, uiComponent);
+  components.set(mainComponentId, uiComponent);
 
   return uiComponent;
 };

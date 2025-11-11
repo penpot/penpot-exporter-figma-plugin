@@ -1,23 +1,19 @@
 import type { PenpotContext } from '@ui/lib/types/penpotContext';
 import type { Uuid } from '@ui/lib/types/utils/uuid';
-import { componentShapes, components, parseFigmaId } from '@ui/parser';
+import { componentShapes, components } from '@ui/parser';
 import { createArtboard } from '@ui/parser/creators';
 import { symbolVariantProperties } from '@ui/parser/creators/symbols';
 import type { ComponentRoot } from '@ui/types';
 
-export const createComponent = (
-  context: PenpotContext,
-  { figmaId, figmaVariantId }: ComponentRoot
-): void => {
-  const componentShape = componentShapes.get(figmaId);
+export const createComponent = (context: PenpotContext, { id, variantId }: ComponentRoot): void => {
+  const componentShape = componentShapes.get(id);
 
   if (!componentShape) {
     return;
   }
 
-  const componentId = getComponentId(context, figmaId);
+  const componentId = getComponentId(context, id);
   const { type: _type, path, variantProperties, ...shape } = componentShape;
-  const variantId = parseFigmaId(context, figmaVariantId);
 
   shape.componentFile = context.currentFileId;
   shape.componentId = componentId;
@@ -31,19 +27,18 @@ export const createComponent = (
     return;
   }
 
-  components.set(figmaId, {
+  components.set(id, {
     componentId,
     path,
     mainInstancePage: context.currentPageId,
-    componentFigmaId: figmaId,
     mainInstanceId: frameId,
     variantId,
-    variantProperties: symbolVariantProperties(variantProperties, figmaVariantId)
+    variantProperties: symbolVariantProperties(variantProperties, variantId)
   });
 };
 
-const getComponentId = (context: PenpotContext, figmaId: string): string | Uuid => {
-  const component = components.get(figmaId);
+const getComponentId = (context: PenpotContext, id: string): string | Uuid => {
+  const component = components.get(id);
 
   return component?.componentId ?? context.genId();
 };

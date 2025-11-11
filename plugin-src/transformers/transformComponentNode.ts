@@ -9,8 +9,9 @@ import {
   transformCornerRadius,
   transformDimension,
   transformEffects,
-  transformFigmaIds,
   transformFills,
+  transformId,
+  transformIds,
   transformLayoutAttributes,
   transformProportion,
   transformRotationAndPosition,
@@ -19,16 +20,17 @@ import {
   transformVariantNameAndProperties
 } from '@plugin/transformers/partials';
 
+import type { ComponentShape } from '@ui/lib/types/shapes/componentShape';
 import type { ComponentRoot } from '@ui/types';
 
 export const transformComponentNode = async (node: ComponentNode): Promise<ComponentRoot> => {
   const isVariant = node.parent?.type === 'COMPONENT_SET';
 
-  components.set(node.id, {
+  const component: ComponentShape = {
     type: 'component',
     showContent: !node.clipsContent,
     ...transformComponentNameAndPath(node),
-    ...transformFigmaIds(node),
+    ...transformIds(node),
     ...transformFills(node),
     ...transformEffects(node),
     ...transformStrokes(node),
@@ -43,7 +45,9 @@ export const transformComponentNode = async (node: ComponentNode): Promise<Compo
     ...transformConstraints(node),
     ...transformAutoLayout(node),
     ...(isVariant ? transformVariantNameAndProperties(node) : {})
-  });
+  };
+
+  components.set(component.id, component);
 
   if (!isVariant) {
     registerComponentProperties(node);
@@ -52,7 +56,7 @@ export const transformComponentNode = async (node: ComponentNode): Promise<Compo
   return {
     type: 'component',
     name: node.name,
-    figmaId: node.id,
-    figmaVariantId: isVariant ? node.parent.id : undefined
+    id: component.id,
+    variantId: isVariant ? transformId(node.parent) : undefined
   };
 };

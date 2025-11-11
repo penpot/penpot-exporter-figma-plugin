@@ -4,8 +4,8 @@ import {
   transformCornerRadius,
   transformDimension,
   transformEffects,
-  transformFigmaIds,
   transformFills,
+  transformIds,
   transformLayoutAttributes,
   transformOverrides,
   transformProportion,
@@ -20,7 +20,7 @@ export const transformRectangleNode = (node: RectangleNode): RectShape => {
   return {
     type: 'rect',
     name: node.name,
-    ...transformFigmaIds(node),
+    ...transformIds(node),
     ...transformFills(node),
     ...transformEffects(node),
     ...transformStrokes(node),

@@ -6,7 +6,6 @@ import type { ComponentProperty, UiComponent } from '@ui/types';
 
 export const typographies: Map<string, TypographyStyle> = new Map();
 export const images: Map<string, Uuid> = new Map();
-export const identifiers: Map<string, Uuid> = new Map();
 export const components: Map<string, UiComponent> = new Map();
 export const componentShapes: Map<string, ComponentShape> = new Map();
 export const colors: Map<string, FillStyle> = new Map();

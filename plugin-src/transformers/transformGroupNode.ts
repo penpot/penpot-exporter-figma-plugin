@@ -2,7 +2,7 @@ import {
   transformBlend,
   transformDimension,
   transformEffects,
-  transformFigmaIds,
+  transformIds,
   transformOverrides,
   transformRotationAndPosition,
   transformSceneNode
@@ -13,7 +13,7 @@ import type { GroupShape } from '@ui/lib/types/shapes/groupShape';
 
 export const transformGroupNode = async (node: GroupNode): Promise<GroupShape> => {
   return {
-    ...transformFigmaIds(node),
+    ...transformIds(node),
     ...transformGroupNodeLike(node),
     ...transformEffects(node),
     ...transformBlend(node),

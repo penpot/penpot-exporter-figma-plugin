@@ -29,10 +29,10 @@ export const transformDocumentNode = async (node: DocumentNode): Promise<PenpotD
   return {
     name: node.name,
     children,
-    components: toObject(components),
     images,
     paintStyles,
     textStyles,
+    components: toObject(components),
     componentProperties: toObject(componentProperties),
     variantProperties: toPlainObject(variantProperties),
     missingFonts: Array.from(missingFonts)
