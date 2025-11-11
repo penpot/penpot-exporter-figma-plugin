@@ -28,7 +28,7 @@ export type ComponentInstance = ShapeBaseAttributes &
   LayoutAttributes &
   LayoutChildAttributes &
   Children & {
-    mainComponentId: string;
+    mainComponentId: Uuid;
     componentRoot: boolean;
     showContent?: boolean;
     isOrphan: boolean;
@@ -41,7 +41,7 @@ export type UiComponent = {
   pageId?: Uuid;
   fileId?: Uuid;
   frameId: Uuid;
-  variantId?: string;
+  variantId?: Uuid;
   variantProperties?: VariantProperty[];
   path?: string;
 };
