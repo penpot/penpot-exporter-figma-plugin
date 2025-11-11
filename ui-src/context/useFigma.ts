@@ -5,6 +5,7 @@ import type { FormValues } from '@ui/components/ExportForm';
 import { type MessageData, createInMemoryWritable, sendMessage } from '@ui/context';
 import { identify, track } from '@ui/metrics/mixpanel';
 import { parse } from '@ui/parser';
+import { formatExportTime } from '@ui/utils';
 import { fileSizeInMB } from '@ui/utils/fileSizeInMB';
 
 export type UseFigmaHook = {
@@ -124,14 +125,19 @@ export const useFigma = (): UseFigmaHook => {
 
         setExportedBlob({ blob, filename });
 
-        // Calculate export time
+        let duration: number | undefined = undefined;
+
         if (exportStartTimeRef.current) {
           const endTime = Date.now();
-          const duration = endTime - exportStartTimeRef.current;
+          duration = endTime - exportStartTimeRef.current;
+
           setExportTime(duration);
         }
 
-        track('File Exported', { 'Exported File Size': fileSizeInMB(blob.size) });
+        track('File Exported', {
+          'Exported File Size': fileSizeInMB(blob.size),
+          'Export Time': duration ? formatExportTime(duration) : undefined
+        });
 
         setExporting(false);
         setSummary(true);
