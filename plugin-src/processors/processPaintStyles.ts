@@ -1,4 +1,4 @@
-import { sleep, yieldEvery } from '@common/sleep';
+import { yieldByTime } from '@common/sleep';
 
 import { paintStyles } from '@plugin/libraries';
 import { translatePaintStyle } from '@plugin/translators/styles';
@@ -47,12 +47,10 @@ export const processPaintStyles = async (): Promise<Record<string, FillStyle>> =
       data: processedStyles
     });
 
-    await yieldEvery(processedStyles);
+    await yieldByTime();
   }
 
   flushProgress();
-
-  await sleep(20);
 
   return styles;
 };

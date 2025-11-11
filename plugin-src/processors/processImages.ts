@@ -1,4 +1,4 @@
-import { sleep, yieldEvery } from '@common/sleep';
+import { yieldByTime } from '@common/sleep';
 
 import { images } from '@plugin/libraries';
 import { flushProgress, reportProgress } from '@plugin/utils';
@@ -34,12 +34,10 @@ export const processImages = async (): Promise<Record<string, Uint8Array<ArrayBu
       data: processedImagesCount
     });
 
-    await yieldEvery(processedImagesCount);
+    await yieldByTime();
   }
 
   flushProgress();
-
-  await sleep(20);
 
   return processedImages;
 };

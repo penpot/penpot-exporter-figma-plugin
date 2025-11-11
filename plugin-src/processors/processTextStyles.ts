@@ -1,4 +1,4 @@
-import { sleep, yieldEvery } from '@common/sleep';
+import { yieldByTime } from '@common/sleep';
 
 import { textStyles } from '@plugin/libraries';
 import { translateTextStyle } from '@plugin/translators/styles';
@@ -47,12 +47,10 @@ export const processTextStyles = async (): Promise<Record<string, TypographyStyl
       data: processedStyles
     });
 
-    await yieldEvery(processedStyles);
+    await yieldByTime();
   }
 
   flushProgress();
-
-  await sleep(20);
 
   return styles;
 };

@@ -1,4 +1,4 @@
-import { yieldEvery } from '@common/sleep';
+import { yieldByTime } from '@common/sleep';
 
 import { sendMessage } from '@ui/context';
 import type { PenpotContext } from '@ui/lib/types/penpotContext';
@@ -55,6 +55,6 @@ export const registerTypographyLibraries = async (
       data: stylesRegistered
     });
 
-    await yieldEvery(stylesRegistered);
+    await yieldByTime();
   }
 };

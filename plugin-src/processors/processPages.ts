@@ -1,4 +1,4 @@
-import { yieldEvery } from '@common/sleep';
+import { yieldByTime } from '@common/sleep';
 
 import { transformPageNode } from '@plugin/transformers';
 import { flushProgress, reportProgress } from '@plugin/utils';
@@ -26,7 +26,7 @@ export const processPages = async (node: DocumentNode): Promise<PenpotPage[]> =>
       data: processedPages
     });
 
-    await yieldEvery(processedPages);
+    await yieldByTime();
   }
 
   flushProgress();

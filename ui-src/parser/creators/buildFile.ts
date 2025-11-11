@@ -1,4 +1,4 @@
-import { yieldEvery } from '@common/sleep';
+import { yieldByTime } from '@common/sleep';
 
 import { sendMessage } from '@ui/context';
 import type { PenpotContext } from '@ui/lib/types/penpotContext';
@@ -31,7 +31,7 @@ export const buildFile = async (context: PenpotContext, children: PenpotPage[]):
       data: pagesBuilt
     });
 
-    await yieldEvery(pagesBuilt);
+    await yieldByTime();
   }
 
   await createComponentsLibrary(context);

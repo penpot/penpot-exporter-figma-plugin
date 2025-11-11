@@ -1,4 +1,4 @@
-import { yieldEvery } from '@common/sleep';
+import { yieldByTime } from '@common/sleep';
 
 import { transformGroupNodeLike, transformSceneNode } from '@plugin/transformers';
 import { transformMaskIds } from '@plugin/transformers/partials';
@@ -50,15 +50,13 @@ export const translateMaskChildren = async (
 
 export const translateChildren = async (children: readonly SceneNode[]): Promise<PenpotNode[]> => {
   const transformedChildren: PenpotNode[] = [];
-  let processedChildren = 0;
 
   for (const child of children) {
     const penpotNode = await transformSceneNode(child);
 
     if (penpotNode) transformedChildren.push(penpotNode);
 
-    processedChildren += 1;
-    await yieldEvery(processedChildren);
+    await yieldByTime();
   }
 
   return transformedChildren;
