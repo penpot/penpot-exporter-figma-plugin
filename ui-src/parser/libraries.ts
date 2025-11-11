@@ -10,4 +10,4 @@ export const components: Map<Uuid, UiComponent> = new Map();
 export const componentShapes: Map<Uuid, ComponentShape> = new Map();
 export const colors: Map<string, FillStyle> = new Map();
 export const componentProperties: Map<string, ComponentProperty> = new Map();
-export const variantProperties: Map<string, string[]> = new Map();
+export const variantProperties: Map<Uuid, string[]> = new Map();
