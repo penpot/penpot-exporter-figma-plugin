@@ -5,6 +5,7 @@ import type { FormValues } from '@ui/components/ExportForm';
 import { type MessageData, createInMemoryWritable, sendMessage } from '@ui/context';
 import { identify, track } from '@ui/metrics/mixpanel';
 import { parse } from '@ui/parser';
+import type { Steps } from '@ui/types/progressMessages';
 import { formatExportTime } from '@ui/utils';
 import { fileSizeInMB } from '@ui/utils/fileSizeInMB';
 
@@ -27,18 +28,6 @@ export type UseFigmaHook = {
   exportPenpot: (data: FormValues) => void;
   downloadBlob: () => void;
 };
-
-export type Steps =
-  | 'processing'
-  | 'images'
-  | 'optimization'
-  | 'building'
-  | 'components'
-  | 'exporting'
-  | 'fills'
-  | 'colorLibraries'
-  | 'typographies'
-  | 'typoLibraries';
 
 export const useFigma = (): UseFigmaHook => {
   const [missingFonts, setMissingFonts] = useState<string[]>();
