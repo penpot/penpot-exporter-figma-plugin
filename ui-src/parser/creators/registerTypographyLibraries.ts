@@ -13,7 +13,7 @@ export const registerTypographyLibraries = async (
 
   if (stylesToRegister.length === 0) return;
 
-  let stylesRegistered = 0;
+  let stylesRegistered = 1;
 
   sendMessage({
     type: 'PROGRESS_TOTAL_ITEMS',
@@ -48,11 +48,9 @@ export const registerTypographyLibraries = async (
 
     typographies.set(key, style);
 
-    stylesRegistered += 1;
-
     sendMessage({
       type: 'PROGRESS_PROCESSED_ITEMS',
-      data: stylesRegistered
+      data: stylesRegistered++
     });
 
     await yieldByTime();

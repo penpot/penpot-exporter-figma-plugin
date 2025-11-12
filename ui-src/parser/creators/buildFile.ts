@@ -7,7 +7,7 @@ import { components } from '@ui/parser';
 import { createComponentsLibrary, createPage } from '@ui/parser/creators';
 
 export const buildFile = async (context: PenpotContext, children: PenpotPage[]): Promise<void> => {
-  let pagesBuilt = 0;
+  let pagesBuilt = 1;
 
   components.clear();
 
@@ -24,11 +24,9 @@ export const buildFile = async (context: PenpotContext, children: PenpotPage[]):
   for (const page of children) {
     createPage(context, page);
 
-    pagesBuilt += 1;
-
     sendMessage({
       type: 'PROGRESS_PROCESSED_ITEMS',
-      data: pagesBuilt
+      data: pagesBuilt++
     });
 
     await yieldByTime();
