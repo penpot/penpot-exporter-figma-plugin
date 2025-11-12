@@ -12,13 +12,14 @@ import {
   transformTextNode,
   transformVectorNode
 } from '@plugin/transformers';
+import { reportProgress } from '@plugin/utils';
 
 import type { PenpotNode } from '@ui/types';
 
 export const transformSceneNode = async (node: SceneNode): Promise<PenpotNode | undefined> => {
   let penpotNode: PenpotNode | undefined;
 
-  figma.ui.postMessage({
+  reportProgress({
     type: 'PROGRESS_CURRENT_ITEM',
     data: node.name
   });

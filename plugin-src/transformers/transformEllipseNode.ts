@@ -3,8 +3,8 @@ import {
   transformConstraints,
   transformDimension,
   transformEffects,
-  transformFigmaIds,
   transformFills,
+  transformIds,
   transformLayoutAttributes,
   transformOverrides,
   transformProportion,
@@ -20,7 +20,7 @@ export const transformEllipseNode = (node: EllipseNode): CircleShape => {
   return {
     type: 'circle',
     name: node.name,
-    ...transformFigmaIds(node),
+    ...transformIds(node),
     ...transformFills(node),
     ...transformEffects(node),
     ...transformStrokes(node),

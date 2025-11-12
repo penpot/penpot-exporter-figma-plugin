@@ -1,13 +1,13 @@
 import { variantProperties } from '@plugin/libraries';
 
 import type { VariantComponent, VariantShape } from '@ui/lib/types/shapes/variant';
+import type { Uuid } from '@ui/lib/types/utils/uuid';
 
 export const transformVariantNameAndProperties = (
-  node: ComponentNode
+  node: ComponentNode,
+  variantId: Uuid
 ): Pick<VariantComponent, 'variantProperties'> & Pick<VariantShape, 'variantName'> => {
-  const id = node.parent?.id ?? '';
-
-  const componentPropertyNames = variantProperties.get(id) ?? new Set();
+  const componentPropertyNames = variantProperties.get(variantId) ?? new Set();
 
   const properties = node.name.split(',').map(pair => {
     const [name, value] = pair.split('=').map(s => s.trim());
@@ -17,7 +17,7 @@ export const transformVariantNameAndProperties = (
     return { name, value };
   });
 
-  variantProperties.set(id, componentPropertyNames);
+  variantProperties.set(variantId, componentPropertyNames);
 
   return {
     variantName: properties.map(prop => prop.value).join(', '),

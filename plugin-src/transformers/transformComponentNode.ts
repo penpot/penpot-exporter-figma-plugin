@@ -9,8 +9,9 @@ import {
   transformCornerRadius,
   transformDimension,
   transformEffects,
-  transformFigmaIds,
   transformFills,
+  transformId,
+  transformIds,
   transformLayoutAttributes,
   transformProportion,
   transformRotationAndPosition,
@@ -19,17 +20,23 @@ import {
   transformVariableConsumptionMap,
   transformVariantNameAndProperties
 } from '@plugin/transformers/partials';
+import { generateUuid } from '@plugin/utils';
 
-import type { ComponentRoot } from '@ui/types';
+import type { ComponentShape } from '@ui/lib/types/shapes/componentShape';
 
-export const transformComponentNode = async (node: ComponentNode): Promise<ComponentRoot> => {
+export const transformComponentNode = async (node: ComponentNode): Promise<ComponentShape> => {
   const isVariant = node.parent?.type === 'COMPONENT_SET';
+  const variantId = isVariant ? transformId(node.parent) : undefined;
 
-  components.set(node.id, {
+  const component: ComponentShape = {
     type: 'component',
     showContent: !node.clipsContent,
+    componentId: generateUuid(),
+    componentRoot: true,
+    mainInstance: true,
+    variantId,
     ...transformComponentNameAndPath(node),
-    ...transformFigmaIds(node),
+    ...transformIds(node),
     ...transformFills(node),
     ...transformEffects(node),
     ...transformStrokes(node),
@@ -43,18 +50,22 @@ export const transformComponentNode = async (node: ComponentNode): Promise<Compo
     ...transformConstraints(node),
     ...transformAutoLayout(node),
     ...transformVariableConsumptionMap(node),
-    ...(isVariant ? transformVariantNameAndProperties(node) : {}),
-    ...(await transformChildren(node))
+    ...(await transformChildren(node)),
+    ...(isVariant ? transformVariantNameAndProperties(node, variantId!) : {})
+  };
+
+  const nameSplit = component.name.split(' / ');
+
+  components.set(component.id, {
+    name: nameSplit[nameSplit.length - 1],
+    componentId: component.componentId!,
+    frameId: component.id,
+    variantId
   });
 
   if (!isVariant) {
     registerComponentProperties(node);
   }
 
-  return {
-    type: 'component',
-    name: node.name,
-    figmaId: node.id,
-    figmaVariantId: isVariant ? node.parent.id : undefined
-  };
+  return component;
 };

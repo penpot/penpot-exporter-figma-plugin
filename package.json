@@ -1,6 +1,6 @@
 {
   "name": "penpot-exporter",
-  "version": "0.15.0",
+  "version": "0.15.1",
   "description": "Penpot exporter",
   "type": "module",
   "scripts": {
@@ -36,7 +36,8 @@
     "romans": "^3.1",
     "slugify": "^1.6",
     "svg-path-parser": "^1.1",
-    "use-resize-observer": "^9.1"
+    "use-resize-observer": "^9.1",
+    "uuid": "^13.0.0"
   },
   "devDependencies": {
     "@changesets/changelog-github": "^0.5",
@@ -45,6 +46,7 @@
     "@trivago/prettier-plugin-sort-imports": "^5.2",
     "@types/node": "^24.6",
     "@types/svg-path-parser": "^1.1",
+    "@types/uuid": "^10.0.0",
     "@vitejs/plugin-react-swc": "^4.1",
     "concurrently": "^9.2",
     "esbuild": "^0.25",

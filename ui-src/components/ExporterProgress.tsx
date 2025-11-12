@@ -2,7 +2,8 @@ import { LoadingIndicator } from '@create-figma-plugin/ui';
 import type { JSX } from 'preact';
 
 import { Stack } from '@ui/components/Stack';
-import { type Steps, useFigmaContext } from '@ui/context';
+import { useFigmaContext } from '@ui/context';
+import type { Steps } from '@ui/types/progressMessages';
 
 type Messages = {
   total: string;

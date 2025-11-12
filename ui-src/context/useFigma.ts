@@ -1,16 +1,18 @@
 import { exportStream } from '@penpot/library';
-import { useEffect, useState } from 'preact/hooks';
+import { useEffect, useRef, useState } from 'preact/hooks';
 
 import type { FormValues } from '@ui/components/ExportForm';
 import { type MessageData, createInMemoryWritable, sendMessage } from '@ui/context';
 import { identify, track } from '@ui/metrics/mixpanel';
 import { parse } from '@ui/parser';
+import type { Steps } from '@ui/types/progressMessages';
+import { formatExportTime } from '@ui/utils';
+import { fileSizeInMB } from '@ui/utils/fileSizeInMB';
 
 export type UseFigmaHook = {
   missingFonts: string[] | undefined;
-  needsReload: boolean;
-  loading: boolean;
   exporting: boolean;
+  summary: boolean;
   error: boolean;
   step: Steps | undefined;
   progress: {
@@ -19,30 +21,22 @@ export type UseFigmaHook = {
     processedItems: number;
   };
   progressPercentage: number;
-  reload: () => void;
+  exportedBlob: { blob: Blob; filename: string } | null;
+  exportTime: number | null;
+  retry: () => void;
   cancel: () => void;
   exportPenpot: (data: FormValues) => void;
+  downloadBlob: () => void;
 };
-
-export type Steps =
-  | 'tokens'
-  | 'processing'
-  | 'images'
-  | 'optimization'
-  | 'building'
-  | 'components'
-  | 'exporting'
-  | 'fills'
-  | 'colorLibraries'
-  | 'typographies'
-  | 'typoLibraries';
 
 export const useFigma = (): UseFigmaHook => {
   const [missingFonts, setMissingFonts] = useState<string[]>();
-  const [needsReload, setNeedsReload] = useState(false);
-  const [loading, setLoading] = useState(true);
   const [exporting, setExporting] = useState(false);
+  const [summary, setSummary] = useState(false);
   const [error, setError] = useState(false);
+  const [exportedBlob, setExportedBlob] = useState<{ blob: Blob; filename: string } | null>(null);
+  const [exportTime, setExportTime] = useState<number | null>(null);
+  const exportStartTimeRef = useRef<number | null>(null);
 
   const [step, setStep] = useState<Steps>();
   const [progress, setProgress] = useState<{
@@ -72,7 +66,32 @@ export const useFigma = (): UseFigmaHook => {
 
         break;
       }
+      case 'RELOAD': {
+        setMissingFonts(undefined);
+        setExporting(false);
+        setSummary(false);
+        setError(false);
+        setExportedBlob(null);
+        setExportTime(null);
+        setStep(undefined);
+        setProgress({
+          currentItem: undefined,
+          totalItems: 0,
+          processedItems: 0
+        });
+        setProgressPercentage(0);
+
+        exportStartTimeRef.current = null;
+
+        track('Plugin Reloaded');
+
+        break;
+      }
       case 'PENPOT_DOCUMENT': {
+        if (pluginMessage.data.missingFonts) {
+          setMissingFonts(pluginMessage.data.missingFonts);
+        }
+
         const context = await parse(pluginMessage.data);
 
         sendMessage({
@@ -91,27 +110,27 @@ export const useFigma = (): UseFigmaHook => {
         });
 
         const blob = getBlob();
+        const filename = `${pluginMessage.data.name}.penpot`;
 
-        download(blob, `${pluginMessage.data.name}.penpot`);
+        setExportedBlob({ blob, filename });
 
-        // get size of the file in Mb rounded to 2 decimal places
-        const size = Math.round((blob.size / 1024 / 1024) * 100) / 100;
-        track('File Exported', { 'Exported File Size': size + ' Mb' });
+        let duration: number | undefined = undefined;
+
+        if (exportStartTimeRef.current) {
+          const endTime = Date.now();
+          duration = endTime - exportStartTimeRef.current;
+
+          setExportTime(duration);
+        }
+
+        track('File Exported', {
+          'Exported File Size': fileSizeInMB(blob.size),
+          'Export Time': duration ? formatExportTime(duration) : undefined
+        });
 
         setExporting(false);
+        setSummary(true);
         setStep(undefined);
-
-        break;
-      }
-      case 'CUSTOM_FONTS': {
-        setMissingFonts(pluginMessage.data);
-        setLoading(false);
-        setNeedsReload(false);
-
-        break;
-      }
-      case 'CHANGES_DETECTED': {
-        setNeedsReload(true);
 
         break;
       }
@@ -154,7 +173,6 @@ export const useFigma = (): UseFigmaHook => {
       }
       case 'ERROR': {
         setError(true);
-        setLoading(false);
         setExporting(false);
         track('Error', { 'Error Message': pluginMessage.data });
 
@@ -171,15 +189,29 @@ export const useFigma = (): UseFigmaHook => {
     a.download = name;
 
     a.click();
+
+    window.URL.revokeObjectURL(url);
+
+    track('File Downloaded');
   };
 
-  const reload = (): void => {
-    setLoading(true);
-    setError(false);
-    postMessage('reload');
+  const downloadBlob = (): void => {
+    if (exportedBlob) {
+      download(exportedBlob.blob, exportedBlob.filename);
+    }
+  };
+
+  const retry = (): void => {
+    track('Plugin Retry');
+
+    postMessage('retry');
   };
 
   const cancel = (): void => {
+    setExportedBlob(null);
+
+    track('Plugin Closed');
+
     postMessage('cancel');
   };
 
@@ -190,6 +222,9 @@ export const useFigma = (): UseFigmaHook => {
       totalItems: prev.totalItems,
       processedItems: 0
     }));
+    exportStartTimeRef.current = Date.now();
+
+    track('File Export Started');
 
     postMessage('export');
   };
@@ -206,15 +241,17 @@ export const useFigma = (): UseFigmaHook => {
 
   return {
     missingFonts,
-    needsReload,
-    loading,
     exporting,
+    summary,
     error,
     step,
     progress,
     progressPercentage,
-    reload,
+    exportedBlob,
+    exportTime,
+    retry,
     cancel,
-    exportPenpot
+    exportPenpot,
+    downloadBlob
   };
 };

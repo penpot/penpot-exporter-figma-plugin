@@ -1,3 +1,5 @@
+import { generateUuid } from '@plugin/utils';
+
 import type { Blur } from '@ui/lib/types/utils/blur';
 
 export const translateBlurEffects = (effect: readonly Effect[]): Blur | undefined => {
@@ -8,6 +10,7 @@ export const translateBlurEffects = (effect: readonly Effect[]): Blur | undefine
   }
 
   return {
+    id: generateUuid(),
     type: 'layer-blur',
     value: blur.radius,
     hidden: !blur.visible

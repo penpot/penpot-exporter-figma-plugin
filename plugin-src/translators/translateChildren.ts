@@ -1,7 +1,7 @@
-import { sleep } from '@common/sleep';
+import { yieldByTime } from '@common/sleep';
 
 import { transformGroupNodeLike, transformSceneNode } from '@plugin/transformers';
-import { transformMaskFigmaIds } from '@plugin/transformers/partials';
+import { transformMaskIds } from '@plugin/transformers/partials';
 
 import type { PenpotNode } from '@ui/types';
 
@@ -39,7 +39,7 @@ export const translateMaskChildren = async (
   }
 
   const maskGroup = {
-    ...transformMaskFigmaIds(maskChild),
+    ...transformMaskIds(maskChild),
     ...transformGroupNodeLike(maskChild),
     children: maskedChildren,
     maskedGroup: true
@@ -56,7 +56,7 @@ export const translateChildren = async (children: readonly SceneNode[]): Promise
 
     if (penpotNode) transformedChildren.push(penpotNode);
 
-    await sleep(0);
+    await yieldByTime();
   }
 
   return transformedChildren;

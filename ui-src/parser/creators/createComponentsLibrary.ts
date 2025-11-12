@@ -1,9 +1,9 @@
-import { sleep } from '@common/sleep';
+import { yieldByTime } from '@common/sleep';
 
-import { sendMessage } from '@ui/context';
+import { flushMessageQueue, sendMessage } from '@ui/context';
 import type { PenpotContext } from '@ui/lib/types/penpotContext';
 import type { PenpotComponent } from '@ui/lib/types/shapes/componentShape';
-import { componentShapes, components } from '@ui/parser';
+import { componentRoots, components } from '@ui/parser';
 import type { UiComponent } from '@ui/types';
 
 export const createComponentsLibrary = async (context: PenpotContext): Promise<void> => {
@@ -27,25 +27,25 @@ export const createComponentsLibrary = async (context: PenpotContext): Promise<v
       data: componentsBuilt++
     });
 
-    await sleep(0);
+    await yieldByTime();
   }
+
+  flushMessageQueue();
 };
 
 const createComponentLibrary = (context: PenpotContext, component: UiComponent): void => {
-  const componentShape = componentShapes.get(component.componentFigmaId);
+  const componentRoot = componentRoots.get(component.frameId);
 
-  if (!componentShape) {
+  if (!componentRoot) {
     return;
   }
-
-  const nameSplit = componentShape.name.split(' / ');
 
   const penpotComponent: PenpotComponent = {
     componentId: component.componentId,
     fileId: context.currentFileId,
-    name: nameSplit[nameSplit.length - 1],
-    frameId: component.mainInstanceId,
-    pageId: component.mainInstancePage,
+    name: component.name,
+    frameId: component.frameId,
+    pageId: component.pageId,
     path: component.path
   };
 

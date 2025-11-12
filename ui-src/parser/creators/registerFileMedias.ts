@@ -1,6 +1,6 @@
-import { sleep } from '@common/sleep';
+import { yieldByTime } from '@common/sleep';
 
-import { sendMessage } from '@ui/context';
+import { flushMessageQueue, sendMessage } from '@ui/context';
 import type { PenpotContext } from '@ui/lib/types/penpotContext';
 import type { Uuid } from '@ui/lib/types/utils/uuid';
 import { images } from '@ui/parser';
@@ -38,8 +38,10 @@ export const registerFileMedias = async (
       data: imagesOptimized++
     });
 
-    await sleep(0);
+    await yieldByTime();
   }
+
+  flushMessageQueue();
 };
 
 const registerFileMedia = async (
