@@ -14,7 +14,7 @@ export const processPages = async (node: DocumentNode): Promise<PenpotPage[]> =>
     data: node.children.length
   });
 
-  figma.ui.postMessage({
+  reportProgress({
     type: 'PROGRESS_STEP',
     data: 'processing'
   });
