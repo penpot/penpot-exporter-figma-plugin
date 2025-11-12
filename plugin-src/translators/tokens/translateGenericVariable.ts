@@ -6,7 +6,7 @@ export const translateGenericVariable = (
   variable: Variable,
   variableName: string,
   modeId: string,
-  translateVariableValues: (variable: Variable, modeId: string) => Map<TokenType, string>
+  translateVariableValues: (variable: Variable, modeId: string) => Map<TokenType, Token['$value']>
 ): [string, Token | Record<string, Token>] | null => {
   const variableValues = translateVariableValues(variable, modeId);
 

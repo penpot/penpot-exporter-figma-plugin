@@ -8,7 +8,7 @@ const isColorValue = (value: VariableValue): value is RGB | RGBA => {
   return typeof value === 'object' && 'r' in value && 'g' in value && 'b' in value;
 };
 
-const translateColorValue = (value: VariableValue): string | null => {
+const translateColorValue = (value: VariableValue): Token['$value'] | null => {
   if (isAliasValue(value)) {
     return translateAliasValue(value);
   }

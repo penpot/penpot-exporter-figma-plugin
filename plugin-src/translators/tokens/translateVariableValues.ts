@@ -1,15 +1,15 @@
-import type { TokenType } from '@ui/lib/types/shapes/tokens';
+import type { Token, TokenType } from '@ui/lib/types/shapes/tokens';
 
 export const translateVariableValues = (
   variable: Variable,
   modeId: string,
   translateScopes: (variable: Variable) => TokenType[],
-  translateValue: (value: VariableValue, tokenType: TokenType) => string | null
-): Map<TokenType, string> => {
+  translateValue: (value: VariableValue, tokenType: TokenType) => Token['$value'] | null
+): Map<TokenType, Token['$value']> => {
   const value = variable.valuesByMode[modeId];
 
   const tokenTypes = translateScopes(variable);
-  const variableTypes = new Map<TokenType, string>();
+  const variableTypes = new Map<TokenType, string | string[]>();
 
   for (const tokenType of tokenTypes) {
     const $value = translateValue(value, tokenType);

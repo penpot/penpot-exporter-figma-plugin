@@ -35,19 +35,18 @@ const isStringValue = (value: VariableValue): value is string => {
   return typeof value === 'string';
 };
 
-const translateValue = (value: VariableValue, tokenType: TokenType): string | null => {
+const translateValue = (value: VariableValue, tokenType: TokenType): Token['$value'] | null => {
   if (isAliasValue(value)) {
     return translateAliasValue(value);
   }
 
   if (isStringValue(value)) {
     if (tokenType === 'fontFamilies') {
-      // @TODO: Change to return [value]; when Penpot SDK supports array values
       return value;
     }
 
     if (tokenType === 'fontWeights') {
-      return isValidFontWeightValue(value) ? value.toString() : null;
+      return isValidFontWeightValue(value) ? value : null;
     }
 
     return value;

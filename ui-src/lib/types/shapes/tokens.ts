@@ -29,7 +29,7 @@ export type TokenType =
   | 'textCase';
 
 export type Token = {
-  $value: string;
+  $value: string | string[];
   $type: TokenType;
   $description: string;
 };

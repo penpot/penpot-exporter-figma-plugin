@@ -20,7 +20,7 @@ const isNumberValue = (value: VariableValue): value is number => {
   return typeof value === 'number';
 };
 
-const translateValue = (value: VariableValue, tokenType: TokenType): string | null => {
+const translateValue = (value: VariableValue, tokenType: TokenType): Token['$value'] | null => {
   if (isAliasValue(value)) {
     return translateAliasValue(value);
   }
