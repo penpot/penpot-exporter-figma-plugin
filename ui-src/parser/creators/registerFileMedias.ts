@@ -16,7 +16,7 @@ export const registerFileMedias = async (
 
   if (imagesToOptimize.length === 0) return;
 
-  let imagesOptimized = 0;
+  let imagesOptimized = 1;
 
   sendMessage({
     type: 'PROGRESS_TOTAL_ITEMS',
@@ -33,11 +33,9 @@ export const registerFileMedias = async (
       images.set(key, await registerFileMedia(context, key, bytes));
     }
 
-    imagesOptimized += 1;
-
     sendMessage({
       type: 'PROGRESS_PROCESSED_ITEMS',
-      data: imagesOptimized
+      data: imagesOptimized++
     });
 
     await yieldByTime();
