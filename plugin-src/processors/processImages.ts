@@ -8,7 +8,7 @@ export const processImages = async (): Promise<Record<string, Uint8Array<ArrayBu
 
   if (images.size === 0) return processedImages;
 
-  let processedImagesCount = 0;
+  let currentImage = 1;
 
   reportProgress({
     type: 'PROGRESS_TOTAL_ITEMS',
@@ -27,11 +27,9 @@ export const processImages = async (): Promise<Record<string, Uint8Array<ArrayBu
       processedImages[key] = bytes as Uint8Array<ArrayBuffer>;
     }
 
-    processedImagesCount += 1;
-
     reportProgress({
       type: 'PROGRESS_PROCESSED_ITEMS',
-      data: processedImagesCount
+      data: currentImage++
     });
 
     await yieldByTime();

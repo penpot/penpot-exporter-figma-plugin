@@ -7,7 +7,7 @@ import type { PenpotPage } from '@ui/lib/types/penpotPage';
 
 export const processPages = async (node: DocumentNode): Promise<PenpotPage[]> => {
   const children = [];
-  let processedPages = 0;
+  let currentPage = 1;
 
   reportProgress({
     type: 'PROGRESS_TOTAL_ITEMS',
@@ -19,11 +19,9 @@ export const processPages = async (node: DocumentNode): Promise<PenpotPage[]> =>
 
     children.push(await transformPageNode(page));
 
-    processedPages += 1;
-
     reportProgress({
       type: 'PROGRESS_PROCESSED_ITEMS',
-      data: processedPages
+      data: currentPage++
     });
 
     await yieldByTime();
