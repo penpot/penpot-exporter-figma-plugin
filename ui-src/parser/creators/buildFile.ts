@@ -1,10 +1,10 @@
 import { yieldByTime } from '@common/sleep';
 
-import { sendMessage } from '@ui/context';
+import { flushMessageQueue, sendMessage } from '@ui/context';
 import type { PenpotContext } from '@ui/lib/types/penpotContext';
 import type { PenpotPage } from '@ui/lib/types/penpotPage';
 import { components } from '@ui/parser';
-import { createComponentsLibrary, createPage } from '@ui/parser/creators';
+import { createPage } from '@ui/parser/creators';
 
 export const buildFile = async (context: PenpotContext, children: PenpotPage[]): Promise<void> => {
   let pagesBuilt = 1;
@@ -32,5 +32,5 @@ export const buildFile = async (context: PenpotContext, children: PenpotPage[]):
     await yieldByTime();
   }
 
-  await createComponentsLibrary(context);
+  flushMessageQueue();
 };
