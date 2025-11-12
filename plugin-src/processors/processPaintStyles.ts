@@ -1,7 +1,8 @@
-import { sleep } from '@common/sleep';
+import { yieldByTime } from '@common/sleep';
 
 import { paintStyles } from '@plugin/libraries';
 import { translatePaintStyle } from '@plugin/translators/styles';
+import { flushProgress, reportProgress } from '@plugin/utils';
 
 import type { FillStyle } from '@ui/lib/types/utils/fill';
 
@@ -23,12 +24,12 @@ export const processPaintStyles = async (): Promise<Record<string, FillStyle>> =
 
   let currentStyle = 1;
 
-  figma.ui.postMessage({
+  reportProgress({
     type: 'PROGRESS_TOTAL_ITEMS',
     data: paintStyles.size
   });
 
-  figma.ui.postMessage({
+  reportProgress({
     type: 'PROGRESS_STEP',
     data: 'fills'
   });
@@ -39,15 +40,15 @@ export const processPaintStyles = async (): Promise<Record<string, FillStyle>> =
       styles[styleId] = translatePaintStyle(figmaStyle);
     }
 
-    figma.ui.postMessage({
+    reportProgress({
       type: 'PROGRESS_PROCESSED_ITEMS',
       data: currentStyle++
     });
 
-    await sleep(0);
+    await yieldByTime();
   }
 
-  await sleep(20);
+  flushProgress();
 
   return styles;
 };

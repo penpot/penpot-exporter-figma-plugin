@@ -1,6 +1,6 @@
-import { sleep } from '@common/sleep';
+import { yieldByTime } from '@common/sleep';
 
-import { sendMessage } from '@ui/context';
+import { flushMessageQueue, sendMessage } from '@ui/context';
 import type { PenpotContext } from '@ui/lib/types/penpotContext';
 import type { PenpotComponent } from '@ui/lib/types/shapes/componentShape';
 import { componentRoots, components } from '@ui/parser';
@@ -27,8 +27,10 @@ export const createComponentsLibrary = async (context: PenpotContext): Promise<v
       data: componentsBuilt++
     });
 
-    await sleep(0);
+    await yieldByTime();
   }
+
+  flushMessageQueue();
 };
 
 const createComponentLibrary = (context: PenpotContext, component: UiComponent): void => {

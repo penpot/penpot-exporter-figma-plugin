@@ -1,6 +1,7 @@
-import { sleep } from '@common/sleep';
+import { yieldByTime } from '@common/sleep';
 
 import { transformPageNode } from '@plugin/transformers';
+import { flushProgress, reportProgress } from '@plugin/utils';
 
 import type { PenpotPage } from '@ui/lib/types/penpotPage';
 
@@ -8,7 +9,7 @@ export const processPages = async (node: DocumentNode): Promise<PenpotPage[]> =>
   const children = [];
   let currentPage = 1;
 
-  figma.ui.postMessage({
+  reportProgress({
     type: 'PROGRESS_TOTAL_ITEMS',
     data: node.children.length
   });
@@ -18,13 +19,15 @@ export const processPages = async (node: DocumentNode): Promise<PenpotPage[]> =>
 
     children.push(await transformPageNode(page));
 
-    figma.ui.postMessage({
+    reportProgress({
       type: 'PROGRESS_PROCESSED_ITEMS',
       data: currentPage++
     });
 
-    await sleep(0);
+    await yieldByTime();
   }
+
+  flushProgress();
 
   return children;
 };

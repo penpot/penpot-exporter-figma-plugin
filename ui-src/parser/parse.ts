@@ -2,10 +2,12 @@ import { createBuildContext } from '@penpot/library';
 
 import { init } from '@common/map';
 
+import { flushMessageQueue } from '@ui/context';
 import type { PenpotContext } from '@ui/lib/types/penpotContext';
 import { componentProperties, componentRoots, variantProperties } from '@ui/parser';
 import {
   buildFile,
+  createComponentsLibrary,
   registerColorLibraries,
   registerFileMedias,
   registerTypographyLibraries
@@ -33,8 +35,11 @@ export const parse = async ({
   await registerColorLibraries(context, paintStyles);
   await registerTypographyLibraries(context, textStyles);
   await buildFile(context, children);
+  await createComponentsLibrary(context);
 
   context.closeFile();
+
+  flushMessageQueue();
 
   return context;
 };

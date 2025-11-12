@@ -1,6 +1,6 @@
-import { sleep } from '@common/sleep';
+import { yieldByTime } from '@common/sleep';
 
-import { sendMessage } from '@ui/context';
+import { flushMessageQueue, sendMessage } from '@ui/context';
 import type { PenpotContext } from '@ui/lib/types/penpotContext';
 import type { TypographyStyle } from '@ui/lib/types/shapes/textShape';
 import { typographies } from '@ui/parser';
@@ -53,6 +53,8 @@ export const registerTypographyLibraries = async (
       data: stylesRegistered++
     });
 
-    await sleep(0);
+    await yieldByTime();
   }
+
+  flushMessageQueue();
 };

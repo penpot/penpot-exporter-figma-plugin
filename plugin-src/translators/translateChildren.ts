@@ -1,4 +1,4 @@
-import { sleep } from '@common/sleep';
+import { yieldByTime } from '@common/sleep';
 
 import { transformGroupNodeLike, transformSceneNode } from '@plugin/transformers';
 import { transformMaskIds } from '@plugin/transformers/partials';
@@ -56,7 +56,7 @@ export const translateChildren = async (children: readonly SceneNode[]): Promise
 
     if (penpotNode) transformedChildren.push(penpotNode);
 
-    await sleep(0);
+    await yieldByTime();
   }
 
   return transformedChildren;

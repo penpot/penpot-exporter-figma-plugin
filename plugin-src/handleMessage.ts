@@ -9,11 +9,16 @@ import {
   variantProperties
 } from '@plugin/libraries';
 import { transformDocumentNode } from '@plugin/transformers';
+import { flushProgress, reportProgress } from '@plugin/utils';
 
 export const handleExportMessage = async (): Promise<void> => {
-  figma.ui.postMessage({
+  const document = await transformDocumentNode(figma.root);
+
+  flushProgress();
+
+  reportProgress({
     type: 'PENPOT_DOCUMENT',
-    data: await transformDocumentNode(figma.root)
+    data: document
   });
 };
 
@@ -27,7 +32,7 @@ export const handleRetryMessage = async (): Promise<void> => {
   componentProperties.clear();
   variantProperties.clear();
 
-  figma.ui.postMessage({
+  reportProgress({
     type: 'RELOAD'
   });
 };

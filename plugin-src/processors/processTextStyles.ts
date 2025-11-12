@@ -1,7 +1,8 @@
-import { sleep } from '@common/sleep';
+import { yieldByTime } from '@common/sleep';
 
 import { textStyles } from '@plugin/libraries';
 import { translateTextStyle } from '@plugin/translators/styles';
+import { flushProgress, reportProgress } from '@plugin/utils';
 
 import type { TypographyStyle } from '@ui/lib/types/shapes/textShape';
 
@@ -23,12 +24,12 @@ export const processTextStyles = async (): Promise<Record<string, TypographyStyl
 
   let currentStyle = 1;
 
-  figma.ui.postMessage({
+  reportProgress({
     type: 'PROGRESS_TOTAL_ITEMS',
     data: textStyles.size
   });
 
-  figma.ui.postMessage({
+  reportProgress({
     type: 'PROGRESS_STEP',
     data: 'typographies'
   });
@@ -39,15 +40,15 @@ export const processTextStyles = async (): Promise<Record<string, TypographyStyl
       styles[styleId] = translateTextStyle(figmaStyle);
     }
 
-    figma.ui.postMessage({
+    reportProgress({
       type: 'PROGRESS_PROCESSED_ITEMS',
       data: currentStyle++
     });
 
-    await sleep(0);
+    await yieldByTime();
   }
 
-  await sleep(20);
+  flushProgress();
 
   return styles;
 };
