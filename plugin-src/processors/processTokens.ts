@@ -3,8 +3,8 @@ import { translateSet, translateTheme } from '@plugin/translators/tokens';
 
 import type { Theme, Token, TokenSets, Tokens } from '@ui/lib/types/shapes/tokens';
 
-const valueIsAlias = (value: string): boolean => {
-  return value.startsWith('{') && value.endsWith('}');
+const valueIsAlias = (value: Token['$value']): value is string => {
+  return typeof value === 'string' && value.startsWith('{') && value.endsWith('}');
 };
 
 const resolveAlias = (token: Token): Token | null => {
