@@ -2,4 +2,4 @@
 'penpot-exporter': minor
 ---
 
-Optimize performance by reducir UI overhead during export
+Optimize performance by reducing UI overhead during export
