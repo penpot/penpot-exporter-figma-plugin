@@ -9,26 +9,23 @@ type ProgressStepperProps = {
   currentStep: Steps;
 };
 
-const humanizeStepName = (step: Steps): string => {
-  return step.replace(/([a-z])([A-Z])/g, '$1 $2').replace(/^./, char => char.toUpperCase());
-};
+export const ProgressStepper = ({ currentStep }: ProgressStepperProps): JSX.Element | null => {
+  const currentStepIndex = PROGRESS_STEPS.indexOf(currentStep);
 
-export const ProgressStepper = ({ currentStep }: ProgressStepperProps): JSX.Element => {
-  const computedIndex = PROGRESS_STEPS.indexOf(currentStep);
-  const isKnownStep = computedIndex !== -1;
-  const currentIndex = isKnownStep ? computedIndex : 0;
-  const stepIndex = PROGRESS_STEPS.indexOf(currentStep);
-  const stepNumber = stepIndex !== -1 ? stepIndex + 1 : undefined;
-  const stepPrefix = stepNumber ? `Step ${stepNumber} of ${PROGRESS_STEPS.length}` : undefined;
+  if (currentStepIndex === -1) {
+    return null;
+  }
 
   return (
     <div className={styles.wrapper}>
-      {stepPrefix && <strong className={styles.prefix}>{stepPrefix}</strong>}
+      <strong
+        className={styles.prefix}
+      >{`Step ${currentStepIndex + 1} of ${PROGRESS_STEPS.length}`}</strong>
       <div className={styles.container}>
         <div className={styles.steps} role="list">
           {PROGRESS_STEPS.map((step, index) => {
-            const isCompleted = isKnownStep && index < currentIndex;
-            const isCurrent = isKnownStep && index === currentIndex;
+            const isCompleted = index < currentStepIndex;
+            const isCurrent = index === currentStepIndex;
 
             return (
               <div
@@ -37,8 +34,6 @@ export const ProgressStepper = ({ currentStep }: ProgressStepperProps): JSX.Elem
                   [styles['step-completed']]: isCompleted,
                   [styles['step-current']]: isCurrent
                 })}
-                role="listitem"
-                title={`${index + 1}. ${humanizeStepName(step)}`}
               />
             );
           })}
