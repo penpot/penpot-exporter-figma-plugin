@@ -16,34 +16,31 @@ const stepMessages: Record<Steps, Messages> = {
     current: 'Currently processing layer'
   },
   images: {
-    total: 'images downloaded 📸'
+    total: 'Images downloaded 📸'
   },
   optimization: {
-    total: 'images optimized 📸'
+    total: 'Images optimized 📸'
   },
   building: {
-    total: 'pages built 🏗️',
-    current: 'Currently processing layer'
+    total: 'Pages built 🏗️'
   },
   fills: {
-    total: 'color libraries fetched 🎨'
+    total: 'Fetching color libraries 🎨'
   },
   colorLibraries: {
-    total: 'color libraries built 🎨'
+    total: 'Building color libraries 🎨'
   },
   components: {
-    total: 'components built 🏗️',
-    current: 'Currently processing layer'
+    total: 'Components built 🏗️'
   },
   exporting: {
-    total: 'Penpot file generated 🚀',
-    current: 'Currently exporting item'
+    total: 'Penpot file generated 🚀'
   },
   typographies: {
-    total: 'text libraries fetched 📝'
+    total: 'Fetching text libraries 📝'
   },
   typoLibraries: {
-    total: 'text libraries built 📝'
+    total: 'Building text libraries 📝'
   }
 };
 
@@ -82,11 +79,6 @@ const StepProgress = (): JSX.Element | null => {
     case 'optimization':
     case 'building':
     case 'components':
-      return (
-        <>
-          {`${progress.processedItems} of ${progress.totalItems}`} {stepMessages[step].total}
-        </>
-      );
     case 'exporting':
       return (
         <>

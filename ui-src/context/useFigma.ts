@@ -1,5 +1,5 @@
 import { exportStream } from '@penpot/library';
-import { useEffect, useRef, useState } from 'preact/hooks';
+import { useEffect, useMemo, useRef, useState } from 'preact/hooks';
 
 import type { FormValues } from '@ui/components/ExportForm';
 import { type MessageData, createInMemoryWritable, sendMessage } from '@ui/context';
@@ -48,7 +48,12 @@ export const useFigma = (): UseFigmaHook => {
     totalItems: 0,
     processedItems: 0
   });
-  const [progressPercentage, setProgressPercentage] = useState<number>(0);
+  const calculatedProgressPercentage = useMemo(() => {
+    if (progress.totalItems === 0) {
+      return 0;
+    }
+    return Math.round((progress.processedItems / progress.totalItems) * 100);
+  }, [progress.processedItems, progress.totalItems]);
 
   const postMessage = (type: string, data?: unknown): void => {
     parent.postMessage({ pluginMessage: { type, data } }, '*');
@@ -79,7 +84,6 @@ export const useFigma = (): UseFigmaHook => {
           totalItems: 0,
           processedItems: 0
         });
-        setProgressPercentage(0);
 
         exportStartTimeRef.current = null;
 
@@ -103,9 +107,11 @@ export const useFigma = (): UseFigmaHook => {
 
         await exportStream(context, writable, {
           onProgress: ({ item, total }) => {
-            const percentage = Math.round((item / total) * 100);
-
-            setProgressPercentage(percentage);
+            setProgress(prev => ({
+              currentItem: prev.currentItem,
+              totalItems: total,
+              processedItems: item
+            }));
           }
         });
 
@@ -247,7 +253,7 @@ export const useFigma = (): UseFigmaHook => {
     error,
     step,
     progress,
-    progressPercentage,
+    progressPercentage: calculatedProgressPercentage,
     exportedBlob,
     exportTime,
     retry,

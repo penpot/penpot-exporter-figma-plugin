@@ -18,7 +18,7 @@ const emitMessage = (pluginMessage: PluginMessage): void => {
 
 const messageBuffer = createMessageBuffer<PluginMessage>({
   bufferedTypes: BUFFERED_TYPES as Set<PluginMessage['type']>,
-  flushInterval: 1000,
+  flushInterval: 500,
   sendMessage: emitMessage,
   setTimeout: window.setTimeout.bind(window),
   clearTimeout: window.clearTimeout.bind(window)
