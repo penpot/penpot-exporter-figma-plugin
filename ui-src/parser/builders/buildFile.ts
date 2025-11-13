@@ -12,13 +12,11 @@ export const buildFile = async (context: PenpotContext, children: PenpotPage[]):
   components.clear();
 
   sendMessage({
-    type: 'PROGRESS_TOTAL_ITEMS',
-    data: children.length
-  });
-
-  sendMessage({
     type: 'PROGRESS_STEP',
-    data: 'building'
+    data: {
+      step: 'building',
+      total: children.length
+    }
   });
 
   for (const page of children) {
