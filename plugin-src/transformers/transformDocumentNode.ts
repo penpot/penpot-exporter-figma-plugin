@@ -23,8 +23,8 @@ export const transformDocumentNode = async (node: DocumentNode): Promise<PenpotD
 
   const children = await processPages(node);
   const paintStyles = await processPaintStyles();
-  const images = await processImages();
   const textStyles = await processTextStyles();
+  const images = await processImages();
 
   return {
     name: node.name,

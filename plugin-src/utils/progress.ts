@@ -6,7 +6,7 @@ const BUFFERED_TYPES = new Set(BUFFERED_PROGRESS_TYPES);
 
 const messageBuffer = createMessageBuffer<PluginMessage>({
   bufferedTypes: BUFFERED_TYPES,
-  flushInterval: 100,
+  flushInterval: 1000,
   sendMessage: message => {
     figma.ui.postMessage(message);
   }

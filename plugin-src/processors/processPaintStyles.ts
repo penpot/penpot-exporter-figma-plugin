@@ -22,13 +22,6 @@ export const processPaintStyles = async (): Promise<Record<string, FillStyle>> =
 
   if (paintStyles.size === 0) return styles;
 
-  let currentStyle = 1;
-
-  reportProgress({
-    type: 'PROGRESS_TOTAL_ITEMS',
-    data: paintStyles.size
-  });
-
   reportProgress({
     type: 'PROGRESS_STEP',
     data: 'fills'
@@ -39,11 +32,6 @@ export const processPaintStyles = async (): Promise<Record<string, FillStyle>> =
     if (figmaStyle && isPaintStyle(figmaStyle)) {
       styles[styleId] = translatePaintStyle(figmaStyle);
     }
-
-    reportProgress({
-      type: 'PROGRESS_PROCESSED_ITEMS',
-      data: currentStyle++
-    });
 
     await yieldByTime();
   }

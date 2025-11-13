@@ -63,26 +63,28 @@ const StepProgress = (): JSX.Element | null => {
   const currentText = stepMessages[step].current;
 
   switch (step) {
+    case 'fills':
+    case 'typographies':
+    case 'colorLibraries':
+    case 'typoLibraries':
+      return <>{stepMessages[step].total}</>;
     case 'processing':
+      return (
+        <>
+          {`${progress.processedItems} of ${progress.totalItems}`} {stepMessages[step].total}
+          <br />
+          {currentText}
+          <br />
+          {'“' + truncateText(progress.currentItem, 35) + '”'}
+        </>
+      );
     case 'images':
     case 'optimization':
     case 'building':
-    case 'fills':
     case 'components':
-    case 'colorLibraries':
-    case 'typographies':
-    case 'typoLibraries':
       return (
         <>
-          {progress.processedItems} of {progress.totalItems} {stepMessages[step].total}
-          {progress.currentItem && currentText ? (
-            <>
-              <br />
-              {currentText}
-              <br />
-              {'“' + truncateText(progress.currentItem, 35) + '”'}
-            </>
-          ) : undefined}
+          {`${progress.processedItems} of ${progress.totalItems}`} {stepMessages[step].total}
         </>
       );
     case 'exporting':

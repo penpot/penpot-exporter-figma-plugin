@@ -14,13 +14,6 @@ export const registerColorLibraries = async (
 
   if (stylesToRegister.length === 0) return;
 
-  let stylesRegistered = 1;
-
-  sendMessage({
-    type: 'PROGRESS_TOTAL_ITEMS',
-    data: stylesToRegister.length
-  });
-
   sendMessage({
     type: 'PROGRESS_STEP',
     data: 'colorLibraries'
@@ -46,11 +39,6 @@ export const registerColorLibraries = async (
     }
 
     colors.set(key, fillStyle);
-
-    sendMessage({
-      type: 'PROGRESS_PROCESSED_ITEMS',
-      data: stylesRegistered++
-    });
 
     await yieldByTime();
   }

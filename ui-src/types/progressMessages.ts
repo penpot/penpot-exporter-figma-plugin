@@ -66,10 +66,6 @@ export type PluginMessage =
 /**
  * Types that should be buffered (only the latest message of each type is kept)
  */
-export const BUFFERED_PROGRESS_TYPES = [
-  'PROGRESS_TOTAL_ITEMS',
-  'PROGRESS_PROCESSED_ITEMS',
-  'PROGRESS_CURRENT_ITEM'
-] as const;
+export const BUFFERED_PROGRESS_TYPES = ['PROGRESS_CURRENT_ITEM'] as const;
 
 export type BufferedProgressType = (typeof BUFFERED_PROGRESS_TYPES)[number];

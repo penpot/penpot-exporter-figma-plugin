@@ -22,13 +22,6 @@ export const processTextStyles = async (): Promise<Record<string, TypographyStyl
 
   if (textStyles.size === 0) return styles;
 
-  let currentStyle = 1;
-
-  reportProgress({
-    type: 'PROGRESS_TOTAL_ITEMS',
-    data: textStyles.size
-  });
-
   reportProgress({
     type: 'PROGRESS_STEP',
     data: 'typographies'
@@ -39,11 +32,6 @@ export const processTextStyles = async (): Promise<Record<string, TypographyStyl
     if (figmaStyle && isTextStyle(figmaStyle)) {
       styles[styleId] = translateTextStyle(figmaStyle);
     }
-
-    reportProgress({
-      type: 'PROGRESS_PROCESSED_ITEMS',
-      data: currentStyle++
-    });
 
     await yieldByTime();
   }

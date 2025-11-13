@@ -13,13 +13,6 @@ export const registerTypographyLibraries = async (
 
   if (stylesToRegister.length === 0) return;
 
-  let stylesRegistered = 1;
-
-  sendMessage({
-    type: 'PROGRESS_TOTAL_ITEMS',
-    data: stylesToRegister.length
-  });
-
   sendMessage({
     type: 'PROGRESS_STEP',
     data: 'typoLibraries'
@@ -47,11 +40,6 @@ export const registerTypographyLibraries = async (
     style.typography.id = typographyId;
 
     typographies.set(key, style);
-
-    sendMessage({
-      type: 'PROGRESS_PROCESSED_ITEMS',
-      data: stylesRegistered++
-    });
 
     await yieldByTime();
   }
