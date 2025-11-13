@@ -4,7 +4,7 @@ import {
   optimizeFileMedias,
   registerColorLibraries,
   registerTypographyLibraries
-} from '@ui/parser/creators';
+} from '@ui/parser/builders';
 import type { PenpotDocument } from '@ui/types';
 
 export const buildAssets = async (
