@@ -1,9 +1,10 @@
-import { LoadingIndicator } from '@create-figma-plugin/ui';
 import type { JSX } from 'preact';
 
+import { ProgressBar } from '@ui/components/ProgressBar';
+import { ProgressStepper } from '@ui/components/ProgressStepper';
 import { Stack } from '@ui/components/Stack';
 import { useFigmaContext } from '@ui/context';
-import type { Steps } from '@ui/types/progressMessages';
+import { type Steps } from '@ui/types/progressMessages';
 
 type Messages = {
   total: string;
@@ -15,37 +16,25 @@ const stepMessages: Record<Steps, Messages> = {
     total: 'pages processed 💪',
     current: 'Currently processing layer'
   },
-  images: {
-    total: 'Images downloaded 📸'
+  processAssets: {
+    total: 'Processing assets 📸 🎨 📝'
   },
-  optimization: {
-    total: 'Images optimized 📸'
+  buildAssets: {
+    total: 'Building assets 📸 🎨 📝'
   },
   building: {
-    total: 'Pages built 🏗️'
-  },
-  fills: {
-    total: 'Fetching color libraries 🎨'
-  },
-  colorLibraries: {
-    total: 'Building color libraries 🎨'
+    total: 'Building pages 🏗️'
   },
   components: {
-    total: 'Components built 🏗️'
+    total: 'Building components 🏗️'
   },
   exporting: {
-    total: 'Penpot file generated 🚀'
-  },
-  typographies: {
-    total: 'Fetching text libraries 📝'
-  },
-  typoLibraries: {
-    total: 'Building text libraries 📝'
+    total: 'Generating Penpot file 🚀'
   }
 };
 
 const StepProgress = (): JSX.Element | null => {
-  const { progress, progressPercentage, step } = useFigmaContext();
+  const { progress, step } = useFigmaContext();
 
   const truncateText = (text: string, maxChars: number): string => {
     if (text.length <= maxChars) {
@@ -60,10 +49,11 @@ const StepProgress = (): JSX.Element | null => {
   const currentText = stepMessages[step].current;
 
   switch (step) {
-    case 'fills':
-    case 'typographies':
-    case 'colorLibraries':
-    case 'typoLibraries':
+    case 'processAssets':
+    case 'buildAssets':
+    case 'building':
+    case 'components':
+    case 'exporting':
       return <>{stepMessages[step].total}</>;
     case 'processing':
       return (
@@ -75,26 +65,19 @@ const StepProgress = (): JSX.Element | null => {
           {'“' + truncateText(progress.currentItem, 35) + '”'}
         </>
       );
-    case 'images':
-    case 'optimization':
-    case 'building':
-    case 'components':
-    case 'exporting':
-      return (
-        <>
-          {progressPercentage}% {stepMessages[step].total}
-        </>
-      );
   }
 };
 
 export const ExporterProgress = (): JSX.Element => {
+  const { progressPercentage, step } = useFigmaContext();
+
   return (
-    <Stack space="small" horizontalAlign="center">
-      <LoadingIndicator />
-      <span style={{ textAlign: 'center' }}>
+    <Stack space="medium" horizontalAlign="center">
+      {step && <ProgressStepper currentStep={step} />}
+      <Stack space="2xsmall" style={{ textAlign: 'center' }}>
+        <ProgressBar value={progressPercentage} />
         <StepProgress />
-      </span>
+      </Stack>
     </Stack>
   );
 };

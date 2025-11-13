@@ -10,8 +10,11 @@ export const processPages = async (node: DocumentNode): Promise<PenpotPage[]> =>
   let currentPage = 1;
 
   reportProgress({
-    type: 'PROGRESS_TOTAL_ITEMS',
-    data: node.children.length
+    type: 'PROGRESS_STEP',
+    data: {
+      step: 'processing',
+      total: node.children.length
+    }
   });
 
   for (const page of node.children) {

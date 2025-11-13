@@ -17,21 +17,25 @@ export const registerTextStyles = async (): Promise<void> => {
   });
 };
 
-export const processTextStyles = async (): Promise<Record<string, TypographyStyle>> => {
+export const processTextStyles = async (
+  currentAsset: number
+): Promise<Record<string, TypographyStyle>> => {
   const styles: Record<string, TypographyStyle> = {};
 
   if (textStyles.size === 0) return styles;
 
-  reportProgress({
-    type: 'PROGRESS_STEP',
-    data: 'typographies'
-  });
+  let currentStyle = currentAsset;
 
   for (const [styleId, style] of textStyles.entries()) {
     const figmaStyle = style ?? (await figma.getStyleByIdAsync(styleId));
     if (figmaStyle && isTextStyle(figmaStyle)) {
       styles[styleId] = translateTextStyle(figmaStyle);
     }
+
+    reportProgress({
+      type: 'PROGRESS_PROCESSED_ITEMS',
+      data: currentStyle++
+    });
 
     await yieldByTime();
   }

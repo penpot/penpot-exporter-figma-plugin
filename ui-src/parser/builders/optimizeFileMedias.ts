@@ -8,25 +8,14 @@ import { detectMimeType } from '@ui/utils';
 
 const IMAGE_QUALITY = 0.8;
 
-export const registerFileMedias = async (
+export const optimizeFileMedias = async (
   context: PenpotContext,
-  binaryImages: Record<string, Uint8Array<ArrayBuffer>>
+  imagesToOptimize: [string, Uint8Array<ArrayBuffer>][],
+  currentAsset: number
 ): Promise<void> => {
-  const imagesToOptimize = Object.entries(binaryImages);
-
   if (imagesToOptimize.length === 0) return;
 
-  let imagesOptimized = 1;
-
-  sendMessage({
-    type: 'PROGRESS_TOTAL_ITEMS',
-    data: imagesToOptimize.length
-  });
-
-  sendMessage({
-    type: 'PROGRESS_STEP',
-    data: 'optimization'
-  });
+  let imagesOptimized = currentAsset;
 
   for (const [key, bytes] of imagesToOptimize) {
     if (bytes) {

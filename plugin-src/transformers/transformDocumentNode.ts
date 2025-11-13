@@ -6,14 +6,8 @@ import {
   missingFonts,
   variantProperties
 } from '@plugin/libraries';
-import {
-  processImages,
-  processPages,
-  processPaintStyles,
-  processTextStyles,
-  registerPaintStyles,
-  registerTextStyles
-} from '@plugin/processors';
+import { processPages, registerPaintStyles, registerTextStyles } from '@plugin/processors';
+import { processAssets } from '@plugin/processors/processAssets';
 
 import type { PenpotDocument } from '@ui/types';
 
@@ -22,9 +16,7 @@ export const transformDocumentNode = async (node: DocumentNode): Promise<PenpotD
   await registerTextStyles();
 
   const children = await processPages(node);
-  const paintStyles = await processPaintStyles();
-  const textStyles = await processTextStyles();
-  const images = await processImages();
+  const [images, paintStyles, textStyles] = await processAssets();
 
   return {
     name: node.name,

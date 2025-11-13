@@ -100,7 +100,10 @@ export const useFigma = (): UseFigmaHook => {
 
         sendMessage({
           type: 'PROGRESS_STEP',
-          data: 'exporting'
+          data: {
+            step: 'exporting',
+            total: Infinity
+          }
         });
 
         const { writable, getBlob } = createInMemoryWritable();
@@ -141,12 +144,12 @@ export const useFigma = (): UseFigmaHook => {
         break;
       }
       case 'PROGRESS_STEP': {
-        setStep(pluginMessage.data);
-        setProgress(prev => ({
+        setStep(pluginMessage.data.step);
+        setProgress({
           currentItem: '',
-          totalItems: prev.totalItems,
+          totalItems: pluginMessage.data.total,
           processedItems: 0
-        }));
+        });
 
         break;
       }
@@ -154,15 +157,6 @@ export const useFigma = (): UseFigmaHook => {
         setProgress(prev => ({
           currentItem: pluginMessage.data,
           totalItems: prev.totalItems,
-          processedItems: prev.processedItems
-        }));
-
-        break;
-      }
-      case 'PROGRESS_TOTAL_ITEMS': {
-        setProgress(prev => ({
-          currentItem: prev.currentItem,
-          totalItems: pluginMessage.data,
           processedItems: prev.processedItems
         }));
 
@@ -223,7 +217,6 @@ export const useFigma = (): UseFigmaHook => {
 
   const exportPenpot = (): void => {
     setExporting(true);
-    setStep('processing');
     setProgress(prev => ({
       currentItem: prev.currentItem,
       totalItems: prev.totalItems,

@@ -7,16 +7,12 @@ import { typographies } from '@ui/parser';
 
 export const registerTypographyLibraries = async (
   context: PenpotContext,
-  styles: Record<string, TypographyStyle>
+  stylesToRegister: [string, TypographyStyle][],
+  currentAsset: number
 ): Promise<void> => {
-  const stylesToRegister = Object.entries(styles);
-
   if (stylesToRegister.length === 0) return;
 
-  sendMessage({
-    type: 'PROGRESS_STEP',
-    data: 'typoLibraries'
-  });
+  let stylesRegistered = currentAsset;
 
   for (const [key, style] of stylesToRegister) {
     const typography = style.typography;
@@ -40,6 +36,11 @@ export const registerTypographyLibraries = async (
     style.typography.id = typographyId;
 
     typographies.set(key, style);
+
+    sendMessage({
+      type: 'PROGRESS_PROCESSED_ITEMS',
+      data: stylesRegistered++
+    });
 
     await yieldByTime();
   }

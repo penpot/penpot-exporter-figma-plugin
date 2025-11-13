@@ -1,0 +1,68 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.375rem;
+  width: 100%;
+}
+
+.prefix {
+  white-space: nowrap;
+  text-align: center;
+}
+
+.container {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  width: 100%;
+}
+
+.label {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.5rem;
+  height: 1.5rem;
+  padding: 0 0.25rem;
+  border-radius: 999px;
+  background-color: var(--figma-color-bg-secondary);
+  font-size: 0.75rem;
+  font-weight: 600;
+  line-height: 1;
+  color: inherit;
+}
+
+.label-active {
+  background-color: var(--figma-color-bg-brand);
+  color: #fff;
+}
+
+.steps {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  width: 100%;
+}
+
+.step {
+  position: relative;
+  flex: 1 1 0;
+  height: 0.375rem;
+  border-radius: 999px;
+  background-color: var(--figma-color-bg-secondary);
+  opacity: 0.4;
+  transition:
+    opacity 0.2s ease-out,
+    background-color 0.2s ease-out;
+}
+
+.step-completed {
+  opacity: 1;
+  background-color: var(--figma-color-bg-brand);
+}
+
+.step-current {
+  opacity: 0.6;
+  background-color: var(--figma-color-bg-brand);
+}

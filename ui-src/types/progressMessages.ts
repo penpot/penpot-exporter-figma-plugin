@@ -2,15 +2,20 @@ import type { PenpotDocument } from '@ui/types/penpotDocument';
 
 export type Steps =
   | 'processing'
-  | 'images'
-  | 'optimization'
+  | 'processAssets'
+  | 'buildAssets'
   | 'building'
   | 'components'
-  | 'exporting'
-  | 'fills'
-  | 'colorLibraries'
-  | 'typographies'
-  | 'typoLibraries';
+  | 'exporting';
+
+export const PROGRESS_STEPS: Steps[] = [
+  'processing',
+  'processAssets',
+  'buildAssets',
+  'building',
+  'components',
+  'exporting'
+];
 
 export type PenpotDocumentMessage = {
   type: 'PENPOT_DOCUMENT';
@@ -19,12 +24,10 @@ export type PenpotDocumentMessage = {
 
 export type ProgressStepMessage = {
   type: 'PROGRESS_STEP';
-  data: Steps;
-};
-
-export type ProgressTotalItemsMessage = {
-  type: 'PROGRESS_TOTAL_ITEMS';
-  data: number;
+  data: {
+    step: Steps;
+    total: number;
+  };
 };
 
 export type ProgressProcessedItemsMessage = {
@@ -56,7 +59,6 @@ export type UserDataMessage = {
 export type PluginMessage =
   | PenpotDocumentMessage
   | ProgressStepMessage
-  | ProgressTotalItemsMessage
   | ProgressProcessedItemsMessage
   | ProgressCurrentItemMessage
   | ReloadMessage
