@@ -22,8 +22,15 @@ export const ExportSummary = (): JSX.Element | null => {
 
       <Stack space="2xsmall">
         <strong style={{ fontSize: 13 }}>{exportedBlob.filename}</strong>
-        <Muted>File size: {fileSizeInMB(exportedBlob.blob.size)}</Muted>
-        {exportTime && <Muted>Export time: {formatExportTime(exportTime)}</Muted>}
+        <p>
+          File size: {fileSizeInMB(exportedBlob.blob.size)}
+          {exportTime && (
+            <>
+              <br />
+              Export time: {formatExportTime(exportTime)}
+            </>
+          )}
+        </p>
       </Stack>
 
       {hasMissingFonts && (
