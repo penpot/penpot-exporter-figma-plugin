@@ -12,12 +12,12 @@
 
 .progress-bar-track {
   stroke: var(--figma-color-bg-secondary);
-  stroke-width: 3;
+  stroke-width: 4;
 }
 
 .progress-bar-fill {
   stroke: var(--figma-color-bg-brand);
-  stroke-width: 3;
+  stroke-width: 4;
   stroke-linecap: round;
   transition: stroke-dashoffset 0.2s ease-out;
   will-change: stroke-dashoffset;
