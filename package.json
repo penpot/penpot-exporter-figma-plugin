@@ -30,6 +30,7 @@
     "base64-js": "^1.5",
     "classnames": "^2.5",
     "lru-cache": "^11.2",
+    "lucide-react": "^0.553.0",
     "mixpanel-figma": "^2.0",
     "preact": "^10.27",
     "react-hook-form": "^7.63",
