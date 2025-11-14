@@ -1,5 +1,5 @@
 import { exportStream } from '@penpot/library';
-import { useEffect, useMemo, useRef, useState } from 'preact/hooks';
+import { useEffect, useRef, useState } from 'preact/hooks';
 
 import type { FormValues } from '@ui/components/ExportForm';
 import { type MessageData, createInMemoryWritable, sendMessage } from '@ui/context';
@@ -14,7 +14,7 @@ export type UseFigmaHook = {
   exporting: boolean;
   summary: boolean;
   error: boolean;
-  step: Steps | undefined;
+  step: Steps;
   progress: {
     currentItem: string;
     totalItems: number;
@@ -38,25 +38,18 @@ export const useFigma = (): UseFigmaHook => {
   const [exportTime, setExportTime] = useState<number | null>(null);
   const exportStartTimeRef = useRef<number | null>(null);
 
-  const [step, setStep] = useState<Steps>();
-  const [progress, setProgress] = useState<{
-    currentItem: string;
-    totalItems: number;
-    processedItems: number;
-  }>({
-    currentItem: '',
-    totalItems: 0,
-    processedItems: 0
-  });
-  const calculatedProgressPercentage = useMemo(() => {
-    if (progress.totalItems === 0) {
-      return 0;
-    }
-    return Math.round((progress.processedItems / progress.totalItems) * 100);
-  }, [progress.processedItems, progress.totalItems]);
+  const [step, setStep] = useState<Steps>('buildAssets');
+  const totalItemsRef = useRef<number>(0);
+  const [currentItem, setCurrentItem] = useState('');
+  const [processedItems, setProcessedItems] = useState(0);
+  const [progressPercentage, setProgressPercentage] = useState(0);
 
   const postMessage = (type: string, data?: unknown): void => {
     parent.postMessage({ pluginMessage: { type, data } }, '*');
+  };
+
+  const calculatePercentage = (item: number, total: number): number => {
+    return Math.round((item / total) * 100);
   };
 
   const onMessage = async (event: MessageEvent<MessageData>): Promise<void> => {
@@ -78,13 +71,10 @@ export const useFigma = (): UseFigmaHook => {
         setError(false);
         setExportedBlob(null);
         setExportTime(null);
-        setStep(undefined);
-        setProgress({
-          currentItem: '',
-          totalItems: 0,
-          processedItems: 0
-        });
+        setStep('processing');
+        setCurrentItem('');
 
+        totalItemsRef.current = 0;
         exportStartTimeRef.current = null;
 
         track('Plugin Reloaded');
@@ -110,11 +100,13 @@ export const useFigma = (): UseFigmaHook => {
 
         await exportStream(context, writable, {
           onProgress: ({ item, total }) => {
-            setProgress(prev => ({
-              currentItem: prev.currentItem,
-              totalItems: total,
-              processedItems: item
-            }));
+            sendMessage({
+              type: 'PROGRESS_EXPORT',
+              data: {
+                current: item,
+                total: total
+              }
+            });
           }
         });
 
@@ -139,35 +131,34 @@ export const useFigma = (): UseFigmaHook => {
 
         setExporting(false);
         setSummary(true);
-        setStep(undefined);
+        setStep('processing');
 
         break;
       }
       case 'PROGRESS_STEP': {
         setStep(pluginMessage.data.step);
-        setProgress({
-          currentItem: '',
-          totalItems: pluginMessage.data.total,
-          processedItems: 0
-        });
+        setProgressPercentage(0);
+        setProcessedItems(0);
+
+        totalItemsRef.current = pluginMessage.data.total;
 
         break;
       }
       case 'PROGRESS_CURRENT_ITEM': {
-        setProgress(prev => ({
-          currentItem: pluginMessage.data,
-          totalItems: prev.totalItems,
-          processedItems: prev.processedItems
-        }));
+        setCurrentItem(pluginMessage.data);
 
         break;
       }
       case 'PROGRESS_PROCESSED_ITEMS': {
-        setProgress(prev => ({
-          currentItem: prev.currentItem,
-          totalItems: prev.totalItems,
-          processedItems: pluginMessage.data
-        }));
+        setProcessedItems(pluginMessage.data);
+        setProgressPercentage(calculatePercentage(pluginMessage.data, totalItemsRef.current));
+
+        break;
+      }
+      case 'PROGRESS_EXPORT': {
+        setProgressPercentage(
+          calculatePercentage(pluginMessage.data.current, pluginMessage.data.total)
+        );
 
         break;
       }
@@ -208,8 +199,6 @@ export const useFigma = (): UseFigmaHook => {
   };
 
   const cancel = (): void => {
-    setExportedBlob(null);
-
     track('Plugin Closed');
 
     postMessage('cancel');
@@ -217,11 +206,6 @@ export const useFigma = (): UseFigmaHook => {
 
   const exportPenpot = (): void => {
     setExporting(true);
-    setProgress(prev => ({
-      currentItem: prev.currentItem,
-      totalItems: prev.totalItems,
-      processedItems: 0
-    }));
     exportStartTimeRef.current = Date.now();
 
     track('File Export Started');
@@ -245,8 +229,12 @@ export const useFigma = (): UseFigmaHook => {
     summary,
     error,
     step,
-    progress,
-    progressPercentage: calculatedProgressPercentage,
+    progress: {
+      currentItem,
+      totalItems: totalItemsRef.current,
+      processedItems
+    },
+    progressPercentage,
     exportedBlob,
     exportTime,
     retry,

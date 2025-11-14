@@ -4,33 +4,15 @@ import { ProgressBar } from '@ui/components/ProgressBar';
 import { ProgressStepper } from '@ui/components/ProgressStepper';
 import { Stack } from '@ui/components/Stack';
 import { useFigmaContext } from '@ui/context';
-import { type Steps } from '@ui/types/progressMessages';
+import type { Steps } from '@ui/types/progressMessages';
 
-type Messages = {
-  total: string;
-  current?: string;
-};
-
-const stepMessages: Record<Steps, Messages> = {
-  processing: {
-    total: 'pages processed 💪',
-    current: 'Currently processing layer'
-  },
-  processAssets: {
-    total: 'Processing assets 📸 🎨 📝'
-  },
-  buildAssets: {
-    total: 'Building assets 📸 🎨 📝'
-  },
-  building: {
-    total: 'Building pages 🏗️'
-  },
-  components: {
-    total: 'Building components 🏗️'
-  },
-  exporting: {
-    total: 'Generating Penpot file 🚀'
-  }
+const stepMessages: Record<Steps, string> = {
+  processing: 'Figma pages processed 💪',
+  processAssets: 'Processing Figma assets 📸 🎨 📝',
+  buildAssets: 'Creating Penpot assets 📸 🎨 📝',
+  building: 'Creating Penpot pages 🏗️',
+  components: 'Creating components 🏗️',
+  exporting: 'Generating Penpot file 🚀'
 };
 
 const StepProgress = (): JSX.Element | null => {
@@ -46,23 +28,32 @@ const StepProgress = (): JSX.Element | null => {
 
   if (!step) return null;
 
-  const currentText = stepMessages[step].current;
-
   switch (step) {
+    case 'exporting':
+      return (
+        <>
+          {stepMessages[step]}
+          <br />
+          <br />
+        </>
+      );
     case 'processAssets':
     case 'buildAssets':
-    case 'building':
     case 'components':
-    case 'exporting':
-      return <>{stepMessages[step].total}</>;
+    case 'building':
+      return (
+        <>
+          {`${progress.processedItems} of ${progress.totalItems}`} {stepMessages[step]}
+          <br />
+          <br />
+        </>
+      );
     case 'processing':
       return (
         <>
-          {`${progress.processedItems} of ${progress.totalItems}`} {stepMessages[step].total}
+          {`${progress.processedItems} of ${progress.totalItems}`} {stepMessages[step]}
           <br />
-          {currentText}
-          <br />
-          {'“' + truncateText(progress.currentItem, 35) + '”'}
+          {'Layer: “' + truncateText(progress.currentItem, 35) + '”'}
         </>
       );
   }
@@ -72,9 +63,10 @@ export const ExporterProgress = (): JSX.Element => {
   const { progressPercentage, step } = useFigmaContext();
 
   return (
-    <Stack space="medium" horizontalAlign="center">
-      {step && <ProgressStepper currentStep={step} />}
-      <Stack space="2xsmall" style={{ textAlign: 'center' }}>
+    <Stack space="small">
+      <strong style={{ fontSize: 13 }}>Exporting to Penpot...</strong>
+      <ProgressStepper currentStep={step} />
+      <Stack space="2xsmall">
         <ProgressBar value={progressPercentage} />
         <StepProgress />
       </Stack>

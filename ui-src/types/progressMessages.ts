@@ -40,6 +40,14 @@ export type ProgressCurrentItemMessage = {
   data: string;
 };
 
+export type ProgressExportMessage = {
+  type: 'PROGRESS_EXPORT';
+  data: {
+    current: number;
+    total: number;
+  };
+};
+
 export type ReloadMessage = {
   type: 'RELOAD';
 };
@@ -61,6 +69,7 @@ export type PluginMessage =
   | ProgressStepMessage
   | ProgressProcessedItemsMessage
   | ProgressCurrentItemMessage
+  | ProgressExportMessage
   | ReloadMessage
   | ErrorMessage
   | UserDataMessage;
@@ -68,6 +77,10 @@ export type PluginMessage =
 /**
  * Types that should be buffered (only the latest message of each type is kept)
  */
-export const BUFFERED_PROGRESS_TYPES = ['PROGRESS_CURRENT_ITEM'] as const;
+export const BUFFERED_PROGRESS_TYPES = [
+  'PROGRESS_PROCESSED_ITEMS',
+  'PROGRESS_CURRENT_ITEM',
+  'PROGRESS_EXPORT'
+] as const;
 
 export type BufferedProgressType = (typeof BUFFERED_PROGRESS_TYPES)[number];
