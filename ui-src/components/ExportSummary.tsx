@@ -36,7 +36,7 @@ export const ExportSummary = (): JSX.Element | null => {
 
       {hasMissingFonts && (
         <Stack space="xsmall">
-          <Banner icon={<CircleAlert size={14} />} variant="warning">
+          <Banner icon={<CircleAlert size={14} />}>
             <strong>
               {missingFonts.length} custom font{missingFonts.length > 1 ? 's' : ''} detected
             </strong>

@@ -29,7 +29,7 @@ export const buildFile = async (context: PenpotContext, children: PenpotPage[]):
       data: pagesBuilt++
     });
 
-    await yieldByTime();
+    await yieldByTime(undefined, true);
   }
 
   flushMessageQueue();

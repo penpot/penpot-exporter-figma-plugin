@@ -66,7 +66,7 @@ export const ExporterProgress = (): JSX.Element => {
 
   return (
     <Stack space="small">
-      <strong style={{ fontSize: 15 }}>Exporting to Penpot...</strong>
+      <strong style={{ fontSize: 15 }}>Exporting to Penpot</strong>
       <ProgressStepper currentStep={step} />
       <Stack space="2xsmall">
         <ProgressBar value={progressPercentage} />
