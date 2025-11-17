@@ -14,5 +14,5 @@
   height: 100%;
   background-color: var(--figma-color-bg-brand);
   border-radius: 999px;
-  transition: width 1s ease-out;
+  transition: width 0.25s ease-out;
 }

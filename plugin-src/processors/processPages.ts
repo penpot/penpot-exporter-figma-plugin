@@ -32,5 +32,7 @@ export const processPages = async (node: DocumentNode): Promise<PenpotPage[]> =>
 
   flushProgress();
 
+  await yieldByTime(undefined, true);
+
   return children;
 };

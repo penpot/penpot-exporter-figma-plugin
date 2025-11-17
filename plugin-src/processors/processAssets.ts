@@ -1,3 +1,5 @@
+import { yieldByTime } from '@common/sleep';
+
 import { images, paintStyles, textStyles } from '@plugin/libraries';
 import { processImages, processPaintStyles, processTextStyles } from '@plugin/processors';
 import { reportProgress } from '@plugin/utils';
@@ -21,6 +23,8 @@ export const processAssets = async (): Promise<
       total
     }
   });
+
+  await yieldByTime(undefined, true);
 
   const processedPaintStyles = await processPaintStyles(1);
   const processedTextStyles = await processTextStyles(images.size + 1);

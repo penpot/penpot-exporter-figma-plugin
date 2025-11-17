@@ -29,5 +29,7 @@ export const processImages = async (
 
   flushProgress();
 
+  await yieldByTime(undefined, true);
+
   return processedImages;
 };

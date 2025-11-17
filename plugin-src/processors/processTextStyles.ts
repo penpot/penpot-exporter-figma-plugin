@@ -42,5 +42,7 @@ export const processTextStyles = async (
 
   flushProgress();
 
+  await yieldByTime(undefined, true);
+
   return styles;
 };
