@@ -42,7 +42,7 @@ const translateValue = (value: VariableValue, tokenType: TokenType): Token['$val
 
   if (isStringValue(value)) {
     if (tokenType === 'fontFamilies') {
-      return value;
+      return [value];
     }
 
     if (tokenType === 'fontWeights') {
