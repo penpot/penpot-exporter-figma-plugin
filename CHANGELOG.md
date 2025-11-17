@@ -1,5 +1,15 @@
 # penpot-exporter
 
+## 0.16.1
+
+### Patch Changes
+
+- [#301](https://github.com/penpot/penpot-exporter-figma-plugin/pull/301)
+  [`c6fb57f`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/c6fb57f743d8a0033fdfd35882a8114488e478d1)
+  Thanks [@jordisala1991](https://github.com/jordisala1991)! - Fix variant properties not being
+  properly ordered, in Penpot we need to ensure the order is constant among all instances of a
+  component
+
 ## 0.16.0
 
 ### Minor Changes
