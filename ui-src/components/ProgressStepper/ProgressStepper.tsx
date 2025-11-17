@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import { Circle } from 'lucide-react';
+import { Circle, CircleCheck } from 'lucide-react';
 import type { JSX } from 'preact';
 
 import { Stack } from '@ui/components/Stack';
@@ -12,12 +12,12 @@ type ProgressStepperProps = {
 };
 
 const STEP_NAMES: Record<Steps, string> = {
-  processing: 'Process Figma pages',
-  processAssets: 'Process Figma assets',
-  buildAssets: 'Create Penpot assets',
-  building: 'Create Penpot pages',
+  processing: 'Scan Figma pages',
+  processAssets: 'Gather linked assets',
+  buildAssets: 'Build Penpot assets',
+  building: 'Assemble Penpot pages',
   components: 'Create components',
-  exporting: 'Generate Penpot file'
+  exporting: 'Package Penpot file'
 };
 
 export const ProgressStepper = ({ currentStep }: ProgressStepperProps): JSX.Element | null => {
@@ -30,26 +30,32 @@ export const ProgressStepper = ({ currentStep }: ProgressStepperProps): JSX.Elem
   return (
     <Stack space="2xsmall">
       <div className={styles['step-info']}>
-        Step {currentStepIndex + 1} of {PROGRESS_STEPS.length} — {STEP_NAMES[currentStep]}
+        <strong>
+          Step {currentStepIndex + 1} of {PROGRESS_STEPS.length}
+        </strong>{' '}
+        — {STEP_NAMES[currentStep]}
       </div>
 
       <Stack direction="column" space="3xsmall">
         {PROGRESS_STEPS.map((step, index) => {
           const isCompleted = index < currentStepIndex;
           const isCurrent = index === currentStepIndex;
+          const isNextStep = index > currentStepIndex;
 
           return (
             <div
               key={step}
               className={classNames(styles['step-item'], {
                 [styles['step-item-active']]: isCurrent,
-                [styles['step-item-completed']]: isCompleted
+                [styles['step-item-next']]: isNextStep
               })}
             >
-              {isCurrent || isCompleted ? (
-                <Circle size={9} style={{ fill: 'var(--figma-color-text)' }} />
+              {isCurrent ? (
+                <Circle size={13} style={{ fill: 'var(--figma-color-text)' }} />
+              ) : isCompleted ? (
+                <CircleCheck size={13} />
               ) : (
-                <Circle size={9} />
+                <Circle size={13} />
               )}
               {STEP_NAMES[step]}
             </div>

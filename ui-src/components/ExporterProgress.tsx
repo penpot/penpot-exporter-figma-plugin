@@ -7,24 +7,16 @@ import { useFigmaContext } from '@ui/context';
 import type { Steps } from '@ui/types/progressMessages';
 
 const stepMessages: Record<Steps, string> = {
-  processing: 'Figma pages processed 💪',
-  processAssets: 'Processing Figma assets 📸 🎨 📝',
-  buildAssets: 'Creating Penpot assets 📸 🎨 📝',
-  building: 'Creating Penpot pages 🏗️',
-  components: 'Creating components 🏗️',
-  exporting: 'Generating Penpot file 🚀'
+  processing: 'Figma pages scanned 💪',
+  processAssets: 'Figma assets gathered 📸 🎨 📝',
+  buildAssets: 'Penpot assets built 📸 🎨 📝',
+  building: 'Penpot pages assembled 🏗️',
+  components: 'Components created 🏗️',
+  exporting: 'Packaging Penpot file 🚀'
 };
 
 const StepProgress = (): JSX.Element | null => {
   const { progress, step } = useFigmaContext();
-
-  const truncateText = (text: string, maxChars: number): string => {
-    if (text.length <= maxChars) {
-      return text;
-    }
-
-    return text.slice(0, maxChars) + '...';
-  };
 
   if (!step) return null;
 
@@ -53,7 +45,17 @@ const StepProgress = (): JSX.Element | null => {
         <>
           {`${progress.processedItems} of ${progress.totalItems}`} {stepMessages[step]}
           <br />
-          {'Layer: “' + truncateText(progress.currentItem, 35) + '”'}
+          <span
+            style={{
+              display: 'inline-block',
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              whiteSpace: 'nowrap',
+              maxWidth: '100%'
+            }}
+          >
+            {'Layer: "' + progress.currentItem + '"'}
+          </span>
         </>
       );
   }
@@ -64,7 +66,7 @@ export const ExporterProgress = (): JSX.Element => {
 
   return (
     <Stack space="small">
-      <strong style={{ fontSize: 13 }}>Exporting to Penpot...</strong>
+      <strong style={{ fontSize: 15 }}>Exporting to Penpot...</strong>
       <ProgressStepper currentStep={step} />
       <Stack space="2xsmall">
         <ProgressBar value={progressPercentage} />

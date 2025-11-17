@@ -38,7 +38,7 @@ export const useFigma = (): UseFigmaHook => {
   const [exportTime, setExportTime] = useState<number | null>(null);
   const exportStartTimeRef = useRef<number | null>(null);
 
-  const [step, setStep] = useState<Steps>('buildAssets');
+  const [step, setStep] = useState<Steps>('processing');
   const totalItemsRef = useRef<number>(0);
   const [currentItem, setCurrentItem] = useState('');
   const [processedItems, setProcessedItems] = useState(0);
