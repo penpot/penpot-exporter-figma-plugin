@@ -16,7 +16,7 @@ const AppFooter = (): JSX.Element => {
           alignItems: 'center'
         }}
       >
-        {__DEV__ && (
+        {__DEV__ ? (
           <span
             style={{
               padding: '0.125rem 0.375rem',
@@ -30,6 +30,8 @@ const AppFooter = (): JSX.Element => {
           >
             DEV
           </span>
+        ) : (
+          <span></span>
         )}
 
         <Text style={{ margin: '0.5rem', marginRight: '1rem' }}>
