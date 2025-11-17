@@ -19,6 +19,8 @@ export const buildFile = async (context: PenpotContext, children: PenpotPage[]):
     }
   });
 
+  await yieldByTime(undefined, true);
+
   for (const page of children) {
     createPage(context, page);
 
