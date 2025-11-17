@@ -1,3 +1,5 @@
+import { yieldByTime } from '@common/sleep';
+
 import { sendMessage } from '@ui/context';
 import type { PenpotContext } from '@ui/lib/types/penpotContext';
 import {
@@ -24,6 +26,8 @@ export const buildAssets = async (
       total: imagesToOptimize.length + paintStylesToRegister.length + textStylesToRegister.length
     }
   });
+
+  await yieldByTime(undefined, true);
 
   await optimizeFileMedias(context, imagesToOptimize, 1);
   await registerColorLibraries(context, paintStylesToRegister, imagesToOptimize.length + 1);

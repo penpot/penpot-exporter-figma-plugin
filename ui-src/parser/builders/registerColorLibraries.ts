@@ -45,4 +45,6 @@ export const registerColorLibraries = async (
   }
 
   flushMessageQueue();
+
+  await yieldByTime(undefined, true);
 };

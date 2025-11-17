@@ -17,6 +17,8 @@ export const buildComponentsLibrary = async (context: PenpotContext): Promise<vo
     }
   });
 
+  await yieldByTime(undefined, true);
+
   for (const [_, component] of components.entries()) {
     createComponentLibrary(context, component);
 
@@ -29,6 +31,8 @@ export const buildComponentsLibrary = async (context: PenpotContext): Promise<vo
   }
 
   flushMessageQueue();
+
+  await yieldByTime(undefined, true);
 };
 
 const createComponentLibrary = (context: PenpotContext, component: UiComponent): void => {

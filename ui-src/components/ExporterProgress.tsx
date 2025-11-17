@@ -23,26 +23,26 @@ const StepProgress = (): JSX.Element | null => {
   switch (step) {
     case 'exporting':
       return (
-        <>
+        <p>
           {stepMessages[step]}
           <br />
           <br />
-        </>
+        </p>
       );
     case 'processAssets':
     case 'buildAssets':
     case 'components':
     case 'building':
       return (
-        <>
+        <p>
           {`${progress.processedItems} of ${progress.totalItems}`} {stepMessages[step]}
           <br />
           <br />
-        </>
+        </p>
       );
     case 'processing':
       return (
-        <>
+        <p>
           {`${progress.processedItems} of ${progress.totalItems}`} {stepMessages[step]}
           <br />
           <span
@@ -56,7 +56,7 @@ const StepProgress = (): JSX.Element | null => {
           >
             {'Layer: "' + progress.currentItem + '"'}
           </span>
-        </>
+        </p>
       );
   }
 };

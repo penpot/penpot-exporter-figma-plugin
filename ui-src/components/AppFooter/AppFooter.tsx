@@ -20,7 +20,7 @@ const AppFooter = (): JSX.Element => {
           <span
             style={{
               padding: '0.125rem 0.375rem',
-              marginLeft: '0.5rem',
+              marginLeft: '1rem',
               backgroundColor: '#ff6b35',
               color: 'white',
               borderRadius: '0.25rem',
@@ -32,7 +32,7 @@ const AppFooter = (): JSX.Element => {
           </span>
         )}
 
-        <Text style={{ margin: '0.5rem' }}>
+        <Text style={{ margin: '0.5rem', marginRight: '1rem' }}>
           <Muted>v{APP_VERSION}</Muted>
         </Text>
       </div>

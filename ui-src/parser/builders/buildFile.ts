@@ -31,4 +31,6 @@ export const buildFile = async (context: PenpotContext, children: PenpotPage[]):
   }
 
   flushMessageQueue();
+
+  await yieldByTime(undefined, true);
 };

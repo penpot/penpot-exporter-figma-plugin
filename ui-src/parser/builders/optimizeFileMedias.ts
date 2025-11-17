@@ -31,6 +31,8 @@ export const optimizeFileMedias = async (
   }
 
   flushMessageQueue();
+
+  await yieldByTime(undefined, true);
 };
 
 const registerFileMedia = async (

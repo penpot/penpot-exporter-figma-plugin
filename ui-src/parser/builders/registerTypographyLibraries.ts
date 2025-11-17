@@ -46,4 +46,6 @@ export const registerTypographyLibraries = async (
   }
 
   flushMessageQueue();
+
+  await yieldByTime(undefined, true);
 };
