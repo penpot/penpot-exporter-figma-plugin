@@ -6,18 +6,18 @@ import type { PenpotComponent } from '@ui/lib/types/shapes/componentShape';
 import { componentRoots, components } from '@ui/parser';
 import type { UiComponent } from '@ui/types';
 
-export const createComponentsLibrary = async (context: PenpotContext): Promise<void> => {
+export const buildComponentsLibrary = async (context: PenpotContext): Promise<void> => {
   let componentsBuilt = 1;
 
   sendMessage({
-    type: 'PROGRESS_TOTAL_ITEMS',
-    data: components.size
+    type: 'PROGRESS_STEP',
+    data: {
+      step: 'components',
+      total: components.size
+    }
   });
 
-  sendMessage({
-    type: 'PROGRESS_STEP',
-    data: 'components'
-  });
+  await yieldByTime(undefined, true);
 
   for (const [_, component] of components.entries()) {
     createComponentLibrary(context, component);
@@ -31,6 +31,8 @@ export const createComponentsLibrary = async (context: PenpotContext): Promise<v
   }
 
   flushMessageQueue();
+
+  await yieldByTime(undefined, true);
 };
 
 const createComponentLibrary = (context: PenpotContext, component: UiComponent): void => {

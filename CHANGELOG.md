@@ -1,5 +1,51 @@
 # penpot-exporter
 
+## 0.16.0
+
+### Minor Changes
+
+- [#282](https://github.com/penpot/penpot-exporter-figma-plugin/pull/282)
+  [`3db6acd`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/3db6acdcd1f3a2a0dd9fda85878c18548d7ee51e)
+  Thanks [@SpykeRel04D](https://github.com/SpykeRel04D)! - Show current version on the plugin
+  interface
+
+- [#297](https://github.com/penpot/penpot-exporter-figma-plugin/pull/297)
+  [`08d6291`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/08d6291e20f2bac9c3f446e1de4df9c24919e33d)
+  Thanks [@jordisala1991](https://github.com/jordisala1991)! - Progress visualization is now clear,
+  with a new UI and simplified steps
+
+- [#288](https://github.com/penpot/penpot-exporter-figma-plugin/pull/288)
+  [`99a45b9`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/99a45b90a12a321c2e1441190d671e62b1ebdb44)
+  Thanks [@jordisala1991](https://github.com/jordisala1991)! - Add a summary after export is
+  completed
+
+- [#288](https://github.com/penpot/penpot-exporter-figma-plugin/pull/288)
+  [`99a45b9`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/99a45b90a12a321c2e1441190d671e62b1ebdb44)
+  Thanks [@jordisala1991](https://github.com/jordisala1991)! - Move missing fonts section to the end
+  of the export process, removing the initial loading time of the plugin
+
+- [#296](https://github.com/penpot/penpot-exporter-figma-plugin/pull/296)
+  [`489c625`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/489c6251c278bc43cbe43d27785879b77c36a825)
+  Thanks [@jordisala1991](https://github.com/jordisala1991)! - Optimize performance by reducing UI
+  overhead during export
+
+- [#294](https://github.com/penpot/penpot-exporter-figma-plugin/pull/294)
+  [`0c36d60`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/0c36d6065e43a92dd544a187fd879a1cccfa1a30)
+  Thanks [@jordisala1991](https://github.com/jordisala1991)! - Refactor identifier generation logic
+  to improve performance
+
+- [#298](https://github.com/penpot/penpot-exporter-figma-plugin/pull/298)
+  [`4500260`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/4500260092183651066814d23a7497494fa6d550)
+  Thanks [@jordisala1991](https://github.com/jordisala1991)! - Add more information to the main
+  plugin page
+
+### Patch Changes
+
+- [#291](https://github.com/penpot/penpot-exporter-figma-plugin/pull/291)
+  [`d69c757`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/d69c757e8026dd0714b17acea906f4f159df8bd6)
+  Thanks [@jordisala1991](https://github.com/jordisala1991)! - Fix Flex layout gap translation and
+  alignment in certain cases
+
 ## 0.15.1
 
 ### Patch Changes

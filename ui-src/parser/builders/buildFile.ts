@@ -12,14 +12,14 @@ export const buildFile = async (context: PenpotContext, children: PenpotPage[]):
   components.clear();
 
   sendMessage({
-    type: 'PROGRESS_TOTAL_ITEMS',
-    data: children.length
+    type: 'PROGRESS_STEP',
+    data: {
+      step: 'building',
+      total: children.length
+    }
   });
 
-  sendMessage({
-    type: 'PROGRESS_STEP',
-    data: 'building'
-  });
+  await yieldByTime(undefined, true);
 
   for (const page of children) {
     createPage(context, page);
@@ -29,8 +29,10 @@ export const buildFile = async (context: PenpotContext, children: PenpotPage[]):
       data: pagesBuilt++
     });
 
-    await yieldByTime();
+    await yieldByTime(undefined, true);
   }
 
   flushMessageQueue();
+
+  await yieldByTime(undefined, true);
 };

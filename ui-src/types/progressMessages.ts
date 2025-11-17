@@ -3,15 +3,20 @@ import type { PenpotDocument } from '@ui/types/penpotDocument';
 export type Steps =
   | 'tokens'
   | 'processing'
-  | 'images'
-  | 'optimization'
+  | 'processAssets'
+  | 'buildAssets'
   | 'building'
   | 'components'
-  | 'exporting'
-  | 'fills'
-  | 'colorLibraries'
-  | 'typographies'
-  | 'typoLibraries';
+  | 'exporting';
+
+export const PROGRESS_STEPS: Steps[] = [
+  'processing',
+  'processAssets',
+  'buildAssets',
+  'building',
+  'components',
+  'exporting'
+];
 
 export type PenpotDocumentMessage = {
   type: 'PENPOT_DOCUMENT';
@@ -20,12 +25,10 @@ export type PenpotDocumentMessage = {
 
 export type ProgressStepMessage = {
   type: 'PROGRESS_STEP';
-  data: Steps;
-};
-
-export type ProgressTotalItemsMessage = {
-  type: 'PROGRESS_TOTAL_ITEMS';
-  data: number;
+  data: {
+    step: Steps;
+    total: number;
+  };
 };
 
 export type ProgressProcessedItemsMessage = {
@@ -36,6 +39,14 @@ export type ProgressProcessedItemsMessage = {
 export type ProgressCurrentItemMessage = {
   type: 'PROGRESS_CURRENT_ITEM';
   data: string;
+};
+
+export type ProgressExportMessage = {
+  type: 'PROGRESS_EXPORT';
+  data: {
+    current: number;
+    total: number;
+  };
 };
 
 export type ReloadMessage = {
@@ -57,9 +68,9 @@ export type UserDataMessage = {
 export type PluginMessage =
   | PenpotDocumentMessage
   | ProgressStepMessage
-  | ProgressTotalItemsMessage
   | ProgressProcessedItemsMessage
   | ProgressCurrentItemMessage
+  | ProgressExportMessage
   | ReloadMessage
   | ErrorMessage
   | UserDataMessage;
@@ -68,9 +79,9 @@ export type PluginMessage =
  * Types that should be buffered (only the latest message of each type is kept)
  */
 export const BUFFERED_PROGRESS_TYPES = [
-  'PROGRESS_TOTAL_ITEMS',
   'PROGRESS_PROCESSED_ITEMS',
-  'PROGRESS_CURRENT_ITEM'
+  'PROGRESS_CURRENT_ITEM',
+  'PROGRESS_EXPORT'
 ] as const;
 
 export type BufferedProgressType = (typeof BUFFERED_PROGRESS_TYPES)[number];

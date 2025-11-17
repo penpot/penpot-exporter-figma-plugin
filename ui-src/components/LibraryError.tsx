@@ -1,18 +1,17 @@
-import { Banner, Button, IconWarningSmall24, Link } from '@create-figma-plugin/ui';
+import { Banner, Button, Link } from '@create-figma-plugin/ui';
+import { CircleAlert } from 'lucide-react';
 import type { JSX } from 'preact';
 
 import { Stack } from '@ui/components/Stack';
 import { useFigmaContext } from '@ui/context';
 
-export const LibraryError = (): JSX.Element | null => {
-  const { retry, cancel, error } = useFigmaContext();
-
-  if (!error) return null;
+export const LibraryError = (): JSX.Element => {
+  const { retry, cancel } = useFigmaContext();
 
   return (
     <Stack space="small">
       <Stack space="xsmall">
-        <Banner icon={<IconWarningSmall24 />} variant="warning">
+        <Banner icon={<CircleAlert size={14} />} variant="warning">
           Oops! It looks like there was an <b>error generating the export file</b>.
         </Banner>
         <span>
@@ -21,7 +20,7 @@ export const LibraryError = (): JSX.Element | null => {
             href="https://github.com/penpot/penpot-exporter-figma-plugin/issues"
             target="_blank"
           >
-            Github repository
+            Github repository →
           </Link>
           , and we&apos;ll be happy to assist you!
         </span>

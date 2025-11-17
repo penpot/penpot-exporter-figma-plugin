@@ -9,9 +9,10 @@ import {
   variantProperties
 } from '@plugin/libraries';
 import { transformDocumentNode } from '@plugin/transformers';
-import { flushProgress, reportProgress } from '@plugin/utils';
+import { flushProgress, reportProgress, resetProgress } from '@plugin/utils';
 
 export const handleExportMessage = async (): Promise<void> => {
+  resetProgress();
   const document = await transformDocumentNode(figma.root);
 
   flushProgress();
@@ -23,6 +24,7 @@ export const handleExportMessage = async (): Promise<void> => {
 };
 
 export const handleRetryMessage = async (): Promise<void> => {
+  resetProgress();
   missingFonts.clear();
   textStyles.clear();
   paintStyles.clear();

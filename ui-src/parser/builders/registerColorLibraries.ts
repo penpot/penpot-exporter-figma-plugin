@@ -8,23 +8,12 @@ import { symbolFillImage } from '@ui/parser/creators/symbols/symbolFills';
 
 export const registerColorLibraries = async (
   context: PenpotContext,
-  styles: Record<string, FillStyle>
+  stylesToRegister: [string, FillStyle][],
+  currentAsset: number
 ): Promise<void> => {
-  const stylesToRegister = Object.entries(styles);
-
   if (stylesToRegister.length === 0) return;
 
-  let stylesRegistered = 1;
-
-  sendMessage({
-    type: 'PROGRESS_TOTAL_ITEMS',
-    data: stylesToRegister.length
-  });
-
-  sendMessage({
-    type: 'PROGRESS_STEP',
-    data: 'colorLibraries'
-  });
+  let stylesRegistered = currentAsset;
 
   for (const [key, fillStyle] of stylesToRegister) {
     for (let index = 0; index < fillStyle.fills.length; index++) {
@@ -56,4 +45,6 @@ export const registerColorLibraries = async (
   }
 
   flushMessageQueue();
+
+  await yieldByTime(undefined, true);
 };

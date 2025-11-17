@@ -4,11 +4,14 @@ const DEFAULT_YIELD_MS = 32;
 
 let lastYieldTimestamp = 0;
 
-export const yieldByTime = async (maxElapsedMs: number = DEFAULT_YIELD_MS): Promise<void> => {
+export const yieldByTime = async (
+  maxElapsedMs: number = DEFAULT_YIELD_MS,
+  force: boolean = false
+): Promise<void> => {
   const now = Date.now();
   const shouldYieldByTime = maxElapsedMs > 0 && now - lastYieldTimestamp >= maxElapsedMs;
 
-  if (!shouldYieldByTime) {
+  if (!shouldYieldByTime && !force) {
     return;
   }
 

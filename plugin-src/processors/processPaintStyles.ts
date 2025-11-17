@@ -17,22 +17,14 @@ export const registerPaintStyles = async (): Promise<void> => {
   });
 };
 
-export const processPaintStyles = async (): Promise<Record<string, FillStyle>> => {
+export const processPaintStyles = async (
+  currentAsset: number
+): Promise<Record<string, FillStyle>> => {
   const styles: Record<string, FillStyle> = {};
 
   if (paintStyles.size === 0) return styles;
 
-  let currentStyle = 1;
-
-  reportProgress({
-    type: 'PROGRESS_TOTAL_ITEMS',
-    data: paintStyles.size
-  });
-
-  reportProgress({
-    type: 'PROGRESS_STEP',
-    data: 'fills'
-  });
+  let currentStyle = currentAsset;
 
   for (const [styleId, paintStyle] of paintStyles.entries()) {
     const figmaStyle = paintStyle ?? (await figma.getStyleByIdAsync(styleId));
@@ -49,6 +41,8 @@ export const processPaintStyles = async (): Promise<Record<string, FillStyle>> =
   }
 
   flushProgress();
+
+  await yieldByTime(undefined, true);
 
   return styles;
 };

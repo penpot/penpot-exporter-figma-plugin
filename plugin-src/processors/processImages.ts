@@ -3,22 +3,14 @@ import { yieldByTime } from '@common/sleep';
 import { images } from '@plugin/libraries';
 import { flushProgress, reportProgress } from '@plugin/utils';
 
-export const processImages = async (): Promise<Record<string, Uint8Array<ArrayBuffer>>> => {
+export const processImages = async (
+  currentAsset: number
+): Promise<Record<string, Uint8Array<ArrayBuffer>>> => {
   const processedImages: Record<string, Uint8Array<ArrayBuffer>> = {};
 
   if (images.size === 0) return processedImages;
 
-  let currentImage = 1;
-
-  reportProgress({
-    type: 'PROGRESS_TOTAL_ITEMS',
-    data: images.size
-  });
-
-  reportProgress({
-    type: 'PROGRESS_STEP',
-    data: 'images'
-  });
+  let currentImage = currentAsset;
 
   for (const [key, image] of images.entries()) {
     const bytes = await image?.getBytesAsync();
@@ -36,6 +28,8 @@ export const processImages = async (): Promise<Record<string, Uint8Array<ArrayBu
   }
 
   flushProgress();
+
+  await yieldByTime(undefined, true);
 
   return processedImages;
 };
