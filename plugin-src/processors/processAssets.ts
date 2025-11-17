@@ -27,8 +27,8 @@ export const processAssets = async (): Promise<
   await yieldByTime(undefined, true);
 
   const processedPaintStyles = await processPaintStyles(1);
-  const processedTextStyles = await processTextStyles(images.size + 1);
-  const processedImages = await processImages(images.size + paintStyles.size + 1);
+  const processedTextStyles = await processTextStyles(paintStyles.size + 1);
+  const processedImages = await processImages(paintStyles.size + textStyles.size + 1);
 
   return [processedImages, processedPaintStyles, processedTextStyles];
 };
