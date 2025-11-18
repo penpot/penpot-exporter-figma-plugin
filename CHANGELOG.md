@@ -1,5 +1,14 @@
 # penpot-exporter
 
+## 0.16.2
+
+### Patch Changes
+
+- [#303](https://github.com/penpot/penpot-exporter-figma-plugin/pull/303)
+  [`bc1c24d`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/bc1c24df43519f7e4c153be5976ad85194408dac)
+  Thanks [@jordisala1991](https://github.com/jordisala1991)! - Fix multiple shadows on the same
+  layer
+
 ## 0.16.1
 
 ### Patch Changes
