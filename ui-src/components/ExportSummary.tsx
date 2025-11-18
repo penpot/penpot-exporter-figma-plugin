@@ -1,4 +1,5 @@
-import { Banner, Button, IconInfoSmall24, Link, Muted } from '@create-figma-plugin/ui';
+import { Banner, Button, Link, Muted } from '@create-figma-plugin/ui';
+import { CircleAlert, Info } from 'lucide-react';
 import type { JSX } from 'preact';
 
 import { Stack } from '@ui/components/Stack';
@@ -16,19 +17,26 @@ export const ExportSummary = (): JSX.Element | null => {
 
   return (
     <Stack space="medium">
-      <Banner icon={<IconInfoSmall24 />} variant="success">
+      <Banner icon={<Info size={14} />} variant="success">
         <strong>Export completed successfully! 🎉</strong>
       </Banner>
 
       <Stack space="2xsmall">
         <strong style={{ fontSize: 13 }}>{exportedBlob.filename}</strong>
-        <Muted>File size: {fileSizeInMB(exportedBlob.blob.size)}</Muted>
-        {exportTime && <Muted>Export time: {formatExportTime(exportTime)}</Muted>}
+        <p>
+          File size: {fileSizeInMB(exportedBlob.blob.size)}
+          {exportTime && (
+            <>
+              <br />
+              Export time: {formatExportTime(exportTime)}
+            </>
+          )}
+        </p>
       </Stack>
 
       {hasMissingFonts && (
         <Stack space="xsmall">
-          <Banner icon={<IconInfoSmall24 />} variant="warning">
+          <Banner icon={<CircleAlert size={14} />}>
             <strong>
               {missingFonts.length} custom font{missingFonts.length > 1 ? 's' : ''} detected
             </strong>

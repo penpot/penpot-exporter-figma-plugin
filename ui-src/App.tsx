@@ -39,20 +39,6 @@ export const App = (): JSX.Element => {
                 fill: 'var(--figma-color-icon)'
               }}
             />
-            {__DEV__ && (
-              <span
-                style={{
-                  alignSelf: 'center',
-                  padding: '0.125rem 0.375rem',
-                  backgroundColor: '#ff6b35',
-                  color: 'white',
-                  borderRadius: '0.25rem',
-                  fontWeight: 'bold'
-                }}
-              >
-                DEV
-              </span>
-            )}
             <PenpotExporter />
           </Stack>
         </Wrapper>

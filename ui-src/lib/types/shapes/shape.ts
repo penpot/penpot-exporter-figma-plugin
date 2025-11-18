@@ -14,7 +14,8 @@ import type { Uuid } from '@ui/lib/types/utils/uuid';
 import type { ComponentPropertyReference } from '@ui/types';
 
 export type ShapeBaseAttributes = {
-  id?: Uuid;
+  id: Uuid;
+  shapeRef?: Uuid;
   name: string;
   type?:
     | 'frame'
@@ -35,9 +36,6 @@ export type ShapeBaseAttributes = {
   parentId?: Uuid;
   frameId?: Uuid;
   rotation?: number;
-
-  figmaId?: string; // @TODO: move to any other place
-  figmaRelatedId?: string; // @TODO: move to any other place
 };
 
 export type ShapeAttributes = {
@@ -47,7 +45,6 @@ export type ShapeAttributes = {
   componentRoot?: boolean;
   mainInstance?: boolean;
   remoteSynced?: boolean;
-  shapeRef?: Uuid;
   touched?: SyncGroups[];
   blocked?: boolean;
   collapsed?: boolean;

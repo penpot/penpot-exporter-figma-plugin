@@ -1,105 +1,77 @@
-import { LoadingIndicator } from '@create-figma-plugin/ui';
 import type { JSX } from 'preact';
 
+import { ProgressBar } from '@ui/components/ProgressBar';
+import { ProgressStepper } from '@ui/components/ProgressStepper';
 import { Stack } from '@ui/components/Stack';
-import { type Steps, useFigmaContext } from '@ui/context';
+import { useFigmaContext } from '@ui/context';
+import type { Steps } from '@ui/types/progressMessages';
 
-type Messages = {
-  total: string;
-  current?: string;
-};
-
-const stepMessages: Record<Steps, Messages> = {
-  processing: {
-    total: 'pages processed 💪',
-    current: 'Currently processing layer'
-  },
-  images: {
-    total: 'images downloaded 📸'
-  },
-  optimization: {
-    total: 'images optimized 📸'
-  },
-  building: {
-    total: 'pages built 🏗️',
-    current: 'Currently processing layer'
-  },
-  fills: {
-    total: 'color libraries fetched 🎨'
-  },
-  colorLibraries: {
-    total: 'color libraries built 🎨'
-  },
-  components: {
-    total: 'components built 🏗️',
-    current: 'Currently processing layer'
-  },
-  exporting: {
-    total: 'Penpot file generated 🚀',
-    current: 'Currently exporting item'
-  },
-  typographies: {
-    total: 'text libraries fetched 📝'
-  },
-  typoLibraries: {
-    total: 'text libraries built 📝'
-  }
+const stepMessages: Record<Steps, string> = {
+  processing: 'Figma pages scanned 💪',
+  processAssets: 'Figma assets gathered 📸 🎨 📝',
+  buildAssets: 'Penpot assets built 📸 🎨 📝',
+  building: 'Penpot pages assembled 🏗️',
+  components: 'Components created 🏗️',
+  exporting: 'Packaging Penpot file 🚀'
 };
 
 const StepProgress = (): JSX.Element | null => {
-  const { progress, progressPercentage, step } = useFigmaContext();
-
-  const truncateText = (text: string, maxChars: number): string => {
-    if (text.length <= maxChars) {
-      return text;
-    }
-
-    return text.slice(0, maxChars) + '...';
-  };
+  const { progress, step } = useFigmaContext();
 
   if (!step) return null;
 
-  const currentText = stepMessages[step].current;
-
   switch (step) {
-    case 'processing':
-    case 'images':
-    case 'optimization':
-    case 'building':
-    case 'fills':
-    case 'components':
-    case 'colorLibraries':
-    case 'typographies':
-    case 'typoLibraries':
-      return (
-        <>
-          {progress.processedItems} of {progress.totalItems} {stepMessages[step].total}
-          {progress.currentItem && currentText ? (
-            <>
-              <br />
-              {currentText}
-              <br />
-              {'“' + truncateText(progress.currentItem, 35) + '”'}
-            </>
-          ) : undefined}
-        </>
-      );
     case 'exporting':
       return (
-        <>
-          {progressPercentage}% {stepMessages[step].total}
-        </>
+        <p>
+          {stepMessages[step]}
+          <br />
+          <br />
+        </p>
+      );
+    case 'processAssets':
+    case 'buildAssets':
+    case 'components':
+    case 'building':
+      return (
+        <p>
+          {`${progress.processedItems} of ${progress.totalItems}`} {stepMessages[step]}
+          <br />
+          <br />
+        </p>
+      );
+    case 'processing':
+      return (
+        <p>
+          {`${progress.processedItems} of ${progress.totalItems}`} {stepMessages[step]}
+          <br />
+          <span
+            style={{
+              display: 'inline-block',
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              whiteSpace: 'nowrap',
+              maxWidth: '100%'
+            }}
+          >
+            {'Layer: "' + progress.currentItem + '"'}
+          </span>
+        </p>
       );
   }
 };
 
 export const ExporterProgress = (): JSX.Element => {
+  const { progressPercentage, step } = useFigmaContext();
+
   return (
-    <Stack space="small" horizontalAlign="center">
-      <LoadingIndicator />
-      <span style={{ textAlign: 'center' }}>
+    <Stack space="small">
+      <strong style={{ fontSize: 15 }}>Exporting to Penpot</strong>
+      <ProgressStepper currentStep={step} />
+      <Stack space="2xsmall">
+        <ProgressBar value={progressPercentage} />
         <StepProgress />
-      </span>
+      </Stack>
     </Stack>
   );
 };

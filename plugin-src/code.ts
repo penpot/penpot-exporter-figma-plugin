@@ -1,7 +1,7 @@
 import { getUserData } from '@plugin/getUserData';
 import { handleExportMessage, handleRetryMessage } from '@plugin/handleMessage';
 
-const BASE_HEIGHT = 135;
+const BASE_HEIGHT = 500;
 const BASE_WIDTH = 290;
 
 const onMessage: MessageEventHandler = message => {

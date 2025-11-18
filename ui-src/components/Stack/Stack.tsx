@@ -5,7 +5,7 @@ import type { PropsWithChildren } from 'preact/compat';
 import styles from './Stack.module.css';
 
 type StackProps = PropsWithChildren<{
-  space?: 'medium' | 'small' | 'xsmall' | '2xsmall';
+  space?: 'medium' | 'small' | 'xsmall' | '2xsmall' | '3xsmall';
   direction?: 'column' | 'row';
   horizontalAlign?: 'start' | 'center';
   style?: CSSProperties;

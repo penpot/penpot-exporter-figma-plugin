@@ -1,4 +1,3 @@
-import { sendMessage } from '@ui/context';
 import type { PenpotContext } from '@ui/lib/types/penpotContext';
 import {
   createArtboard,
@@ -20,11 +19,6 @@ export const createItems = (context: PenpotContext, nodes: PenpotNode[]): void =
 };
 
 const createItem = (context: PenpotContext, node: PenpotNode): void => {
-  sendMessage({
-    type: 'PROGRESS_CURRENT_ITEM',
-    data: node.name
-  });
-
   switch (node.type) {
     case 'rect':
       return createRectangle(context, node);

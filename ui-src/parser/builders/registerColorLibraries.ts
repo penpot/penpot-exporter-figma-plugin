@@ -1,6 +1,6 @@
-import { sleep } from '@common/sleep';
+import { yieldByTime } from '@common/sleep';
 
-import { sendMessage } from '@ui/context';
+import { flushMessageQueue, sendMessage } from '@ui/context';
 import type { PenpotContext } from '@ui/lib/types/penpotContext';
 import type { FillStyle } from '@ui/lib/types/utils/fill';
 import { colors } from '@ui/parser';
@@ -8,23 +8,12 @@ import { symbolFillImage } from '@ui/parser/creators/symbols/symbolFills';
 
 export const registerColorLibraries = async (
   context: PenpotContext,
-  styles: Record<string, FillStyle>
+  stylesToRegister: [string, FillStyle][],
+  currentAsset: number
 ): Promise<void> => {
-  const stylesToRegister = Object.entries(styles);
-
   if (stylesToRegister.length === 0) return;
 
-  let stylesRegistered = 1;
-
-  sendMessage({
-    type: 'PROGRESS_TOTAL_ITEMS',
-    data: stylesToRegister.length
-  });
-
-  sendMessage({
-    type: 'PROGRESS_STEP',
-    data: 'colorLibraries'
-  });
+  let stylesRegistered = currentAsset;
 
   for (const [key, fillStyle] of stylesToRegister) {
     for (let index = 0; index < fillStyle.fills.length; index++) {
@@ -52,6 +41,10 @@ export const registerColorLibraries = async (
       data: stylesRegistered++
     });
 
-    await sleep(0);
+    await yieldByTime();
   }
+
+  flushMessageQueue();
+
+  await yieldByTime(undefined, true);
 };

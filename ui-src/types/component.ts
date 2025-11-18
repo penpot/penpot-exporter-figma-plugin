@@ -9,10 +9,10 @@ import type { Children } from '@ui/lib/types/utils/children';
 import type { Uuid } from '@ui/lib/types/utils/uuid';
 
 export type ComponentRoot = {
-  type: 'component';
   name: string;
-  figmaId: string;
-  figmaVariantId?: string;
+  componentId: Uuid;
+  frameId: Uuid;
+  variantId?: Uuid;
 };
 
 export type ComponentTextPropertyOverride = {
@@ -28,10 +28,8 @@ export type ComponentInstance = ShapeBaseAttributes &
   LayoutAttributes &
   LayoutChildAttributes &
   Children & {
-    mainComponentFigmaId: string;
-    figmaId?: string;
-    figmaRelatedId?: string;
-    isComponentRoot: boolean;
+    mainComponentId: Uuid;
+    componentRoot: boolean;
     showContent?: boolean;
     isOrphan: boolean;
     type: 'instance';
@@ -39,10 +37,11 @@ export type ComponentInstance = ShapeBaseAttributes &
 
 export type UiComponent = {
   componentId: Uuid;
-  mainInstancePage?: Uuid;
-  mainInstanceId: Uuid;
-  componentFigmaId: string;
-  variantId?: string;
+  name: string;
+  pageId?: Uuid;
+  fileId?: Uuid;
+  frameId: Uuid;
+  variantId?: Uuid;
   variantProperties?: VariantProperty[];
   path?: string;
 };

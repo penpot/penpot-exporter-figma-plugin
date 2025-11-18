@@ -5,6 +5,7 @@ import type { FormValues } from '@ui/components/ExportForm';
 import { type MessageData, createInMemoryWritable, sendMessage } from '@ui/context';
 import { identify, track } from '@ui/metrics/mixpanel';
 import { parse } from '@ui/parser';
+import type { Steps } from '@ui/types/progressMessages';
 import { formatExportTime } from '@ui/utils';
 import { fileSizeInMB } from '@ui/utils/fileSizeInMB';
 
@@ -13,9 +14,9 @@ export type UseFigmaHook = {
   exporting: boolean;
   summary: boolean;
   error: boolean;
-  step: Steps | undefined;
+  step: Steps;
   progress: {
-    currentItem: string | undefined;
+    currentItem: string;
     totalItems: number;
     processedItems: number;
   };
@@ -28,18 +29,6 @@ export type UseFigmaHook = {
   downloadBlob: () => void;
 };
 
-export type Steps =
-  | 'processing'
-  | 'images'
-  | 'optimization'
-  | 'building'
-  | 'components'
-  | 'exporting'
-  | 'fills'
-  | 'colorLibraries'
-  | 'typographies'
-  | 'typoLibraries';
-
 export const useFigma = (): UseFigmaHook => {
   const [missingFonts, setMissingFonts] = useState<string[]>();
   const [exporting, setExporting] = useState(false);
@@ -49,20 +38,18 @@ export const useFigma = (): UseFigmaHook => {
   const [exportTime, setExportTime] = useState<number | null>(null);
   const exportStartTimeRef = useRef<number | null>(null);
 
-  const [step, setStep] = useState<Steps>();
-  const [progress, setProgress] = useState<{
-    currentItem: string | undefined;
-    totalItems: number;
-    processedItems: number;
-  }>({
-    currentItem: undefined,
-    totalItems: 0,
-    processedItems: 0
-  });
-  const [progressPercentage, setProgressPercentage] = useState<number>(0);
+  const [step, setStep] = useState<Steps>('processing');
+  const totalItemsRef = useRef<number>(0);
+  const [currentItem, setCurrentItem] = useState('');
+  const [processedItems, setProcessedItems] = useState(0);
+  const [progressPercentage, setProgressPercentage] = useState(0);
 
   const postMessage = (type: string, data?: unknown): void => {
     parent.postMessage({ pluginMessage: { type, data } }, '*');
+  };
+
+  const calculatePercentage = (item: number, total: number): number => {
+    return Math.round((item / total) * 100);
   };
 
   const onMessage = async (event: MessageEvent<MessageData>): Promise<void> => {
@@ -84,14 +71,10 @@ export const useFigma = (): UseFigmaHook => {
         setError(false);
         setExportedBlob(null);
         setExportTime(null);
-        setStep(undefined);
-        setProgress({
-          currentItem: undefined,
-          totalItems: 0,
-          processedItems: 0
-        });
-        setProgressPercentage(0);
+        setStep('processing');
+        setCurrentItem('');
 
+        totalItemsRef.current = 0;
         exportStartTimeRef.current = null;
 
         track('Plugin Reloaded');
@@ -107,16 +90,23 @@ export const useFigma = (): UseFigmaHook => {
 
         sendMessage({
           type: 'PROGRESS_STEP',
-          data: 'exporting'
+          data: {
+            step: 'exporting',
+            total: Infinity
+          }
         });
 
         const { writable, getBlob } = createInMemoryWritable();
 
         await exportStream(context, writable, {
           onProgress: ({ item, total }) => {
-            const percentage = Math.round((item / total) * 100);
-
-            setProgressPercentage(percentage);
+            sendMessage({
+              type: 'PROGRESS_EXPORT',
+              data: {
+                current: item,
+                total: total
+              }
+            });
           }
         });
 
@@ -141,44 +131,34 @@ export const useFigma = (): UseFigmaHook => {
 
         setExporting(false);
         setSummary(true);
-        setStep(undefined);
+        setStep('processing');
 
         break;
       }
       case 'PROGRESS_STEP': {
-        setStep(pluginMessage.data);
-        setProgress(prev => ({
-          currentItem: undefined,
-          totalItems: prev.totalItems,
-          processedItems: 0
-        }));
+        setStep(pluginMessage.data.step);
+        setProgressPercentage(0);
+        setProcessedItems(0);
+
+        totalItemsRef.current = pluginMessage.data.total;
 
         break;
       }
       case 'PROGRESS_CURRENT_ITEM': {
-        setProgress(prev => ({
-          currentItem: pluginMessage.data,
-          totalItems: prev.totalItems,
-          processedItems: prev.processedItems
-        }));
-
-        break;
-      }
-      case 'PROGRESS_TOTAL_ITEMS': {
-        setProgress(prev => ({
-          currentItem: prev.currentItem,
-          totalItems: pluginMessage.data,
-          processedItems: prev.processedItems
-        }));
+        setCurrentItem(pluginMessage.data);
 
         break;
       }
       case 'PROGRESS_PROCESSED_ITEMS': {
-        setProgress(prev => ({
-          currentItem: prev.currentItem,
-          totalItems: prev.totalItems,
-          processedItems: pluginMessage.data
-        }));
+        setProcessedItems(pluginMessage.data);
+        setProgressPercentage(calculatePercentage(pluginMessage.data, totalItemsRef.current));
+
+        break;
+      }
+      case 'PROGRESS_EXPORT': {
+        setProgressPercentage(
+          calculatePercentage(pluginMessage.data.current, pluginMessage.data.total)
+        );
 
         break;
       }
@@ -219,8 +199,6 @@ export const useFigma = (): UseFigmaHook => {
   };
 
   const cancel = (): void => {
-    setExportedBlob(null);
-
     track('Plugin Closed');
 
     postMessage('cancel');
@@ -228,12 +206,6 @@ export const useFigma = (): UseFigmaHook => {
 
   const exportPenpot = (): void => {
     setExporting(true);
-    setStep('processing');
-    setProgress(prev => ({
-      currentItem: prev.currentItem,
-      totalItems: prev.totalItems,
-      processedItems: 0
-    }));
     exportStartTimeRef.current = Date.now();
 
     track('File Export Started');
@@ -257,7 +229,11 @@ export const useFigma = (): UseFigmaHook => {
     summary,
     error,
     step,
-    progress,
+    progress: {
+      currentItem,
+      totalItems: totalItemsRef.current,
+      processedItems
+    },
     progressPercentage,
     exportedBlob,
     exportTime,
