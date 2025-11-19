@@ -10,6 +10,7 @@ import {
   transformDimension,
   transformEffects,
   transformFills,
+  transformGrids,
   transformId,
   transformIds,
   transformLayoutAttributes,
@@ -49,6 +50,7 @@ export const transformComponentNode = async (node: ComponentNode): Promise<Compo
     ...transformRotationAndPosition(node),
     ...transformConstraints(node),
     ...transformAutoLayout(node),
+    ...transformGrids(node),
     ...(isVariant ? transformVariantNameAndProperties(node, variantId!) : {})
   };
 

@@ -7,6 +7,7 @@ export * from './transformCornerRadius';
 export * from './transformDimensionAndPosition';
 export * from './transformEffects';
 export * from './transformFills';
+export * from './transformGrids';
 export * from './transformIds';
 export * from './transformLayout';
 export * from './transformOverrides';
