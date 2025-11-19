@@ -17,10 +17,7 @@ export const processPages = async (node: DocumentNode): Promise<PenpotPage[]> =>
     }
   });
 
-  reportProgress({
-    type: 'PROGRESS_STEP',
-    data: 'processing'
-  });
+  await yieldByTime(undefined, true);
 
   for (const page of node.children) {
     await page.loadAsync();

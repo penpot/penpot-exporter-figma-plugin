@@ -10,6 +10,7 @@ export type Steps =
   | 'exporting';
 
 export const PROGRESS_STEPS: Steps[] = [
+  'tokens',
   'processing',
   'processAssets',
   'buildAssets',
