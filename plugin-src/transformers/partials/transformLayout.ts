@@ -1,11 +1,15 @@
 import {
+  translateGridCells,
+  translateGridTracks,
   translateLayoutAlignContent,
   translateLayoutAlignItems,
   translateLayoutFlexDir,
   translateLayoutGap,
+  translateLayoutGridDir,
   translateLayoutItemAlignSelf,
   translateLayoutJustifyContent,
   translateLayoutJustifyItems,
+  translateLayoutMode,
   translateLayoutPadding,
   translateLayoutPaddingType,
   translateLayoutSizing,
@@ -16,22 +20,27 @@ import type { LayoutAttributes, LayoutChildAttributes } from '@ui/lib/types/shap
 
 export const transformAutoLayout = (node: BaseFrameMixin): LayoutAttributes => {
   return {
-    layout: node.layoutMode !== 'NONE' ? 'flex' : undefined,
+    layout: translateLayoutMode(node.layoutMode),
     layoutFlexDir: translateLayoutFlexDir(node.layoutMode),
     layoutGap: translateLayoutGap(node),
-    layoutWrapType: translateLayoutWrapType(node.layoutWrap),
+    layoutWrapType: translateLayoutWrapType(node),
     layoutPadding: translateLayoutPadding(node),
     layoutPaddingType: translateLayoutPaddingType(node),
     layoutJustifyContent: translateLayoutJustifyContent(node),
     layoutJustifyItems: translateLayoutJustifyItems(node),
     layoutAlignContent: translateLayoutAlignContent(node),
-    layoutAlignItems: translateLayoutAlignItems(node)
+    layoutAlignItems: translateLayoutAlignItems(node),
+    layoutGridDir: translateLayoutGridDir(node.layoutMode),
+    layoutGridRows: translateGridTracks(node.gridRowSizes),
+    layoutGridColumns: translateGridTracks(node.gridColumnSizes),
+    layoutGridCells: translateGridCells(node)
   };
 };
 
 export const transformLayoutAttributes = (
   node: LayoutMixin,
-  isFrame: boolean = false
+  isFrame: boolean = false,
+  isText: boolean = false
 ): Pick<
   LayoutChildAttributes,
   | 'layoutItemH-Sizing'
@@ -44,8 +53,8 @@ export const transformLayoutAttributes = (
   | 'layoutItemMinW'
 > => {
   return {
-    'layoutItemH-Sizing': translateLayoutSizing(node.layoutSizingHorizontal, isFrame),
-    'layoutItemV-Sizing': translateLayoutSizing(node.layoutSizingVertical, isFrame),
+    'layoutItemH-Sizing': translateLayoutSizing(node.layoutSizingHorizontal, isFrame, isText),
+    'layoutItemV-Sizing': translateLayoutSizing(node.layoutSizingVertical, isFrame, isText),
     'layoutItemAlignSelf': translateLayoutItemAlignSelf(node.layoutAlign),
     'layoutItemAbsolute': node.layoutPositioning === 'ABSOLUTE',
     'layoutItemMaxH': node.maxHeight ?? undefined,
