@@ -8,6 +8,7 @@ import {
   transformDimension,
   transformEffects,
   transformFills,
+  transformGrids,
   transformId,
   transformIds,
   transformLayoutAttributes,
@@ -67,6 +68,7 @@ export const transformInstanceNode = async (
     ...transformConstraints(node),
     ...transformAutoLayout(node),
     ...transformVariableConsumptionMap(node),
+    ...transformGrids(node),
     ...(await transformChildren(node)),
     ...nodeOverrides
   };

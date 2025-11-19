@@ -7,6 +7,7 @@ import {
   transformDimension,
   transformEffects,
   transformFills,
+  transformGrids,
   transformIds,
   transformLayoutAttributes,
   transformOverrides,
@@ -46,6 +47,7 @@ export const transformFrameNode = async (node: FrameNode | SectionNode): Promise
       ...transformEffects(node),
       ...transformConstraints(node),
       ...transformAutoLayout(node),
+      ...transformGrids(node),
       ...transformAndRotation
     };
   }

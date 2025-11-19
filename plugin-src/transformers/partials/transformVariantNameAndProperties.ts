@@ -9,13 +9,16 @@ export const transformVariantNameAndProperties = (
 ): Pick<VariantComponent, 'variantProperties'> & Pick<VariantShape, 'variantName'> => {
   const componentPropertyNames = variantProperties.get(variantId) ?? new Set();
 
-  const properties = node.name.split(',').map(pair => {
-    const [name, value] = pair.split('=').map(s => s.trim());
+  const properties = node.name
+    .split(',')
+    .sort()
+    .map(pair => {
+      const [name, value] = pair.split('=').map(s => s.trim());
 
-    componentPropertyNames.add(name);
+      componentPropertyNames.add(name);
 
-    return { name, value };
-  });
+      return { name, value };
+    });
 
   variantProperties.set(variantId, componentPropertyNames);
 

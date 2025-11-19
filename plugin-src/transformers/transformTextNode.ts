@@ -28,7 +28,7 @@ export const transformTextNode = (node: TextNode): TextShape => {
     ...transformSceneNode(node),
     ...transformBlend(node),
     ...transformProportion(node),
-    ...transformLayoutAttributes(node),
+    ...transformLayoutAttributes(node, false, true),
     ...transformStrokes(node),
     ...transformConstraints(node),
     ...transformVariableConsumptionMap(node),
