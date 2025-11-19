@@ -20,7 +20,6 @@ export const translateGrids = (layoutGrids: readonly LayoutGrid[]): Grid[] => {
       case 'GRID':
         return translateSquareGrid(grid);
       case 'ROWS':
-        return translateRowColsGrid(grid);
       case 'COLUMNS':
         return translateRowColsGrid(grid);
     }
@@ -51,7 +50,7 @@ const translateRowColsGrid = (layoutGrid: RowsColsLayoutGrid): RowGrid | ColumnG
         opacity: layoutGrid.color ? layoutGrid.color.a : 0
       },
       type: translateGridAlignment(layoutGrid.alignment),
-      size: layoutGrid.count,
+      size: layoutGrid.count === Infinity ? undefined : layoutGrid.count,
       margin: layoutGrid.offset,
       gutter: layoutGrid.gutterSize,
       itemLength: layoutGrid.sectionSize
