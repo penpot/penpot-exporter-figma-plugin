@@ -1,5 +1,12 @@
-import { ClosePath, CurveTo, Segment } from '@ui/lib/types/shapes/pathShape';
-import { Point } from '@ui/lib/types/utils/point';
+import type {
+  ClosePathCommand,
+  Command,
+  CurveToCommand,
+  HorizontalLineToCommand,
+  VerticalLineToCommand
+} from 'svg-path-parser';
+
+import type { Point } from '@ui/lib/types/utils/point';
 
 export const applyRotation = (point: Point, transform: Transform, boundingBox: Rect): Point => {
   const centerPoint = calculateCenter(boundingBox);
@@ -16,38 +23,36 @@ export const applyRotation = (point: Point, transform: Transform, boundingBox: R
 };
 
 export const applyRotationToSegment = (
-  segment: Exclude<Segment, ClosePath>,
+  command: Command,
   transform: Transform,
   boundingBox: Rect
-): Segment => {
-  const rotated = applyRotation(
-    { x: segment.params.x, y: segment.params.y },
-    transform,
-    boundingBox
-  );
-
-  if (isCurveTo(segment)) {
-    const curve1 = applyRotation(
-      { x: segment.params.c1x, y: segment.params.c1y },
-      transform,
-      boundingBox
-    );
-    const curve2 = applyRotation(
-      { x: segment.params.c2x, y: segment.params.c2y },
-      transform,
-      boundingBox
-    );
-
-    segment.params.c1x = curve1.x;
-    segment.params.c1y = curve1.y;
-    segment.params.c2x = curve2.x;
-    segment.params.c2y = curve2.y;
+): Command => {
+  if (isHorizontalLineTo(command)) {
+    return command;
+  }
+  if (isVerticalLineTo(command)) {
+    return command;
+  }
+  if (isClosePath(command)) {
+    return command;
   }
 
-  segment.params.x = rotated.x;
-  segment.params.y = rotated.y;
+  const rotated = applyRotation({ x: command.x, y: command.y }, transform, boundingBox);
 
-  return segment;
+  if (isCurveTo(command)) {
+    const curve1 = applyRotation({ x: command.x1, y: command.y1 }, transform, boundingBox);
+    const curve2 = applyRotation({ x: command.x2, y: command.y2 }, transform, boundingBox);
+
+    command.x1 = curve1.x;
+    command.y1 = curve1.y;
+    command.x2 = curve2.x;
+    command.y2 = curve2.y;
+  }
+
+  command.x = rotated.x;
+  command.y = rotated.y;
+
+  return command;
 };
 
 export const applyInverseRotation = (
@@ -59,12 +64,8 @@ export const applyInverseRotation = (
 export const getRotation = (transform: Transform): number =>
   Math.acos(transform[0][0]) * (180 / Math.PI);
 
-export const isTransformed = (transform: Transform, boundingBox: Rect | null): boolean => {
-  if (!boundingBox) {
-    return false;
-  }
-
-  return transform[0][2] !== boundingBox.x || transform[1][2] !== boundingBox.y;
+export const isTransformed = (transform: Transform): boolean => {
+  return !isIdentityMatrix(transform);
 };
 
 const inverseMatrix = (matrix: Transform): Transform => [
@@ -77,9 +78,31 @@ const applyMatrix = (matrix: Transform, point: Point): Point => ({
   y: point.x * matrix[1][0] + point.y * matrix[1][1]
 });
 
+const isIdentityMatrix = (matrix: Transform): boolean => {
+  return (
+    cleanNumber(matrix[0][0]) === 1 &&
+    cleanNumber(matrix[0][1]) === 0 &&
+    cleanNumber(matrix[1][0]) === 0 &&
+    cleanNumber(matrix[1][1]) === 1
+  );
+};
+
 const calculateCenter = (boundingBox: Rect): Point => ({
   x: boundingBox.x + boundingBox.width / 2,
   y: boundingBox.y + boundingBox.height / 2
 });
 
-const isCurveTo = (segment: Segment): segment is CurveTo => segment.command === 'curve-to';
+const isCurveTo = (command: Command): command is CurveToCommand => command.command === 'curveto';
+
+const isHorizontalLineTo = (command: Command): command is HorizontalLineToCommand =>
+  command.command === 'horizontal lineto';
+
+const isVerticalLineTo = (command: Command): command is VerticalLineToCommand =>
+  command.command === 'vertical lineto';
+
+const isClosePath = (command: Command): command is ClosePathCommand =>
+  command.command === 'closepath';
+
+const cleanNumber = (value: number, epsilon = 1e-6, decimals = 6): number => {
+  return Math.abs(value) < epsilon ? 0 : +value.toFixed(decimals);
+};

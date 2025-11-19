@@ -1,4 +1,3 @@
-import { registerComponentProperties } from '@plugin/registerComponentProperties';
 import {
   transformAutoLayout,
   transformBlend,
@@ -7,10 +6,10 @@ import {
   transformCornerRadius,
   transformDimension,
   transformEffects,
-  transformFigmaIds,
   transformFills,
+  transformGrids,
+  transformIds,
   transformLayoutAttributes,
-  transformLayoutGrids,
   transformOverrides,
   transformProportion,
   transformRotationAndPosition,
@@ -18,28 +17,16 @@ import {
   transformStrokes
 } from '@plugin/transformers/partials';
 
-import { FrameShape } from '@ui/lib/types/shapes/frameShape';
-import { Point } from '@ui/lib/types/utils/point';
+import type { FrameShape } from '@ui/lib/types/shapes/frameShape';
+import type { Point } from '@ui/lib/types/utils/point';
 
 const isSectionNode = (node: FrameNode | SectionNode | ComponentSetNode): node is SectionNode => {
   return node.type === 'SECTION';
 };
 
-const isComponentSetNode = (
-  node: FrameNode | SectionNode | ComponentSetNode
-): node is ComponentSetNode => {
-  return node.type === 'COMPONENT_SET';
-};
-
-export const transformFrameNode = async (
-  node: FrameNode | SectionNode | ComponentSetNode
-): Promise<FrameShape> => {
+export const transformFrameNode = async (node: FrameNode | SectionNode): Promise<FrameShape> => {
   let frameSpecificAttributes: Partial<FrameShape> = {};
   let referencePoint: Point = { x: node.absoluteTransform[0][2], y: node.absoluteTransform[1][2] };
-
-  if (isComponentSetNode(node)) {
-    registerComponentProperties(node);
-  }
 
   if (!isSectionNode(node)) {
     const { x, y, ...transformAndRotation } = transformRotationAndPosition(node);
@@ -59,7 +46,7 @@ export const transformFrameNode = async (
       ...transformEffects(node),
       ...transformConstraints(node),
       ...transformAutoLayout(node),
-      ...transformLayoutGrids(node),
+      ...transformGrids(node),
       ...transformAndRotation
     };
   }
@@ -68,7 +55,7 @@ export const transformFrameNode = async (
     type: 'frame',
     name: node.name,
     showContent: isSectionNode(node) ? true : !node.clipsContent,
-    ...transformFigmaIds(node),
+    ...transformIds(node),
     ...transformFills(node),
     ...referencePoint,
     ...frameSpecificAttributes,

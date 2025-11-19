@@ -1,11 +1,12 @@
-import { BoolShape } from '@ui/lib/types/shapes/boolShape';
-import { CircleShape } from '@ui/lib/types/shapes/circleShape';
-import { FrameShape } from '@ui/lib/types/shapes/frameShape';
-import { GroupShape } from '@ui/lib/types/shapes/groupShape';
-import { PathShape } from '@ui/lib/types/shapes/pathShape';
-import { RectShape } from '@ui/lib/types/shapes/rectShape';
-import { TextShape } from '@ui/lib/types/shapes/textShape';
-import { ComponentInstance, ComponentRoot } from '@ui/types';
+import type { BoolShape } from '@ui/lib/types/shapes/boolShape';
+import type { CircleShape } from '@ui/lib/types/shapes/circleShape';
+import type { ComponentShape } from '@ui/lib/types/shapes/componentShape';
+import type { FrameShape } from '@ui/lib/types/shapes/frameShape';
+import type { GroupShape } from '@ui/lib/types/shapes/groupShape';
+import type { PathShape } from '@ui/lib/types/shapes/pathShape';
+import type { RectShape } from '@ui/lib/types/shapes/rectShape';
+import type { TextShape } from '@ui/lib/types/shapes/textShape';
+import type { ComponentInstance } from '@ui/types';
 
 export type PenpotNode =
   | FrameShape
@@ -16,4 +17,4 @@ export type PenpotNode =
   | TextShape
   | BoolShape
   | ComponentInstance
-  | ComponentRoot;
+  | ComponentShape;

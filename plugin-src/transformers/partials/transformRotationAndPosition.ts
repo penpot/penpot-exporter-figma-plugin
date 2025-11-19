@@ -1,7 +1,7 @@
 import { translateRotation, translateZeroRotation } from '@plugin/translators';
 import { applyInverseRotation, getRotation, isTransformed } from '@plugin/utils';
 
-import { ShapeBaseAttributes, ShapeGeomAttributes } from '@ui/lib/types/shapes/shape';
+import type { ShapeBaseAttributes, ShapeGeomAttributes } from '@ui/lib/types/shapes/shape';
 
 export const transformRotation = (
   node: LayoutMixin
@@ -12,17 +12,14 @@ export const transformRotation = (
 };
 
 export const transformRotationAndPosition = (
-  node: LayoutMixin
+  node: SceneNode
 ): Pick<ShapeBaseAttributes, 'transform' | 'transformInverse' | 'rotation'> &
   Pick<ShapeGeomAttributes, 'x' | 'y'> => {
   const x = node.absoluteTransform[0][2];
   const y = node.absoluteTransform[1][2];
   const rotation = getRotation(node.absoluteTransform);
 
-  if (
-    !node.absoluteBoundingBox ||
-    !isTransformed(node.absoluteTransform, node.absoluteBoundingBox)
-  ) {
+  if (!node.absoluteBoundingBox || !isTransformed(node.absoluteTransform)) {
     return {
       x,
       y,

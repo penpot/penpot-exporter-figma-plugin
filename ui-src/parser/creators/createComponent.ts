@@ -1,40 +1,36 @@
-import { PenpotFile } from '@ui/lib/types/penpotFile';
-import { componentShapes, components } from '@ui/parser';
-import { ComponentRoot } from '@ui/types';
+import type { PenpotContext } from '@ui/lib/types/penpotContext';
+import type { ComponentShape } from '@ui/lib/types/shapes/componentShape';
+import { componentRoots, components } from '@ui/parser';
+import { createArtboard } from '@ui/parser/creators';
+import { symbolVariantProperties } from '@ui/parser/creators/symbols';
+import type { UiComponent } from '@ui/types';
 
-import { createArtboard } from '.';
+export const createComponent = (
+  context: PenpotContext,
+  { type: _type, path, variantProperties, ...shape }: ComponentShape
+): void => {
+  const componentRoot = componentRoots.get(shape.id);
 
-export const createComponent = (file: PenpotFile, { figmaId }: ComponentRoot) => {
-  const componentShape = componentShapes.get(figmaId);
-
-  if (!componentShape) {
+  if (!componentRoot) {
     return;
   }
 
-  const componentId = getComponentId(file, figmaId);
-  const { type, ...shape } = componentShape;
+  const { componentId, frameId, name, variantId } = componentRoot;
 
-  shape.componentFile = file.getId();
-  shape.componentId = componentId;
-  shape.componentRoot = true;
-  shape.mainInstance = true;
-
-  const frameId = createArtboard(file, shape);
-
-  if (!frameId) {
-    return;
-  }
-
-  components.set(figmaId, {
+  const component: UiComponent = {
     componentId,
-    mainInstancePage: file.getCurrentPageId(),
-    componentFigmaId: figmaId,
-    mainInstanceId: frameId
-  });
-};
+    frameId,
+    name,
+    variantId,
+    path,
+    pageId: context.currentPageId,
+    fileId: context.currentFileId,
+    variantProperties: symbolVariantProperties(variantProperties, variantId)
+  };
 
-const getComponentId = (file: PenpotFile, figmaId: string) => {
-  const component = components.get(figmaId);
+  components.set(shape.id, component);
 
-  return component?.componentId ?? file.newId();
+  shape.componentFile = context.currentFileId;
+
+  createArtboard(context, shape);
 };

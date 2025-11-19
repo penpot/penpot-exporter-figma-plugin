@@ -1,11 +1,11 @@
-import { LayoutChildAttributes } from '@ui/lib/types/shapes/layout';
-import {
+import type { LayoutChildAttributes } from '@ui/lib/types/shapes/layout';
+import type {
   ShapeAttributes,
   ShapeBaseAttributes,
   ShapeGeomAttributes
 } from '@ui/lib/types/shapes/shape';
-import { Fill } from '@ui/lib/types/utils/fill';
-import { Typography } from '@ui/lib/types/utils/typography';
+import type { Fill } from '@ui/lib/types/utils/fill';
+import type { Typography } from '@ui/lib/types/utils/typography';
 
 export type TextShape = ShapeBaseAttributes &
   ShapeGeomAttributes &
@@ -55,6 +55,7 @@ export type TextStyle = TextTypography & {
   textAlign?: TextHorizontalAlign;
   textDirection?: 'ltr' | 'rtl' | 'auto';
   fills?: Fill[];
+
   fillStyleId?: string; // @TODO: move to any other place
   textStyleId?: string; // @TODO: move to any other place
 };

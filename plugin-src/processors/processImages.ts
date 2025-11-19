@@ -1,42 +1,35 @@
-import { toArray } from '@common/map';
-import { sleep } from '@common/sleep';
+import { yieldByTime } from '@common/sleep';
 
-import { images as imagesLibrary } from '@plugin/libraries';
+import { images } from '@plugin/libraries';
+import { flushProgress, reportProgress } from '@plugin/utils';
 
-export const processImages = async (): Promise<Record<string, Uint8Array>> => {
-  const imageToDownload = toArray(imagesLibrary);
-  const images: Record<string, Uint8Array> = {};
+export const processImages = async (
+  currentAsset: number
+): Promise<Record<string, Uint8Array<ArrayBuffer>>> => {
+  const processedImages: Record<string, Uint8Array<ArrayBuffer>> = {};
 
-  if (imageToDownload.length === 0) return images;
+  if (images.size === 0) return processedImages;
 
-  let currentImage = 1;
+  let currentImage = currentAsset;
 
-  figma.ui.postMessage({
-    type: 'PROGRESS_TOTAL_ITEMS',
-    data: imageToDownload.length
-  });
-
-  figma.ui.postMessage({
-    type: 'PROGRESS_STEP',
-    data: 'images'
-  });
-
-  for (const [key, image] of imageToDownload) {
+  for (const [key, image] of images.entries()) {
     const bytes = await image?.getBytesAsync();
 
     if (bytes) {
-      images[key] = bytes;
+      processedImages[key] = bytes as Uint8Array<ArrayBuffer>;
     }
 
-    figma.ui.postMessage({
+    reportProgress({
       type: 'PROGRESS_PROCESSED_ITEMS',
       data: currentImage++
     });
 
-    await sleep(0);
+    await yieldByTime();
   }
 
-  await sleep(20);
+  flushProgress();
 
-  return images;
+  await yieldByTime(undefined, true);
+
+  return processedImages;
 };

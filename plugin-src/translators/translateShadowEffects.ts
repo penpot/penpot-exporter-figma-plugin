@@ -1,6 +1,6 @@
-import { rgbToHex } from '@plugin/utils';
+import { generateUuid, rgbToHex } from '@plugin/utils';
 
-import { Shadow, ShadowStyle } from '@ui/lib/types/utils/shadow';
+import type { Shadow, ShadowStyle } from '@ui/lib/types/utils/shadow';
 
 export const translateShadowEffect = (effect: Effect): Shadow | undefined => {
   if (effect.type !== 'DROP_SHADOW' && effect.type !== 'INNER_SHADOW') {
@@ -8,6 +8,7 @@ export const translateShadowEffect = (effect: Effect): Shadow | undefined => {
   }
 
   return {
+    id: generateUuid(),
     style: translateShadowType(effect),
     offsetX: effect.offset.x,
     offsetY: effect.offset.y,

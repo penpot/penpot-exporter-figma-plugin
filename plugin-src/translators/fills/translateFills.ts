@@ -6,7 +6,7 @@ import {
 } from '@plugin/translators/fills/gradients';
 import { rgbToHex } from '@plugin/utils';
 
-import { Fill } from '@ui/lib/types/utils/fill';
+import type { Fill } from '@ui/lib/types/utils/fill';
 
 export const translateFill = (fill: Paint): Fill | undefined => {
   switch (fill.type) {

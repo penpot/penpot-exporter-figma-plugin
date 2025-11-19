@@ -1,8 +1,7 @@
 import { translateFill } from '@plugin/translators/fills/translateFills';
+import { translateStyleName, translateStylePath } from '@plugin/translators/styles';
 
-import { FillStyle } from '@ui/lib/types/utils/fill';
-
-import { translateStyleName, translateStylePath } from '.';
+import type { FillStyle } from '@ui/lib/types/utils/fill';
 
 export const translatePaintStyle = (figmaStyle: PaintStyle): FillStyle => {
   const fillStyle: FillStyle = {
@@ -34,7 +33,7 @@ export const translatePaintStyle = (figmaStyle: PaintStyle): FillStyle => {
   return fillStyle;
 };
 
-const translatePaintStylePath = (figmaStyle: PaintStyle) => {
+const translatePaintStylePath = (figmaStyle: PaintStyle): string => {
   const path = translateStylePath(figmaStyle);
 
   if (figmaStyle.paints.length <= 1) {

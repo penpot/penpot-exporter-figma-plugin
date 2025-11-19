@@ -3,8 +3,8 @@ import {
   transformChildren,
   transformDimension,
   transformEffects,
-  transformFigmaIds,
   transformFills,
+  transformIds,
   transformLayoutAttributes,
   transformOverrides,
   transformProportion,
@@ -14,14 +14,14 @@ import {
 } from '@plugin/transformers/partials';
 import { translateBoolType } from '@plugin/translators';
 
-import { BoolShape } from '@ui/lib/types/shapes/boolShape';
+import type { BoolShape } from '@ui/lib/types/shapes/boolShape';
 
 export const transformBooleanNode = async (node: BooleanOperationNode): Promise<BoolShape> => {
   return {
     type: 'bool',
     name: node.name,
     boolType: translateBoolType(node.booleanOperation),
-    ...transformFigmaIds(node),
+    ...transformIds(node),
     ...(await transformChildren(node)),
     ...transformFills(node),
     ...transformEffects(node),

@@ -7,10 +7,11 @@ import {
   transformCornerRadius,
   transformDimension,
   transformEffects,
-  transformFigmaIds,
   transformFills,
+  transformGrids,
+  transformId,
+  transformIds,
   transformLayoutAttributes,
-  transformLayoutGrids,
   transformOverrides,
   transformProportion,
   transformRotationAndPosition,
@@ -18,7 +19,7 @@ import {
   transformStrokes
 } from '@plugin/transformers/partials';
 
-import { ComponentInstance } from '@ui/types';
+import type { ComponentInstance } from '@ui/types';
 
 export const transformInstanceNode = async (
   node: InstanceNode
@@ -48,11 +49,11 @@ export const transformInstanceNode = async (
   return {
     type: 'instance',
     name: node.name,
-    mainComponentFigmaId: mainComponent.id,
-    isComponentRoot: isComponentRoot(node),
+    mainComponentId: transformId(mainComponent),
+    componentRoot: isComponentRoot(node),
     showContent: !node.clipsContent,
     isOrphan,
-    ...transformFigmaIds(node),
+    ...transformIds(node),
     ...transformFills(node),
     ...transformEffects(node),
     ...transformStrokes(node),
@@ -65,7 +66,7 @@ export const transformInstanceNode = async (
     ...transformRotationAndPosition(node),
     ...transformConstraints(node),
     ...transformAutoLayout(node),
-    ...transformLayoutGrids(node),
+    ...transformGrids(node),
     ...(await transformChildren(node)),
     ...nodeOverrides
   };

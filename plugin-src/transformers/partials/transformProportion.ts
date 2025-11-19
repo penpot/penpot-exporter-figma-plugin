@@ -1,7 +1,9 @@
-import { ShapeAttributes } from '@ui/lib/types/shapes/shape';
+import type { ShapeAttributes } from '@ui/lib/types/shapes/shape';
 
-export const transformProportion = (node: LayoutMixin): Pick<ShapeAttributes, 'proportionLock'> => {
+export const transformProportion = (
+  node: AspectRatioLockMixin
+): Pick<ShapeAttributes, 'proportionLock'> => {
   return {
-    proportionLock: node.constrainProportions
+    proportionLock: node.targetAspectRatio !== null
   };
 };

@@ -1,0 +1,41 @@
+import type { PenpotFile } from '@ui/lib/types/penpotFile';
+import type { PenpotPage } from '@ui/lib/types/penpotPage';
+import type { PenpotBool } from '@ui/lib/types/shapes/boolShape';
+import type { CircleShape } from '@ui/lib/types/shapes/circleShape';
+import type { PenpotComponent } from '@ui/lib/types/shapes/componentShape';
+import type { FrameShape } from '@ui/lib/types/shapes/frameShape';
+import type { GroupShape } from '@ui/lib/types/shapes/groupShape';
+import type { PathShape } from '@ui/lib/types/shapes/pathShape';
+import type { RectShape } from '@ui/lib/types/shapes/rectShape';
+import type { TextShape } from '@ui/lib/types/shapes/textShape';
+import type { Color } from '@ui/lib/types/utils/color';
+import type { ImageColor } from '@ui/lib/types/utils/imageColor';
+import type { Media } from '@ui/lib/types/utils/media';
+import type { Typography } from '@ui/lib/types/utils/typography';
+import type { Uuid } from '@ui/lib/types/utils/uuid';
+
+export interface PenpotContext {
+  currentFileId: Uuid;
+  currentFrameId: Uuid;
+  currentPageId: Uuid;
+  lastId: Uuid;
+  addFile(file: PenpotFile): Uuid;
+  closeFile(): void;
+  addPage(page: PenpotPage): Uuid;
+  closePage(): void;
+  addBoard(artboard: FrameShape): Uuid;
+  closeBoard(): void;
+  addGroup(group: GroupShape): Uuid;
+  closeGroup(): void;
+  addBool(bool: PenpotBool): Uuid;
+  addRect(rect: RectShape): Uuid;
+  addCircle(circle: CircleShape): Uuid;
+  addPath(path: PathShape): Uuid;
+  addText(options: TextShape): Uuid;
+  addLibraryColor(color: Color): Uuid;
+  addLibraryTypography(typography: Typography): Uuid;
+  addComponent(component: PenpotComponent): Uuid;
+  addFileMedia(media: Media, blob: Blob): Uuid;
+  getMediaAsImage(mediaId: Uuid): ImageColor;
+  genId(): Uuid;
+}

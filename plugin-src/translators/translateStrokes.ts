@@ -1,6 +1,6 @@
 import { translateFill } from '@plugin/translators/fills';
 
-import { Stroke, StrokeAlignment, StrokeCaps } from '@ui/lib/types/utils/stroke';
+import type { Stroke, StrokeAlignment, StrokeCaps } from '@ui/lib/types/utils/stroke';
 
 export const translateStrokes = (
   node: MinimalStrokesMixin | (MinimalStrokesMixin & IndividualStrokesMixin),
@@ -12,9 +12,20 @@ export const translateStrokes = (
     strokeStyle: node.dashPattern.length ? 'dashed' : 'solid'
   };
 
-  return node.strokes.map((paint, index) =>
-    translateStroke(paint, sharedStrokeProperties, strokeCaps, index === 0)
-  );
+  const penpotStrokes: Stroke[] = [];
+
+  for (let index = 0; index < node.strokes.length; index++) {
+    const stroke = node.strokes[index];
+    const penpotStroke = translateStroke(stroke, sharedStrokeProperties, strokeCaps, index === 0);
+
+    if (!penpotStroke) {
+      continue;
+    }
+
+    penpotStrokes.unshift(penpotStroke);
+  }
+
+  return penpotStrokes;
 };
 
 export const translateStroke = (
@@ -22,15 +33,27 @@ export const translateStroke = (
   sharedStrokeProperties: Stroke,
   strokeCaps: (stroke: Stroke) => Stroke,
   firstStroke: boolean
-): Stroke => {
+): Stroke | undefined => {
   const fill = translateFill(paint);
+  let stroke: Stroke = { ...sharedStrokeProperties };
 
-  let stroke: Stroke = {
-    strokeColor: fill?.fillColor,
-    strokeOpacity: fill?.fillOpacity,
-    strokeImage: fill?.fillImage,
-    ...sharedStrokeProperties
-  };
+  if (!fill) {
+    return;
+  }
+
+  stroke.strokeOpacity = fill.fillOpacity;
+
+  if (fill.fillColorGradient) {
+    stroke.strokeColorGradient = fill.fillColorGradient;
+  }
+
+  if (fill.fillColor) {
+    stroke.strokeColor = fill.fillColor;
+  }
+
+  if (fill.fillImage) {
+    stroke.strokeImage = fill.fillImage;
+  }
 
   if (firstStroke) {
     stroke = strokeCaps(stroke);

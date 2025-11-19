@@ -1,16 +1,13 @@
-import { PenpotFile } from '@ui/lib/types/penpotFile';
-import { CircleShape } from '@ui/lib/types/shapes/circleShape';
-import { parseFigmaId } from '@ui/parser';
+import type { PenpotContext } from '@ui/lib/types/penpotContext';
+import type { CircleShape } from '@ui/lib/types/shapes/circleShape';
 import { symbolFills, symbolStrokes, symbolTouched } from '@ui/parser/creators/symbols';
 
 export const createCircle = (
-  file: PenpotFile,
-  { type, figmaId, figmaRelatedId, ...shape }: CircleShape
-) => {
-  shape.id = parseFigmaId(file, figmaId);
-  shape.shapeRef = parseFigmaId(file, figmaRelatedId, true);
-  shape.fills = symbolFills(shape.fillStyleId, shape.fills);
-  shape.strokes = symbolStrokes(shape.strokes);
+  context: PenpotContext,
+  { type: _type, ...shape }: CircleShape
+): void => {
+  shape.fills = symbolFills(context, shape.fillStyleId, shape.fills);
+  shape.strokes = symbolStrokes(context, shape.strokes);
   shape.touched = symbolTouched(
     !shape.hidden,
     undefined,
@@ -18,5 +15,5 @@ export const createCircle = (
     shape.componentPropertyReferences
   );
 
-  file.createCircle(shape);
+  context.addCircle(shape);
 };

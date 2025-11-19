@@ -1,24 +1,14 @@
-import { PenpotFile } from '@ui/lib/types/penpotFile';
-import { BoolShape } from '@ui/lib/types/shapes/boolShape';
-import { parseFigmaId } from '@ui/parser';
-import {
-  symbolBoolType,
-  symbolFills,
-  symbolStrokes,
-  symbolTouched
-} from '@ui/parser/creators/symbols';
-
-import { createItems } from '.';
+import type { PenpotContext } from '@ui/lib/types/penpotContext';
+import type { BoolShape } from '@ui/lib/types/shapes/boolShape';
+import { createItems } from '@ui/parser/creators';
+import { symbolFills, symbolStrokes, symbolTouched } from '@ui/parser/creators/symbols';
 
 export const createBool = (
-  file: PenpotFile,
-  { type, figmaId, figmaRelatedId, children = [], ...shape }: BoolShape
-) => {
-  shape.id = parseFigmaId(file, figmaId);
-  shape.shapeRef = parseFigmaId(file, figmaRelatedId, true);
-  shape.fills = symbolFills(shape.fillStyleId, shape.fills);
-  shape.strokes = symbolStrokes(shape.strokes);
-  shape.boolType = symbolBoolType(shape.boolType);
+  context: PenpotContext,
+  { type: _type, children = [], boolType, ...shape }: BoolShape
+): void => {
+  shape.fills = symbolFills(context, shape.fillStyleId, shape.fills);
+  shape.strokes = symbolStrokes(context, shape.strokes);
   shape.touched = symbolTouched(
     !shape.hidden,
     undefined,
@@ -26,9 +16,14 @@ export const createBool = (
     shape.componentPropertyReferences
   );
 
-  file.addBool(shape);
+  const groupId = context.addGroup(shape);
 
-  createItems(file, children);
+  createItems(context, children);
 
-  file.closeBool();
+  context.closeGroup();
+
+  context.addBool({
+    groupId,
+    type: boolType
+  });
 };

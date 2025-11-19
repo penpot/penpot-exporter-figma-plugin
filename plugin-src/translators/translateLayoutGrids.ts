@@ -1,4 +1,4 @@
-import {
+import type {
   GridLayoutGrid,
   LayoutGrid,
   RowsColsLayoutGrid
@@ -6,7 +6,13 @@ import {
 
 import { rgbToHex } from '@plugin/utils';
 
-import { ColumnGrid, Grid, GridAlignment, RowGrid, SquareGrid } from '@ui/lib/types/utils/grid';
+import type {
+  ColumnGrid,
+  Grid,
+  GridAlignment,
+  RowGrid,
+  SquareGrid
+} from '@ui/lib/types/utils/grid';
 
 export const translateGrids = (layoutGrids: readonly LayoutGrid[]): Grid[] => {
   return layoutGrids.map(grid => {

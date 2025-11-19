@@ -1,53 +1,30 @@
-import { PenpotFile } from '@ui/lib/types/penpotFile';
-import { Uuid } from '@ui/lib/types/utils/uuid';
-import { components, parseFigmaId } from '@ui/parser';
-import { ComponentInstance } from '@ui/types';
-
-import { createArtboard } from '.';
+import type { PenpotContext } from '@ui/lib/types/penpotContext';
+import type { Uuid } from '@ui/lib/types/utils/uuid';
+import { componentRoots } from '@ui/parser';
+import { createArtboard } from '@ui/parser/creators';
+import type { ComponentInstance } from '@ui/types';
 
 let remoteFileId: Uuid | undefined = undefined;
 
 export const createComponentInstance = (
-  file: PenpotFile,
-  { type, mainComponentFigmaId, isComponentRoot, ...shape }: ComponentInstance
-) => {
-  const uiComponent =
-    components.get(mainComponentFigmaId) ?? createUiComponent(file, mainComponentFigmaId);
+  context: PenpotContext,
+  { type: _type, mainComponentId, ...shape }: ComponentInstance
+): void => {
+  const componentRoot = componentRoots.get(mainComponentId);
 
-  if (!uiComponent) {
-    return;
+  if (!shape.shapeRef) {
+    shape.shapeRef = mainComponentId;
   }
 
-  if (!shape.figmaRelatedId) {
-    shape.shapeRef = uiComponent.mainInstanceId;
-  }
-  shape.componentFile = shape.isOrphan ? getRemoteFileId(file) : file.getId();
-  shape.componentRoot = isComponentRoot;
-  shape.componentId = uiComponent.componentId;
+  shape.componentFile = componentRoot ? context.currentFileId : getRemoteFileId(context);
+  shape.componentId = componentRoot ? componentRoot.componentId : context.genId();
 
-  createArtboard(file, shape);
+  createArtboard(context, shape);
 };
 
-const createUiComponent = (file: PenpotFile, mainComponentFigmaId: string) => {
-  const mainInstanceId = parseFigmaId(file, mainComponentFigmaId);
-  if (!mainInstanceId) {
-    return;
-  }
-
-  const uiComponent = {
-    componentId: file.newId(),
-    componentFigmaId: mainComponentFigmaId,
-    mainInstanceId
-  };
-
-  components.set(mainComponentFigmaId, uiComponent);
-
-  return uiComponent;
-};
-
-const getRemoteFileId = (file: PenpotFile): Uuid => {
+const getRemoteFileId = (context: PenpotContext): Uuid => {
   if (!remoteFileId) {
-    remoteFileId = file.newId();
+    remoteFileId = context.genId();
   }
 
   return remoteFileId;

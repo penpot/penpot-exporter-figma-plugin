@@ -1,0 +1,20 @@
+.step-info {
+  font-size: 0.8125rem;
+  font-weight: 500;
+}
+
+.step-item {
+  display: flex;
+  font-size: 0.8125rem;
+  align-items: center;
+  gap: 0.375rem;
+}
+
+.step-item-active {
+  color: var(--figma-color-text);
+  font-weight: 500;
+}
+
+.step-item-next {
+  opacity: 0.7;
+}

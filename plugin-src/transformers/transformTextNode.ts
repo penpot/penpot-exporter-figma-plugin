@@ -3,7 +3,7 @@ import {
   transformConstraints,
   transformDimension,
   transformEffects,
-  transformFigmaIds,
+  transformIds,
   transformLayoutAttributes,
   transformOverrides,
   transformProportion,
@@ -13,13 +13,13 @@ import {
   transformText
 } from '@plugin/transformers/partials';
 
-import { TextShape } from '@ui/lib/types/shapes/textShape';
+import type { TextShape } from '@ui/lib/types/shapes/textShape';
 
 export const transformTextNode = (node: TextNode): TextShape => {
   return {
     type: 'text',
     name: node.name,
-    ...transformFigmaIds(node),
+    ...transformIds(node),
     ...transformText(node),
     ...transformDimension(node),
     ...transformRotationAndPosition(node),
@@ -27,7 +27,7 @@ export const transformTextNode = (node: TextNode): TextShape => {
     ...transformSceneNode(node),
     ...transformBlend(node),
     ...transformProportion(node),
-    ...transformLayoutAttributes(node),
+    ...transformLayoutAttributes(node, false, true),
     ...transformStrokes(node),
     ...transformConstraints(node),
     ...transformOverrides(node)

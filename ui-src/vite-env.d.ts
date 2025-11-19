@@ -1,6 +1,6 @@
 /// <reference types="vite/client" />
 /// <reference types="vite-plugin-svgr/client" />
-declare module ViteEnv {
+declare namespace ViteEnv {
   interface ImportMetaEnv {
     VITE_SENTRY_DSN: string;
     VITE_MIXPANEL_TOKEN: string;

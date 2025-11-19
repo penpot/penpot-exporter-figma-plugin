@@ -1,6 +1,6 @@
 import { translateConstraintH, translateConstraintV } from '@plugin/translators';
 
-import { ShapeAttributes } from '@ui/lib/types/shapes/shape';
+import type { ShapeAttributes } from '@ui/lib/types/shapes/shape';
 
 export const transformConstraints = (
   node: ConstraintMixin

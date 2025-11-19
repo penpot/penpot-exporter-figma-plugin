@@ -7,11 +7,12 @@ import {
   transformProportion,
   transformSceneNode,
   transformStrokesFromVector,
-  transformVectorFills
+  transformVectorFills,
+  transformVectorIds
 } from '@plugin/transformers/partials';
 import { translateCommands, translateWindingRule } from '@plugin/translators/vectors';
 
-import { PathShape } from '@ui/lib/types/shapes/pathShape';
+import type { PathShape } from '@ui/lib/types/shapes/pathShape';
 
 export const transformVectorPaths = (node: VectorNode): PathShape[] => {
   let regions: readonly VectorRegion[] = [];
@@ -22,22 +23,34 @@ export const transformVectorPaths = (node: VectorNode): PathShape[] => {
     console.warn('Could not access the vector network', node, error);
   }
 
-  const strokeLength = node.strokes.length;
+  const hasStrokes = node.strokes.length > 0;
+  const hasGeometry = node.fillGeometry.length > 0;
 
   const pathShapes = node.vectorPaths
     .filter((vectorPath, index) => {
-      return nodeHasFills(node, vectorPath, regions[index]) || strokeLength > 0;
+      return (
+        hasStrokes ||
+        (!hasStrokes && !hasGeometry) ||
+        nodeHasFills(node, vectorPath, regions[index])
+      );
     })
-    .map((vectorPath, index) => transformVectorPath(node, vectorPath, regions[index]));
+    .map((vectorPath, index) => transformVectorPath(node, vectorPath, regions[index], index));
+
+  if (regions.length > 0) {
+    return pathShapes;
+  }
+
+  const normalizedVectorPaths = node.vectorPaths.map(vectorPath => normalizePath(vectorPath.data));
 
   const geometryShapes = node.fillGeometry
-    .filter(
-      geometry =>
-        !node.vectorPaths.find(
-          vectorPath => normalizePath(vectorPath.data) === normalizePath(geometry.data)
-        )
-    )
-    .map(geometry => transformVectorPath(node, geometry, undefined));
+    .filter(geometry => {
+      const normalizedGeometry = normalizePath(geometry.data);
+
+      return !normalizedVectorPaths.find(
+        normalizedVectorPath => normalizedVectorPath === normalizedGeometry
+      );
+    })
+    .map((geometry, index) => transformVectorPath(node, geometry, undefined, index));
 
   return [...geometryShapes, ...pathShapes];
 };
@@ -63,7 +76,8 @@ const nodeHasFills = (
 const transformVectorPath = (
   node: VectorNode,
   vectorPath: VectorPath,
-  vectorRegion: VectorRegion | undefined
+  vectorRegion: VectorRegion | undefined,
+  index: number
 ): PathShape => {
   const normalizedPaths = parseSVG(vectorPath.data);
 
@@ -76,6 +90,7 @@ const transformVectorPath = (
     },
     constraintsH: 'scale',
     constraintsV: 'scale',
+    ...transformVectorIds(node, index),
     ...transformVectorFills(node, vectorPath, vectorRegion),
     ...transformStrokesFromVector(node, normalizedPaths, vectorRegion),
     ...transformEffects(node),

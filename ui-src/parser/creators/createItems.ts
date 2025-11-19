@@ -1,7 +1,4 @@
-import { sendMessage } from '@ui/context';
-import { PenpotFile } from '@ui/lib/types/penpotFile';
-import { PenpotNode } from '@ui/types';
-
+import type { PenpotContext } from '@ui/lib/types/penpotContext';
 import {
   createArtboard,
   createBool,
@@ -12,38 +9,36 @@ import {
   createPath,
   createRectangle,
   createText
-} from '.';
+} from '@ui/parser/creators';
+import type { PenpotNode } from '@ui/types';
 
-export const createItems = (file: PenpotFile, nodes: PenpotNode[]) => {
+export const createItems = (context: PenpotContext, nodes: PenpotNode[]): void => {
   for (const node of nodes) {
-    createItem(file, node);
+    createItem(context, node);
   }
 };
 
-const createItem = (file: PenpotFile, node: PenpotNode) => {
-  sendMessage({
-    type: 'PROGRESS_CURRENT_ITEM',
-    data: node.name
-  });
-
+const createItem = (context: PenpotContext, node: PenpotNode): void => {
   switch (node.type) {
     case 'rect':
-      return createRectangle(file, node);
+      return createRectangle(context, node);
     case 'circle':
-      return createCircle(file, node);
+      return createCircle(context, node);
     case 'frame':
-      return createArtboard(file, node);
+      createArtboard(context, node);
+
+      return;
     case 'group':
-      return createGroup(file, node);
+      return createGroup(context, node);
     case 'path':
-      return createPath(file, node);
+      return createPath(context, node);
     case 'text':
-      return createText(file, node);
+      return createText(context, node);
     case 'bool':
-      return createBool(file, node);
+      return createBool(context, node);
     case 'component':
-      return createComponent(file, node);
+      return createComponent(context, node);
     case 'instance':
-      return createComponentInstance(file, node);
+      return createComponentInstance(context, node);
   }
 };

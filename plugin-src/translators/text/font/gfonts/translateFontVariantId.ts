@@ -1,10 +1,10 @@
-import { GoogleFont } from './googleFont';
+import type { GoogleFont } from '@plugin/translators/text/font/gfonts/googleFont';
 
 export const translateFontVariantId = (
   googleFont: GoogleFont,
   fontName: FontName,
   fontWeight: string
-) => {
+): string => {
   // check match directly by style
   const variant = googleFont.variants?.find(variant => variant === fontName.style.toLowerCase());
 
@@ -17,4 +17,7 @@ export const translateFontVariantId = (
   );
 
   if (variantWithWeight !== undefined) return variantWithWeight;
+
+  // fallback to font weight (it will not be displayed on Penpot, but it will be rendered)
+  return fontWeight;
 };

@@ -4,8 +4,8 @@ import {
   transformCornerRadius,
   transformDimension,
   transformEffects,
-  transformFigmaIds,
   transformFills,
+  transformIds,
   transformLayoutAttributes,
   transformOverrides,
   transformProportion,
@@ -14,13 +14,13 @@ import {
   transformStrokes
 } from '@plugin/transformers/partials';
 
-import { RectShape } from '@ui/lib/types/shapes/rectShape';
+import type { RectShape } from '@ui/lib/types/shapes/rectShape';
 
 export const transformRectangleNode = (node: RectangleNode): RectShape => {
   return {
     type: 'rect',
     name: node.name,
-    ...transformFigmaIds(node),
+    ...transformIds(node),
     ...transformFills(node),
     ...transformEffects(node),
     ...transformStrokes(node),

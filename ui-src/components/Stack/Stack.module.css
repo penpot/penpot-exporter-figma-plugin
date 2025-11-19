@@ -26,6 +26,10 @@
     --spacing: 0.25rem;
   }
 
+  .stack-3xsmall {
+    --spacing: 0.125rem;
+  }
+
   .stack-center {
     align-items: center;
   }

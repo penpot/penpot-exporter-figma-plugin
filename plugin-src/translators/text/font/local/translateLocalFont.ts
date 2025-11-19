@@ -1,6 +1,7 @@
-import { LocalFont, translateFontVariantId } from '@plugin/translators/text/font/local';
+import type { LocalFont } from '@plugin/translators/text/font/local';
+import { translateFontVariantId } from '@plugin/translators/text/font/local';
 
-import { TextTypography } from '@ui/lib/types/shapes/textShape';
+import type { TextTypography } from '@ui/lib/types/shapes/textShape';
 
 import { items as localFonts } from './localFonts.json';
 
@@ -19,10 +20,6 @@ export const translateLocalFont = (
     fontVariantId: translateFontVariantId(localFont, fontName, fontWeight),
     fontWeight
   };
-};
-
-export const isLocalFont = (fontName: FontName | undefined): boolean => {
-  return getLocalFont(fontName) !== undefined;
 };
 
 const getLocalFont = (fontName: FontName | undefined): LocalFont | undefined => {

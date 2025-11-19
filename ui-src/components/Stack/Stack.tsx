@@ -1,15 +1,16 @@
 import classNames from 'classnames';
-import { CSSProperties, PropsWithChildren } from 'react';
+import type { CSSProperties, JSX } from 'preact';
+import type { PropsWithChildren } from 'preact/compat';
 
 import styles from './Stack.module.css';
 
-type StackProps = PropsWithChildren & {
-  space?: 'medium' | 'small' | 'xsmall' | '2xsmall';
+type StackProps = PropsWithChildren<{
+  space?: 'medium' | 'small' | 'xsmall' | '2xsmall' | '3xsmall';
   direction?: 'column' | 'row';
   horizontalAlign?: 'start' | 'center';
   style?: CSSProperties;
   as?: 'div' | 'ol';
-};
+}>;
 
 export const Stack = ({
   space = 'medium',
@@ -18,7 +19,7 @@ export const Stack = ({
   style,
   as = 'div',
   children
-}: StackProps) => {
+}: StackProps): JSX.Element => {
   const Tag = as;
 
   return (

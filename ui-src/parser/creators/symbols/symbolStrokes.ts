@@ -1,13 +1,16 @@
-import { Stroke } from '@ui/lib/types/utils/stroke';
+import type { PenpotContext } from '@ui/lib/types/penpotContext';
+import type { Stroke } from '@ui/lib/types/utils/stroke';
+import { symbolFillImage } from '@ui/parser/creators/symbols';
 
-import { symbolFillImage } from '.';
-
-export const symbolStrokes = (strokes?: Stroke[]): Stroke[] | undefined => {
+export const symbolStrokes = (context: PenpotContext, strokes?: Stroke[]): Stroke[] | undefined => {
   if (!strokes) return;
 
   return strokes.map(stroke => {
     if (stroke.strokeImage) {
-      stroke.strokeImage = symbolFillImage(stroke.strokeImage);
+      const strokeImage = symbolFillImage(context, stroke.strokeImage);
+      if (strokeImage) {
+        stroke.strokeImage = strokeImage;
+      }
     }
 
     return stroke;

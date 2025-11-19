@@ -1,67 +1,12 @@
-import { PenpotDocument } from '@ui/types';
+import { createMessageBuffer } from '@common/messageBuffer';
 
-import { Steps } from '.';
+import { BUFFERED_PROGRESS_TYPES, type PluginMessage } from '@ui/types/progressMessages';
 
 export type MessageData = { pluginMessage?: PluginMessage };
 
-type PluginMessage =
-  | PenpotDocumentMessage
-  | CustomFontsMessage
-  | ChangesDetectedMessage
-  | ProgressStepMessage
-  | ProgressCurrentItemMessage
-  | ProgressTotalItemsMessage
-  | ProgressProcessedItemsMessage
-  | ErrorMessage
-  | UserDataMessage;
+const BUFFERED_TYPES = new Set(BUFFERED_PROGRESS_TYPES);
 
-type PenpotDocumentMessage = {
-  type: 'PENPOT_DOCUMENT';
-  data: PenpotDocument;
-};
-
-type CustomFontsMessage = {
-  type: 'CUSTOM_FONTS';
-  data: string[];
-};
-
-type ChangesDetectedMessage = {
-  type: 'CHANGES_DETECTED';
-};
-
-type ProgressStepMessage = {
-  type: 'PROGRESS_STEP';
-  data: Steps;
-};
-
-type ProgressCurrentItemMessage = {
-  type: 'PROGRESS_CURRENT_ITEM';
-  data: string;
-};
-
-type ProgressTotalItemsMessage = {
-  type: 'PROGRESS_TOTAL_ITEMS';
-  data: number;
-};
-
-type ProgressProcessedItemsMessage = {
-  type: 'PROGRESS_PROCESSED_ITEMS';
-  data: number;
-};
-
-type ErrorMessage = {
-  type: 'ERROR';
-  data: string;
-};
-
-type UserDataMessage = {
-  type: 'USER_DATA';
-  data: {
-    userId: string;
-  };
-};
-
-export const sendMessage = (pluginMessage: PluginMessage) => {
+const emitMessage = (pluginMessage: PluginMessage): void => {
   window.dispatchEvent(
     new MessageEvent<MessageData>('message', {
       data: {
@@ -69,4 +14,20 @@ export const sendMessage = (pluginMessage: PluginMessage) => {
       }
     })
   );
+};
+
+const messageBuffer = createMessageBuffer<PluginMessage>({
+  bufferedTypes: BUFFERED_TYPES as Set<PluginMessage['type']>,
+  flushInterval: 500,
+  sendMessage: emitMessage,
+  setTimeout: window.setTimeout.bind(window),
+  clearTimeout: window.clearTimeout.bind(window)
+});
+
+export const sendMessage = (pluginMessage: PluginMessage): void => {
+  messageBuffer.send(pluginMessage);
+};
+
+export const flushMessageQueue = (): void => {
+  messageBuffer.flush();
 };

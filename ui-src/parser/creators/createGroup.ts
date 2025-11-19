@@ -1,16 +1,12 @@
-import { PenpotFile } from '@ui/lib/types/penpotFile';
-import { GroupShape } from '@ui/lib/types/shapes/groupShape';
-import { parseFigmaId } from '@ui/parser';
+import type { PenpotContext } from '@ui/lib/types/penpotContext';
+import type { GroupShape } from '@ui/lib/types/shapes/groupShape';
+import { createItems } from '@ui/parser/creators';
 import { symbolTouched } from '@ui/parser/creators/symbols';
 
-import { createItems } from '.';
-
 export const createGroup = (
-  file: PenpotFile,
-  { type, children = [], figmaId, figmaRelatedId, ...shape }: GroupShape
-) => {
-  shape.id = parseFigmaId(file, figmaId);
-  shape.shapeRef = parseFigmaId(file, figmaRelatedId, true);
+  context: PenpotContext,
+  { type: _type, children = [], ...shape }: GroupShape
+): void => {
   shape.touched = symbolTouched(
     !shape.hidden,
     undefined,
@@ -18,9 +14,9 @@ export const createGroup = (
     shape.componentPropertyReferences
   );
 
-  file.addGroup(shape);
+  context.addGroup(shape);
 
-  createItems(file, children);
+  createItems(context, children);
 
-  file.closeGroup();
+  context.closeGroup();
 };

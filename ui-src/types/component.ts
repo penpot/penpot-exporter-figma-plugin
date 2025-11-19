@@ -1,12 +1,18 @@
-import { LayoutAttributes, LayoutChildAttributes } from '@ui/lib/types/shapes/layout';
-import { ShapeAttributes, ShapeGeomAttributes } from '@ui/lib/types/shapes/shape';
-import { Children } from '@ui/lib/types/utils/children';
-import { Uuid } from '@ui/lib/types/utils/uuid';
+import type { LayoutAttributes, LayoutChildAttributes } from '@ui/lib/types/shapes/layout';
+import type {
+  ShapeAttributes,
+  ShapeBaseAttributes,
+  ShapeGeomAttributes
+} from '@ui/lib/types/shapes/shape';
+import type { VariantProperty } from '@ui/lib/types/shapes/variant';
+import type { Children } from '@ui/lib/types/utils/children';
+import type { Uuid } from '@ui/lib/types/utils/uuid';
 
 export type ComponentRoot = {
-  figmaId: string;
-  type: 'component';
   name: string;
+  componentId: Uuid;
+  frameId: Uuid;
+  variantId?: Uuid;
 };
 
 export type ComponentTextPropertyOverride = {
@@ -16,15 +22,14 @@ export type ComponentTextPropertyOverride = {
   defaultValue: string;
 };
 
-export type ComponentInstance = ShapeGeomAttributes &
+export type ComponentInstance = ShapeBaseAttributes &
   ShapeAttributes &
+  ShapeGeomAttributes &
   LayoutAttributes &
   LayoutChildAttributes &
   Children & {
-    mainComponentFigmaId: string;
-    figmaId?: string;
-    figmaRelatedId?: string;
-    isComponentRoot: boolean;
+    mainComponentId: Uuid;
+    componentRoot: boolean;
     showContent?: boolean;
     isOrphan: boolean;
     type: 'instance';
@@ -32,9 +37,13 @@ export type ComponentInstance = ShapeGeomAttributes &
 
 export type UiComponent = {
   componentId: Uuid;
-  mainInstancePage?: Uuid;
-  mainInstanceId: Uuid;
-  componentFigmaId: string;
+  name: string;
+  pageId?: Uuid;
+  fileId?: Uuid;
+  frameId: Uuid;
+  variantId?: Uuid;
+  variantProperties?: VariantProperty[];
+  path?: string;
 };
 
 export type ComponentProperty = {

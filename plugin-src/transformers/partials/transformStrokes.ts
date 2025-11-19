@@ -1,9 +1,9 @@
-import { Command } from 'svg-path-parser';
+import type { Command } from 'svg-path-parser';
 
 import { translateStrokeCap, translateStrokes } from '@plugin/translators';
 
-import { ShapeAttributes } from '@ui/lib/types/shapes/shape';
-import { Stroke } from '@ui/lib/types/utils/stroke';
+import type { ShapeAttributes } from '@ui/lib/types/shapes/shape';
+import type { Stroke } from '@ui/lib/types/utils/stroke';
 
 const isVectorLike = (node: GeometryMixin | VectorLikeMixin): node is VectorLikeMixin => {
   return 'vectorNetwork' in node;
@@ -18,7 +18,7 @@ export const transformStrokes = (
 ): Pick<ShapeAttributes, 'strokes'> => {
   const vectorNetwork = isVectorLike(node) ? node.vectorNetwork : undefined;
 
-  const strokeCaps = (stroke: Stroke) => {
+  const strokeCaps = (stroke: Stroke): Stroke => {
     if (!hasFillGeometry(node) && vectorNetwork && vectorNetwork.vertices.length > 0) {
       stroke.strokeCapStart = translateStrokeCap(vectorNetwork.vertices[0]);
       stroke.strokeCapEnd = translateStrokeCap(
@@ -39,7 +39,7 @@ export const transformStrokesFromVector = (
   vector: Command[],
   vectorRegion: VectorRegion | undefined
 ): Pick<ShapeAttributes, 'strokes'> => {
-  const strokeCaps = (stroke: Stroke) => {
+  const strokeCaps = (stroke: Stroke): Stroke => {
     if (vectorRegion !== undefined) return stroke;
 
     const startVertex = findVertex(node.vectorNetwork.vertices, vector[0]);

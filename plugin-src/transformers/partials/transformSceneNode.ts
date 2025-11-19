@@ -1,4 +1,4 @@
-import { ShapeAttributes } from '@ui/lib/types/shapes/shape';
+import type { ShapeAttributes } from '@ui/lib/types/shapes/shape';
 
 export const transformSceneNode = (
   node: SceneNodeMixin

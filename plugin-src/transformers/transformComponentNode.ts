@@ -4,33 +4,39 @@ import {
   transformAutoLayout,
   transformBlend,
   transformChildren,
+  transformComponentNameAndPath,
   transformConstraints,
   transformCornerRadius,
   transformDimension,
   transformEffects,
-  transformFigmaIds,
   transformFills,
+  transformGrids,
+  transformId,
+  transformIds,
   transformLayoutAttributes,
-  transformLayoutGrids,
   transformProportion,
   transformRotationAndPosition,
   transformSceneNode,
-  transformStrokes
+  transformStrokes,
+  transformVariantNameAndProperties
 } from '@plugin/transformers/partials';
+import { generateUuid } from '@plugin/utils';
 
-import { ComponentRoot } from '@ui/types';
+import type { ComponentShape } from '@ui/lib/types/shapes/componentShape';
 
-const isNonVariantComponentNode = (node: ComponentNode): boolean => {
-  return node.parent?.type !== 'COMPONENT_SET';
-};
+export const transformComponentNode = async (node: ComponentNode): Promise<ComponentShape> => {
+  const isVariant = node.parent?.type === 'COMPONENT_SET';
+  const variantId = isVariant ? transformId(node.parent) : undefined;
 
-export const transformComponentNode = async (node: ComponentNode): Promise<ComponentRoot> => {
-  components.set(node.id, {
+  const component: ComponentShape = {
     type: 'component',
-    name: node.name,
-    path: node.parent?.type === 'COMPONENT_SET' ? node.parent.name : '',
     showContent: !node.clipsContent,
-    ...transformFigmaIds(node),
+    componentId: generateUuid(),
+    componentRoot: true,
+    mainInstance: true,
+    variantId,
+    ...transformComponentNameAndPath(node),
+    ...transformIds(node),
     ...transformFills(node),
     ...transformEffects(node),
     ...transformStrokes(node),
@@ -44,16 +50,22 @@ export const transformComponentNode = async (node: ComponentNode): Promise<Compo
     ...transformRotationAndPosition(node),
     ...transformConstraints(node),
     ...transformAutoLayout(node),
-    ...transformLayoutGrids(node)
+    ...transformGrids(node),
+    ...(isVariant ? transformVariantNameAndProperties(node, variantId!) : {})
+  };
+
+  const nameSplit = component.name.split(' / ');
+
+  components.set(component.id, {
+    name: nameSplit[nameSplit.length - 1],
+    componentId: component.componentId!,
+    frameId: component.id,
+    variantId
   });
 
-  if (isNonVariantComponentNode(node)) {
+  if (!isVariant) {
     registerComponentProperties(node);
   }
 
-  return {
-    figmaId: node.id,
-    type: 'component',
-    name: node.name
-  };
+  return component;
 };

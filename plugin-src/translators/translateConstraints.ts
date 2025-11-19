@@ -1,4 +1,4 @@
-import { ConstraintH, ConstraintV } from '@ui/lib/types/shapes/shape';
+import type { ConstraintH, ConstraintV } from '@ui/lib/types/shapes/shape';
 
 export const translateConstraintH = (constraint: ConstraintType): ConstraintH => {
   switch (constraint) {

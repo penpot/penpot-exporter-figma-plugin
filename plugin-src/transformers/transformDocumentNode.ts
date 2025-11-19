@@ -1,33 +1,32 @@
-import { toObject } from '@common/map';
+import { toObject, toPlainObject } from '@common/map';
 
-import { componentProperties, components } from '@plugin/libraries';
 import {
-  processImages,
-  processPages,
-  processPaintStyles,
-  processTextStyles,
-  registerPaintStyles,
-  registerTextStyles
-} from '@plugin/processors';
+  componentProperties,
+  components,
+  missingFonts,
+  variantProperties
+} from '@plugin/libraries';
+import { processPages, registerPaintStyles, registerTextStyles } from '@plugin/processors';
+import { processAssets } from '@plugin/processors/processAssets';
 
-import { PenpotDocument } from '@ui/types';
+import type { PenpotDocument } from '@ui/types';
 
 export const transformDocumentNode = async (node: DocumentNode): Promise<PenpotDocument> => {
   await registerPaintStyles();
   await registerTextStyles();
 
   const children = await processPages(node);
-  const paintStyles = await processPaintStyles();
-  const images = await processImages();
-  const textStyles = await processTextStyles();
+  const [images, paintStyles, textStyles] = await processAssets();
 
   return {
     name: node.name,
     children,
-    components: toObject(components),
     images,
     paintStyles,
     textStyles,
-    componentProperties: toObject(componentProperties)
+    components: toObject(components),
+    componentProperties: toObject(componentProperties),
+    variantProperties: toPlainObject(variantProperties),
+    missingFonts: Array.from(missingFonts)
   };
 };

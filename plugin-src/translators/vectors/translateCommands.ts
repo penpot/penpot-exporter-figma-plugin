@@ -1,12 +1,11 @@
-import { Command } from 'svg-path-parser';
+import type { Command } from 'svg-path-parser';
 
+import { translateNonRotatedCommands } from '@plugin/translators/vectors/translateNonRotatedCommands';
+import { translateRotatedCommands } from '@plugin/translators/vectors/translateRotatedCommands';
 import { isTransformed } from '@plugin/utils';
 
-import { translateNonRotatedCommands } from '.';
-import { translateRotatedCommands } from './translateRotatedCommands';
-
-export const translateCommands = (node: LayoutMixin, commands: Command[]) => {
-  if (node.absoluteBoundingBox && isTransformed(node.absoluteTransform, node.absoluteBoundingBox)) {
+export const translateCommands = (node: LayoutMixin, commands: Command[]): string => {
+  if (node.absoluteBoundingBox && isTransformed(node.absoluteTransform)) {
     return translateRotatedCommands(commands, node.absoluteTransform, node.absoluteBoundingBox);
   }
 

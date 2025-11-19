@@ -1,8 +1,7 @@
-import { PenpotNode } from '@ui/types';
-
 import {
   transformBooleanNode,
   transformComponentNode,
+  transformComponentSetNode,
   transformEllipseNode,
   transformFrameNode,
   transformGroupNode,
@@ -12,12 +11,15 @@ import {
   transformRectangleNode,
   transformTextNode,
   transformVectorNode
-} from '.';
+} from '@plugin/transformers';
+import { reportProgress } from '@plugin/utils';
+
+import type { PenpotNode } from '@ui/types';
 
 export const transformSceneNode = async (node: SceneNode): Promise<PenpotNode | undefined> => {
   let penpotNode: PenpotNode | undefined;
 
-  figma.ui.postMessage({
+  reportProgress({
     type: 'PROGRESS_CURRENT_ITEM',
     data: node.name
   });
@@ -29,9 +31,11 @@ export const transformSceneNode = async (node: SceneNode): Promise<PenpotNode | 
     case 'ELLIPSE':
       penpotNode = transformEllipseNode(node);
       break;
+    case 'COMPONENT_SET':
+      penpotNode = await transformComponentSetNode(node);
+      break;
     case 'SECTION':
     case 'FRAME':
-    case 'COMPONENT_SET':
       penpotNode = await transformFrameNode(node);
       break;
     case 'GROUP':

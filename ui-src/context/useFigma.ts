@@ -1,57 +1,58 @@
-import { useEffect, useState } from 'react';
+import { exportStream } from '@penpot/library';
+import { useEffect, useRef, useState } from 'preact/hooks';
 
-import { FormValues } from '@ui/components/ExportForm';
+import type { FormValues } from '@ui/components/ExportForm';
+import { type MessageData, createInMemoryWritable, sendMessage } from '@ui/context';
 import { identify, track } from '@ui/metrics/mixpanel';
 import { parse } from '@ui/parser';
-
-import { MessageData, sendMessage } from '.';
+import type { Steps } from '@ui/types/progressMessages';
+import { formatExportTime } from '@ui/utils';
+import { fileSizeInMB } from '@ui/utils/fileSizeInMB';
 
 export type UseFigmaHook = {
   missingFonts: string[] | undefined;
-  needsReload: boolean;
-  loading: boolean;
   exporting: boolean;
+  summary: boolean;
   error: boolean;
-  step: Steps | undefined;
-  currentItem: string | undefined;
-  totalItems: number;
-  processedItems: number;
-  reload: () => void;
+  step: Steps;
+  progress: {
+    currentItem: string;
+    totalItems: number;
+    processedItems: number;
+  };
+  progressPercentage: number;
+  exportedBlob: { blob: Blob; filename: string } | null;
+  exportTime: number | null;
+  retry: () => void;
   cancel: () => void;
   exportPenpot: (data: FormValues) => void;
+  downloadBlob: () => void;
 };
-
-export type Steps =
-  | 'processing'
-  | 'images'
-  | 'optimization'
-  | 'building'
-  | 'components'
-  | 'exporting'
-  | 'fills'
-  | 'format'
-  | 'libraries'
-  | 'typographies'
-  | 'typoFormat'
-  | 'typoLibraries';
 
 export const useFigma = (): UseFigmaHook => {
   const [missingFonts, setMissingFonts] = useState<string[]>();
-  const [needsReload, setNeedsReload] = useState(false);
-  const [loading, setLoading] = useState(true);
   const [exporting, setExporting] = useState(false);
+  const [summary, setSummary] = useState(false);
   const [error, setError] = useState(false);
+  const [exportedBlob, setExportedBlob] = useState<{ blob: Blob; filename: string } | null>(null);
+  const [exportTime, setExportTime] = useState<number | null>(null);
+  const exportStartTimeRef = useRef<number | null>(null);
 
-  const [step, setStep] = useState<Steps>();
-  const [currentItem, setCurrentItem] = useState<string | undefined>();
-  const [totalItems, setTotalItems] = useState<number>(0);
-  const [processedItems, setProcessedItems] = useState<number>(0);
+  const [step, setStep] = useState<Steps>('processing');
+  const totalItemsRef = useRef<number>(0);
+  const [currentItem, setCurrentItem] = useState('');
+  const [processedItems, setProcessedItems] = useState(0);
+  const [progressPercentage, setProgressPercentage] = useState(0);
 
-  const postMessage = (type: string, data?: unknown) => {
+  const postMessage = (type: string, data?: unknown): void => {
     parent.postMessage({ pluginMessage: { type, data } }, '*');
   };
 
-  const onMessage = async (event: MessageEvent<MessageData>) => {
+  const calculatePercentage = (item: number, total: number): number => {
+    return Math.round((item / total) * 100);
+  };
+
+  const onMessage = async (event: MessageEvent<MessageData>): Promise<void> => {
     if (!event.data.pluginMessage) return;
 
     const { pluginMessage } = event.data;
@@ -60,74 +61,118 @@ export const useFigma = (): UseFigmaHook => {
       case 'USER_DATA': {
         identify({ userId: pluginMessage.data.userId });
         track('Plugin Loaded');
+
+        break;
+      }
+      case 'RELOAD': {
+        setMissingFonts(undefined);
+        setExporting(false);
+        setSummary(false);
+        setError(false);
+        setExportedBlob(null);
+        setExportTime(null);
+        setStep('processing');
+        setCurrentItem('');
+
+        totalItemsRef.current = 0;
+        exportStartTimeRef.current = null;
+
+        track('Plugin Reloaded');
+
         break;
       }
       case 'PENPOT_DOCUMENT': {
-        const file = await parse(pluginMessage.data);
+        if (pluginMessage.data.missingFonts) {
+          setMissingFonts(pluginMessage.data.missingFonts);
+        }
+
+        const context = await parse(pluginMessage.data);
 
         sendMessage({
           type: 'PROGRESS_STEP',
-          data: 'exporting'
+          data: {
+            step: 'exporting',
+            total: Infinity
+          }
         });
 
-        const blob = await file.export().catch(error => {
-          sendMessage({
-            type: 'ERROR',
-            data: error.message
-          });
+        const { writable, getBlob } = createInMemoryWritable();
+
+        await exportStream(context, writable, {
+          onProgress: ({ item, total }) => {
+            sendMessage({
+              type: 'PROGRESS_EXPORT',
+              data: {
+                current: item,
+                total: total
+              }
+            });
+          }
         });
 
-        if (blob) {
-          download(blob, `${pluginMessage.data.name}.zip`);
+        const blob = getBlob();
+        const filename = `${pluginMessage.data.name}.penpot`;
 
-          // get size of the file in Mb rounded to 2 decimal places
-          const size = Math.round((blob.size / 1024 / 1024) * 100) / 100;
-          track('File Exported', { 'Exported File Size': size + ' Mb' });
+        setExportedBlob({ blob, filename });
+
+        let duration: number | undefined = undefined;
+
+        if (exportStartTimeRef.current) {
+          const endTime = Date.now();
+          duration = endTime - exportStartTimeRef.current;
+
+          setExportTime(duration);
         }
 
-        setExporting(false);
-        setStep(undefined);
+        track('File Exported', {
+          'Exported File Size': fileSizeInMB(blob.size),
+          'Export Time': duration ? formatExportTime(duration) : undefined
+        });
 
-        break;
-      }
-      case 'CUSTOM_FONTS': {
-        setMissingFonts(pluginMessage.data);
-        setLoading(false);
-        setNeedsReload(false);
-        break;
-      }
-      case 'CHANGES_DETECTED': {
-        setNeedsReload(true);
+        setExporting(false);
+        setSummary(true);
+        setStep('processing');
+
         break;
       }
       case 'PROGRESS_STEP': {
-        setStep(pluginMessage.data);
+        setStep(pluginMessage.data.step);
+        setProgressPercentage(0);
         setProcessedItems(0);
+
+        totalItemsRef.current = pluginMessage.data.total;
+
         break;
       }
       case 'PROGRESS_CURRENT_ITEM': {
         setCurrentItem(pluginMessage.data);
-        break;
-      }
-      case 'PROGRESS_TOTAL_ITEMS': {
-        setTotalItems(pluginMessage.data);
+
         break;
       }
       case 'PROGRESS_PROCESSED_ITEMS': {
         setProcessedItems(pluginMessage.data);
+        setProgressPercentage(calculatePercentage(pluginMessage.data, totalItemsRef.current));
+
+        break;
+      }
+      case 'PROGRESS_EXPORT': {
+        setProgressPercentage(
+          calculatePercentage(pluginMessage.data.current, pluginMessage.data.total)
+        );
+
         break;
       }
       case 'ERROR': {
         setError(true);
-        setLoading(false);
         setExporting(false);
         track('Error', { 'Error Message': pluginMessage.data });
+
         throw new Error(pluginMessage.data);
       }
     }
   };
 
-  const download = (blob: Blob, name: string) => {
+  const download = (blob: Blob, name: string): void => {
     const url = window.URL.createObjectURL(blob);
     const a = document.createElement('a');
 
@@ -135,22 +180,35 @@ export const useFigma = (): UseFigmaHook => {
     a.download = name;
 
     a.click();
+
+    window.URL.revokeObjectURL(url);
+
+    track('File Downloaded');
   };
 
-  const reload = () => {
-    setLoading(true);
-    setError(false);
-    postMessage('reload');
+  const downloadBlob = (): void => {
+    if (exportedBlob) {
+      download(exportedBlob.blob, exportedBlob.filename);
+    }
   };
 
-  const cancel = () => {
+  const retry = (): void => {
+    track('Plugin Retry');
+
+    postMessage('retry');
+  };
+
+  const cancel = (): void => {
+    track('Plugin Closed');
+
     postMessage('cancel');
   };
 
-  const exportPenpot = () => {
+  const exportPenpot = (): void => {
     setExporting(true);
-    setStep('processing');
-    setProcessedItems(0);
+    exportStartTimeRef.current = Date.now();
+
+    track('File Export Started');
 
     postMessage('export');
   };
@@ -160,23 +218,28 @@ export const useFigma = (): UseFigmaHook => {
 
     postMessage('ready');
 
-    return () => {
+    return (): void => {
       window.removeEventListener('message', onMessage);
     };
   }, []);
 
   return {
     missingFonts,
-    needsReload,
-    loading,
     exporting,
+    summary,
     error,
     step,
-    currentItem,
-    totalItems,
-    processedItems,
-    reload,
+    progress: {
+      currentItem,
+      totalItems: totalItemsRef.current,
+      processedItems
+    },
+    progressPercentage,
+    exportedBlob,
+    exportTime,
+    retry,
     cancel,
-    exportPenpot
+    exportPenpot,
+    downloadBlob
   };
 };

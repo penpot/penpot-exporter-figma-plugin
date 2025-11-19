@@ -1,10 +1,10 @@
-import { LocalFont } from './localFont';
+import type { LocalFont } from '@plugin/translators/text/font/local/localFont';
 
 export const translateFontVariantId = (
   localFont: LocalFont,
   fontName: FontName,
   fontWeight: string
-): string | undefined => {
+): string => {
   // check match by style and weight
   const italic = fontName.style.toLowerCase().includes('italic');
   const variantWithStyleWeight = localFont.variants?.find(
@@ -26,4 +26,7 @@ export const translateFontVariantId = (
   );
 
   if (variantById !== undefined) return variantById.id;
+
+  // fallback to font weight (it will not be displayed on Penpot, but it will be rendered)
+  return fontWeight;
 };

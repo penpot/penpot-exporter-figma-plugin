@@ -1,9 +1,11 @@
-import { LayoutChildAttributes } from '@ui/lib/types/shapes/layout';
-import { PathContent } from '@ui/lib/types/shapes/pathShape';
-import { ShapeAttributes, ShapeBaseAttributes } from '@ui/lib/types/shapes/shape';
-import { Children } from '@ui/lib/types/utils/children';
-import { Point } from '@ui/lib/types/utils/point';
-import { Uuid } from '@ui/lib/types/utils/uuid';
+import type { LayoutChildAttributes } from '@ui/lib/types/shapes/layout';
+import type {
+  ShapeAttributes,
+  ShapeBaseAttributes,
+  ShapeGeomAttributes
+} from '@ui/lib/types/shapes/shape';
+import type { Children } from '@ui/lib/types/utils/children';
+import type { Uuid } from '@ui/lib/types/utils/uuid';
 
 export const BOOL_DIFFERENCE: unique symbol = Symbol.for('difference');
 export const BOOL_UNION: unique symbol = Symbol.for('union');
@@ -21,19 +23,19 @@ export type BoolOperations =
   | typeof BOOL_EXCLUDE;
 
 export type BoolShape = ShapeBaseAttributes &
+  ShapeGeomAttributes &
   ShapeAttributes &
   BoolAttributes &
   LayoutChildAttributes &
   Children;
 
+export type PenpotBool = {
+  groupId: Uuid;
+  type: BoolOperations;
+};
+
 type BoolAttributes = {
   type?: 'bool';
   shapes?: Uuid[];
   boolType: BoolOperations;
-  boolContent?: BoolContent[];
 };
-
-type BoolContent = {
-  relative?: boolean;
-  prevPos?: Point;
-} & PathContent;

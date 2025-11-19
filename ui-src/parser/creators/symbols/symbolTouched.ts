@@ -1,6 +1,6 @@
-import { SyncGroups } from '@ui/lib/types/utils/syncGroups';
+import type { SyncGroups } from '@ui/lib/types/utils/syncGroups';
 import { componentProperties } from '@ui/parser';
-import { ComponentPropertyReference } from '@ui/types';
+import type { ComponentPropertyReference } from '@ui/types';
 
 export const symbolTouched = (
   visible: boolean | undefined,
@@ -12,24 +12,30 @@ export const symbolTouched = (
     return touched;
   }
 
+  const touchedResult = touched ?? [];
   const propertyReferenceVisible = componentPropertyReferences.visible;
   const propertyReferenceCharacters = componentPropertyReferences.characters;
 
   if (
     propertyReferenceVisible &&
     visible !== componentProperties.get(propertyReferenceVisible)?.defaultValue &&
-    !touched?.includes(':visibility-group')
+    !touchedResult.includes('visibility-group')
   ) {
-    touched?.push(':visibility-group');
+    touchedResult.push('visibility-group');
   }
 
   if (
     propertyReferenceCharacters &&
-    characters !== componentProperties.get(propertyReferenceCharacters)?.defaultValue &&
-    !touched?.includes(':content-group')
+    characters !== componentProperties.get(propertyReferenceCharacters)?.defaultValue
   ) {
-    touched?.push(':content-group');
+    if (!touchedResult.includes('content-group')) {
+      touchedResult.push('content-group');
+    }
+
+    if (!touchedResult.includes('text-content-text')) {
+      touchedResult.push('text-content-text');
+    }
   }
 
-  return touched;
+  return touchedResult;
 };

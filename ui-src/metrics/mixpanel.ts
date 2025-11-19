@@ -1,6 +1,6 @@
 import mixpanel from 'mixpanel-figma';
 
-export const track = (name: string, opts = {}) => {
+export const track = (name: string, opts = {}): void => {
   if (import.meta.env.VITE_MIXPANEL_TOKEN && import.meta.env.PROD) {
     opts = {
       ...opts,
@@ -10,7 +10,7 @@ export const track = (name: string, opts = {}) => {
   }
 };
 
-export const identify = ({ userId }: { userId: string }) => {
+export const identify = ({ userId }: { userId: string }): void => {
   if (import.meta.env.VITE_MIXPANEL_TOKEN && import.meta.env.PROD) {
     mixpanel.identify(userId);
 
@@ -21,7 +21,7 @@ export const identify = ({ userId }: { userId: string }) => {
   }
 };
 
-export const initializeMixpanel = () => {
+export const initializeMixpanel = (): void => {
   if (import.meta.env.VITE_MIXPANEL_TOKEN && import.meta.env.PROD) {
     mixpanel.init(import.meta.env.VITE_MIXPANEL_TOKEN, {
       disable_cookie: true,
