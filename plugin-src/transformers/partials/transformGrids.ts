@@ -1,4 +1,4 @@
-import { translateGrids } from '@plugin/translators/translateLayoutGrids';
+import { translateGrids } from '@plugin/translators';
 
 import type { ShapeAttributes } from '@ui/lib/types/shapes/shape';
 
