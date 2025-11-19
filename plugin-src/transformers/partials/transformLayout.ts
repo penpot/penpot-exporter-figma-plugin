@@ -23,7 +23,7 @@ export const transformAutoLayout = (node: BaseFrameMixin): LayoutAttributes => {
     layout: translateLayoutMode(node.layoutMode),
     layoutFlexDir: translateLayoutFlexDir(node.layoutMode),
     layoutGap: translateLayoutGap(node),
-    layoutWrapType: translateLayoutWrapType(node.layoutWrap),
+    layoutWrapType: translateLayoutWrapType(node),
     layoutPadding: translateLayoutPadding(node),
     layoutPaddingType: translateLayoutPaddingType(node),
     layoutJustifyContent: translateLayoutJustifyContent(node),
@@ -39,7 +39,8 @@ export const transformAutoLayout = (node: BaseFrameMixin): LayoutAttributes => {
 
 export const transformLayoutAttributes = (
   node: LayoutMixin,
-  isFrame: boolean = false
+  isFrame: boolean = false,
+  isText: boolean = false
 ): Pick<
   LayoutChildAttributes,
   | 'layoutItemH-Sizing'
@@ -52,8 +53,8 @@ export const transformLayoutAttributes = (
   | 'layoutItemMinW'
 > => {
   return {
-    'layoutItemH-Sizing': translateLayoutSizing(node.layoutSizingHorizontal, isFrame),
-    'layoutItemV-Sizing': translateLayoutSizing(node.layoutSizingVertical, isFrame),
+    'layoutItemH-Sizing': translateLayoutSizing(node.layoutSizingHorizontal, isFrame, isText),
+    'layoutItemV-Sizing': translateLayoutSizing(node.layoutSizingVertical, isFrame, isText),
     'layoutItemAlignSelf': translateLayoutItemAlignSelf(node.layoutAlign),
     'layoutItemAbsolute': node.layoutPositioning === 'ABSOLUTE',
     'layoutItemMaxH': node.maxHeight ?? undefined,
