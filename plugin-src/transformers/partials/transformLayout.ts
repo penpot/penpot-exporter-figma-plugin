@@ -19,17 +19,34 @@ import {
 import type { LayoutAttributes, LayoutChildAttributes } from '@ui/lib/types/shapes/layout';
 
 export const transformAutoLayout = (node: BaseFrameMixin): LayoutAttributes => {
-  return {
-    layout: translateLayoutMode(node.layoutMode),
-    layoutFlexDir: translateLayoutFlexDir(node.layoutMode),
+  const layout = translateLayoutMode(node.layoutMode);
+
+  if (layout === undefined) {
+    return {};
+  }
+
+  const commonAttributes: LayoutAttributes = {
+    layout,
     layoutGap: translateLayoutGap(node),
-    layoutWrapType: translateLayoutWrapType(node),
+    layoutGapType: 'multiple',
     layoutPadding: translateLayoutPadding(node),
     layoutPaddingType: translateLayoutPaddingType(node),
     layoutJustifyContent: translateLayoutJustifyContent(node),
     layoutJustifyItems: translateLayoutJustifyItems(node),
     layoutAlignContent: translateLayoutAlignContent(node),
-    layoutAlignItems: translateLayoutAlignItems(node),
+    layoutAlignItems: translateLayoutAlignItems(node)
+  };
+
+  if (layout === 'flex') {
+    return {
+      ...commonAttributes,
+      layoutFlexDir: translateLayoutFlexDir(node.layoutMode),
+      layoutWrapType: translateLayoutWrapType(node)
+    };
+  }
+
+  return {
+    ...commonAttributes,
     layoutGridDir: translateLayoutGridDir(node.layoutMode),
     layoutGridRows: translateGridTracks(node.gridRowSizes),
     layoutGridColumns: translateGridTracks(node.gridColumnSizes),
