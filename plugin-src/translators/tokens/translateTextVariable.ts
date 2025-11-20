@@ -8,27 +8,29 @@ import {
 
 import type { Token, TokenType } from '@ui/lib/types/shapes/tokens';
 
+const VALID_FONT_WEIGHT_VALUES = [
+  'thin',
+  'thinitalic',
+  'extralight',
+  'extralightitalic',
+  'light',
+  'lightitalic',
+  'regular',
+  'italic',
+  'medium',
+  'mediumitalic',
+  'semibold',
+  'semibolditalic',
+  'bold',
+  'bolditalic',
+  'extrabold',
+  'extrabolditalic',
+  'black',
+  'blackitalic'
+];
+
 const isValidFontWeightValue = (value: string): boolean => {
-  return [
-    'thin',
-    'thinitalic',
-    'extralight',
-    'extralightitalic',
-    'light',
-    'lightitalic',
-    'regular',
-    'italic',
-    'medium',
-    'mediumitalic',
-    'semibold',
-    'semibolditalic',
-    'bold',
-    'bolditalic',
-    'extrabold',
-    'extrabolditalic',
-    'black',
-    'blackitalic'
-  ].includes(value);
+  return VALID_FONT_WEIGHT_VALUES.includes(value);
 };
 
 const isStringValue = (value: VariableValue): value is string => {
