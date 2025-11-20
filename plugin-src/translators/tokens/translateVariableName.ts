@@ -15,10 +15,11 @@ export const translateVariableName = (variable: Variable): string => {
 
   if (uniqueVariableNames.has(name)) {
     let i = 0;
+    let uniqueName = name + '-' + i;
 
-    const uniqueName = name + '-' + i;
     while (uniqueVariableNames.has(uniqueName)) {
       i++;
+      uniqueName = name + '-' + i;
     }
 
     name = uniqueName;

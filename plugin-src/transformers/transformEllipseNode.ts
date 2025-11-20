@@ -31,7 +31,7 @@ export const transformEllipseNode = (node: EllipseNode): CircleShape => {
     ...transformProportion(node),
     ...transformLayoutAttributes(node),
     ...transformConstraints(node),
-    ...transformOverrides(node),
-    ...transformVariableConsumptionMap(node)
+    ...transformVariableConsumptionMap(node),
+    ...transformOverrides(node)
   };
 };
