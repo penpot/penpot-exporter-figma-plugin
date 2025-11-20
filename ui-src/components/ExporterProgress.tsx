@@ -7,7 +7,6 @@ import { useFigmaContext } from '@ui/context';
 import type { Steps } from '@ui/types/progressMessages';
 
 const stepMessages: Record<Steps, string> = {
-  tokens: 'Processing tokens 📝',
   processing: 'Figma pages scanned 💪',
   processAssets: 'Figma assets gathered 📸 🎨 📝',
   buildAssets: 'Penpot assets built 📸 🎨 📝',
@@ -30,7 +29,6 @@ const StepProgress = (): JSX.Element | null => {
           <br />
         </p>
       );
-    case 'tokens':
     case 'processAssets':
     case 'buildAssets':
     case 'components':

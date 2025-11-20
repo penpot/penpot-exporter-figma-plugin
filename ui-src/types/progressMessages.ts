@@ -1,7 +1,6 @@
 import type { PenpotDocument } from '@ui/types/penpotDocument';
 
 export type Steps =
-  | 'tokens'
   | 'processing'
   | 'processAssets'
   | 'buildAssets'
@@ -10,7 +9,6 @@ export type Steps =
   | 'exporting';
 
 export const PROGRESS_STEPS: Steps[] = [
-  'tokens',
   'processing',
   'processAssets',
   'buildAssets',

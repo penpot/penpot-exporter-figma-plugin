@@ -87,11 +87,6 @@ const getVariables = async (collection: VariableCollection): Promise<Variable[]>
 };
 
 export const processTokens = async (): Promise<Tokens> => {
-  figma.ui.postMessage({
-    type: 'PROGRESS_STEP',
-    data: 'tokens'
-  });
-
   const localCollections = await figma.variables.getLocalVariableCollectionsAsync();
 
   const sets: TokenSets = {};
