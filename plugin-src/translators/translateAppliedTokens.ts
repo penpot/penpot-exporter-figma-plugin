@@ -33,6 +33,10 @@ const EQUIVALENCIES = [
 ] as const;
 
 const getBoundVariableIdForPaint = (paints: readonly Paint[]): string | null => {
+  if (paints.length === 0) {
+    return null;
+  }
+
   const paint = paints[paints.length - 1];
 
   if (paint.type !== 'SOLID') {
