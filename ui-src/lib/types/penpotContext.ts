@@ -8,6 +8,7 @@ import type { GroupShape } from '@ui/lib/types/shapes/groupShape';
 import type { PathShape } from '@ui/lib/types/shapes/pathShape';
 import type { RectShape } from '@ui/lib/types/shapes/rectShape';
 import type { TextShape } from '@ui/lib/types/shapes/textShape';
+import type { Tokens } from '@ui/lib/types/shapes/tokens';
 import type { Color } from '@ui/lib/types/utils/color';
 import type { ImageColor } from '@ui/lib/types/utils/imageColor';
 import type { Media } from '@ui/lib/types/utils/media';
@@ -37,5 +38,6 @@ export interface PenpotContext {
   addComponent(component: PenpotComponent): Uuid;
   addFileMedia(media: Media, blob: Blob): Uuid;
   getMediaAsImage(mediaId: Uuid): ImageColor;
+  addTokensLib(tokens: Tokens): void;
   genId(): Uuid;
 }

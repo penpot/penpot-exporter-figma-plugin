@@ -6,7 +6,8 @@ import {
   transformLayoutAttributes,
   transformOverrides,
   transformSceneNode,
-  transformStrokes
+  transformStrokes,
+  transformVariableConsumptionMap
 } from '@plugin/transformers/partials';
 import { translateCommands } from '@plugin/translators/vectors';
 
@@ -30,6 +31,7 @@ export const transformLineNode = (node: LineNode): PathShape => {
     ...transformBlend(node),
     ...transformLayoutAttributes(node),
     ...transformConstraints(node),
+    ...transformVariableConsumptionMap(node),
     ...transformOverrides(node)
   };
 };

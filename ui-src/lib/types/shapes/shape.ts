@@ -1,3 +1,4 @@
+import type { TokenProperties } from '@ui/lib/types/shapes/tokens';
 import type { BlendMode } from '@ui/lib/types/utils/blendModes';
 import type { Blur } from '@ui/lib/types/utils/blur';
 import type { Export } from '@ui/lib/types/utils/export';
@@ -70,6 +71,7 @@ export type ShapeAttributes = {
   shadow?: Shadow[];
   blur?: Blur;
   growType?: GrowType;
+  appliedTokens?: { [key in TokenProperties]?: string };
 
   fillStyleId?: string; // @TODO: move to any other place
   componentPropertyReferences?: ComponentPropertyReference; // @TODO: move to any other place

@@ -16,7 +16,8 @@ import {
   transformProportion,
   transformRotationAndPosition,
   transformSceneNode,
-  transformStrokes
+  transformStrokes,
+  transformVariableConsumptionMap
 } from '@plugin/transformers/partials';
 
 import type { ComponentInstance } from '@ui/types';
@@ -66,6 +67,7 @@ export const transformInstanceNode = async (
     ...transformRotationAndPosition(node),
     ...transformConstraints(node),
     ...transformAutoLayout(node),
+    ...transformVariableConsumptionMap(node),
     ...transformGrids(node),
     ...(await transformChildren(node)),
     ...nodeOverrides

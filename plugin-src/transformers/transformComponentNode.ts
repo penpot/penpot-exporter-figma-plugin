@@ -18,6 +18,7 @@ import {
   transformRotationAndPosition,
   transformSceneNode,
   transformStrokes,
+  transformVariableConsumptionMap,
   transformVariantNameAndProperties
 } from '@plugin/transformers/partials';
 import { generateUuid } from '@plugin/utils';
@@ -45,12 +46,13 @@ export const transformComponentNode = async (node: ComponentNode): Promise<Compo
     ...transformProportion(node),
     ...transformLayoutAttributes(node, true),
     ...transformCornerRadius(node),
-    ...(await transformChildren(node)),
     ...transformDimension(node),
     ...transformRotationAndPosition(node),
     ...transformConstraints(node),
     ...transformAutoLayout(node),
+    ...transformVariableConsumptionMap(node),
     ...transformGrids(node),
+    ...(await transformChildren(node)),
     ...(isVariant ? transformVariantNameAndProperties(node, variantId!) : {})
   };
 

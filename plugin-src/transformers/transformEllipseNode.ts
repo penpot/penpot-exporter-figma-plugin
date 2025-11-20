@@ -10,7 +10,8 @@ import {
   transformProportion,
   transformRotationAndPosition,
   transformSceneNode,
-  transformStrokes
+  transformStrokes,
+  transformVariableConsumptionMap
 } from '@plugin/transformers/partials';
 
 import type { CircleShape } from '@ui/lib/types/shapes/circleShape';
@@ -30,6 +31,7 @@ export const transformEllipseNode = (node: EllipseNode): CircleShape => {
     ...transformProportion(node),
     ...transformLayoutAttributes(node),
     ...transformConstraints(node),
+    ...transformVariableConsumptionMap(node),
     ...transformOverrides(node)
   };
 };

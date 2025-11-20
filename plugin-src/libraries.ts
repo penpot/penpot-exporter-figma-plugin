@@ -10,3 +10,6 @@ export const images: Map<string, Image | null> = new Map();
 export const components: Map<Uuid, ComponentRoot> = new Map();
 export const componentProperties: Map<string, ComponentProperty> = new Map();
 export const variantProperties: Map<Uuid, Set<string>> = new Map();
+export const variables: Map<string, string> = new Map();
+export const variableNames: Map<string, string> = new Map();
+export const uniqueVariableNames: Set<string> = new Set();

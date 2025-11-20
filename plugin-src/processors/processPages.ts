@@ -17,6 +17,8 @@ export const processPages = async (node: DocumentNode): Promise<PenpotPage[]> =>
     }
   });
 
+  await yieldByTime(undefined, true);
+
   for (const page of node.children) {
     await page.loadAsync();
 

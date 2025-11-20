@@ -13,6 +13,7 @@ export const parse = async (document: PenpotDocument): Promise<PenpotContext> =>
     name,
     children = [],
     components,
+    tokens,
     componentProperties: recordComponentProperties,
     variantProperties: recordVariantProperties
   } = document;
@@ -28,6 +29,7 @@ export const parse = async (document: PenpotDocument): Promise<PenpotContext> =>
   await buildFile(context, children);
   await buildComponentsLibrary(context);
 
+  context.addTokensLib(tokens);
   context.closeFile();
 
   flushMessageQueue();

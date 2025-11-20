@@ -10,7 +10,8 @@ import {
   transformProportion,
   transformRotationAndPosition,
   transformSceneNode,
-  transformStrokes
+  transformStrokes,
+  transformVariableConsumptionMap
 } from '@plugin/transformers/partials';
 import { translateBoolType } from '@plugin/translators';
 
@@ -22,7 +23,6 @@ export const transformBooleanNode = async (node: BooleanOperationNode): Promise<
     name: node.name,
     boolType: translateBoolType(node.booleanOperation),
     ...transformIds(node),
-    ...(await transformChildren(node)),
     ...transformFills(node),
     ...transformEffects(node),
     ...transformStrokes(node),
@@ -32,6 +32,8 @@ export const transformBooleanNode = async (node: BooleanOperationNode): Promise<
     ...transformBlend(node),
     ...transformProportion(node),
     ...transformLayoutAttributes(node),
+    ...transformVariableConsumptionMap(node),
+    ...(await transformChildren(node)),
     ...transformOverrides(node)
   };
 };

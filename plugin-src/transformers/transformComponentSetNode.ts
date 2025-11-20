@@ -13,7 +13,8 @@ import {
   transformOverrides,
   transformProportion,
   transformRotationAndPosition,
-  transformSceneNode
+  transformSceneNode,
+  transformVariableConsumptionMap
 } from '@plugin/transformers/partials';
 
 import type { FrameShape } from '@ui/lib/types/shapes/frameShape';
@@ -36,9 +37,10 @@ export const transformComponentSetNode = async (node: ComponentSetNode): Promise
     ...transformProportion(node),
     ...transformLayoutAttributes(node, true),
     ...transformConstraints(node),
-    ...transformOverrides(node),
     ...transformAutoLayout(node),
     ...transformComponentSetStrokesAndCornerRadius(node),
-    ...(await transformChildren(node))
+    ...transformVariableConsumptionMap(node),
+    ...(await transformChildren(node)),
+    ...transformOverrides(node)
   };
 };

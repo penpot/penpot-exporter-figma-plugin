@@ -14,7 +14,8 @@ import {
   transformProportion,
   transformRotationAndPosition,
   transformSceneNode,
-  transformStrokes
+  transformStrokes,
+  transformVariableConsumptionMap
 } from '@plugin/transformers/partials';
 
 import type { FrameShape } from '@ui/lib/types/shapes/frameShape';
@@ -60,8 +61,9 @@ export const transformFrameNode = async (node: FrameNode | SectionNode): Promise
     ...referencePoint,
     ...frameSpecificAttributes,
     ...transformDimension(node),
-    ...(await transformChildren(node)),
     ...transformSceneNode(node),
+    ...transformVariableConsumptionMap(node),
+    ...(await transformChildren(node)),
     ...transformOverrides(node)
   };
 };

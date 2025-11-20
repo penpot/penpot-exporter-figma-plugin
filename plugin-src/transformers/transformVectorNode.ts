@@ -3,6 +3,7 @@ import {
   transformConstraints,
   transformIds,
   transformOverrides,
+  transformVariableConsumptionMap,
   transformVectorPaths
 } from '@plugin/transformers/partials';
 
@@ -28,6 +29,7 @@ export const transformVectorNode = (node: VectorNode): GroupShape | PathShape | 
       name: node.name,
       ...transformIds(node),
       ...transformConstraints(node),
+      ...transformVariableConsumptionMap(node),
       ...transformOverrides(node)
     };
   }
@@ -36,6 +38,7 @@ export const transformVectorNode = (node: VectorNode): GroupShape | PathShape | 
     ...transformGroupNodeLike(node),
     ...transformIds(node),
     ...transformConstraints(node),
+    ...transformVariableConsumptionMap(node),
     ...transformOverrides(node),
     children
   };

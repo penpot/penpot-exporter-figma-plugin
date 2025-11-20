@@ -1,3 +1,4 @@
+export * from './translateAppliedTokens';
 export * from './translateBlendMode';
 export * from './translateBlurEffects';
 export * from './translateBoolType';

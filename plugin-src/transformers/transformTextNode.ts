@@ -10,7 +10,8 @@ import {
   transformRotationAndPosition,
   transformSceneNode,
   transformStrokes,
-  transformText
+  transformText,
+  transformVariableConsumptionMap
 } from '@plugin/transformers/partials';
 
 import type { TextShape } from '@ui/lib/types/shapes/textShape';
@@ -30,6 +31,7 @@ export const transformTextNode = (node: TextNode): TextShape => {
     ...transformLayoutAttributes(node, false, true),
     ...transformStrokes(node),
     ...transformConstraints(node),
+    ...transformVariableConsumptionMap(node),
     ...transformOverrides(node)
   };
 };
