@@ -30,7 +30,7 @@ const VALID_FONT_WEIGHT_VALUES = [
 ];
 
 const isValidFontWeightValue = (value: string): boolean => {
-  return VALID_FONT_WEIGHT_VALUES.includes(value);
+  return VALID_FONT_WEIGHT_VALUES.includes(value.toLowerCase());
 };
 
 const isStringValue = (value: VariableValue): value is string => {
