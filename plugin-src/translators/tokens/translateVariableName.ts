@@ -13,6 +13,10 @@ export const translateVariableName = (variable: Variable): string => {
     .replace(/\.$/, 'D')
     .replace(/\.{2,}/g, '.');
 
+  if (name === '') {
+    name = 'unnamed';
+  }
+
   if (uniqueVariableNames.has(name)) {
     let i = 1;
 
