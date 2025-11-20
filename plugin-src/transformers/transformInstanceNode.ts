@@ -33,19 +33,20 @@ export const transformInstanceNode = async (
   const primaryComponent = getPrimaryComponent(mainComponent);
   const isOrphan = isOrphanInstance(primaryComponent);
   let nodeOverrides = {};
+
   if (!isOrphan && node.overrides.length > 0) {
     node.overrides.forEach(override => overrides.set(override.id, override.overriddenFields));
     nodeOverrides = transformOverrides(node);
   }
 
-  const fetchedOverrides = [...(overrides.get(node.id) ?? [])];
-  if (node.visible !== mainComponent.visible) {
-    fetchedOverrides.push('visible');
-  }
-  if (node.locked !== mainComponent.locked) {
-    fetchedOverrides.push('locked');
-  }
-  overrides.set(node.id, fetchedOverrides);
+  // const fetchedOverrides = [...(overrides.get(node.id) ?? [])];
+  // if (node.visible !== mainComponent.visible) {
+  //   fetchedOverrides.push('visible');
+  // }
+  // if (node.locked !== mainComponent.locked) {
+  //   fetchedOverrides.push('locked');
+  // }
+  // overrides.set(node.id, fetchedOverrides);
 
   return {
     type: 'instance',

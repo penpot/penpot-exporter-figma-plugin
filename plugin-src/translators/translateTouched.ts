@@ -1,3 +1,5 @@
+import { overrides } from '@plugin/libraries';
+
 import type { SyncGroups } from '@ui/lib/types/utils/syncGroups';
 
 type SyncAttributes = {
@@ -140,20 +142,45 @@ const syncAttributes: SyncAttributes = {
   code: []
 };
 
-export const translateTouched = (
-  changedProperties: NodeChangeProperty[] | undefined
-): SyncGroups[] => {
+const getInstanceId = (node: SceneNode): string | undefined => {
+  const ids = node.id.split(';');
+
+  if (ids.length > 1) {
+    return ids[0].replace('I', '');
+  }
+};
+
+const getInstanceOverrides = (node: SceneNode): NodeChangeProperty[] | undefined => {
+  const instanceId = getInstanceId(node);
+
+  if (instanceId && overrides.has(instanceId)) {
+    return overrides.get(instanceId);
+  }
+};
+
+export const translateTouched = (node: SceneNode): SyncGroups[] => {
   const syncGroups: Set<SyncGroups> = new Set();
 
-  if (!changedProperties) return [];
+  const mainOverrides = overrides.get(node.id) ?? [];
 
-  changedProperties.forEach(changedProperty => {
-    const syncGroup = syncAttributes[changedProperty];
-
+  mainOverrides.forEach(override => {
+    const syncGroup = syncAttributes[override];
     if (syncGroup && syncGroup.length > 0) {
       syncGroup.forEach(group => syncGroups.add(group));
     }
   });
+
+  const instanceOverrides = getInstanceOverrides(node);
+
+  if (instanceOverrides && instanceOverrides.length > 0) {
+    if (instanceOverrides.includes('width')) {
+      syncGroups.add('geometry-group');
+    }
+
+    if (instanceOverrides.includes('height')) {
+      syncGroups.add('geometry-group');
+    }
+  }
 
   return Array.from(syncGroups);
 };
