@@ -108,12 +108,36 @@ export const translateLayoutWrapType = (node: BaseFrameMixin): LayoutWrapType | 
   }
 };
 
+/**
+ * If height is the same as the padding top and bottom, we need to reduce a bit the paddings to avoid a bug in Penpot
+ * Same happens for width and padding left and right.
+ *
+ * Just reducing 0.0001 is enough to avoid the bug.
+ *
+ * Figma allows the padding to be even greater than height or width, but we cannot fix all scenarios, because it
+ * means to modify the padding (that could also be linked to a token).
+ */
 export const translateLayoutPadding = (node: BaseFrameMixin): LayoutPadding => {
+  let p1 = node.paddingTop;
+  let p2 = node.paddingRight;
+  let p3 = node.paddingBottom;
+  let p4 = node.paddingLeft;
+
+  if (node.height > 0 && node.height === p1 + p3) {
+    p1 = p1 - 0.0001;
+    p3 = p3 - 0.0001;
+  }
+
+  if (node.width > 0 && node.width === p2 + p4) {
+    p2 = p2 - 0.0001;
+    p4 = p4 - 0.0001;
+  }
+
   return {
-    p1: node.paddingTop,
-    p2: node.paddingRight,
-    p3: node.paddingBottom,
-    p4: node.paddingLeft
+    p1,
+    p2,
+    p3,
+    p4
   };
 };
 
