@@ -2,4 +2,4 @@
 'penpot-exporter': minor
 ---
 
-Added layout grids support
+Implement Grids translation
