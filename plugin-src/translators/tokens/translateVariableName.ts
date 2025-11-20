@@ -14,15 +14,13 @@ export const translateVariableName = (variable: Variable): string => {
     .replace(/\.{2,}/g, '.');
 
   if (uniqueVariableNames.has(name)) {
-    let i = 0;
-    let uniqueName = name + '-' + i;
+    let i = 1;
 
-    while (uniqueVariableNames.has(uniqueName)) {
+    while (uniqueVariableNames.has(`${name}-${i}`)) {
       i++;
-      uniqueName = name + '-' + i;
     }
 
-    name = uniqueName;
+    name = `${name}-${i}`;
   }
 
   uniqueVariableNames.add(name);
