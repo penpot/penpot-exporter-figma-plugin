@@ -12,7 +12,6 @@ type ProgressStepperProps = {
 };
 
 const STEP_NAMES: Record<Steps, string> = {
-  tokens: 'Process tokens',
   processing: 'Scan Figma pages',
   processAssets: 'Gather linked assets',
   buildAssets: 'Build Penpot assets',
