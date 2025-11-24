@@ -23,6 +23,9 @@ export const transformBooleanNode = async (
   const children = await transformChildren(node);
 
   if (!children.children || children.children.length === 0) {
+    // In Penpot, boolean groups without children are not supported.
+    // In Figma, they are supported, but they do not make a lot of sense
+    // so we just ignore them.
     return;
   }
 
