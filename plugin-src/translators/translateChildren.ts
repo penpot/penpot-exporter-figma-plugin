@@ -20,9 +20,6 @@ export const translateMaskChildren = async (
 ): Promise<PenpotNode[]> => {
   const maskChild = children[maskIndex];
 
-  const unmaskedChildren = await translateChildren(children.slice(0, maskIndex));
-  const maskedChildren = await translateChildren(children.slice(maskIndex));
-
   if (
     maskChild.type === 'STICKY' ||
     maskChild.type === 'CONNECTOR' ||
@@ -35,8 +32,11 @@ export const translateMaskChildren = async (
     maskChild.type === 'TABLE' ||
     maskChild.type === 'SHAPE_WITH_TEXT'
   ) {
-    return [...unmaskedChildren, ...maskedChildren];
+    return await translateChildren(children);
   }
+
+  const unmaskedChildren = await translateChildren(children.slice(0, maskIndex));
+  const maskedChildren = await translateChildren(children.slice(maskIndex));
 
   const maskGroup = {
     ...transformMaskIds(maskChild),

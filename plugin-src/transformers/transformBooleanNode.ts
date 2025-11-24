@@ -20,7 +20,9 @@ import type { BoolShape } from '@ui/lib/types/shapes/boolShape';
 export const transformBooleanNode = async (
   node: BooleanOperationNode
 ): Promise<BoolShape | undefined> => {
-  if (node.children.length === 0) {
+  const children = await transformChildren(node);
+
+  if (!children.children || children.children.length === 0) {
     return;
   }
 
@@ -39,7 +41,7 @@ export const transformBooleanNode = async (
     ...transformProportion(node),
     ...transformLayoutAttributes(node),
     ...transformVariableConsumptionMap(node),
-    ...(await transformChildren(node)),
+    ...children,
     ...transformOverrides(node)
   };
 };
