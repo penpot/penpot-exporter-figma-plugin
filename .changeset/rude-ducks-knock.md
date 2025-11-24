@@ -2,4 +2,4 @@
 'penpot-exporter': patch
 ---
 
-Fix migrating empty boolean groups
+Fix to avoid empty boolean groups
