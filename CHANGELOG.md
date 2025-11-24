@@ -1,5 +1,14 @@
 # penpot-exporter
 
+## 0.17.1
+
+### Patch Changes
+
+- [#309](https://github.com/penpot/penpot-exporter-figma-plugin/pull/309)
+  [`b610ec2`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/b610ec2805d33c0255daecca73d7656173d58cfd)
+  Thanks [@jordisala1991](https://github.com/jordisala1991)! - Fix case where there are no variables
+  in the Figma file
+
 ## 0.17.0
 
 ### Minor Changes
