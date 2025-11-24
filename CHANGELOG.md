@@ -1,5 +1,13 @@
 # penpot-exporter
 
+## 0.17.2
+
+### Patch Changes
+
+- [#311](https://github.com/penpot/penpot-exporter-figma-plugin/pull/311)
+  [`b688cec`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/b688cecfbe74a6be63b8a0d99106bc1102fffa18)
+  Thanks [@jordisala1991](https://github.com/jordisala1991)! - Fix to avoid empty boolean groups
+
 ## 0.17.1
 
 ### Patch Changes
