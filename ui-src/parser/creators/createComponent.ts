@@ -2,7 +2,6 @@ import type { PenpotContext } from '@ui/lib/types/penpotContext';
 import type { ComponentShape } from '@ui/lib/types/shapes/componentShape';
 import { componentRoots, components } from '@ui/parser';
 import { createArtboard } from '@ui/parser/creators';
-import { symbolVariantProperties } from '@ui/parser/creators/symbols';
 import type { UiComponent } from '@ui/types';
 
 export const createComponent = (
@@ -25,7 +24,7 @@ export const createComponent = (
     path,
     pageId: context.currentPageId,
     fileId: context.currentFileId,
-    variantProperties: symbolVariantProperties(variantProperties, variantId)
+    variantProperties
   };
 
   components.set(shape.id, component);

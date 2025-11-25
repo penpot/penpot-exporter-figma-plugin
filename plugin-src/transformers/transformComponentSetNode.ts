@@ -1,4 +1,3 @@
-import { registerComponentProperties } from '@plugin/registerComponentProperties';
 import {
   transformAutoLayout,
   transformBlend,
@@ -16,11 +15,16 @@ import {
   transformSceneNode,
   transformVariableConsumptionMap
 } from '@plugin/transformers/partials';
+import {
+  registerComponentProperties,
+  registerVariantProperties
+} from '@plugin/translators/components';
 
 import type { FrameShape } from '@ui/lib/types/shapes/frameShape';
 
 export const transformComponentSetNode = async (node: ComponentSetNode): Promise<FrameShape> => {
   registerComponentProperties(node);
+  registerVariantProperties(node);
 
   return {
     type: 'frame',
