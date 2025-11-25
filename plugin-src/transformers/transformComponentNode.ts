@@ -1,5 +1,4 @@
 import { components } from '@plugin/libraries';
-import { registerComponentProperties } from '@plugin/registerComponentProperties';
 import {
   transformAutoLayout,
   transformBlend,
@@ -21,6 +20,7 @@ import {
   transformVariableConsumptionMap,
   transformVariantNameAndProperties
 } from '@plugin/transformers/partials';
+import { registerComponentProperties } from '@plugin/translators/components';
 import { generateUuid } from '@plugin/utils';
 
 import type { ComponentShape } from '@ui/lib/types/shapes/componentShape';

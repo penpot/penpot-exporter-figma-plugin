@@ -8,16 +8,6 @@ export const toObject = <T>(map: Map<string, T>): Record<string, T> => {
   return result;
 };
 
-export const toPlainObject = <T>(map: Map<string, Set<T>>): Record<string, T[]> => {
-  const result: Record<string, T[]> = {};
-
-  for (const [key, value] of map) {
-    result[key] = [...value];
-  }
-
-  return result;
-};
-
 export const init = <T>(map: Map<string, T>, records: Record<string, T>): void => {
   map.clear();
 
