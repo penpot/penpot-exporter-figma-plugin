@@ -1,5 +1,49 @@
 # penpot-exporter
 
+## 0.17.2
+
+### Patch Changes
+
+- [#311](https://github.com/penpot/penpot-exporter-figma-plugin/pull/311)
+  [`b688cec`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/b688cecfbe74a6be63b8a0d99106bc1102fffa18)
+  Thanks [@jordisala1991](https://github.com/jordisala1991)! - Fix to avoid empty boolean groups
+
+## 0.17.1
+
+### Patch Changes
+
+- [#309](https://github.com/penpot/penpot-exporter-figma-plugin/pull/309)
+  [`b610ec2`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/b610ec2805d33c0255daecca73d7656173d58cfd)
+  Thanks [@jordisala1991](https://github.com/jordisala1991)! - Fix case where there are no variables
+  in the Figma file
+
+## 0.17.0
+
+### Minor Changes
+
+- [#283](https://github.com/penpot/penpot-exporter-figma-plugin/pull/283)
+  [`58a1168`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/58a1168bd638c74481e4a18f5b2086ecbd41b0d3)
+  Thanks [@jordisala1991](https://github.com/jordisala1991)! - Implement Design Tokens translation
+
+- [#292](https://github.com/penpot/penpot-exporter-figma-plugin/pull/292)
+  [`cd2b55b`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/cd2b55b3d0ee742475a35c5b471385cad5735679)
+  Thanks [@jordisala1991](https://github.com/jordisala1991)! - Implement Grid Layout translation
+
+- [#248](https://github.com/penpot/penpot-exporter-figma-plugin/pull/248)
+  [`28af0fd`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/28af0fdb116c9e3d2fa5be664198e2cb4b5b4679)
+  Thanks [@Cenadros](https://github.com/Cenadros)! - Implement Grids translation
+
+### Patch Changes
+
+- [#306](https://github.com/penpot/penpot-exporter-figma-plugin/pull/306)
+  [`c6113d0`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/c6113d074d080c96c1d7736fed61e74edf011eca)
+  Thanks [@jordisala1991](https://github.com/jordisala1991)! - Fix scenario where paddings are the
+  same as width/height and the inner element is moved from its original position
+
+- [#292](https://github.com/penpot/penpot-exporter-figma-plugin/pull/292)
+  [`cd2b55b`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/cd2b55b3d0ee742475a35c5b471385cad5735679)
+  Thanks [@jordisala1991](https://github.com/jordisala1991)! - Fix flex layout for text elements
+
 ## 0.16.2
 
 ### Patch Changes

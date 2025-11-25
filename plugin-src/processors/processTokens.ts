@@ -86,7 +86,7 @@ const getVariables = async (collection: VariableCollection): Promise<Variable[]>
   return variables;
 };
 
-export const processTokens = async (): Promise<Tokens> => {
+export const processTokens = async (): Promise<Tokens | undefined> => {
   const localCollections = await figma.variables.getLocalVariableCollectionsAsync();
 
   const sets: TokenSets = {};
@@ -110,6 +110,10 @@ export const processTokens = async (): Promise<Tokens> => {
         activeSets.push(setName);
       }
     }
+  }
+
+  if (tokenSetOrder.length === 0) {
+    return;
   }
 
   return {

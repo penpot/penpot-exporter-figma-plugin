@@ -17,7 +17,18 @@ import { translateBoolType } from '@plugin/translators';
 
 import type { BoolShape } from '@ui/lib/types/shapes/boolShape';
 
-export const transformBooleanNode = async (node: BooleanOperationNode): Promise<BoolShape> => {
+export const transformBooleanNode = async (
+  node: BooleanOperationNode
+): Promise<BoolShape | undefined> => {
+  const children = await transformChildren(node);
+
+  if (!children.children || children.children.length === 0) {
+    // In Penpot, boolean groups without children are not supported.
+    // In Figma, they are supported, but they do not make a lot of sense
+    // so we just ignore them.
+    return;
+  }
+
   return {
     type: 'bool',
     name: node.name,
@@ -33,7 +44,7 @@ export const transformBooleanNode = async (node: BooleanOperationNode): Promise<
     ...transformProportion(node),
     ...transformLayoutAttributes(node),
     ...transformVariableConsumptionMap(node),
-    ...(await transformChildren(node)),
+    ...children,
     ...transformOverrides(node)
   };
 };

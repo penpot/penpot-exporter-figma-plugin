@@ -29,7 +29,10 @@ export const parse = async (document: PenpotDocument): Promise<PenpotContext> =>
   await buildFile(context, children);
   await buildComponentsLibrary(context);
 
-  context.addTokensLib(tokens);
+  if (tokens) {
+    context.addTokensLib(tokens);
+  }
+
   context.closeFile();
 
   flushMessageQueue();

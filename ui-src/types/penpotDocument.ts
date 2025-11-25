@@ -11,7 +11,7 @@ export type PenpotDocument = {
   images: Record<string, Uint8Array<ArrayBuffer>>;
   paintStyles: Record<string, FillStyle>;
   textStyles: Record<string, TypographyStyle>;
-  tokens: Tokens;
+  tokens?: Tokens;
   componentProperties: Record<string, ComponentProperty>;
   variantProperties: Record<string, string[]>;
   missingFonts: string[];
