@@ -25,16 +25,16 @@ export const transformVectorPaths = (node: VectorNode): PathShape[] => {
 
   const hasStrokes = node.strokes.length > 0;
   const hasGeometry = node.fillGeometry.length > 0;
+  let count = 0;
 
   const pathShapes = node.vectorPaths
-    .filter((vectorPath, index) => {
-      return (
+    .filter(
+      (vectorPath, index) =>
         hasStrokes ||
         (!hasStrokes && !hasGeometry) ||
         nodeHasFills(node, vectorPath, regions[index])
-      );
-    })
-    .map((vectorPath, index) => transformVectorPath(node, vectorPath, regions[index], index));
+    )
+    .map((vectorPath, index) => transformVectorPath(node, vectorPath, regions[index], count++));
 
   if (regions.length > 0) {
     return pathShapes;
@@ -50,7 +50,7 @@ export const transformVectorPaths = (node: VectorNode): PathShape[] => {
         normalizedVectorPath => normalizedVectorPath === normalizedGeometry
       );
     })
-    .map((geometry, index) => transformVectorPath(node, geometry, undefined, index));
+    .map(geometry => transformVectorPath(node, geometry, undefined, count++));
 
   return [...geometryShapes, ...pathShapes];
 };
