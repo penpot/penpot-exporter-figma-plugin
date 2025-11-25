@@ -158,6 +158,15 @@ const getInstanceOverrides = (node: SceneNode): NodeChangeProperty[] | undefined
   }
 };
 
+const isPathNode = (node: SceneNode): boolean => {
+  return (
+    node.type === 'VECTOR' ||
+    node.type === 'LINE' ||
+    node.type === 'STAR' ||
+    node.type === 'POLYGON'
+  );
+};
+
 export const translateTouched = (node: SceneNode): SyncGroups[] => {
   const syncGroups: Set<SyncGroups> = new Set();
 
@@ -172,13 +181,14 @@ export const translateTouched = (node: SceneNode): SyncGroups[] => {
 
   const instanceOverrides = getInstanceOverrides(node);
 
-  if (instanceOverrides && instanceOverrides.length > 0) {
-    if (instanceOverrides.includes('width')) {
-      syncGroups.add('geometry-group');
-    }
+  if (
+    instanceOverrides &&
+    (instanceOverrides.includes('width') || instanceOverrides.includes('height'))
+  ) {
+    syncGroups.add('geometry-group');
 
-    if (instanceOverrides.includes('height')) {
-      syncGroups.add('geometry-group');
+    if (isPathNode(node)) {
+      syncGroups.add('content-group');
     }
   }
 
