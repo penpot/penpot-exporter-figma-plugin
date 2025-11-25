@@ -50,7 +50,7 @@ export const transformVectorPaths = (node: VectorNode): PathShape[] => {
         normalizedVectorPath => normalizedVectorPath === normalizedGeometry
       );
     })
-    .map((geometry, index) => transformVectorPath(node, geometry, undefined, count++));
+    .map(geometry => transformVectorPath(node, geometry, undefined, count++));
 
   return [...geometryShapes, ...pathShapes];
 };
