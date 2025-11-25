@@ -1,5 +1,24 @@
 # penpot-exporter
 
+## 0.17.3
+
+### Patch Changes
+
+- [#314](https://github.com/penpot/penpot-exporter-figma-plugin/pull/314)
+  [`468f5f8`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/468f5f8719e6a8bc73c6ecc78bf62ab73b1e76b5)
+  Thanks [@jordisala1991](https://github.com/jordisala1991)! - Fix component variants when there are
+  missing properties on some variants
+
+- [#315](https://github.com/penpot/penpot-exporter-figma-plugin/pull/315)
+  [`3f083b6`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/3f083b6809e9682932841c0c03fbd93fdb7127ad)
+  Thanks [@jordisala1991](https://github.com/jordisala1991)! - Fix vector paths when more than one
+  svg-path is needed to represent the Figma vector
+
+- [#307](https://github.com/penpot/penpot-exporter-figma-plugin/pull/307)
+  [`9e26ea6`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/9e26ea6225a350d524a2e5ce0ead3dccddf2f552)
+  Thanks [@jordisala1991](https://github.com/jordisala1991)! - Improve overrides for resized
+  components
+
 ## 0.17.2
 
 ### Patch Changes
