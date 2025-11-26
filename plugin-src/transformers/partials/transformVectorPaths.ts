@@ -27,42 +27,131 @@ export const transformVectorPaths = (node: VectorNode): PathShape[] => {
   const hasGeometry = node.fillGeometry.length > 0;
   let count = 0;
 
-  const pathShapes = node.vectorPaths
-    .filter(
-      (vectorPath, index) =>
-        hasStrokes ||
-        (!hasStrokes && !hasGeometry) ||
-        nodeHasFills(node, vectorPath, regions[index])
-    )
-    .map((vectorPath, index) => transformVectorPath(node, vectorPath, regions[index], count++));
+  // Cache for vertex extraction to avoid re-parsing same path data
+  const vertexCache = new Map<string, Set<string>>();
+  const getVertices = (pathData: string): Set<string> => {
+    let vertices = vertexCache.get(pathData);
+    if (!vertices) {
+      vertices = extractVertices(pathData);
+      vertexCache.set(pathData, vertices);
+    }
+    return vertices;
+  };
+
+  // Compute combined vertices of all fillGeometry entries once
+  // (vectorPaths may contain multiple subpaths in one entry, while fillGeometry has them separate)
+  const combinedFillGeometryVertices = hasGeometry
+    ? getCombinedVerticesCached(
+        node.fillGeometry.map(geo => geo.data),
+        getVertices
+      )
+    : new Set<string>();
+  const combinedFillGeometryHash = hashVertexSet(combinedFillGeometryVertices);
+
+  // Single pass: filter vectorPaths and collect both pathShapes and included path data
+  // Use hash-based deduplication for O(1) lookup instead of O(n²) set comparisons
+  const includedVectorPathsData: string[] = [];
+  const pathShapes: PathShape[] = [];
+  const seenVertexHashes = new Set<string>();
+
+  for (let i = 0; i < node.vectorPaths.length; i++) {
+    const vectorPath = node.vectorPaths[i];
+    const currentVertices = getVertices(vectorPath.data);
+    const currentHash = hashVertexSet(currentVertices);
+    let shouldInclude = false;
+
+    // Include if there are strokes but NO fillGeometry (stroke-only vector)
+    if (hasStrokes && !hasGeometry) {
+      shouldInclude = true;
+    }
+    // Include if there are no strokes and no geometry (edge case)
+    else if (!hasStrokes && !hasGeometry) {
+      shouldInclude = true;
+    }
+    // Include if this path has fills (windingRule !== 'NONE')
+    else if (nodeHasFills(node, vectorPath, regions[i])) {
+      shouldInclude = true;
+    }
+    // For windingRule 'NONE' paths when hasStrokes && hasGeometry:
+    // Only EXCLUDE if this vectorPath visits the SAME vertices as the COMBINED fillGeometry
+    else if (hasStrokes && hasGeometry && vectorPath.windingRule === 'NONE') {
+      shouldInclude = currentHash !== combinedFillGeometryHash;
+    }
+
+    // Deduplicate: skip if we've already seen a path with identical vertices (O(1) hash lookup)
+    if (shouldInclude && !seenVertexHashes.has(currentHash)) {
+      seenVertexHashes.add(currentHash);
+      includedVectorPathsData.push(vectorPath.data);
+      pathShapes.push(transformVectorPath(node, vectorPath, regions[i], count++));
+    }
+  }
 
   if (regions.length > 0) {
     return pathShapes;
   }
 
-  const normalizedVectorPaths = node.vectorPaths.map(vectorPath => normalizePath(vectorPath.data));
+  // Compute combined vertices of included vectorPaths (reusing cached data)
+  const combinedIncludedVectorPathVertices = getCombinedVerticesCached(
+    includedVectorPathsData,
+    getVertices
+  );
+  const combinedIncludedHash = hashVertexSet(combinedIncludedVectorPathVertices);
 
-  const geometryShapes = node.fillGeometry
-    .filter(geometry => {
-      const normalizedGeometry = normalizePath(geometry.data);
+  // Include fillGeometry only if combined fillGeometry vertices differ from combined included vectorPath vertices
+  // This handles cases where vectorPaths has multiple subpaths and fillGeometry has them as separate entries
+  const shouldIncludeFillGeometry =
+    includedVectorPathsData.length === 0 || combinedFillGeometryHash !== combinedIncludedHash;
 
-      return !normalizedVectorPaths.find(
-        normalizedVectorPath => normalizedVectorPath === normalizedGeometry
-      );
-    })
-    .map(geometry => transformVectorPath(node, geometry, undefined, count++));
+  const geometryShapes = shouldIncludeFillGeometry
+    ? node.fillGeometry.map(geometry => transformVectorPath(node, geometry, undefined, count++))
+    : [];
 
   return [...geometryShapes, ...pathShapes];
 };
 
-const normalizePath = (path: string): string => {
-  // Round to 2 decimal places all numbers
-  const str = path.replace(/(\d+\.\d+|\d+)/g, (match: string) => {
-    return parseFloat(match).toFixed(2);
-  });
+/**
+ * Extracts all vertices from a path as a normalized set of "x,y" strings.
+ * This allows comparing paths by their vertices, regardless of path structure
+ * (e.g., multiple subpaths vs one continuous path).
+ */
+const extractVertices = (pathData: string): Set<string> => {
+  const vertices = new Set<string>();
+  const commands = parseSVG(pathData);
 
-  // remove spaces
-  return str.replace(/\s/g, '');
+  for (const cmd of commands) {
+    if ('x' in cmd && 'y' in cmd && typeof cmd.x === 'number' && typeof cmd.y === 'number') {
+      // Round to 1 decimal for tolerance
+      const vertex = `${cmd.x.toFixed(1)},${cmd.y.toFixed(1)}`;
+      vertices.add(vertex);
+    }
+  }
+
+  return vertices;
+};
+
+/**
+ * Combines vertices from multiple path data strings into a single set.
+ * Uses a cache function to avoid re-parsing same paths.
+ */
+const getCombinedVerticesCached = (
+  pathDataList: string[],
+  getVertices: (pathData: string) => Set<string>
+): Set<string> => {
+  const combined = new Set<string>();
+  for (const pathData of pathDataList) {
+    for (const vertex of getVertices(pathData)) {
+      combined.add(vertex);
+    }
+  }
+  return combined;
+};
+
+/**
+ * Creates a hash string from a vertex set for O(1) equality comparison.
+ * Sorts vertices to ensure consistent hash regardless of insertion order.
+ */
+const hashVertexSet = (vertices: Set<string>): string => {
+  return Array.from(vertices).sort().join('|');
 };
 
 const nodeHasFills = (
