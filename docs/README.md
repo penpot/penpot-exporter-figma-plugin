@@ -4,7 +4,7 @@ Documentation for migrating Figma designs to Penpot using Model Context Protocol
 
 ---
 
-## 📚 Essential Documents
+## 📚 Documents
 
 | Document                                                       | Purpose                                       |
 | -------------------------------------------------------------- | --------------------------------------------- |
@@ -16,48 +16,7 @@ Documentation for migrating Figma designs to Penpot using Model Context Protocol
 
 ---
 
-## 🚀 Quick Start
+## 🤖 Using Cursor?
 
-1. **Read** `LLM_MIGRATION_GUIDE.md` for complete instructions
-2. **Reference** `LLM_QUICK_REFERENCE.md` for lookups during migration
-3. **Check** `LLM_UNIVERSAL_CHECKLIST.md` to ensure nothing is missed
-
----
-
-## ⚠️ Critical Rules (Quick Reference)
-
-```javascript
-// ✅ Use resize() - width/height are read-only
-shape.resize(200, 100);
-
-// ✅ Use dir, rowGap, columnGap for FlexLayout
-flex.dir = 'column';
-flex.rowGap = 16;
-
-// ✅ Use characters for text
-text.characters = 'Hello';
-
-// ✅ Use hex colors directly
-fills: [{ fillColor: '#ffffff' }];
-
-// ✅ Add FlexLayout BEFORE children
-const flex = board.addFlexLayout();
-board.appendChild(child); // child at x=0, y=0
-
-// ✅ Set path position AFTER content
-path.content = 'M 0 0 L 100 50';
-path.x = 100; // After content!
-
-// ✅ Use relative multipliers for lineHeight
-text.lineHeight = '1.2'; // Not "16"
-```
-
----
-
-## 🎯 From Real Migration (185 Elements)
-
-- ✅ Hex colors work directly (`"#ffffff"`)
-- ✅ borderRadius works on boards
-- ✅ SVG path strings work for `path.content`
-- ✅ Large designs: query sub-nodes with `get_design_context(nodeId)`
-- ✅ Font fallback: use `sourcesanspro`
+The `.cursor/rules/figma-penpot-migration.mdc` rule provides navigation guidance, critical rules,
+and troubleshooting tips that are automatically loaded into context.

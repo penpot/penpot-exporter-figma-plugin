@@ -1,0 +1,187 @@
+---
+description: Rules for migrating Figma designs to Penpot using MCP servers
+globs:
+alwaysApply: false
+---
+
+# Figma → Penpot Migration via MCP
+
+When asked to migrate a Figma design to Penpot, follow this guide to navigate the documentation and
+complete the task successfully.
+
+## Documentation Structure
+
+| Document                          | When to Use                                | What It Contains                                          |
+| --------------------------------- | ------------------------------------------ | --------------------------------------------------------- |
+| `docs/LLM_MIGRATION_GUIDE.md`     | **START HERE** - Read before any migration | Complete guide: workflows, API patterns, code examples    |
+| `docs/LLM_QUICK_REFERENCE.md`     | During migration for lookups               | Tables: node mappings, blend modes, constraints, snippets |
+| `docs/LLM_UNIVERSAL_CHECKLIST.md` | Complex migrations                         | Step-by-step checklist to ensure nothing is missed        |
+| `docs/FIGMA_MCP_DATA_FORMAT.md`   | When parsing Figma MCP output              | How Figma MCP returns data (React/Tailwind, not raw)      |
+| `docs/CONTRIBUTING.md`            | When updating documentation                | Rules for maintaining docs, where to add new learnings    |
+
+## Step-by-Step Navigation
+
+### 1. Before Starting Any Migration
+
+```
+READ: docs/LLM_MIGRATION_GUIDE.md
+- Section 1: Quick Start (initialization pattern)
+- Section 2: MCP Tools Reference (what tools return)
+- Section 5: Critical API Patterns (MUST know these)
+```
+
+### 2. When Extracting from Figma
+
+```
+READ: docs/FIGMA_MCP_DATA_FORMAT.md
+- Understand that Figma MCP returns React/Tailwind code, NOT raw data
+- For large designs: get_design_context() returns XML metadata
+- Strategy: Query sub-nodes individually
+```
+
+### 3. During Shape Creation (Quick Lookups)
+
+```
+READ: docs/LLM_QUICK_REFERENCE.md
+- Node Type Mappings (Figma → Penpot)
+- Blend Modes table
+- Boolean Operations table
+- FlexLayout properties
+- Code Snippets section
+```
+
+### 4. For Complex/Large Migrations
+
+```
+READ: docs/LLM_UNIVERSAL_CHECKLIST.md
+- Follow phases sequentially
+- Check off items as completed
+- Don't skip validation phase
+```
+
+### 5. When Updating Documentation
+
+```
+READ: docs/CONTRIBUTING.md
+- Single source of truth: LLM_MIGRATION_GUIDE.md
+- Quick Reference = lookup tables only, no explanations
+- Do NOT create new LLM_*.md files
+- Add learnings to existing sections
+```
+
+## Critical Rules (MEMORIZE)
+
+These are the most common mistakes. Always follow:
+
+```javascript
+// ✅ Use resize() - width/height are READ-ONLY
+shape.resize(200, 100);
+
+// ✅ DISABLE clipContent on ALL boards (defaults to true!)
+board.clipContent = false;
+
+// ✅ Use insertChild for z-order - appendChild adds at index 0 (BEHIND)
+let zIndex = 0;
+card.insertChild(zIndex++, backgroundRect); // index 0 = behind
+card.insertChild(zIndex++, textOnTop); // index 1 = in front
+
+// ✅ x/y are ABSOLUTE page coordinates (add parent offset for local positioning)
+// Formula: child.x = parent.x + localX, child.y = parent.y + localY
+const parent = penpot.createBoard();
+parent.x = 100;
+parent.y = 150;
+child.x = 100 + 20; // absolute = parent.x + localX
+child.y = 150 + 30; // absolute = parent.y + localY
+// Verify: child.boardX = 20, child.boardY = 30 (relative to parent)
+
+// ✅ Use FLAT structure - nested text in boards may not render
+// Put all rectangles and text as direct children of card
+
+// ✅ Use dir, rowGap, columnGap for FlexLayout
+flex.dir = 'column'; // NOT 'direction'
+flex.rowGap = 16; // NOT 'gap'
+
+// ✅ Use characters for text content
+text.characters = 'Hello'; // NOT 'content'
+
+// ✅ Hex colors work directly
+fills: [{ fillColor: '#ffffff' }];
+
+// ✅ Add FlexLayout BEFORE children
+const flex = board.addFlexLayout();
+board.appendChild(child); // child at x=0, y=0
+
+// ✅ Set path position AFTER content
+path.content = 'M 0 0 L 100 50';
+path.x = 100; // AFTER content!
+
+// ✅ Use relative multipliers for lineHeight
+text.lineHeight = '1.2'; // NOT '16' (pixels)
+
+// ✅ Font fallback
+text.fontFamily = 'sourcesanspro'; // Fallback for unknown fonts
+
+// ✅ Verify parent before appendChild
+if (parent) {
+  parent.appendChild(child);
+} else {
+  storage.migrationState.errors.push({ error: 'Parent not found' });
+}
+
+// ✅ ALWAYS take Penpot screenshots after EACH creation step
+// Use mcp_Penpot_export_shape({ shapeId: element.id }) immediately after creating
+// Check: positions correct, no negative boardX/boardY, content not clipped
+```
+
+## MCP Tools Available
+
+### Figma MCP
+
+| Tool                          | Returns                                | Use For                    |
+| ----------------------------- | -------------------------------------- | -------------------------- |
+| `get_design_context(nodeId?)` | React/Tailwind code (or XML for large) | Extract styling, structure |
+| `get_metadata(nodeId?)`       | XML with id, name, x, y, width, height | Basic properties           |
+| `get_variable_defs(nodeId?)`  | Object                                 | Design tokens              |
+| `get_screenshot(nodeId?)`     | Image                                  | Visual reference           |
+
+### Penpot MCP
+
+| Tool                 | Description                                            |
+| -------------------- | ------------------------------------------------------ |
+| `execute_code(code)` | Run JS with `penpot`, `penpotUtils`, `storage` objects |
+
+## Migration Workflow Summary
+
+```
+1. Initialize state     → storage.migrationState = { idMapping: {}, errors: [], warnings: [] }
+2. Extract from Figma   → get_design_context() / get_metadata()
+3. For large designs    → Query sub-nodes individually
+4. Create in order      → Tokens → Styles → Components → Boards → Shapes → Instances
+5. Use correct APIs     → resize(), dir, rowGap, characters, etc.
+6. Validate             → Check errors, verify structure
+```
+
+## When Things Go Wrong
+
+1. **Shape not appearing?** → Check if `appendChild()` was called
+2. **Layout not working?** → Ensure FlexLayout added BEFORE children
+3. **Text wrong?** → Use `characters`, not `content`
+4. **Size wrong?** → Use `resize()`, not `width`/`height`
+5. **Path in wrong place?** → Set `x`/`y` AFTER `content`
+6. **Font missing?** → Fall back to `sourcesanspro`
+7. **Content clipped at edges?** → Set `board.clipContent = false`
+8. **Text behind shapes?** → Use `insertChild(index, child)` not `appendChild()`
+9. **Child outside parent / negative boardX/boardY?** → Use absolute coords:
+   `child.x = parent.x + localX`
+10. **Nested text not visible?** → Use flat structure, all elements as direct card children
+11. **Visual issues?** → Take Penpot screenshots with `mcp_Penpot_export_shape` after EACH step
+12. **Debug positioning?** → Check `boardX`/`boardY` after appendChild - negative = wrong
+
+## Document Updates
+
+If you discover new patterns or gotchas during migration:
+
+- Read `docs/CONTRIBUTING.md` for rules
+- Add to existing sections in `LLM_MIGRATION_GUIDE.md`
+- Update `LLM_QUICK_REFERENCE.md` tables if applicable
+- Do NOT create new documentation files

@@ -329,6 +329,163 @@ const child = penpot.createText('Title');
 card.appendChild(child); // Direct reference, guaranteed to work
 ```
 
+### ⚠️ clipContent Defaults to True
+
+**CRITICAL**: All boards have `clipContent = true` by default, which clips content near edges.
+
+```javascript
+// ❌ WRONG - content may be clipped
+const card = penpot.createBoard();
+card.resize(372, 235);
+// Content near edges gets cut off!
+
+// ✅ CORRECT - disable clipping
+const card = penpot.createBoard();
+card.resize(372, 235);
+card.clipContent = false; // MUST set this on all boards!
+```
+
+### ⚠️ appendChild Adds at Index 0 (Behind)
+
+**CRITICAL**: `appendChild()` inserts children at index 0, meaning new elements go BEHIND existing
+ones. This is counterintuitive - later-added elements end up underneath earlier ones.
+
+```javascript
+// ❌ WRONG - text ends up BEHIND rectangle
+const rect = penpot.createRectangle();
+parent.appendChild(rect);  // Goes to index 0
+
+const text = penpot.createText('Label');
+parent.appendChild(text);  // Also goes to index 0, pushing rect to index 1
+// Result: rect is at index 1 (front), text at index 0 (back) - text hidden!
+
+// ✅ CORRECT - use insertChild with incrementing indices
+let zIndex = 0;
+const rect = penpot.createRectangle();
+parent.insertChild(zIndex++, rect);  // Index 0 (back)
+
+const text = penpot.createText('Label');
+parent.insertChild(zIndex++, text);  // Index 1 (front)
+// Result: rect at 0 (back), text at 1 (front) - text visible on top!
+```
+
+### ⚠️ Coordinate System: Absolute vs Relative
+
+**CRITICAL**: Penpot Plugin API uses **ABSOLUTE page coordinates** for `x` and `y`.
+
+| Property           | Type         | Description                                             |
+| ------------------ | ------------ | ------------------------------------------------------- |
+| `x`, `y`           | **Absolute** | Position on the page (writable)                         |
+| `boardX`, `boardY` | **Relative** | Position relative to parent board (read-only, computed) |
+
+This matches how the Figma plugin exports coordinates using `absoluteTransform`.
+
+```javascript
+// To position a child at LOCAL coords (localX, localY) inside a parent:
+// Formula: child.x = parent.x + localX
+//          child.y = parent.y + localY
+
+// Example: Child at local position (20, 30) inside parent at (100, 150)
+const parent = penpot.createBoard();
+parent.x = 100;
+parent.y = 150;
+penpot.root.appendChild(parent);
+
+const child = penpot.createRectangle();
+child.x = 100 + 20; // = 120 (absolute page coordinate)
+child.y = 150 + 30; // = 180 (absolute page coordinate)
+child.resize(50, 50);
+parent.appendChild(child);
+// Verify: child.boardX = 20, child.boardY = 30 ✅
+
+// ❌ WRONG - treats local coords as absolute page coords
+const wrongChild = penpot.createRectangle();
+wrongChild.x = 20; // Interpreted as absolute position on page!
+wrongChild.y = 30;
+parent.appendChild(wrongChild);
+// Result: wrongChild.boardX = -80, boardY = -120 (appears outside parent!)
+```
+
+**For nested containers**, calculate cumulative absolute position:
+
+```javascript
+// Card at (0, 0) → Chart at local (24, 108) → Path at local (12, 30)
+const card = penpot.createBoard();
+card.x = 0;
+card.y = 0;
+
+const chart = penpot.createBoard();
+chart.x = card.x + 24; // = 24
+chart.y = card.y + 108; // = 108
+card.appendChild(chart);
+
+const path = penpot.createPath();
+path.content = 'M 0 0 L 100 50';
+path.x = chart.x + 12; // = 36 (absolute)
+path.y = chart.y + 30; // = 138 (absolute)
+chart.appendChild(path);
+// Verify: path.boardX = 12, path.boardY = 30 ✅
+```
+
+**Debug tip**: Check `boardX`/`boardY` after `appendChild()` - negative values indicate wrong
+positioning.
+
+### ⚠️ ALWAYS Verify with Screenshots
+
+**Take a Penpot screenshot after EVERY major creation step** using `mcp_Penpot_export_shape`:
+
+```javascript
+// After creating a card or container:
+const card = penpot.createBoard();
+// ... add children ...
+// → Call mcp_Penpot_export_shape({ shapeId: card.id }) to verify rendering
+
+// What to check:
+// 1. Elements are visible (not clipped)
+// 2. Positions are correct (not overlapping incorrectly)
+// 3. Text is readable and in correct location
+// 4. Charts/paths appear in expected locations
+```
+
+**When things look wrong:**
+
+- Check `boardX`/`boardY` values - negative values usually indicate positioning bugs
+- Check `clipContent` on parent boards (should be `false`)
+- Verify parent absolute offsets were added to children's coordinates
+
+### ⚠️ Use Flat Structure for Reliable Rendering
+
+**Nested boards with text children may not render correctly in exports.** Use a flat structure where
+all visual elements (rectangles, text) are direct children of the card.
+
+```javascript
+// ❌ PROBLEMATIC - text inside nested Button board may not render
+const button = penpot.createBoard();
+button.fills = [{ fillColor: '#171717' }];
+card.appendChild(button);
+
+const buttonText = penpot.createText('Click');
+button.appendChild(buttonText);  // May not render in exports!
+
+// ✅ RELIABLE - flat structure with all elements as card children
+let zIndex = 0;
+
+// Add button background first (lower index = behind)
+const buttonBg = penpot.createRectangle();
+buttonBg.fills = [{ fillColor: '#171717' }];
+buttonBg.x = 24;
+buttonBg.y = 100;
+card.insertChild(zIndex++, buttonBg);
+
+// Add button text second (higher index = in front)
+const buttonText = penpot.createText('Click');
+buttonText.fills = [{ fillColor: '#ffffff' }];
+buttonText.x = 40;
+buttonText.y = 108;
+card.insertChild(zIndex++, buttonText);
+// Result: text renders on top of button background
+```
+
 ---
 
 ## 6. Text Handling
@@ -679,33 +836,40 @@ instance.componentRefShape = componentId;
 
 ## 11. Common Gotchas
 
-| #   | Issue                      | Solution                                          |
-| --- | -------------------------- | ------------------------------------------------- |
-| 1   | Width/Height are read-only | Use `resize(width, height)`                       |
-| 2   | GridLayout appendChild     | Use `grid.appendChild(child, row, col)`           |
-| 3   | GridLayout columns/rows    | Use `addColumn()`/`addRow()`                      |
-| 4   | FlexLayout direction       | Use `dir`, not `direction`                        |
-| 5   | FlexLayout gap             | Use `rowGap`/`columnGap`, not `gap`               |
-| 6   | Text content               | Use `characters`, not `content`                   |
-| 7   | Text in FlexLayout         | Set `x=0, y=0`                                    |
-| 8   | Text dimensions            | Use `resize()` + `growType = "fixed"`             |
-| 9   | lineHeight                 | Use relative multipliers ("1", "1.2")             |
-| 10  | Boolean operations         | Require at least 2 children                       |
-| 11  | Sections                   | Don't support strokes, blend modes, corner radius |
-| 12  | Images                     | Use `fillImage` in Fill                           |
-| 13  | Fonts                      | Use fallbacks (sourcesanspro)                     |
-| 14  | Component Sets             | Create all variants first, then link              |
-| 15  | Nested Layouts             | Create parent layout before children              |
-| 16  | Hex Colors                 | Use `"#ffffff"` directly                          |
-| 17  | borderRadius               | Works directly on boards                          |
-| 18  | SVG Path Strings           | Use `path.content = "M 0 0 L 100 50"`             |
-| 19  | Path Position              | Set `x`/`y` AFTER `content`                       |
-| 20  | Table appendChild          | Children appear at END of flex layouts            |
-| 21  | FlexLayout timing          | Add layout BEFORE adding children                 |
-| 22  | Mixed values               | Handle per-segment for text fills                 |
-| 23  | Large designs              | Call `get_design_context` on sub-nodes            |
-| 24  | Orphaned shapes at root    | Always verify parent exists before appendChild    |
-| 25  | Silent appendChild failure | Store parent refs in variables, not ID lookups    |
+| #   | Issue                        | Solution                                                   |
+| --- | ---------------------------- | ---------------------------------------------------------- |
+| 1   | Width/Height are read-only   | Use `resize(width, height)`                                |
+| 2   | GridLayout appendChild       | Use `grid.appendChild(child, row, col)`                    |
+| 3   | GridLayout columns/rows      | Use `addColumn()`/`addRow()`                               |
+| 4   | FlexLayout direction         | Use `dir`, not `direction`                                 |
+| 5   | FlexLayout gap               | Use `rowGap`/`columnGap`, not `gap`                        |
+| 6   | Text content                 | Use `characters`, not `content`                            |
+| 7   | Text in FlexLayout           | Set `x=0, y=0`                                             |
+| 8   | Text dimensions              | Use `resize()` + `growType = "fixed"`                      |
+| 9   | lineHeight                   | Use relative multipliers ("1", "1.2")                      |
+| 10  | Boolean operations           | Require at least 2 children                                |
+| 11  | Sections                     | Don't support strokes, blend modes, corner radius          |
+| 12  | Images                       | Use `fillImage` in Fill                                    |
+| 13  | Fonts                        | Use fallbacks (sourcesanspro)                              |
+| 14  | Component Sets               | Create all variants first, then link                       |
+| 15  | Nested Layouts               | Create parent layout before children                       |
+| 16  | Hex Colors                   | Use `"#ffffff"` directly                                   |
+| 17  | borderRadius                 | Works directly on boards                                   |
+| 18  | SVG Path Strings             | Use `path.content = "M 0 0 L 100 50"`                      |
+| 19  | Path Position                | Set `x`/`y` AFTER `content`                                |
+| 20  | Table appendChild            | Children appear at END of flex layouts                     |
+| 21  | FlexLayout timing            | Add layout BEFORE adding children                          |
+| 22  | Mixed values                 | Handle per-segment for text fills                          |
+| 23  | Large designs                | Call `get_design_context` on sub-nodes                     |
+| 24  | Orphaned shapes at root      | Always verify parent exists before appendChild             |
+| 25  | Silent appendChild failure   | Store parent refs in variables, not ID lookups             |
+| 26  | clipContent defaults true    | Set `board.clipContent = false` on all boards              |
+| 27  | appendChild z-order          | appendChild adds at index 0 (BEHIND), use insertChild      |
+| 28  | insertChild for z-order      | Use `parent.insertChild(index, child)` for stacking        |
+| 29  | x/y are ABSOLUTE coordinates | Use `child.x = parent.x + localX` for positioning          |
+| 30  | Nested text not rendering    | Use flat structure - all elements as direct card children  |
+| 31  | Debug child positioning      | Check `boardX`/`boardY` after appendChild - negative=wrong |
+| 32  | Verify rendering             | Take Penpot screenshot after EACH creation step            |
 
 ---
 

@@ -132,6 +132,45 @@
 
 ---
 
+## Critical Board Patterns
+
+| Issue                        | Solution                                                               |
+| ---------------------------- | ---------------------------------------------------------------------- |
+| Content clipping             | `board.clipContent = false` on ALL boards                              |
+| appendChild z-order          | Use `insertChild(index, child)` - appendChild adds at index 0 (behind) |
+| x/y are ABSOLUTE coordinates | `child.x = parent.x + localX`, `child.y = parent.y + localY`           |
+| Nested text not rendering    | Use flat structure - all elements as direct card children              |
+
+### Z-Order Pattern (CRITICAL)
+
+```javascript
+let zIndex = 0;
+// Add backgrounds first (lower index = behind)
+const bg = penpot.createRectangle();
+card.insertChild(zIndex++, bg);
+// Add text last (higher index = in front)
+const text = penpot.createText('Label');
+card.insertChild(zIndex++, text);
+```
+
+### Child Position Pattern (x/y are ABSOLUTE)
+
+```javascript
+// x/y are page coordinates, NOT relative to parent
+// Formula: child.x = parent.x + localX
+const parent = penpot.createBoard();
+parent.x = 100;
+parent.y = 150;
+
+const child = penpot.createRectangle();
+child.x = 100 + 20; // parent.x + localX = 120
+child.y = 150 + 30; // parent.y + localY = 180
+parent.appendChild(child);
+// Verify: child.boardX = 20, child.boardY = 30 ✅
+```
+
+---
+
 ## Code Snippets
 
 ### Rectangle
@@ -142,6 +181,7 @@ rect.name = 'Rectangle';
 rect.resize(200, 100);
 rect.fills = [{ fillColor: '#ff0000' }];
 rect.borderRadius = 8;
+rect.clipContent = false; // IMPORTANT!
 parent.appendChild(rect);
 ```
 
@@ -231,6 +271,9 @@ avatar.fills = [{ fillColor: '#e5e5e5' }];
 14. Large designs: query sub-nodes
 15. Shapes created at root by default - always `appendChild()` to parent
 16. Verify parent exists before `appendChild()` - fails silently if undefined
+17. **x/y are ABSOLUTE**: `child.x = parent.x + localX` (not relative!)
+18. **Debug positioning**: Check `boardX`/`boardY` after appendChild - negative = wrong
+19. **ALWAYS screenshot**: Use `mcp_Penpot_export_shape` after EACH creation step
 
 ---
 
