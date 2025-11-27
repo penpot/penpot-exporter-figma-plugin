@@ -1,5 +1,14 @@
 # penpot-exporter
 
+## 0.18.0
+
+### Minor Changes
+
+- [#319](https://github.com/penpot/penpot-exporter-figma-plugin/pull/319)
+  [`1a88fb6`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/1a88fb6ae6f6f35627beedff457c39781268c2af)
+  Thanks [@jordisala1991](https://github.com/jordisala1991)! - Add export scope option to choose
+  between exporting all pages or only the current page.
+
 ## 0.17.4
 
 ### Patch Changes
