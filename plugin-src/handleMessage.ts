@@ -11,9 +11,11 @@ import {
 import { transformDocumentNode } from '@plugin/transformers';
 import { flushProgress, reportProgress, resetProgress } from '@plugin/utils';
 
-export const handleExportMessage = async (): Promise<void> => {
+import type { ExportScope } from '@ui/types/progressMessages';
+
+export const handleExportMessage = async (scope: ExportScope): Promise<void> => {
   resetProgress();
-  const document = await transformDocumentNode(figma.root);
+  const document = await transformDocumentNode(figma.root, scope);
 
   flushProgress();
 
