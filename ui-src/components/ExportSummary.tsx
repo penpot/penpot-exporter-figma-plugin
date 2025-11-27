@@ -7,13 +7,15 @@ import { useFigmaContext } from '@ui/context';
 import { fileSizeInMB, formatExportTime } from '@ui/utils';
 
 export const ExportSummary = (): JSX.Element | null => {
-  const { exportedBlob, exportTime, missingFonts, downloadBlob, cancel } = useFigmaContext();
+  const { exportedBlob, exportTime, exportScope, missingFonts, downloadBlob, cancel } =
+    useFigmaContext();
 
   if (!exportedBlob) {
     return null;
   }
 
   const hasMissingFonts = missingFonts && missingFonts.length > 0;
+  const isCurrentPageOnly = exportScope === 'current';
 
   return (
     <Stack space="medium">
@@ -33,6 +35,13 @@ export const ExportSummary = (): JSX.Element | null => {
           )}
         </p>
       </Stack>
+
+      {isCurrentPageOnly && (
+        <Banner icon={<Info size={14} />}>
+          This export contains only the current page. Components and other pages are not included.
+          To export everything, select &quot;All pages&quot;.
+        </Banner>
+      )}
 
       {hasMissingFonts && (
         <Stack space="xsmall">

@@ -1,5 +1,7 @@
 import type { PenpotDocument } from '@ui/types/penpotDocument';
 
+export type ExportScope = 'all' | 'current';
+
 export type Steps =
   | 'processing'
   | 'processAssets'

@@ -1,15 +1,26 @@
-import { Button, Link, Muted } from '@create-figma-plugin/ui';
-import type { JSX } from 'preact';
+import type { SegmentedControlOption } from '@create-figma-plugin/ui';
+import { Button, Muted, SegmentedControl } from '@create-figma-plugin/ui';
+import type { JSX, TargetedEvent } from 'preact';
 import { FormProvider, useForm } from 'react-hook-form';
 
 import { Stack } from '@ui/components/Stack';
 import { useFigmaContext } from '@ui/context';
+import type { ExportScope } from '@ui/types/progressMessages';
 
 export type FormValues = Record<string, string>;
 
+const scopeOptions: SegmentedControlOption[] = [
+  { value: 'all', children: 'All pages' },
+  { value: 'current', children: 'Current page' }
+];
+
 export const ExportForm = (): JSX.Element => {
-  const { cancel, exportPenpot } = useFigmaContext();
+  const { cancel, exportPenpot, exportScope, setExportScope } = useFigmaContext();
   const methods = useForm<FormValues>();
+
+  const handleScopeChange = (event: TargetedEvent<HTMLInputElement>): void => {
+    setExportScope(event.currentTarget.value as ExportScope);
+  };
 
   return (
     <FormProvider {...methods}>
@@ -29,6 +40,21 @@ export const ExportForm = (): JSX.Element => {
           </Stack>
 
           <Stack space="xsmall">
+            <strong style={{ fontSize: 13 }}>Export scope</strong>
+            <div style={{ width: 'fit-content' }}>
+              <SegmentedControl
+                options={scopeOptions}
+                value={exportScope}
+                onChange={handleScopeChange}
+              />
+            </div>
+            <Muted>
+              For large documents, try exporting the current page first to test, then do a full
+              export.
+            </Muted>
+          </Stack>
+
+          <Stack space="xsmall">
             <strong style={{ fontSize: 13 }}>How it works</strong>
             <ol style={{ margin: 0, paddingLeft: '1.25rem' }}>
               <li style={{ marginBottom: '0.5rem' }}>
@@ -43,16 +69,6 @@ export const ExportForm = (): JSX.Element => {
               </li>
             </ol>
           </Stack>
-
-          <Muted>
-            Need a refresher on importing?{' '}
-            <Link
-              href="https://help.penpot.app/user-guide/import-export/#importing-files"
-              target="_blank"
-            >
-              Learn how →
-            </Link>
-          </Muted>
 
           <Stack space="xsmall" direction="row">
             <Button fullWidth>Start Export</Button>

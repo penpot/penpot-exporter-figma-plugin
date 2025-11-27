@@ -1,11 +1,10 @@
 import { exportStream } from '@penpot/library';
 import { useEffect, useRef, useState } from 'preact/hooks';
 
-import type { FormValues } from '@ui/components/ExportForm';
 import { type MessageData, createInMemoryWritable, sendMessage } from '@ui/context';
 import { identify, track } from '@ui/metrics/mixpanel';
 import { parse } from '@ui/parser';
-import type { Steps } from '@ui/types/progressMessages';
+import type { ExportScope, Steps } from '@ui/types/progressMessages';
 import { formatExportTime } from '@ui/utils';
 import { fileSizeInMB } from '@ui/utils/fileSizeInMB';
 
@@ -23,9 +22,11 @@ export type UseFigmaHook = {
   progressPercentage: number;
   exportedBlob: { blob: Blob; filename: string } | null;
   exportTime: number | null;
+  exportScope: ExportScope;
+  setExportScope: (scope: ExportScope) => void;
   retry: () => void;
   cancel: () => void;
-  exportPenpot: (data: FormValues) => void;
+  exportPenpot: () => void;
   downloadBlob: () => void;
 };
 
@@ -36,6 +37,7 @@ export const useFigma = (): UseFigmaHook => {
   const [error, setError] = useState(false);
   const [exportedBlob, setExportedBlob] = useState<{ blob: Blob; filename: string } | null>(null);
   const [exportTime, setExportTime] = useState<number | null>(null);
+  const [exportScope, setExportScope] = useState<ExportScope>('all');
   const exportStartTimeRef = useRef<number | null>(null);
 
   const [step, setStep] = useState<Steps>('processing');
@@ -71,6 +73,7 @@ export const useFigma = (): UseFigmaHook => {
         setError(false);
         setExportedBlob(null);
         setExportTime(null);
+        setExportScope('all');
         setStep('processing');
         setCurrentItem('');
 
@@ -208,9 +211,9 @@ export const useFigma = (): UseFigmaHook => {
     setExporting(true);
     exportStartTimeRef.current = Date.now();
 
-    track('File Export Started');
+    track('File Export Started', { scope: exportScope });
 
-    postMessage('export');
+    postMessage('export', { scope: exportScope });
   };
 
   useEffect(() => {
@@ -237,6 +240,8 @@ export const useFigma = (): UseFigmaHook => {
     progressPercentage,
     exportedBlob,
     exportTime,
+    exportScope,
+    setExportScope,
     retry,
     cancel,
     exportPenpot,

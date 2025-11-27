@@ -1,8 +1,17 @@
 import { getUserData } from '@plugin/getUserData';
 import { handleExportMessage, handleRetryMessage } from '@plugin/handleMessage';
 
+import type { ExportScope } from '@ui/types/progressMessages';
+
 const BASE_HEIGHT = 500;
 const BASE_WIDTH = 290;
+
+type ExportMessage = {
+  type: 'export';
+  data: {
+    scope: ExportScope;
+  };
+};
 
 const onMessage: MessageEventHandler = message => {
   if (message.type === 'ready') {
@@ -14,7 +23,9 @@ const onMessage: MessageEventHandler = message => {
   }
 
   if (message.type === 'export') {
-    handleExportMessage();
+    const exportMessage = message as ExportMessage;
+    const scope = exportMessage.data?.scope ?? 'all';
+    handleExportMessage(scope);
   }
 
   if (message.type === 'cancel') {
