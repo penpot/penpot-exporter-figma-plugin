@@ -1,4 +1,4 @@
-import { parseSVG } from 'svg-path-parser';
+import { type Command, parseSVG } from 'svg-path-parser';
 
 import {
   transformBlend,
@@ -13,6 +13,17 @@ import {
 import { translateCommands, translateWindingRule } from '@plugin/translators/vectors';
 
 import type { PathShape } from '@ui/lib/types/shapes/pathShape';
+
+// Cache parsed SVG commands to avoid re-parsing same path data
+const parsedCache = new Map<string, Command[]>();
+const getParsedCommands = (pathData: string): Command[] => {
+  let commands = parsedCache.get(pathData);
+  if (!commands) {
+    commands = parseSVG(pathData);
+    parsedCache.set(pathData, commands);
+  }
+  return commands;
+};
 
 export const transformVectorPaths = (node: VectorNode): PathShape[] => {
   let regions: readonly VectorRegion[] = [];
@@ -56,9 +67,8 @@ export const transformVectorPaths = (node: VectorNode): PathShape[] => {
 
   for (let i = 0; i < node.vectorPaths.length; i++) {
     const vectorPath = node.vectorPaths[i];
-    const currentVertices = getVertices(vectorPath.data);
-    const currentHash = hashVertexSet(currentVertices);
     let shouldInclude = false;
+    let currentHash: string | undefined;
 
     // Include if there are strokes but NO fillGeometry (stroke-only vector)
     if (hasStrokes && !hasGeometry) {
@@ -75,14 +85,21 @@ export const transformVectorPaths = (node: VectorNode): PathShape[] => {
     // For windingRule 'NONE' paths when hasStrokes && hasGeometry:
     // Only EXCLUDE if this vectorPath visits the SAME vertices as the COMBINED fillGeometry
     else if (hasStrokes && hasGeometry && vectorPath.windingRule === 'NONE') {
+      currentHash = hashVertexSet(getVertices(vectorPath.data));
       shouldInclude = currentHash !== combinedFillGeometryHash;
     }
 
-    // Deduplicate: skip if we've already seen a path with identical vertices (O(1) hash lookup)
-    if (shouldInclude && !seenVertexHashes.has(currentHash)) {
-      seenVertexHashes.add(currentHash);
-      includedVectorPathsData.push(vectorPath.data);
-      pathShapes.push(transformVectorPath(node, vectorPath, regions[i], count++));
+    if (shouldInclude) {
+      // Lazy compute hash only when needed for deduplication
+      if (currentHash === undefined) {
+        currentHash = hashVertexSet(getVertices(vectorPath.data));
+      }
+      // Deduplicate: skip if we've already seen a path with identical vertices (O(1) hash lookup)
+      if (!seenVertexHashes.has(currentHash)) {
+        seenVertexHashes.add(currentHash);
+        includedVectorPathsData.push(vectorPath.data);
+        pathShapes.push(transformVectorPath(node, vectorPath, regions[i], count++));
+      }
     }
   }
 
@@ -116,7 +133,7 @@ export const transformVectorPaths = (node: VectorNode): PathShape[] => {
  */
 const extractVertices = (pathData: string): Set<string> => {
   const vertices = new Set<string>();
-  const commands = parseSVG(pathData);
+  const commands = getParsedCommands(pathData);
 
   for (const cmd of commands) {
     if ('x' in cmd && 'y' in cmd && typeof cmd.x === 'number' && typeof cmd.y === 'number') {
@@ -168,7 +185,7 @@ const transformVectorPath = (
   vectorRegion: VectorRegion | undefined,
   index: number
 ): PathShape => {
-  const normalizedPaths = parseSVG(vectorPath.data);
+  const normalizedPaths = getParsedCommands(vectorPath.data);
 
   return {
     type: 'path',
