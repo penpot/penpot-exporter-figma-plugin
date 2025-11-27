@@ -34,12 +34,12 @@ export const translateFills = (
     const penpotFill = translateFill(fill);
 
     if (penpotFill) {
-      // fills are applied in reverse order in Figma, that's why we unshift
-      penpotFills.unshift(penpotFill);
+      penpotFills.push(penpotFill);
     }
   }
 
-  return penpotFills;
+  // fills are applied in reverse order in Figma
+  return penpotFills.reverse();
 };
 
 export const translateFillStyleId = (

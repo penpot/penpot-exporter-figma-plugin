@@ -22,10 +22,11 @@ export const translateStrokes = (
       continue;
     }
 
-    penpotStrokes.unshift(penpotStroke);
+    penpotStrokes.push(penpotStroke);
   }
 
-  return penpotStrokes;
+  // strokes are applied in reverse order in Figma
+  return penpotStrokes.reverse();
 };
 
 export const translateStroke = (
