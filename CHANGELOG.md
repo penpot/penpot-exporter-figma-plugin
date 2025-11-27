@@ -1,5 +1,17 @@
 # penpot-exporter
 
+## 0.17.4
+
+### Patch Changes
+
+- [#318](https://github.com/penpot/penpot-exporter-figma-plugin/pull/318)
+  [`610f665`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/610f66502a24ed0a9af60f084b5a16b0c088c3b2)
+  Thanks [@jordisala1991](https://github.com/jordisala1991)! - Update internal dependencies
+
+- [#316](https://github.com/penpot/penpot-exporter-figma-plugin/pull/316)
+  [`89fd36e`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/89fd36e920f2868e98db2c96785e8cfb0f7b5021)
+  Thanks [@jordisala1991](https://github.com/jordisala1991)! - Improve svg parsing
+
 ## 0.17.3
 
 ### Patch Changes
