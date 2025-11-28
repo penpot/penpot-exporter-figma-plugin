@@ -31,6 +31,11 @@ export class Paragraph {
     segment: TextSegment,
     node: TextNode
   ): PenpotTextNode | undefined {
+    // Don't apply indentation to newline characters themselves
+    if (textNode.text === '\n') {
+      return;
+    }
+
     if (this.isParagraphStarting || this.isFirstTextNode(textNode)) {
       this.list.update(textNode, segment);
 
