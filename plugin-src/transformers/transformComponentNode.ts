@@ -21,7 +21,7 @@ import {
   transformVariantNameAndProperties
 } from '@plugin/transformers/partials';
 import { registerComponentProperties } from '@plugin/translators/components';
-import { generateUuid } from '@plugin/utils';
+import { generateDeterministicUuid } from '@plugin/utils';
 
 import type { ComponentShape } from '@ui/lib/types/shapes/componentShape';
 
@@ -32,7 +32,7 @@ export const transformComponentNode = async (node: ComponentNode): Promise<Compo
   const component: ComponentShape = {
     type: 'component',
     showContent: !node.clipsContent,
-    componentId: generateUuid(),
+    componentId: generateDeterministicUuid(node.key),
     componentRoot: true,
     mainInstance: true,
     variantId,

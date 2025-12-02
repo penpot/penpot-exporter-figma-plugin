@@ -28,7 +28,6 @@ export type ComponentInstance = ShapeBaseAttributes &
   LayoutAttributes &
   LayoutChildAttributes &
   Children & {
-    mainComponentId: Uuid;
     componentRoot: boolean;
     showContent?: boolean;
     isOrphan: boolean;

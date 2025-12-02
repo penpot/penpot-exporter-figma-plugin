@@ -8,16 +8,11 @@ let remoteFileId: Uuid | undefined = undefined;
 
 export const createComponentInstance = (
   context: PenpotContext,
-  { type: _type, mainComponentId, ...shape }: ComponentInstance
+  { type: _type, ...shape }: ComponentInstance
 ): void => {
-  const componentRoot = componentRoots.get(mainComponentId);
-
-  if (!shape.shapeRef) {
-    shape.shapeRef = mainComponentId;
-  }
+  const componentRoot = componentRoots.get(shape.componentId!);
 
   shape.componentFile = componentRoot ? context.currentFileId : getRemoteFileId(context);
-  shape.componentId = componentRoot ? componentRoot.componentId : context.genId();
 
   createArtboard(context, shape);
 };

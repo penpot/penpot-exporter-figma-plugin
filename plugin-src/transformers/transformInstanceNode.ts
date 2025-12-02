@@ -3,6 +3,7 @@ import {
   transformAutoLayout,
   transformBlend,
   transformChildren,
+  transformComponentId,
   transformConstraints,
   transformCornerRadius,
   transformDimension,
@@ -10,7 +11,6 @@ import {
   transformFills,
   transformGrids,
   transformId,
-  transformIds,
   transformLayoutAttributes,
   transformOverrides,
   transformProportion,
@@ -49,11 +49,12 @@ export const transformInstanceNode = async (
   return {
     type: 'instance',
     name: node.name,
-    mainComponentId: transformId(mainComponent),
+    id: transformId(node),
+    shapeRef: transformId(mainComponent),
+    componentId: transformComponentId(mainComponent),
     componentRoot: isComponentRoot(node),
     showContent: !node.clipsContent,
     isOrphan,
-    ...transformIds(node),
     ...transformFills(node),
     ...transformEffects(node),
     ...transformStrokes(node),
@@ -82,7 +83,7 @@ const getPrimaryComponent = (mainComponent: ComponentNode): ComponentNode | Comp
 };
 
 const isOrphanInstance = (primaryComponent: ComponentNode | ComponentSetNode): boolean => {
-  return primaryComponent.parent === null || primaryComponent.remote;
+  return primaryComponent.parent === null;
 };
 
 const isComponentRoot = (node: InstanceNode): boolean => {

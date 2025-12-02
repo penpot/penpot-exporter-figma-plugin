@@ -1,5 +1,5 @@
 import { identifiers } from '@plugin/libraries';
-import { generateUuid } from '@plugin/utils';
+import { generateDeterministicUuid, generateUuid } from '@plugin/utils';
 
 import type { ShapeBaseAttributes } from '@ui/lib/types/shapes/shape';
 import type { Uuid } from '@ui/lib/types/utils/uuid';
@@ -41,6 +41,10 @@ const transformShapeRef = (node: SceneNode): Uuid | undefined => {
 
 export const transformId = (node: SceneNode): Uuid => {
   return parseFigmaId(normalizeNodeId(node.id));
+};
+
+export const transformComponentId = (node: ComponentNode): Uuid => {
+  return generateDeterministicUuid(node.key);
 };
 
 export const transformIds = (node: SceneNode): Pick<ShapeBaseAttributes, 'id' | 'shapeRef'> => {
