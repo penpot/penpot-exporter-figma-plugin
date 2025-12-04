@@ -25,9 +25,19 @@ import { generateDeterministicUuid } from '@plugin/utils';
 
 import type { ComponentShape } from '@ui/lib/types/shapes/componentShape';
 
+export let isSharedLibrary: boolean = false;
+
 export const transformComponentNode = async (node: ComponentNode): Promise<ComponentShape> => {
   const isVariant = node.parent?.type === 'COMPONENT_SET';
   const variantId = isVariant ? transformId(node.parent) : undefined;
+
+  node.setPluginData('figmaFile', figma.root.name);
+
+  const status = await node.getPublishStatusAsync();
+
+  if (status === 'CURRENT' || status === 'CHANGED') {
+    isSharedLibrary = true;
+  }
 
   const component: ComponentShape = {
     type: 'component',

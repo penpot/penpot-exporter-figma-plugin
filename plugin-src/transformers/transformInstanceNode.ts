@@ -22,6 +22,10 @@ import {
 
 import type { ComponentInstance } from '@ui/types';
 
+const remoteFileIds: Record<string, string> = {
+  'Design System': 'fffce8d7-4b40-8153-8007-349d206008f1'
+};
+
 export const transformInstanceNode = async (
   node: InstanceNode
 ): Promise<ComponentInstance | undefined> => {
@@ -51,6 +55,9 @@ export const transformInstanceNode = async (
     name: node.name,
     id: transformId(node),
     shapeRef: transformId(mainComponent),
+    componentFile: mainComponent.remote
+      ? remoteFileIds[mainComponent.getPluginData('figmaFile')]
+      : undefined,
     componentId: transformComponentId(mainComponent),
     componentRoot: isComponentRoot(node),
     showContent: !node.clipsContent,

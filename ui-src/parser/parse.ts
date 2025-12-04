@@ -14,14 +14,15 @@ export const parse = async (document: PenpotDocument): Promise<PenpotContext> =>
     children = [],
     components,
     tokens,
-    componentProperties: recordComponentProperties
+    componentProperties: recordComponentProperties,
+    isShared
   } = document;
 
   init(componentRoots, components);
   init(componentProperties, recordComponentProperties);
 
   const context = createBuildContext({ referer: `penpot-exporter-figma-plugin/${APP_VERSION}` });
-  context.addFile({ name });
+  context.addFile({ name, isShared });
 
   await buildAssets(context, document);
   await buildFile(context, children);

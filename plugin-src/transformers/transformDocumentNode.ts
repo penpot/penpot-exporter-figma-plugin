@@ -7,7 +7,8 @@ import {
   registerPaintStyles,
   registerTextStyles
 } from '@plugin/processors';
-import { processAssets } from '@plugin/processors/processAssets';
+import { processAssets } from '@plugin/processors';
+import { isSharedLibrary } from '@plugin/transformers';
 
 import type { PenpotDocument } from '@ui/types';
 import type { ExportScope } from '@ui/types/progressMessages';
@@ -33,6 +34,7 @@ export const transformDocumentNode = async (
     tokens,
     components: toObject(components),
     componentProperties: toObject(componentProperties),
-    missingFonts: Array.from(missingFonts)
+    missingFonts: Array.from(missingFonts),
+    isShared: isSharedLibrary
   };
 };

@@ -14,4 +14,5 @@ export type PenpotDocument = {
   tokens?: Tokens;
   componentProperties: Record<string, ComponentProperty>;
   missingFonts: string[];
+  isShared: boolean;
 };
