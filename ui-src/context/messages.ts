@@ -1,6 +1,6 @@
 import { createMessageBuffer } from '@common/messageBuffer';
 
-import { BUFFERED_PROGRESS_TYPES, type PluginMessage } from '@ui/types/progressMessages';
+import { BUFFERED_PROGRESS_TYPES, type PluginMessage } from '@ui/types';
 
 export type MessageData = { pluginMessage?: PluginMessage };
 

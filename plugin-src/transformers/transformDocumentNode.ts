@@ -10,8 +10,7 @@ import {
 import { processAssets } from '@plugin/processors';
 import { isSharedLibrary } from '@plugin/transformers';
 
-import type { PenpotDocument } from '@ui/types';
-import type { ExportScope } from '@ui/types/progressMessages';
+import type { ExportScope, PenpotDocument } from '@ui/types';
 
 export const transformDocumentNode = async (
   node: DocumentNode,

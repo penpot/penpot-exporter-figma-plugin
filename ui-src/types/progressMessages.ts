@@ -1,4 +1,4 @@
-import type { PenpotDocument } from '@ui/types/penpotDocument';
+import type { PenpotDocument } from '@ui/types';
 
 export type ExportScope = 'all' | 'current';
 

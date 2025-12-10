@@ -1,4 +1,4 @@
-import { overrides } from '@plugin/libraries';
+import { externalLibraries, overrides } from '@plugin/libraries';
 import {
   transformAutoLayout,
   transformBlend,
@@ -21,10 +21,6 @@ import {
 } from '@plugin/transformers/partials';
 
 import type { ComponentInstance } from '@ui/types';
-
-const remoteFileIds: Record<string, string> = {
-  'Design System': 'fffce8d7-4b40-8153-8007-349d206008f1'
-};
 
 export const transformInstanceNode = async (
   node: InstanceNode
@@ -50,14 +46,17 @@ export const transformInstanceNode = async (
   }
   overrides.set(node.id, fetchedOverrides);
 
+  const figmaFile = mainComponent.getPluginData('figmaFile');
+
   return {
     type: 'instance',
     name: node.name,
     id: transformId(node),
     shapeRef: transformId(mainComponent),
-    componentFile: mainComponent.remote
-      ? remoteFileIds[mainComponent.getPluginData('figmaFile')]
-      : undefined,
+    componentFile:
+      mainComponent.remote && externalLibraries.has(figmaFile)
+        ? externalLibraries.get(figmaFile)
+        : undefined,
     componentId: transformComponentId(mainComponent),
     componentRoot: isComponentRoot(node),
     showContent: !node.clipsContent,

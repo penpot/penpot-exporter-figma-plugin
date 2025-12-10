@@ -1,22 +1,41 @@
-import type { SegmentedControlOption } from '@create-figma-plugin/ui';
-import { Button, Muted, SegmentedControl } from '@create-figma-plugin/ui';
+import {
+  Button,
+  Muted,
+  SegmentedControl,
+  type SegmentedControlOption
+} from '@create-figma-plugin/ui';
 import type { JSX, TargetedEvent } from 'preact';
+import { useEffect } from 'preact/hooks';
 import { FormProvider, useForm } from 'react-hook-form';
 
+import { ExternalLibrariesFieldSet } from '@ui/components/ExternalLibrariesFieldSet';
 import { Stack } from '@ui/components/Stack';
-import { useFigmaContext } from '@ui/context';
-import type { ExportScope } from '@ui/types/progressMessages';
-
-export type FormValues = Record<string, string>;
+import { type FormValues, useFigmaContext } from '@ui/context';
+import type { ExportScope } from '@ui/types';
 
 const scopeOptions: SegmentedControlOption[] = [
   { value: 'all', children: 'All pages' },
   { value: 'current', children: 'Current page' }
 ];
 
+// Hardcoded for now - will come from context/props later
+const EXTERNAL_LIBRARIES = ['Design System'];
+
 export const ExportForm = (): JSX.Element => {
   const { cancel, exportPenpot, exportScope, setExportScope } = useFigmaContext();
-  const methods = useForm<FormValues>();
+  const methods = useForm<FormValues>({
+    defaultValues: {
+      externalLibraries: []
+    }
+  });
+
+  useEffect(() => {
+    if (EXTERNAL_LIBRARIES.length > 0) {
+      methods.reset({
+        externalLibraries: EXTERNAL_LIBRARIES.map(name => ({ name, uuid: '' }))
+      });
+    }
+  }, [methods]);
 
   const handleScopeChange = (event: TargetedEvent<HTMLInputElement>): void => {
     setExportScope(event.currentTarget.value as ExportScope);
@@ -53,6 +72,8 @@ export const ExportForm = (): JSX.Element => {
               export.
             </Muted>
           </Stack>
+
+          <ExternalLibrariesFieldSet />
 
           <Stack space="xsmall">
             <strong style={{ fontSize: 13 }}>How it works</strong>

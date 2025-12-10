@@ -4,9 +4,13 @@ import { useEffect, useRef, useState } from 'preact/hooks';
 import { type MessageData, createInMemoryWritable, sendMessage } from '@ui/context';
 import { identify, track } from '@ui/metrics/mixpanel';
 import { parse } from '@ui/parser';
-import type { ExportScope, Steps } from '@ui/types/progressMessages';
+import type { ExportScope, ExternalLibrary, Steps } from '@ui/types';
 import { formatExportTime } from '@ui/utils';
 import { fileSizeInMB } from '@ui/utils/fileSizeInMB';
+
+export type FormValues = {
+  externalLibraries: ExternalLibrary[];
+};
 
 export type UseFigmaHook = {
   missingFonts: string[] | undefined;
@@ -26,7 +30,7 @@ export type UseFigmaHook = {
   setExportScope: (scope: ExportScope) => void;
   retry: () => void;
   cancel: () => void;
-  exportPenpot: () => void;
+  exportPenpot: (data: FormValues) => void;
   downloadBlob: () => void;
 };
 
@@ -207,13 +211,13 @@ export const useFigma = (): UseFigmaHook => {
     postMessage('cancel');
   };
 
-  const exportPenpot = (): void => {
+  const exportPenpot = (data: FormValues): void => {
     setExporting(true);
     exportStartTimeRef.current = Date.now();
 
     track('File Export Started', { scope: exportScope });
 
-    postMessage('export', { scope: exportScope });
+    postMessage('export', { scope: exportScope, libraries: data.externalLibraries });
   };
 
   useEffect(() => {

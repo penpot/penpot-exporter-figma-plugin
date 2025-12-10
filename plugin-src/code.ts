@@ -1,7 +1,7 @@
 import { getUserData } from '@plugin/getUserData';
 import { handleExportMessage, handleRetryMessage } from '@plugin/handleMessage';
 
-import type { ExportScope } from '@ui/types/progressMessages';
+import type { ExportScope, ExternalLibrary } from '@ui/types';
 
 const BASE_HEIGHT = 500;
 const BASE_WIDTH = 290;
@@ -10,6 +10,7 @@ type ExportMessage = {
   type: 'export';
   data: {
     scope: ExportScope;
+    libraries: ExternalLibrary[];
   };
 };
 
@@ -25,7 +26,9 @@ const onMessage: MessageEventHandler = message => {
   if (message.type === 'export') {
     const exportMessage = message as ExportMessage;
     const scope = exportMessage.data?.scope ?? 'all';
-    handleExportMessage(scope);
+    const libraries = exportMessage.data?.libraries ?? {};
+
+    handleExportMessage(scope, libraries);
   }
 
   if (message.type === 'cancel') {

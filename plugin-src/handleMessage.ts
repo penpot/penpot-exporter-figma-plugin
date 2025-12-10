@@ -1,6 +1,7 @@
 import {
   componentProperties,
   components,
+  externalLibraries,
   images,
   missingFonts,
   overrides,
@@ -11,10 +12,21 @@ import {
 import { transformDocumentNode } from '@plugin/transformers';
 import { flushProgress, reportProgress, resetProgress } from '@plugin/utils';
 
-import type { ExportScope } from '@ui/types/progressMessages';
+import type { ExportScope, ExternalLibrary } from '@ui/types';
 
-export const handleExportMessage = async (scope: ExportScope): Promise<void> => {
+const initializeExternalLibraries = (libraries: ExternalLibrary[]): void => {
+  for (const library of libraries) {
+    externalLibraries.set(library.name, library.uuid);
+  }
+};
+
+export const handleExportMessage = async (
+  scope: ExportScope,
+  libraries: ExternalLibrary[]
+): Promise<void> => {
   resetProgress();
+
+  initializeExternalLibraries(libraries);
   const document = await transformDocumentNode(figma.root, scope);
 
   flushProgress();

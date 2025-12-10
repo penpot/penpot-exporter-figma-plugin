@@ -4,7 +4,7 @@ import { ProgressBar } from '@ui/components/ProgressBar';
 import { ProgressStepper } from '@ui/components/ProgressStepper';
 import { Stack } from '@ui/components/Stack';
 import { useFigmaContext } from '@ui/context';
-import type { Steps } from '@ui/types/progressMessages';
+import type { Steps } from '@ui/types';
 
 const stepMessages: Record<Steps, string> = {
   processing: 'Figma pages scanned 💪',
