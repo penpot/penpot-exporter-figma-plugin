@@ -77,7 +77,7 @@ export const ExportSummary = (): JSX.Element | null => {
 
       <Stack space="xsmall" direction="row">
         <Button fullWidth onClick={downloadBlob}>
-          Download File
+          <strong>Download File</strong>
         </Button>
         <Button secondary fullWidth onClick={cancel}>
           Close

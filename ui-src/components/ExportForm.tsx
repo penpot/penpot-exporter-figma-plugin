@@ -101,11 +101,13 @@ export const ExportForm = (): JSX.Element => {
             style={{
               display: 'flex',
               gap: '0.5rem',
-              alignSelf: 'center',
-              width: 'fit-content'
+              justifyContent: 'right',
+              width: '100%'
             }}
           >
-            <Button style={{ flex: '0 1 auto' }}>Start Export</Button>
+            <Button style={{ flex: '0 1 auto' }}>
+              <strong>Start Export</strong>
+            </Button>
             <Button secondary onClick={cancel} style={{ flex: '0 1 auto' }}>
               Cancel
             </Button>

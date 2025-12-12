@@ -36,7 +36,7 @@ const onMessage: MessageEventHandler = message => {
   }
 
   if (message.type === 'resize') {
-    const width = (message as { width?: number }).width ?? BASE_WIDTH;
+    const width = message.width ?? BASE_WIDTH;
     const height = message.height ?? BASE_HEIGHT;
     figma.ui.resize(width, height);
   }
