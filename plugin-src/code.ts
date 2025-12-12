@@ -4,7 +4,7 @@ import { handleExportMessage, handleRetryMessage } from '@plugin/handleMessage';
 import type { ExportScope, ExternalLibrary } from '@ui/types';
 
 const BASE_HEIGHT = 500;
-const BASE_WIDTH = 290;
+const BASE_WIDTH = 560;
 
 type ExportMessage = {
   type: 'export';
@@ -36,7 +36,9 @@ const onMessage: MessageEventHandler = message => {
   }
 
   if (message.type === 'resize') {
-    figma.ui.resize(BASE_WIDTH, message.height);
+    const width = (message as { width?: number }).width ?? BASE_WIDTH;
+    const height = message.height ?? BASE_HEIGHT;
+    figma.ui.resize(width, height);
   }
 };
 
