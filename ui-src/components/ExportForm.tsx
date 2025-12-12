@@ -18,11 +18,8 @@ const scopeOptions: SegmentedControlOption[] = [
   { value: 'current', children: 'Current page' }
 ];
 
-// Hardcoded for now - will come from context/props later
-const EXTERNAL_LIBRARIES = ['Design System'];
-
 export const ExportForm = (): JSX.Element => {
-  const { cancel, exportPenpot, exportScope, setExportScope } = useFigmaContext();
+  const { cancel, exportPenpot, exportScope, exportLibraries, setExportScope } = useFigmaContext();
   const methods = useForm<FormValues>({
     defaultValues: {
       externalLibraries: []
@@ -30,12 +27,12 @@ export const ExportForm = (): JSX.Element => {
   });
 
   useEffect(() => {
-    if (EXTERNAL_LIBRARIES.length > 0) {
+    if (exportLibraries.length > 0) {
       methods.reset({
-        externalLibraries: EXTERNAL_LIBRARIES.map(name => ({ name, uuid: '' }))
+        externalLibraries: exportLibraries.map(name => ({ name, uuid: '' }))
       });
     }
-  }, [methods]);
+  }, [exportLibraries]);
 
   const handleScopeChange = (event: TargetedEvent<HTMLInputElement>): void => {
     setExportScope(event.currentTarget.value as ExportScope);

@@ -42,3 +42,10 @@ const onMessage: MessageEventHandler = message => {
 
 figma.showUI(__html__, { themeColors: true, width: BASE_WIDTH, height: BASE_HEIGHT });
 figma.ui.onmessage = onMessage;
+
+figma.teamLibrary.getAvailableLibraryVariableCollectionsAsync().then(collections => {
+  figma.ui.postMessage({
+    type: 'EXTERNAL_LIBRARIES',
+    data: collections.map(collection => collection.libraryName)
+  });
+});

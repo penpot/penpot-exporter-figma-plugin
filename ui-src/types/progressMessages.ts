@@ -66,6 +66,11 @@ export type UserDataMessage = {
   };
 };
 
+export type ExternalLibrariesMessage = {
+  type: 'EXTERNAL_LIBRARIES';
+  data: string[];
+};
+
 export type PluginMessage =
   | PenpotDocumentMessage
   | ProgressStepMessage
@@ -74,7 +79,8 @@ export type PluginMessage =
   | ProgressExportMessage
   | ReloadMessage
   | ErrorMessage
-  | UserDataMessage;
+  | UserDataMessage
+  | ExternalLibrariesMessage;
 
 /**
  * Types that should be buffered (only the latest message of each type is kept)

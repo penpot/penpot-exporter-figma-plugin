@@ -27,6 +27,7 @@ export type UseFigmaHook = {
   exportedBlob: { blob: Blob; filename: string } | null;
   exportTime: number | null;
   exportScope: ExportScope;
+  exportLibraries: string[];
   setExportScope: (scope: ExportScope) => void;
   retry: () => void;
   cancel: () => void;
@@ -42,6 +43,7 @@ export const useFigma = (): UseFigmaHook => {
   const [exportedBlob, setExportedBlob] = useState<{ blob: Blob; filename: string } | null>(null);
   const [exportTime, setExportTime] = useState<number | null>(null);
   const [exportScope, setExportScope] = useState<ExportScope>('all');
+  const [exportLibraries, setExportLibraries] = useState<string[]>([]);
   const exportStartTimeRef = useRef<number | null>(null);
 
   const [step, setStep] = useState<Steps>('processing');
@@ -64,6 +66,10 @@ export const useFigma = (): UseFigmaHook => {
     const { pluginMessage } = event.data;
 
     switch (pluginMessage.type) {
+      case 'EXTERNAL_LIBRARIES': {
+        setExportLibraries(pluginMessage.data);
+        break;
+      }
       case 'USER_DATA': {
         identify({ userId: pluginMessage.data.userId });
         track('Plugin Loaded');
@@ -245,6 +251,7 @@ export const useFigma = (): UseFigmaHook => {
     exportedBlob,
     exportTime,
     exportScope,
+    exportLibraries,
     setExportScope,
     retry,
     cancel,
