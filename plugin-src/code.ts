@@ -45,9 +45,26 @@ const onMessage: MessageEventHandler = message => {
 figma.showUI(__html__, { themeColors: true, width: BASE_WIDTH, height: BASE_HEIGHT });
 figma.ui.onmessage = onMessage;
 
-figma.teamLibrary.getAvailableLibraryVariableCollectionsAsync().then(collections => {
-  figma.ui.postMessage({
-    type: 'EXTERNAL_LIBRARIES',
-    data: collections.map(collection => collection.libraryName)
+figma.teamLibrary
+  .getAvailableLibraryVariableCollectionsAsync()
+  .then(collections => {
+    const libraryNames = Array.from(
+      new Set(
+        collections
+          .map(collection => collection.libraryName)
+          .filter((name): name is string => Boolean(name))
+      )
+    );
+
+    figma.ui.postMessage({
+      type: 'EXTERNAL_LIBRARIES',
+      data: libraryNames
+    });
+  })
+  .catch(error => {
+    console.error('Error fetching external libraries:', error);
+    figma.ui.postMessage({
+      type: 'EXTERNAL_LIBRARIES',
+      data: []
+    });
   });
-});
