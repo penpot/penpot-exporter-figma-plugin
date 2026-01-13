@@ -13,6 +13,7 @@ export type PenpotDocument = {
   textStyles: Record<string, TypographyStyle>;
   tokens?: Tokens;
   componentProperties: Record<string, ComponentProperty>;
+  externalLibraries: Record<string, string>;
   missingFonts: string[];
   isShared: boolean;
 };

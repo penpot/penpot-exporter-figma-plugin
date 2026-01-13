@@ -1,7 +1,7 @@
 import { identifiers } from '@plugin/libraries';
-import { generateDeterministicUuid, generateUuid } from '@plugin/utils';
+import { generateDeterministicUuid } from '@plugin/utils';
 
-import type { ShapeBaseAttributes } from '@ui/lib/types/shapes/shape';
+import type { ShapeAttributes, ShapeBaseAttributes } from '@ui/lib/types/shapes/shape';
 import type { Uuid } from '@ui/lib/types/utils/uuid';
 
 const parseFigmaId = (figmaId: string): Uuid => {
@@ -11,7 +11,7 @@ const parseFigmaId = (figmaId: string): Uuid => {
     return id;
   }
 
-  const newId = generateUuid();
+  const newId = generateDeterministicUuid(figmaId);
 
   identifiers.set(figmaId, newId);
 
@@ -43,14 +43,30 @@ export const transformId = (node: SceneNode): Uuid => {
   return parseFigmaId(normalizeNodeId(node.id));
 };
 
-export const transformComponentId = (node: ComponentNode): Uuid => {
-  return generateDeterministicUuid(node.key);
-};
-
 export const transformIds = (node: SceneNode): Pick<ShapeBaseAttributes, 'id' | 'shapeRef'> => {
   return {
     id: transformId(node),
     shapeRef: transformShapeRef(node)
+  };
+};
+
+export const transformComponentIds = (
+  node: ComponentNode
+): Pick<ShapeBaseAttributes, 'id'> & Pick<ShapeAttributes, 'componentId'> => {
+  return {
+    id: generateDeterministicUuid(`id-${node.key}`),
+    componentId: generateDeterministicUuid(node.key)
+  };
+};
+
+export const transformInstanceIds = (
+  node: InstanceNode,
+  mainComponent: ComponentNode
+): Pick<ShapeBaseAttributes, 'id' | 'shapeRef'> & Pick<ShapeAttributes, 'componentId'> => {
+  return {
+    id: transformId(node),
+    shapeRef: transformShapeRef(node) ?? generateDeterministicUuid(`id-${mainComponent.key}`),
+    componentId: generateDeterministicUuid(mainComponent.key)
   };
 };
 

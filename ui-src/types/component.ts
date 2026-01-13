@@ -4,7 +4,6 @@ import type {
   ShapeBaseAttributes,
   ShapeGeomAttributes
 } from '@ui/lib/types/shapes/shape';
-import type { VariantProperty } from '@ui/lib/types/shapes/variant';
 import type { Children } from '@ui/lib/types/utils/children';
 import type { Uuid } from '@ui/lib/types/utils/uuid';
 
@@ -33,17 +32,6 @@ export type ComponentInstance = ShapeBaseAttributes &
     isOrphan: boolean;
     type: 'instance';
   };
-
-export type UiComponent = {
-  componentId: Uuid;
-  name: string;
-  pageId?: Uuid;
-  fileId?: Uuid;
-  frameId: Uuid;
-  variantId?: Uuid;
-  variantProperties?: VariantProperty[];
-  path?: string;
-};
 
 export type ComponentProperty = {
   type: 'BOOLEAN' | 'TEXT' | 'INSTANCE_SWAP' | 'VARIANT';

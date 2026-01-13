@@ -1,14 +1,13 @@
 import type { PenpotContext } from '@ui/lib/types/penpotContext';
-import type { ComponentShape } from '@ui/lib/types/shapes/componentShape';
+import type { ComponentShape, PenpotComponent } from '@ui/lib/types/shapes/componentShape';
 import { componentRoots, components } from '@ui/parser';
 import { createArtboard } from '@ui/parser/creators';
-import type { UiComponent } from '@ui/types';
 
 export const createComponent = (
   context: PenpotContext,
   { type: _type, path, variantProperties, ...shape }: ComponentShape
 ): void => {
-  const componentRoot = componentRoots.get(shape.id);
+  const componentRoot = componentRoots.get(shape.componentId!);
 
   if (!componentRoot) {
     return;
@@ -16,16 +15,22 @@ export const createComponent = (
 
   const { componentId, frameId, name, variantId } = componentRoot;
 
-  const component: UiComponent = {
+  const component: PenpotComponent = {
     componentId,
     frameId,
     name,
-    variantId,
     path,
     pageId: context.currentPageId,
-    fileId: context.currentFileId,
-    variantProperties
+    fileId: context.currentFileId
   };
+
+  if (variantId) {
+    component.variantId = variantId;
+  }
+
+  if (variantProperties) {
+    component.variantProperties = variantProperties;
+  }
 
   components.set(shape.id, component);
 

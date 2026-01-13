@@ -3,14 +3,13 @@ import {
   transformAutoLayout,
   transformBlend,
   transformChildren,
-  transformComponentId,
   transformConstraints,
   transformCornerRadius,
   transformDimension,
   transformEffects,
   transformFills,
   transformGrids,
-  transformId,
+  transformInstanceIds,
   transformLayoutAttributes,
   transformOverrides,
   transformProportion,
@@ -51,16 +50,14 @@ export const transformInstanceNode = async (
   return {
     type: 'instance',
     name: node.name,
-    id: transformId(node),
-    shapeRef: transformId(mainComponent),
     componentFile:
       mainComponent.remote && externalLibraries.has(figmaFile)
         ? externalLibraries.get(figmaFile)
         : undefined,
-    componentId: transformComponentId(mainComponent),
     componentRoot: isComponentRoot(node),
     showContent: !node.clipsContent,
     isOrphan,
+    ...transformInstanceIds(node, mainComponent),
     ...transformFills(node),
     ...transformEffects(node),
     ...transformStrokes(node),

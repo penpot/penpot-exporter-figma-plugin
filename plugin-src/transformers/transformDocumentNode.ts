@@ -1,6 +1,11 @@
 import { toObject } from '@common/map';
 
-import { componentProperties, components, missingFonts } from '@plugin/libraries';
+import {
+  componentProperties,
+  components,
+  externalLibraries,
+  missingFonts
+} from '@plugin/libraries';
 import {
   processPages,
   processTokens,
@@ -33,6 +38,7 @@ export const transformDocumentNode = async (
     tokens,
     components: toObject(components),
     componentProperties: toObject(componentProperties),
+    externalLibraries: toObject(externalLibraries),
     missingFonts: Array.from(missingFonts),
     isShared: isSharedLibrary
   };
