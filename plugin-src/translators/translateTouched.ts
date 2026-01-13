@@ -21,7 +21,7 @@ const syncAttributes: SyncAttributes = {
   textDecoration: ['text-content-attribute', 'content-group'],
   textStyleId: ['text-content-attribute', 'content-group'],
   characters: ['text-content-text', 'content-group'],
-  styledTextSegments: ['text-content-structure'],
+  styledTextSegments: ['text-content-structure', 'text-content-text', 'content-group'],
   lineHeight: ['text-content-attribute', 'content-group'],
   leadingTrim: ['text-font-group'],
   paragraphIndent: ['text-content-attribute', 'content-group'],
