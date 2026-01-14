@@ -1,4 +1,4 @@
-import { Muted, Textbox } from '@create-figma-plugin/ui';
+import { Link, Muted, Textbox } from '@create-figma-plugin/ui';
 import type { JSX } from 'preact';
 import { Controller, useFieldArray, useFormContext } from 'react-hook-form';
 
@@ -26,8 +26,13 @@ export const ExternalLibrariesFieldSet = (): JSX.Element => {
     <Stack space="xsmall">
       <strong style={{ fontSize: 13 }}>External Libraries</strong>
       <Muted>
-        Link your external libraries by providing their Penpot library UUIDs. Leave empty if not
-        applicable.
+        Link your external libraries by providing their Penpot library UUIDs.{' '}
+        <Link
+          href="https://github.com/penpot/penpot-exporter-figma-plugin/wiki/How-to-export-design-systems-(libraries)"
+          target="_blank"
+        >
+          How to export libraries →
+        </Link>
       </Muted>
 
       {fields.map((field, index) => {
