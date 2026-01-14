@@ -32,7 +32,7 @@
     "lru-cache": "^11.2",
     "lucide-react": "^0.555",
     "mixpanel-figma": "^2.0",
-    "preact": "^10.27",
+    "preact": "^10.28",
     "react-hook-form": "^7.66",
     "romans": "^3.1",
     "slugify": "^1.6",
