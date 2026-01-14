@@ -7,12 +7,12 @@ import {
   missingFonts
 } from '@plugin/libraries';
 import {
+  processAssets,
   processPages,
   processTokens,
   registerPaintStyles,
   registerTextStyles
 } from '@plugin/processors';
-import { processAssets } from '@plugin/processors';
 import { isSharedLibrary } from '@plugin/transformers';
 
 import type { ExportScope, PenpotDocument } from '@ui/types';
