@@ -29,31 +29,19 @@ export const transformInstanceNode = async (
     return;
   }
 
-  const primaryComponent = getPrimaryComponent(mainComponent);
-  const isOrphan = isOrphanInstance(primaryComponent);
-
-  if (!isOrphan && node.overrides.length > 0) {
-    node.overrides.forEach(override => overrides.set(override.id, override.overriddenFields));
-  }
-
-  const fetchedOverrides = [...(overrides.get(node.id) ?? [])];
-  if (node.visible !== mainComponent.visible) {
-    fetchedOverrides.push('visible');
-  }
-  if (node.locked !== mainComponent.locked) {
-    fetchedOverrides.push('locked');
-  }
-  overrides.set(node.id, fetchedOverrides);
-
   const figmaFile = mainComponent.getPluginData('figmaFile');
+  const isOrphan = isOrphanInstance(mainComponent);
+
+  if (!isOrphan) {
+    setOverrides(node, mainComponent);
+  }
 
   return {
     type: 'instance',
     name: node.name,
-    componentFile:
-      mainComponent.remote && externalLibraries.has(figmaFile)
-        ? externalLibraries.get(figmaFile)
-        : undefined,
+    componentFile: isRemoteComponent(mainComponent, figmaFile)
+      ? externalLibraries.get(figmaFile)
+      : undefined,
     componentRoot: isComponentRoot(node),
     showContent: !node.clipsContent,
     isOrphan,
@@ -77,23 +65,39 @@ export const transformInstanceNode = async (
   };
 };
 
-const getPrimaryComponent = (mainComponent: ComponentNode): ComponentNode | ComponentSetNode => {
-  if (mainComponent.parent?.type === 'COMPONENT_SET') {
-    return mainComponent.parent;
-  }
-
-  return mainComponent;
+const isOrphanInstance = (node: ComponentNode): boolean => {
+  return node.parent === null && node.remote === false;
 };
 
-const isOrphanInstance = (primaryComponent: ComponentNode | ComponentSetNode): boolean => {
-  return primaryComponent.parent === null && primaryComponent.remote === false;
+const isRemoteComponent = (node: ComponentNode, figmaFile: string): boolean => {
+  return node.remote === true && externalLibraries.has(figmaFile);
+};
+
+const setOverrides = (node: InstanceNode, mainComponent: ComponentNode): void => {
+  node.overrides.forEach(override => overrides.set(override.id, override.overriddenFields));
+
+  const fetchedOverrides = [...(overrides.get(node.id) ?? [])];
+
+  if (node.visible !== mainComponent.visible) {
+    fetchedOverrides.push('visible');
+  }
+
+  if (node.locked !== mainComponent.locked) {
+    fetchedOverrides.push('locked');
+  }
+
+  overrides.set(node.id, fetchedOverrides);
 };
 
 const isComponentRoot = (node: InstanceNode): boolean => {
+  if (node.id.startsWith('I')) {
+    return false;
+  }
+
   let parent = node.parent;
 
   while (parent !== null) {
-    if (parent.type === 'COMPONENT' || parent.type === 'INSTANCE') {
+    if (parent.type === 'COMPONENT') {
       return false;
     }
 
