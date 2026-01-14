@@ -86,7 +86,7 @@ const getPrimaryComponent = (mainComponent: ComponentNode): ComponentNode | Comp
 };
 
 const isOrphanInstance = (primaryComponent: ComponentNode | ComponentSetNode): boolean => {
-  return primaryComponent.parent === null;
+  return primaryComponent.parent === null && primaryComponent.remote === false;
 };
 
 const isComponentRoot = (node: InstanceNode): boolean => {
