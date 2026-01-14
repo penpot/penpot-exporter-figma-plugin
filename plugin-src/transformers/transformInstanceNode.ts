@@ -66,11 +66,11 @@ export const transformInstanceNode = async (
 };
 
 const isOrphanInstance = (node: ComponentNode): boolean => {
-  return node.parent === null && node.remote === false;
+  return node.parent === null && !node.remote;
 };
 
 const isRemoteComponent = (node: ComponentNode, figmaFile: string): boolean => {
-  return node.remote === true && externalLibraries.has(figmaFile);
+  return node.remote && externalLibraries.has(figmaFile) && externalLibraries.get(figmaFile) !== '';
 };
 
 const setOverrides = (node: InstanceNode, mainComponent: ComponentNode): void => {

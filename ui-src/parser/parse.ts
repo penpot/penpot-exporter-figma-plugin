@@ -36,7 +36,9 @@ export const parse = async (document: PenpotDocument): Promise<PenpotContext> =>
   context.closeFile();
 
   for (const [_, libraryId] of Object.entries(externalLibraries)) {
-    context.addRelation(fileId, libraryId);
+    if (libraryId !== '') {
+      context.addRelation(fileId, libraryId);
+    }
   }
 
   flushMessageQueue();
