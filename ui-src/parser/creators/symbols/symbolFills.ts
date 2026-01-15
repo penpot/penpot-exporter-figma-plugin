@@ -12,13 +12,22 @@ export const symbolFills = (
 
   if (!nodeFills) return;
 
-  return nodeFills.map(fill => {
+  const result: Fill[] = [];
+
+  for (const fill of nodeFills) {
     if (fill.fillImage) {
-      fill.fillImage = symbolFillImage(context, fill.fillImage);
+      const resolvedImage = symbolFillImage(context, fill.fillImage);
+
+      // Skip fills with invalid/missing images
+      if (!resolvedImage) continue;
+
+      fill.fillImage = resolvedImage;
     }
 
-    return fill;
-  });
+    result.push(fill);
+  }
+
+  return result;
 };
 
 export const symbolFillImage = (
