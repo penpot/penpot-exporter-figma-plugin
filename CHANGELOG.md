@@ -1,5 +1,22 @@
 # penpot-exporter
 
+## 0.18.1
+
+### Patch Changes
+
+- [#324](https://github.com/penpot/penpot-exporter-figma-plugin/pull/324)
+  [`ab9e364`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/ab9e364e669ef64c89be4b72083ae06d1b144b80)
+  Thanks [@SpykeRel04D](https://github.com/SpykeRel04D)! - Fix wrong (missing) touched groups for
+  styledTextSegments
+
+- [#329](https://github.com/penpot/penpot-exporter-figma-plugin/pull/329)
+  [`4c1ec1b`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/4c1ec1bdeadecfd6bea6eb67d0acbb386f3468da)
+  Thanks [@SpykeRel04D](https://github.com/SpykeRel04D)! - Fix bug with empty fill on an image
+
+- [#326](https://github.com/penpot/penpot-exporter-figma-plugin/pull/326)
+  [`37ec0d6`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/37ec0d6289e930b15d660c62a78208eb6f57de66)
+  Thanks [@jordisala1991](https://github.com/jordisala1991)! - Apply overrides for remote components
+
 ## 0.18.0
 
 ### Minor Changes
