@@ -1,6 +1,7 @@
 import { exportStream } from '@penpot/library';
 import { useEffect, useRef, useState } from 'preact/hooks';
 
+import { extractFileIdFromPenpotUrl } from '@ui/components/ExternalLibrariesFieldSet';
 import { type MessageData, createInMemoryWritable, sendMessage } from '@ui/context';
 import { identify, track } from '@ui/metrics/mixpanel';
 import { parse } from '@ui/parser';
@@ -223,7 +224,14 @@ export const useFigma = (): UseFigmaHook => {
 
     track('File Export Started', { scope: exportScope });
 
-    postMessage('export', { scope: exportScope, libraries: data.externalLibraries });
+    const libraries = data.externalLibraries
+      .map(lib => ({
+        name: lib.name,
+        uuid: extractFileIdFromPenpotUrl(lib.uuid)
+      }))
+      .filter((lib): lib is ExternalLibrary => lib.uuid !== undefined);
+
+    postMessage('export', { scope: exportScope, libraries });
   };
 
   useEffect(() => {

@@ -17,10 +17,6 @@ const parsePenpotUrl = (input: string): ParseResult => {
     return { success: true, fileId: '' };
   }
 
-  if (UUID_REGEX.test(trimmed)) {
-    return { success: true, fileId: trimmed };
-  }
-
   if (!PENPOT_URL_REGEX.test(trimmed)) {
     return {
       success: false,
@@ -53,6 +49,11 @@ const validatePenpotUrl = (value: string | undefined): string | true => {
   return result.success ? true : result.error;
 };
 
+export const extractFileIdFromPenpotUrl = (url: string): string | undefined => {
+  const result = parsePenpotUrl(url);
+  return result.success && result.fileId ? result.fileId : undefined;
+};
+
 export const ExternalLibrariesFieldSet = (): JSX.Element => {
   const {
     control,
@@ -63,13 +64,6 @@ export const ExternalLibrariesFieldSet = (): JSX.Element => {
     control,
     name: 'externalLibraries'
   });
-
-  const handleInputChange =
-    (onChange: (value: string) => void) =>
-    (input: string): void => {
-      const result = parsePenpotUrl(input);
-      onChange(result.success ? result.fileId : input);
-    };
 
   if (fields.length === 0) {
     return <></>;
@@ -109,7 +103,7 @@ export const ExternalLibrariesFieldSet = (): JSX.Element => {
                   id={`lib-${field.name}`}
                   placeholder="Paste Penpot URL"
                   value={value ?? ''}
-                  onValueInput={handleInputChange(onChange)}
+                  onValueInput={onChange}
                   onBlur={onBlur}
                 />
               )}
