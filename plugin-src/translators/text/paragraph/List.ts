@@ -11,6 +11,9 @@ type Level = {
 
 type ListType = 'ORDERED' | 'UNORDERED' | 'NONE';
 
+const getListOptions = (segment: TextSegment): TextListOptions =>
+  segment.listOptions ?? { type: 'NONE' };
+
 export class List {
   private levels: Map<number, Level> = new Map();
   private indentation = 0;
@@ -18,6 +21,8 @@ export class List {
   private listTypeFactory = new ListTypeFactory();
 
   public update(textNode: PenpotTextNode, segment: TextSegment): void {
+    const listOptions = getListOptions(segment);
+
     if (segment.indentation < this.indentation) {
       for (let i = segment.indentation + 1; i <= this.indentation; i++) {
         this.levels.delete(i);
@@ -26,11 +31,11 @@ export class List {
 
     let level = this.levels.get(segment.indentation);
 
-    if (!level || level.type !== segment.listOptions.type) {
+    if (!level || level.type !== listOptions.type) {
       level = {
         style: this.createStyle(textNode, segment.indentation),
         counter: 0,
-        type: segment.listOptions.type
+        type: listOptions.type
       };
 
       this.levels.set(segment.indentation, level);
@@ -46,7 +51,7 @@ export class List {
       throw new Error('Levels not updated');
     }
 
-    const listType = this.listTypeFactory.getListType(segment.listOptions);
+    const listType = this.listTypeFactory.getListType(getListOptions(segment));
 
     return this.updateCurrentSymbol(
       listType.getCurrentSymbol(level.counter, segment.indentation),

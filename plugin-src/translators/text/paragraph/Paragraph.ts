@@ -3,6 +3,8 @@ import type { TextSegment } from '@plugin/translators/text/paragraph/translatePa
 
 import type { TextNode as PenpotTextNode } from '@ui/lib/types/shapes/textShape';
 
+const getListType = (segment: TextSegment): string => segment.listOptions?.type ?? 'NONE';
+
 export class Paragraph {
   private isParagraphStarting = false;
   private isPreviousNodeAList = false;
@@ -20,7 +22,7 @@ export class Paragraph {
 
     textNodes.push(textNode);
 
-    this.isPreviousNodeAList = segment.listOptions.type !== 'NONE';
+    this.isPreviousNodeAList = getListType(segment) !== 'NONE';
     this.isParagraphStarting = textNode.text === '\n';
 
     return textNodes;
@@ -34,7 +36,7 @@ export class Paragraph {
     if (this.isParagraphStarting || this.isFirstTextNode(textNode)) {
       this.list.update(textNode, segment);
 
-      return segment.listOptions.type !== 'NONE'
+      return getListType(segment) !== 'NONE'
         ? this.list.getCurrentList(textNode, segment)
         : this.segmentIndent(node.paragraphIndent);
     }
@@ -42,7 +44,7 @@ export class Paragraph {
 
   private applySpacing(segment: TextSegment, node: TextNode): PenpotTextNode | undefined {
     if (this.isParagraphStarting) {
-      const isList = segment.listOptions.type !== 'NONE';
+      const isList = getListType(segment) !== 'NONE';
 
       return this.segmentParagraphSpacing(
         this.isPreviousNodeAList && isList ? node.listSpacing : node.paragraphSpacing
