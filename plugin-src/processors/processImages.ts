@@ -13,10 +13,14 @@ export const processImages = async (
   let currentImage = currentAsset;
 
   for (const [key, image] of images.entries()) {
-    const bytes = await image?.getBytesAsync();
+    try {
+      const bytes = await image?.getBytesAsync();
 
-    if (bytes) {
-      processedImages[key] = bytes as Uint8Array<ArrayBuffer>;
+      if (bytes) {
+        processedImages[key] = bytes as Uint8Array<ArrayBuffer>;
+      }
+    } catch {
+      // Skip images without valid data (e.g., empty image fills)
     }
 
     reportProgress({
