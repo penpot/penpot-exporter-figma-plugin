@@ -46,12 +46,67 @@ export const useFigma = (): UseFigmaHook => {
   const [processedItems, setProcessedItems] = useState(0);
   const [progressPercentage, setProgressPercentage] = useState(0);
 
+  // For accumulating image batches
+  const pendingDocumentRef = useRef<Parameters<typeof parse>[0] | null>(null);
+  const accumulatedImagesRef = useRef<Record<string, Uint8Array<ArrayBuffer>>>({});
+  const expectedBatchesRef = useRef<number>(0);
+  const receivedBatchesRef = useRef<number>(0);
+
   const postMessage = (type: string, data?: unknown): void => {
     parent.postMessage({ pluginMessage: { type, data } }, '*');
   };
 
   const calculatePercentage = (item: number, total: number): number => {
     return Math.round((item / total) * 100);
+  };
+
+  const processDocument = async (document: Parameters<typeof parse>[0]): Promise<void> => {
+    const context = await parse(document);
+
+    sendMessage({
+      type: 'PROGRESS_STEP',
+      data: {
+        step: 'exporting',
+        total: Infinity
+      }
+    });
+
+    const { writable, getBlob } = createInMemoryWritable();
+
+    await exportStream(context, writable, {
+      onProgress: ({ item, total }) => {
+        sendMessage({
+          type: 'PROGRESS_EXPORT',
+          data: {
+            current: item,
+            total: total
+          }
+        });
+      }
+    });
+
+    const blob = getBlob();
+    const filename = `${document.name}.penpot`;
+
+    setExportedBlob({ blob, filename });
+
+    let duration: number | undefined = undefined;
+
+    if (exportStartTimeRef.current) {
+      const endTime = Date.now();
+      duration = endTime - exportStartTimeRef.current;
+
+      setExportTime(duration);
+    }
+
+    track('File Exported', {
+      'Exported File Size': fileSizeInMB(blob.size),
+      'Export Time': duration ? formatExportTime(duration) : undefined
+    });
+
+    setExporting(false);
+    setSummary(true);
+    setStep('processing');
   };
 
   const onMessage = async (event: MessageEvent<MessageData>): Promise<void> => {
@@ -89,52 +144,44 @@ export const useFigma = (): UseFigmaHook => {
           setMissingFonts(pluginMessage.data.missingFonts);
         }
 
-        const context = await parse(pluginMessage.data);
+        const pendingBatches = pluginMessage.data.pendingImageBatches ?? 0;
 
-        sendMessage({
-          type: 'PROGRESS_STEP',
-          data: {
-            step: 'exporting',
-            total: Infinity
-          }
-        });
+        // Store document and reset batch tracking
+        pendingDocumentRef.current = pluginMessage.data;
+        accumulatedImagesRef.current = {};
+        expectedBatchesRef.current = pendingBatches;
+        receivedBatchesRef.current = 0;
 
-        const { writable, getBlob } = createInMemoryWritable();
-
-        await exportStream(context, writable, {
-          onProgress: ({ item, total }) => {
-            sendMessage({
-              type: 'PROGRESS_EXPORT',
-              data: {
-                current: item,
-                total: total
-              }
-            });
-          }
-        });
-
-        const blob = getBlob();
-        const filename = `${pluginMessage.data.name}.penpot`;
-
-        setExportedBlob({ blob, filename });
-
-        let duration: number | undefined = undefined;
-
-        if (exportStartTimeRef.current) {
-          const endTime = Date.now();
-          duration = endTime - exportStartTimeRef.current;
-
-          setExportTime(duration);
+        // If no batches to wait for, process immediately
+        if (pendingBatches === 0) {
+          await processDocument(pluginMessage.data);
         }
+        // Otherwise wait for image batches
 
-        track('File Exported', {
-          'Exported File Size': fileSizeInMB(blob.size),
-          'Export Time': duration ? formatExportTime(duration) : undefined
-        });
+        break;
+      }
+      case 'IMAGE_BATCH': {
+        const { images } = pluginMessage.data;
 
-        setExporting(false);
-        setSummary(true);
-        setStep('processing');
+        // Accumulate images
+        Object.assign(accumulatedImagesRef.current, images);
+        receivedBatchesRef.current++;
+
+        // When all batches received, process document
+        if (receivedBatchesRef.current === expectedBatchesRef.current && pendingDocumentRef.current) {
+          const documentWithImages = {
+            ...pendingDocumentRef.current,
+            images: accumulatedImagesRef.current
+          };
+
+          await processDocument(documentWithImages);
+
+          // Clean up refs
+          pendingDocumentRef.current = null;
+          accumulatedImagesRef.current = {};
+          expectedBatchesRef.current = 0;
+          receivedBatchesRef.current = 0;
+        }
 
         break;
       }
