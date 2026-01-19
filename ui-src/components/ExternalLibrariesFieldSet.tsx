@@ -17,6 +17,15 @@ export const ExternalLibrariesFieldSet = (): JSX.Element => {
     name: 'externalLibraries'
   });
 
+  const howToLink = (
+    <Link
+      href="https://github.com/penpot/penpot-exporter-figma-plugin/wiki/How-to-export-design-systems-(libraries)"
+      target="_blank"
+    >
+      How to export libraries →
+    </Link>
+  );
+
   if (fields.length === 0) {
     return (
       <Stack space="xsmall">
@@ -25,12 +34,7 @@ export const ExternalLibrariesFieldSet = (): JSX.Element => {
           If this is a design system or a file that uses a design system, you might want to learn
           how to export libraries and link them to your other files.
           <br />
-          <Link
-            href="https://github.com/penpot/penpot-exporter-figma-plugin/wiki/How-to-export-design-systems-(libraries)"
-            target="_blank"
-          >
-            How to export libraries →
-          </Link>
+          {howToLink}
         </Muted>
       </Stack>
     );
@@ -41,13 +45,7 @@ export const ExternalLibrariesFieldSet = (): JSX.Element => {
       <strong style={{ fontSize: 13 }}>External Libraries</strong>
       <Muted>
         Link your external libraries by providing their Penpot library URL. Leave empty if not
-        applicable.{' '}
-        <Link
-          href="https://github.com/penpot/penpot-exporter-figma-plugin/wiki/How-to-export-design-systems-(libraries)"
-          target="_blank"
-        >
-          How to export libraries →
-        </Link>
+        applicable. {howToLink}
       </Muted>
 
       {fields.map((field, index) => {
