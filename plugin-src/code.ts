@@ -63,8 +63,4 @@ figma.teamLibrary
   })
   .catch(error => {
     console.error('Error fetching external libraries:', error);
-    figma.ui.postMessage({
-      type: 'EXTERNAL_LIBRARIES',
-      data: []
-    });
   });
