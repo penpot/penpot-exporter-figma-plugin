@@ -31,11 +31,13 @@ export const transformVectorPaths = (node: VectorNode): PathShape[] => {
   try {
     regions = node.vectorNetwork?.regions ?? [];
   } catch (error) {
-    console.warn('Could not access the vector network', node, error);
+    console.warn('Could not access the vector network', node.name, error);
   }
 
   const hasStrokes = node.strokes.length > 0;
   const hasGeometry = node.fillGeometry.length > 0;
+  const vectorPaths = node.vectorPaths ?? [];
+  const fillGeometry = node.fillGeometry ?? [];
   let count = 0;
 
   // Cache for vertex extraction to avoid re-parsing same path data
@@ -53,7 +55,7 @@ export const transformVectorPaths = (node: VectorNode): PathShape[] => {
   // (vectorPaths may contain multiple subpaths in one entry, while fillGeometry has them separate)
   const combinedFillGeometryVertices = hasGeometry
     ? getCombinedVerticesCached(
-        node.fillGeometry.map(geo => geo.data),
+        fillGeometry.map(geo => geo.data),
         getVertices
       )
     : new Set<string>();
@@ -65,8 +67,8 @@ export const transformVectorPaths = (node: VectorNode): PathShape[] => {
   const pathShapes: PathShape[] = [];
   const seenVertexHashes = new Set<string>();
 
-  for (let i = 0; i < node.vectorPaths.length; i++) {
-    const vectorPath = node.vectorPaths[i];
+  for (let i = 0; i < vectorPaths.length; i++) {
+    const vectorPath = vectorPaths[i];
     let shouldInclude = false;
     let currentHash: string | undefined;
 
@@ -120,7 +122,7 @@ export const transformVectorPaths = (node: VectorNode): PathShape[] => {
     includedVectorPathsData.length === 0 || combinedFillGeometryHash !== combinedIncludedHash;
 
   const geometryShapes = shouldIncludeFillGeometry
-    ? node.fillGeometry.map(geometry => transformVectorPath(node, geometry, undefined, count++))
+    ? fillGeometry.map(geometry => transformVectorPath(node, geometry, undefined, count++))
     : [];
 
   return [...geometryShapes, ...pathShapes];
