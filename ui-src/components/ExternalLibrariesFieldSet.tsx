@@ -18,7 +18,22 @@ export const ExternalLibrariesFieldSet = (): JSX.Element => {
   });
 
   if (fields.length === 0) {
-    return <></>;
+    return (
+      <Stack space="xsmall">
+        <strong style={{ fontSize: 13 }}>External Libraries</strong>
+        <Muted>
+          If this is a design system or a file that uses a design system, you might want to learn
+          how to export libraries and link them to your other files.
+          <br />
+          <Link
+            href="https://github.com/penpot/penpot-exporter-figma-plugin/wiki/How-to-export-design-systems-(libraries)"
+            target="_blank"
+          >
+            How to export libraries →
+          </Link>
+        </Muted>
+      </Stack>
+    );
   }
 
   return (

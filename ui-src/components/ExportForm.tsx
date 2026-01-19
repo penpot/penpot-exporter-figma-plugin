@@ -101,7 +101,7 @@ export const ExportForm = (): JSX.Element => {
             style={{
               display: 'flex',
               gap: '0.5rem',
-              justifyContent: 'right',
+              justifyContent: 'flex-end',
               width: '100%'
             }}
           >

@@ -42,7 +42,7 @@ const AppContent = (): JSX.Element => {
         <Stack>
           <Penpot
             style={{
-              alignSelf: 'left',
+              alignSelf: 'flex-start',
               height: 'auto',
               width: '8.125rem',
               fill: 'var(--figma-color-icon)'
