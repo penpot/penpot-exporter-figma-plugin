@@ -1,8 +1,8 @@
 import * as romans from 'romans';
 
-import type { ListType } from '@plugin/translators/text/paragraph/ListType';
+import type { ListSymbol } from '@plugin/translators/text/paragraph/ListSymbol';
 
-export class OrderedListType implements ListType {
+export class OrderedListSymbol implements ListSymbol {
   public getCurrentSymbol(number: number, indentation: number): string {
     let symbol = '. ';
     switch (indentation % 3) {
