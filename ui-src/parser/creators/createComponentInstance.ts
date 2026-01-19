@@ -4,28 +4,23 @@ import { componentRoots } from '@ui/parser';
 import { createArtboard } from '@ui/parser/creators';
 import type { ComponentInstance } from '@ui/types';
 
-let remoteFileId: Uuid | undefined = undefined;
+let unknownFileId: Uuid | undefined = undefined;
 
 export const createComponentInstance = (
   context: PenpotContext,
-  { type: _type, mainComponentId, ...shape }: ComponentInstance
+  { type: _type, ...shape }: ComponentInstance
 ): void => {
-  const componentRoot = componentRoots.get(mainComponentId);
+  const componentRoot = componentRoots.get(shape.componentId!);
 
-  if (!shape.shapeRef) {
-    shape.shapeRef = mainComponentId;
-  }
-
-  shape.componentFile = componentRoot ? context.currentFileId : getRemoteFileId(context);
-  shape.componentId = componentRoot ? componentRoot.componentId : context.genId();
+  shape.componentFile ??= componentRoot ? context.currentFileId : getUnknownFileId(context);
 
   createArtboard(context, shape);
 };
 
-const getRemoteFileId = (context: PenpotContext): Uuid => {
-  if (!remoteFileId) {
-    remoteFileId = context.genId();
+const getUnknownFileId = (context: PenpotContext): Uuid => {
+  if (!unknownFileId) {
+    unknownFileId = context.genId();
   }
 
-  return remoteFileId;
+  return unknownFileId;
 };

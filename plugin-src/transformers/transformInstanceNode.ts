@@ -1,4 +1,4 @@
-import { overrides } from '@plugin/libraries';
+import { externalLibraries, overrides } from '@plugin/libraries';
 import {
   transformAutoLayout,
   transformBlend,
@@ -9,8 +9,7 @@ import {
   transformEffects,
   transformFills,
   transformGrids,
-  transformId,
-  transformIds,
+  transformInstanceIds,
   transformLayoutAttributes,
   transformOverrides,
   transformProportion,
@@ -30,30 +29,23 @@ export const transformInstanceNode = async (
     return;
   }
 
-  const primaryComponent = getPrimaryComponent(mainComponent);
-  const isOrphan = isOrphanInstance(primaryComponent);
+  const figmaFile = mainComponent.getPluginData('figmaFile');
+  const isOrphan = isOrphanInstance(mainComponent);
 
-  if (!isOrphan && node.overrides.length > 0) {
-    node.overrides.forEach(override => overrides.set(override.id, override.overriddenFields));
+  if (!isOrphan) {
+    setOverrides(node, mainComponent);
   }
-
-  const fetchedOverrides = [...(overrides.get(node.id) ?? [])];
-  if (node.visible !== mainComponent.visible) {
-    fetchedOverrides.push('visible');
-  }
-  if (node.locked !== mainComponent.locked) {
-    fetchedOverrides.push('locked');
-  }
-  overrides.set(node.id, fetchedOverrides);
 
   return {
     type: 'instance',
     name: node.name,
-    mainComponentId: transformId(mainComponent),
+    componentFile: isRemoteComponent(mainComponent, figmaFile)
+      ? externalLibraries.get(figmaFile)
+      : undefined,
     componentRoot: isComponentRoot(node),
     showContent: !node.clipsContent,
     isOrphan,
-    ...transformIds(node),
+    ...transformInstanceIds(node, mainComponent),
     ...transformFills(node),
     ...transformEffects(node),
     ...transformStrokes(node),
@@ -73,23 +65,39 @@ export const transformInstanceNode = async (
   };
 };
 
-const getPrimaryComponent = (mainComponent: ComponentNode): ComponentNode | ComponentSetNode => {
-  if (mainComponent.parent?.type === 'COMPONENT_SET') {
-    return mainComponent.parent;
-  }
-
-  return mainComponent;
+const isOrphanInstance = (node: ComponentNode): boolean => {
+  return node.parent === null && !node.remote;
 };
 
-const isOrphanInstance = (primaryComponent: ComponentNode | ComponentSetNode): boolean => {
-  return primaryComponent.parent === null && primaryComponent.remote === false;
+const isRemoteComponent = (node: ComponentNode, figmaFile: string): boolean => {
+  return node.remote && externalLibraries.has(figmaFile) && externalLibraries.get(figmaFile) !== '';
+};
+
+const setOverrides = (node: InstanceNode, mainComponent: ComponentNode): void => {
+  node.overrides.forEach(override => overrides.set(override.id, override.overriddenFields));
+
+  const fetchedOverrides = [...(overrides.get(node.id) ?? [])];
+
+  if (node.visible !== mainComponent.visible) {
+    fetchedOverrides.push('visible');
+  }
+
+  if (node.locked !== mainComponent.locked) {
+    fetchedOverrides.push('locked');
+  }
+
+  overrides.set(node.id, fetchedOverrides);
 };
 
 const isComponentRoot = (node: InstanceNode): boolean => {
+  if (node.id.startsWith('I')) {
+    return false;
+  }
+
   let parent = node.parent;
 
   while (parent !== null) {
-    if (parent.type === 'COMPONENT' || parent.type === 'INSTANCE') {
+    if (parent.type === 'COMPONENT') {
       return false;
     }
 

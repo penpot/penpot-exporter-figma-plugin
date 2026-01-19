@@ -13,3 +13,4 @@ export const variantProperties: Map<Uuid, Set<string>> = new Map();
 export const variables: Map<string, string> = new Map();
 export const variableNames: Map<string, string> = new Map();
 export const uniqueVariableNames: Set<string> = new Set();
+export const externalLibraries: Map<string, string> = new Map();

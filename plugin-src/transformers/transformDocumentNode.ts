@@ -1,16 +1,21 @@
 import { toObject } from '@common/map';
 
-import { componentProperties, components, missingFonts } from '@plugin/libraries';
 import {
+  componentProperties,
+  components,
+  externalLibraries,
+  missingFonts
+} from '@plugin/libraries';
+import {
+  processAssets,
   processPages,
   processTokens,
   registerPaintStyles,
   registerTextStyles
 } from '@plugin/processors';
-import { processAssets } from '@plugin/processors/processAssets';
+import { isSharedLibrary } from '@plugin/transformers';
 
-import type { PenpotDocument } from '@ui/types';
-import type { ExportScope } from '@ui/types/progressMessages';
+import type { ExportScope, PenpotDocument } from '@ui/types';
 
 export const transformDocumentNode = async (
   node: DocumentNode,
@@ -33,6 +38,8 @@ export const transformDocumentNode = async (
     tokens,
     components: toObject(components),
     componentProperties: toObject(componentProperties),
-    missingFonts: Array.from(missingFonts)
+    externalLibraries: toObject(externalLibraries),
+    missingFonts: Array.from(missingFonts),
+    isShared: isSharedLibrary
   };
 };

@@ -147,6 +147,8 @@ Things that are currently included in the import are:
 - **Auto Layouts**
 - **Color and Typography libraries**
 - **Variants**
+- **ExternalLibraries** (mantaining links between your files and the design system or libraries in
+  your Penpot file)
 
 ## Limitations
 

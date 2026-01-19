@@ -2,7 +2,7 @@ import type { PenpotPage } from '@ui/lib/types/penpotPage';
 import type { TypographyStyle } from '@ui/lib/types/shapes/textShape';
 import type { Tokens } from '@ui/lib/types/shapes/tokens';
 import type { FillStyle } from '@ui/lib/types/utils/fill';
-import type { ComponentProperty, ComponentRoot } from '@ui/types/component';
+import type { ComponentProperty, ComponentRoot } from '@ui/types';
 
 export type PenpotDocument = {
   name: string;
@@ -13,5 +13,7 @@ export type PenpotDocument = {
   textStyles: Record<string, TypographyStyle>;
   tokens?: Tokens;
   componentProperties: Record<string, ComponentProperty>;
+  externalLibraries: Record<string, string>;
   missingFonts: string[];
+  isShared: boolean;
 };

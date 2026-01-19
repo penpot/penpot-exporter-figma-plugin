@@ -3,7 +3,7 @@ import { Circle, CircleCheck } from 'lucide-react';
 import type { JSX } from 'preact';
 
 import { Stack } from '@ui/components/Stack';
-import { PROGRESS_STEPS, type Steps } from '@ui/types/progressMessages';
+import { PROGRESS_STEPS, type Steps } from '@ui/types';
 
 import styles from './ProgressStepper.module.css';
 
