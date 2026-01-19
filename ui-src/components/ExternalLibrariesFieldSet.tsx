@@ -4,8 +4,7 @@ import { Controller, useFieldArray, useFormContext } from 'react-hook-form';
 
 import { Stack } from '@ui/components/Stack';
 import type { FormValues } from '@ui/context';
-
-const UUID_REGEX = /^$|^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+import { validatePenpotUrl } from '@ui/utils';
 
 export const ExternalLibrariesFieldSet = (): JSX.Element => {
   const {
@@ -26,7 +25,8 @@ export const ExternalLibrariesFieldSet = (): JSX.Element => {
     <Stack space="xsmall">
       <strong style={{ fontSize: 13 }}>External Libraries</strong>
       <Muted>
-        Link your external libraries by providing their Penpot library UUIDs.{' '}
+        Link your external libraries by providing their Penpot library URL. Leave empty if not
+        applicable.{' '}
         <Link
           href="https://github.com/penpot/penpot-exporter-figma-plugin/wiki/How-to-export-design-systems-(libraries)"
           target="_blank"
@@ -49,16 +49,11 @@ export const ExternalLibrariesFieldSet = (): JSX.Element => {
             <Controller
               name={`externalLibraries.${index}.uuid`}
               control={control}
-              rules={{
-                pattern: {
-                  value: UUID_REGEX,
-                  message: 'Invalid UUID format'
-                }
-              }}
+              rules={{ validate: validatePenpotUrl }}
               render={({ field: { onChange, onBlur, value } }) => (
                 <Textbox
                   id={`lib-${field.name}`}
-                  placeholder="e.g. 550e8400-e29b-41d4-a716-446655440000"
+                  placeholder="e.g. https://design.penpot.app/#/workspace?team-id=...&file-id=...&page-id=..."
                   value={value ?? ''}
                   onValueInput={onChange}
                   onBlur={onBlur}

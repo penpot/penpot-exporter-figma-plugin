@@ -5,8 +5,7 @@ import { type MessageData, createInMemoryWritable, sendMessage } from '@ui/conte
 import { identify, track } from '@ui/metrics/mixpanel';
 import { parse } from '@ui/parser';
 import type { ExportScope, ExternalLibrary, Steps } from '@ui/types';
-import { formatExportTime } from '@ui/utils';
-import { fileSizeInMB } from '@ui/utils/fileSizeInMB';
+import { extractFileIdFromPenpotUrl, fileSizeInMB, formatExportTime } from '@ui/utils';
 
 export type FormValues = {
   externalLibraries: ExternalLibrary[];
@@ -223,7 +222,14 @@ export const useFigma = (): UseFigmaHook => {
 
     track('File Export Started', { scope: exportScope });
 
-    postMessage('export', { scope: exportScope, libraries: data.externalLibraries });
+    const libraries = data.externalLibraries
+      .map(lib => ({
+        name: lib.name,
+        uuid: extractFileIdFromPenpotUrl(lib.uuid)
+      }))
+      .filter((lib): lib is ExternalLibrary => lib.uuid !== undefined);
+
+    postMessage('export', { scope: exportScope, libraries });
   };
 
   useEffect(() => {
