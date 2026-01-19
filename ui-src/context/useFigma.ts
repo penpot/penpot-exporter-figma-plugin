@@ -1,13 +1,11 @@
 import { exportStream } from '@penpot/library';
 import { useEffect, useRef, useState } from 'preact/hooks';
 
-import { extractFileIdFromPenpotUrl } from '@ui/components/ExternalLibrariesFieldSet';
 import { type MessageData, createInMemoryWritable, sendMessage } from '@ui/context';
 import { identify, track } from '@ui/metrics/mixpanel';
 import { parse } from '@ui/parser';
 import type { ExportScope, ExternalLibrary, Steps } from '@ui/types';
-import { formatExportTime } from '@ui/utils';
-import { fileSizeInMB } from '@ui/utils/fileSizeInMB';
+import { extractFileIdFromPenpotUrl, fileSizeInMB, formatExportTime } from '@ui/utils';
 
 export type FormValues = {
   externalLibraries: ExternalLibrary[];
