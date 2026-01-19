@@ -26,7 +26,7 @@ const onMessage: MessageEventHandler = message => {
   if (message.type === 'export') {
     const exportMessage = message as ExportMessage;
     const scope = exportMessage.data?.scope ?? 'all';
-    const libraries = exportMessage.data?.libraries ?? {};
+    const libraries = exportMessage.data?.libraries ?? [];
 
     handleExportMessage(scope, libraries);
   }
