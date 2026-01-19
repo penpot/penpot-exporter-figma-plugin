@@ -5,7 +5,7 @@ import { Controller, useFieldArray, useFormContext } from 'react-hook-form';
 import { Stack } from '@ui/components/Stack';
 import type { FormValues } from '@ui/context';
 
-const UUID_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+const UUID_REGEX = /^$|^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 const PENPOT_URL_REGEX = /^https?:\/\/[^/]*penpot[^/]*\//i;
 
 type ParseResult = { success: true; fileId: string } | { success: false; error: string };
@@ -101,7 +101,7 @@ export const ExternalLibrariesFieldSet = (): JSX.Element => {
               render={({ field: { onChange, onBlur, value } }) => (
                 <Textbox
                   id={`lib-${field.name}`}
-                  placeholder="Paste Penpot URL"
+                  placeholder="e.g. https://design.penpot.app/#/workspace?team-id=...&file-id=...&page-id=..."
                   value={value ?? ''}
                   onValueInput={onChange}
                   onBlur={onBlur}
