@@ -1,5 +1,21 @@
 # penpot-exporter
 
+## 0.19.0
+
+### Minor Changes
+
+- [#322](https://github.com/penpot/penpot-exporter-figma-plugin/pull/322)
+  [`b714087`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/b7140878482ce38fabb0869b394e9cd09a9e116d)
+  Thanks [@jordisala1991](https://github.com/jordisala1991)! - Allow to export and link external
+  libraries with their files
+
+### Patch Changes
+
+- [#330](https://github.com/penpot/penpot-exporter-figma-plugin/pull/330)
+  [`61afc81`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/61afc815ca75be266a6d7446e71f1ada2611728b)
+  Thanks [@SpykeRel04D](https://github.com/SpykeRel04D)! - Avoid crash when text list fails to
+  inform its list type (ordered or unordered)
+
 ## 0.18.1
 
 ### Patch Changes
