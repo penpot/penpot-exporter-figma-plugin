@@ -1,9 +1,8 @@
 import { List } from '@plugin/translators/text/paragraph/List';
+import { getListType } from '@plugin/translators/text/paragraph/getListType';
 import type { TextSegment } from '@plugin/translators/text/paragraph/translateParagraphProperties';
 
 import type { TextNode as PenpotTextNode } from '@ui/lib/types/shapes/textShape';
-
-const getListType = (segment: TextSegment): string => segment.listOptions?.type ?? 'NONE';
 
 export class Paragraph {
   private isParagraphStarting = false;
