@@ -35,9 +35,9 @@ export const transformVectorPaths = (node: VectorNode): PathShape[] => {
   }
 
   const hasStrokes = node.strokes.length > 0;
-  const hasGeometry = node.fillGeometry.length > 0;
   const vectorPaths = node.vectorPaths ?? [];
   const fillGeometry = node.fillGeometry ?? [];
+  const hasGeometry = fillGeometry.length > 0;
   let count = 0;
 
   // Cache for vertex extraction to avoid re-parsing same path data
