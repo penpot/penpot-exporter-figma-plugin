@@ -1,5 +1,14 @@
 # penpot-exporter
 
+## 0.19.1
+
+### Patch Changes
+
+- [#334](https://github.com/penpot/penpot-exporter-figma-plugin/pull/334)
+  [`010352e`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/010352e73afcfb46a43fd4e5091cfdfeebbad688)
+  Thanks [@SpykeRel04D](https://github.com/SpykeRel04D)! - Fix crash when dealing with some high
+  complexity vectors (svg)
+
 ## 0.19.0
 
 ### Minor Changes
