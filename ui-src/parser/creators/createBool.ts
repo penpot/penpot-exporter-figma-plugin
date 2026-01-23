@@ -22,8 +22,16 @@ export const createBool = (
 
   context.closeGroup();
 
-  context.addBool({
-    groupId,
-    type: boolType
-  });
+  try {
+    context.addBool({
+      groupId,
+      type: boolType
+    });
+  } catch (error) {
+    // Boolean groups have a restriction regarding the children in Penpot:
+    // You cannot have a boolean group with only frames as direct children.
+    //
+    // The shape will still be created, but it will be a normal group.
+    console.warn('Could not add boolean group', shape.name, error);
+  }
 };
