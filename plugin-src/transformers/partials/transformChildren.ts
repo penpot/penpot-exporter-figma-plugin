@@ -1,6 +1,7 @@
 import { translateChildren, translateMaskChildren } from '@plugin/translators';
 
 import type { Children } from '@ui/lib/types/utils/children';
+import type { PenpotNode } from '@ui/types/penpotNode';
 
 const nodeActsAsMask = (node: SceneNode): boolean => {
   return 'isMask' in node && node.isMask;
@@ -35,18 +36,17 @@ export const transformChildren = async (node: ChildrenMixin): Promise<Children> 
   // to break the promise chain and allow garbage collection
   const shouldDefer = currentDepth > 5;
 
-  let children: Children['children'];
+  let children: PenpotNode[];
+
+  const getChildren = (): Promise<PenpotNode[]> =>
+    containsMask
+      ? translateMaskChildren(node.children, maskIndex)
+      : translateChildren(node.children);
 
   if (shouldDefer) {
-    children = await deferToMacrotask(async () => {
-      return containsMask
-        ? await translateMaskChildren(node.children, maskIndex)
-        : await translateChildren(node.children);
-    });
+    children = await deferToMacrotask(getChildren);
   } else {
-    children = containsMask
-      ? await translateMaskChildren(node.children, maskIndex)
-      : await translateChildren(node.children);
+    children = await getChildren();
   }
 
   transformChildrenDepth--;
