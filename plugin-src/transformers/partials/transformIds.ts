@@ -4,10 +4,6 @@ import { generateDeterministicUuid } from '@plugin/utils';
 import type { ShapeAttributes, ShapeBaseAttributes } from '@ui/lib/types/shapes/shape';
 import type { Uuid } from '@ui/lib/types/utils/uuid';
 
-// #region agent log
-let identifiersLogCounter = 0;
-// #endregion
-
 const parseFigmaId = (figmaId: string): Uuid => {
   const id = identifiers.get(figmaId);
 
@@ -18,13 +14,6 @@ const parseFigmaId = (figmaId: string): Uuid => {
   const newId = generateDeterministicUuid(figmaId);
 
   identifiers.set(figmaId, newId);
-
-  // #region agent log
-  identifiersLogCounter++;
-  if (identifiersLogCounter % 100 === 0 || identifiers.size > 500) {
-    console.log('[DEBUG H3-identifiers] identifiers map growth', JSON.stringify({mapSize:identifiers.size,totalCalls:identifiersLogCounter}));
-  }
-  // #endregion
 
   return newId;
 };

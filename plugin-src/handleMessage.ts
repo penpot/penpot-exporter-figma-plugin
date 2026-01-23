@@ -24,38 +24,17 @@ export const handleExportMessage = async (
   scope: ExportScope,
   libraries: ExternalLibrary[]
 ): Promise<void> => {
-  // #region agent log
-  const startTime = Date.now();
-  console.log('[DEBUG H0-overview] Export started', JSON.stringify({scope,librariesCount:libraries.length}));
-  // #endregion
-
   resetProgress();
 
   initializeExternalLibraries(libraries);
+  const document = await transformDocumentNode(figma.root, scope);
 
-  // #region agent log
-  try {
-  // #endregion
-    const document = await transformDocumentNode(figma.root, scope);
+  flushProgress();
 
-    // #region agent log
-    const endTime = Date.now();
-    console.log('[DEBUG H0-overview] Export completed successfully', JSON.stringify({durationMs:endTime-startTime,pagesCount:document.children?.length}));
-    // #endregion
-
-    flushProgress();
-
-    reportProgress({
-      type: 'PENPOT_DOCUMENT',
-      data: document
-    });
-  // #region agent log
-  } catch (error) {
-    const errorTime = Date.now();
-    console.log('[DEBUG H0-overview] Export failed with error', JSON.stringify({durationMs:errorTime-startTime,errorMessage:String(error),errorName:(error as Error)?.name}));
-    throw error;
-  }
-  // #endregion
+  reportProgress({
+    type: 'PENPOT_DOCUMENT',
+    data: document
+  });
 };
 
 export const handleRetryMessage = async (): Promise<void> => {

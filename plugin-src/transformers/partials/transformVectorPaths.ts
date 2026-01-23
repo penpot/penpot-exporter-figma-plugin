@@ -16,20 +16,11 @@ import type { PathShape } from '@ui/lib/types/shapes/pathShape';
 
 // Cache parsed SVG commands to avoid re-parsing same path data
 const parsedCache = new Map<string, Command[]>();
-// #region agent log
-let parsedCacheLogCounter = 0;
-// #endregion
 const getParsedCommands = (pathData: string): Command[] => {
   let commands = parsedCache.get(pathData);
   if (!commands) {
     commands = parseSVG(pathData);
     parsedCache.set(pathData, commands);
-    // #region agent log
-    parsedCacheLogCounter++;
-    if (parsedCacheLogCounter % 20 === 0 || parsedCache.size > 100) {
-      console.log('[DEBUG H1-parsedCache] parsedCache growth', JSON.stringify({cacheSize:parsedCache.size,pathDataLength:pathData.length,commandsCount:commands.length}));
-    }
-    // #endregion
   }
   return commands;
 };

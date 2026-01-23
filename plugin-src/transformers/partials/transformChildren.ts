@@ -6,9 +6,10 @@ const nodeActsAsMask = (node: SceneNode): boolean => {
   return 'isMask' in node && node.isMask;
 };
 
-// #region agent log
+/**
+ * Tracks the current nesting depth to detect deeply nested structures.
+ */
 let transformChildrenDepth = 0;
-// #endregion
 
 /**
  * Defers execution to a new macrotask to break the promise chain.
@@ -27,11 +28,8 @@ export const transformChildren = async (node: ChildrenMixin): Promise<Children> 
   const maskIndex = node.children.findIndex(nodeActsAsMask);
   const containsMask = maskIndex !== -1;
 
-  // #region agent log
   transformChildrenDepth++;
   const currentDepth = transformChildrenDepth;
-  console.log('[DEBUG H8-fix] transformChildren depth', JSON.stringify({ depth: currentDepth, childrenCount: node.children.length }));
-  // #endregion
 
   // For deeply nested structures (depth > 5), defer to a new macrotask
   // to break the promise chain and allow garbage collection
@@ -40,10 +38,6 @@ export const transformChildren = async (node: ChildrenMixin): Promise<Children> 
   let children: Children['children'];
 
   if (shouldDefer) {
-    // #region agent log
-    console.log('[DEBUG H8-fix] Deferring to macrotask at depth', JSON.stringify({ depth: currentDepth }));
-    // #endregion
-
     children = await deferToMacrotask(async () => {
       return containsMask
         ? await translateMaskChildren(node.children, maskIndex)
@@ -55,10 +49,7 @@ export const transformChildren = async (node: ChildrenMixin): Promise<Children> 
       : await translateChildren(node.children);
   }
 
-  // #region agent log
   transformChildrenDepth--;
-  console.log('[DEBUG H8-fix] transformChildren complete', JSON.stringify({ depth: currentDepth, childrenCount: children.length }));
-  // #endregion
 
   return { children };
 };
