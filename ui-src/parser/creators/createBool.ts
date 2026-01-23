@@ -28,9 +28,10 @@ export const createBool = (
       type: boolType
     });
   } catch (error) {
-    // Boolean groups have some special restrictions regarding the children,
-    // so we ignore them if they are not supported. The shape will still be created,
-    // but it will be a normal group.
+    // Boolean groups have a restriction regarding the children in Penpot:
+    // You cannot have a boolean group with only frames as direct children.
+    //
+    // The shape will still be created, but it will be a normal group.
     console.warn('Could not add boolean group', shape.name, error);
   }
 };
