@@ -62,5 +62,5 @@ figma.teamLibrary
     });
   })
   .catch(error => {
-    console.error('Error fetching external libraries:', error);
+    console.warn('Could not fetch external libraries', error);
   });
