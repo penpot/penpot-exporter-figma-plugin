@@ -1,6 +1,6 @@
 {
   "name": "penpot-exporter",
-  "version": "0.18.1",
+  "version": "0.19.2",
   "description": "Penpot exporter",
   "type": "module",
   "scripts": {
@@ -24,7 +24,7 @@
   "license": "MPL2.0",
   "dependencies": {
     "@create-figma-plugin/ui": "^4.0",
-    "@penpot/library": "1.1.0",
+    "@penpot/library": "1.2.0-RC1",
     "@sentry/react": "^10.27",
     "@sentry/vite-plugin": "^4.6",
     "base64-js": "^1.5",

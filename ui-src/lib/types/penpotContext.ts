@@ -39,5 +39,6 @@ export interface PenpotContext {
   addFileMedia(media: Media, blob: Blob): Uuid;
   getMediaAsImage(mediaId: Uuid): ImageColor;
   addTokensLib(tokens: Tokens): void;
+  addRelation(fileId: Uuid, libraryId: Uuid): void;
   genId(): Uuid;
 }

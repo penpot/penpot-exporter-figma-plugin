@@ -14,14 +14,16 @@ export const parse = async (document: PenpotDocument): Promise<PenpotContext> =>
     children = [],
     components,
     tokens,
-    componentProperties: recordComponentProperties
+    componentProperties: recordComponentProperties,
+    externalLibraries,
+    isShared
   } = document;
 
   init(componentRoots, components);
   init(componentProperties, recordComponentProperties);
 
   const context = createBuildContext({ referer: `penpot-exporter-figma-plugin/${APP_VERSION}` });
-  context.addFile({ name });
+  const fileId = context.addFile({ name, isShared });
 
   await buildAssets(context, document);
   await buildFile(context, children);
@@ -32,6 +34,12 @@ export const parse = async (document: PenpotDocument): Promise<PenpotContext> =>
   }
 
   context.closeFile();
+
+  for (const [_, libraryId] of Object.entries(externalLibraries)) {
+    if (libraryId !== '') {
+      context.addRelation(fileId, libraryId);
+    }
+  }
 
   flushMessageQueue();
 

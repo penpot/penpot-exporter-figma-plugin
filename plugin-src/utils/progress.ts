@@ -1,6 +1,6 @@
 import { createMessageBuffer } from '@common/messageBuffer';
 
-import { BUFFERED_PROGRESS_TYPES, type PluginMessage } from '@ui/types/progressMessages';
+import { BUFFERED_PROGRESS_TYPES, type PluginMessage } from '@ui/types';
 
 const BUFFERED_TYPES = new Set(BUFFERED_PROGRESS_TYPES);
 const BATCH_SIZE_BYTES = 50 * 1024 * 1024; // 50MB per batch

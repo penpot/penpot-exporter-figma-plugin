@@ -10,7 +10,7 @@ export const createInMemoryWritable = (): {
     },
     close(): void {},
     abort(err: Error): void {
-      console.error('Writable aborted:', err);
+      console.error('Writable aborted', err);
     }
   });
 

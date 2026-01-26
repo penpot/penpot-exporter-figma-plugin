@@ -4,9 +4,12 @@ import { useEffect, useRef, useState } from 'preact/hooks';
 import { type MessageData, createInMemoryWritable, sendMessage } from '@ui/context';
 import { identify, track } from '@ui/metrics/mixpanel';
 import { parse } from '@ui/parser';
-import type { ExportScope, Steps } from '@ui/types/progressMessages';
-import { formatExportTime } from '@ui/utils';
-import { fileSizeInMB } from '@ui/utils/fileSizeInMB';
+import type { ExportScope, ExternalLibrary, Steps } from '@ui/types';
+import { extractFileIdFromPenpotUrl, fileSizeInMB, formatExportTime } from '@ui/utils';
+
+export type FormValues = {
+  externalLibraries: ExternalLibrary[];
+};
 
 export type UseFigmaHook = {
   missingFonts: string[] | undefined;
@@ -23,10 +26,11 @@ export type UseFigmaHook = {
   exportedBlob: { blob: Blob; filename: string } | null;
   exportTime: number | null;
   exportScope: ExportScope;
+  exportLibraries: string[];
   setExportScope: (scope: ExportScope) => void;
   retry: () => void;
   cancel: () => void;
-  exportPenpot: () => void;
+  exportPenpot: (data: FormValues) => void;
   downloadBlob: () => void;
 };
 
@@ -38,6 +42,7 @@ export const useFigma = (): UseFigmaHook => {
   const [exportedBlob, setExportedBlob] = useState<{ blob: Blob; filename: string } | null>(null);
   const [exportTime, setExportTime] = useState<number | null>(null);
   const [exportScope, setExportScope] = useState<ExportScope>('all');
+  const [exportLibraries, setExportLibraries] = useState<string[]>([]);
   const exportStartTimeRef = useRef<number | null>(null);
 
   const [step, setStep] = useState<Steps>('processing');
@@ -115,6 +120,10 @@ export const useFigma = (): UseFigmaHook => {
     const { pluginMessage } = event.data;
 
     switch (pluginMessage.type) {
+      case 'EXTERNAL_LIBRARIES': {
+        setExportLibraries(pluginMessage.data);
+        break;
+      }
       case 'USER_DATA': {
         identify({ userId: pluginMessage.data.userId });
         track('Plugin Loaded');
@@ -254,13 +263,20 @@ export const useFigma = (): UseFigmaHook => {
     postMessage('cancel');
   };
 
-  const exportPenpot = (): void => {
+  const exportPenpot = (data: FormValues): void => {
     setExporting(true);
     exportStartTimeRef.current = Date.now();
 
     track('File Export Started', { scope: exportScope });
 
-    postMessage('export', { scope: exportScope });
+    const libraries = data.externalLibraries
+      .map(lib => ({
+        name: lib.name,
+        uuid: extractFileIdFromPenpotUrl(lib.uuid)
+      }))
+      .filter((lib): lib is ExternalLibrary => lib.uuid !== undefined);
+
+    postMessage('export', { scope: exportScope, libraries });
   };
 
   useEffect(() => {
@@ -288,6 +304,7 @@ export const useFigma = (): UseFigmaHook => {
     exportedBlob,
     exportTime,
     exportScope,
+    exportLibraries,
     setExportScope,
     retry,
     cancel,

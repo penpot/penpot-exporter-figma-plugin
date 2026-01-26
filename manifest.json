@@ -12,6 +12,6 @@
     ],
     "reasoning": "We use Sentry and Mixpanel to monitor the performance of the plugin and get information about errors to continue improving the experience."
   },
-  "permissions": ["currentuser"],
+  "permissions": ["currentuser", "teamlibrary"],
   "documentAccess": "dynamic-page"
 }

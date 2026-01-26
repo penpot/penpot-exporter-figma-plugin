@@ -4,7 +4,7 @@ import { transformPageNode } from '@plugin/transformers';
 import { flushProgress, reportProgress } from '@plugin/utils';
 
 import type { PenpotPage } from '@ui/lib/types/penpotPage';
-import type { ExportScope } from '@ui/types/progressMessages';
+import type { ExportScope } from '@ui/types';
 
 export const processPages = async (
   node: DocumentNode,

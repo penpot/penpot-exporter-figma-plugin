@@ -1,5 +1,44 @@
 # penpot-exporter
 
+## 0.19.2
+
+### Patch Changes
+
+- [#337](https://github.com/penpot/penpot-exporter-figma-plugin/pull/337)
+  [`7f12b51`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/7f12b518e0d46331bebd603d76f92dc3ed949b78)
+  Thanks [@jordisala1991](https://github.com/jordisala1991)! - Fix maximum call stack size exceeded
+  error on deeply nested structures by deferring child translation
+
+- [#338](https://github.com/penpot/penpot-exporter-figma-plugin/pull/338)
+  [`14cb9ed`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/14cb9ed279efa14be7c17dc2a382c40c1925e016)
+  Thanks [@jordisala1991](https://github.com/jordisala1991)! - Fix crash when boolean groups contain
+  only frames as children (fallback to normal group)
+
+## 0.19.1
+
+### Patch Changes
+
+- [#334](https://github.com/penpot/penpot-exporter-figma-plugin/pull/334)
+  [`010352e`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/010352e73afcfb46a43fd4e5091cfdfeebbad688)
+  Thanks [@SpykeRel04D](https://github.com/SpykeRel04D)! - Fix crash when dealing with some high
+  complexity vectors (svg)
+
+## 0.19.0
+
+### Minor Changes
+
+- [#322](https://github.com/penpot/penpot-exporter-figma-plugin/pull/322)
+  [`b714087`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/b7140878482ce38fabb0869b394e9cd09a9e116d)
+  Thanks [@jordisala1991](https://github.com/jordisala1991)! - Allow to export and link external
+  libraries with their files
+
+### Patch Changes
+
+- [#330](https://github.com/penpot/penpot-exporter-figma-plugin/pull/330)
+  [`61afc81`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/61afc815ca75be266a6d7446e71f1ada2611728b)
+  Thanks [@SpykeRel04D](https://github.com/SpykeRel04D)! - Avoid crash when text list fails to
+  inform its list type (ordered or unordered)
+
 ## 0.18.1
 
 ### Patch Changes
