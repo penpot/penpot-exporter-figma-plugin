@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { sleep, yieldByTime } from './sleep';
+import { sleep, yieldByTime } from '@common/sleep';
 
 describe('sleep', () => {
   beforeEach(() => {

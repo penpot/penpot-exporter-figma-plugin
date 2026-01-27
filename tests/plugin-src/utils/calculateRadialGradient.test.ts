@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { calculateRadialGradient } from './calculateRadialGradient';
+import { calculateRadialGradient } from '@plugin/utils/calculateRadialGradient';
 
 describe('calculateRadialGradient', () => {
   it('calcula gradiente radial con matriz identidad', () => {

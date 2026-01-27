@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { generateDeterministicUuid, generateUuid } from './generateUuid';
+import { generateDeterministicUuid, generateUuid } from '@plugin/utils/generateUuid';
 
 describe('generateUuid', () => {
   it('genera un UUID válido', () => {

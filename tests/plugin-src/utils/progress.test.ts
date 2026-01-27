@@ -24,7 +24,7 @@ describe('progress', () => {
 
     // Importar el módulo después de resetear
     // @ts-expect-error - Dynamic import es soportado por Vitest/esbuild en runtime
-    const progressModule = await import('./progress');
+    const progressModule = await import('@plugin/utils/progress');
     flushProgress = progressModule.flushProgress;
     reportProgress = progressModule.reportProgress;
     resetProgress = progressModule.resetProgress;

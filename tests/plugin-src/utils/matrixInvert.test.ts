@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { matrixInvert } from './matrixInvert';
+import { matrixInvert } from '@plugin/utils/matrixInvert';
 
 describe('matrixInvert', () => {
   it('invierte matriz identidad correctamente', () => {

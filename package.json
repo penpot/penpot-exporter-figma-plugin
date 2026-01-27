@@ -20,7 +20,8 @@
     "fix-lint:stylelint": "stylelint ui-src/**.css --fix",
     "fix-lint:prettier": "prettier --write .",
     "test": "vitest",
-    "test:run": "vitest run"
+    "test:run": "vitest run",
+    "test:coverage": "vitest run --coverage"
   },
   "author": "Kaleidos",
   "license": "MPL2.0",
@@ -51,6 +52,7 @@
     "@types/svg-path-parser": "^1.1",
     "@types/uuid": "^10.0.0",
     "@vitejs/plugin-react-swc": "^4.2",
+    "@vitest/coverage-v8": "^4.0.18",
     "concurrently": "^9.2",
     "esbuild": "^0.27",
     "eslint": "^9.39",

@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { calculateLinearGradient } from './calculateLinearGradient';
+import { calculateLinearGradient } from '@plugin/utils/calculateLinearGradient';
 
 describe('calculateLinearGradient', () => {
   it('calcula gradiente lineal con matriz identidad', () => {

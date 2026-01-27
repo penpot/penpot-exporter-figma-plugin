@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { rgbToHex } from './rgbToHex';
+import { rgbToHex } from '@plugin/utils/rgbToHex';
 
 describe('rgbToHex', () => {
   it('convierte negro correctamente', () => {

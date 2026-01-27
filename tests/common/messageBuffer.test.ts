@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { type MessageBufferConfig, createMessageBuffer } from './messageBuffer';
+import { type MessageBufferConfig, createMessageBuffer } from '@common/messageBuffer';
 
 type TestMessage = { type: string; data?: unknown };
 

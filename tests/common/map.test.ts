@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { init, toObject } from './map';
+import { init, toObject } from '@common/map';
 
 describe('map utilities', () => {
   describe('toObject', () => {

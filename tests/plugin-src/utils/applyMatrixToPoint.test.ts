@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { applyMatrixToPoint } from './applyMatrixToPoint';
+import { applyMatrixToPoint } from '@plugin/utils/applyMatrixToPoint';
 
 describe('applyMatrixToPoint', () => {
   it('aplica matriz identidad sin cambios', () => {

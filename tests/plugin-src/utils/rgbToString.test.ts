@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { rgbToString } from './rgbToString';
+import { rgbToString } from '@plugin/utils/rgbToString';
 
 describe('rgbToString', () => {
   it('convierte RGB a string sin alpha', () => {
