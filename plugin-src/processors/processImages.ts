@@ -23,6 +23,9 @@ export const processImages = async (
       // Skip images without valid data (e.g., empty image fills)
     }
 
+    // Remove processed image from map to free memory
+    images.delete(key);
+
     reportProgress({
       type: 'PROGRESS_PROCESSED_ITEMS',
       data: currentImage++

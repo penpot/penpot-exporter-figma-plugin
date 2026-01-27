@@ -25,6 +25,14 @@ const getParsedCommands = (pathData: string): Command[] => {
   return commands;
 };
 
+/**
+ * Clears the parsed SVG cache to prevent memory accumulation during exports.
+ * Should be called at the start of each export to ensure clean state.
+ */
+export const clearParsedCache = (): void => {
+  parsedCache.clear();
+};
+
 export const transformVectorPaths = (node: VectorNode): PathShape[] => {
   let regions: readonly VectorRegion[] = [];
 

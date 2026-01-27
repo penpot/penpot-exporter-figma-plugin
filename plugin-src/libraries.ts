@@ -1,3 +1,5 @@
+import { clearParsedCache } from '@plugin/transformers/partials/transformVectorPaths';
+
 import type { Uuid } from '@ui/lib/types/utils/uuid';
 import type { ComponentProperty, ComponentRoot } from '@ui/types';
 
@@ -14,3 +16,24 @@ export const variables: Map<string, string> = new Map();
 export const variableNames: Map<string, string> = new Map();
 export const uniqueVariableNames: Set<string> = new Set();
 export const externalLibraries: Map<string, string> = new Map();
+
+/**
+ * Clears all state maps and sets to prevent memory accumulation during exports.
+ * Should be called at the start of each export to ensure clean state.
+ */
+export const clearAllState = (): void => {
+  identifiers.clear();
+  missingFonts.clear();
+  textStyles.clear();
+  paintStyles.clear();
+  overrides.clear();
+  images.clear();
+  components.clear();
+  componentProperties.clear();
+  variantProperties.clear();
+  variables.clear();
+  variableNames.clear();
+  uniqueVariableNames.clear();
+  externalLibraries.clear();
+  clearParsedCache();
+};

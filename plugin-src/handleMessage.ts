@@ -1,4 +1,5 @@
 import {
+  clearAllState,
   componentProperties,
   components,
   externalLibraries,
@@ -24,6 +25,8 @@ export const handleExportMessage = async (
   scope: ExportScope,
   libraries: ExternalLibrary[]
 ): Promise<void> => {
+  // Clear all state maps and caches to prevent memory accumulation
+  clearAllState();
   resetProgress();
 
   initializeExternalLibraries(libraries);
