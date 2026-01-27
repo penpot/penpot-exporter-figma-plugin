@@ -18,7 +18,9 @@
     "fix-lint": "concurrently 'npm:fix-lint:*'",
     "fix-lint:eslint": "eslint . --fix",
     "fix-lint:stylelint": "stylelint ui-src/**.css --fix",
-    "fix-lint:prettier": "prettier --write ."
+    "fix-lint:prettier": "prettier --write .",
+    "test": "vitest",
+    "test:run": "vitest run"
   },
   "author": "Kaleidos",
   "license": "MPL2.0",
@@ -63,6 +65,7 @@
     "vite": "^7.2",
     "vite-plugin-singlefile": "^2.3",
     "vite-plugin-svgr": "^4.5",
-    "vite-tsconfig-paths": "^5.1"
+    "vite-tsconfig-paths": "^5.1",
+    "vitest": "^4.0.18"
   }
 }
