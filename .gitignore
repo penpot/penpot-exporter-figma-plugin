@@ -4,3 +4,6 @@ ui-src/.env
 
 # Sentry Config File
 .env.sentry-build-plugin
+
+# Coverage
+coverage/

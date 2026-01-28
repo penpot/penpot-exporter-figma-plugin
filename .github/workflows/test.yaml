@@ -1,0 +1,22 @@
+name: Test
+
+on:
+  pull_request:
+
+  push:
+    branches: [main, dev]
+
+jobs:
+  test:
+    name: Test ${{ matrix.node }}
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node: ['24.x']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+      - uses: bahmutov/npm-install@v1
+      - run: npm run test:coverage

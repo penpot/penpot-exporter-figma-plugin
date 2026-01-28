@@ -18,7 +18,10 @@
     "fix-lint": "concurrently 'npm:fix-lint:*'",
     "fix-lint:eslint": "eslint . --fix",
     "fix-lint:stylelint": "stylelint ui-src/**.css --fix",
-    "fix-lint:prettier": "prettier --write ."
+    "fix-lint:prettier": "prettier --write .",
+    "test": "vitest",
+    "test:run": "vitest run",
+    "test:coverage": "vitest run --coverage"
   },
   "author": "Kaleidos",
   "license": "MPL2.0",
@@ -49,6 +52,7 @@
     "@types/svg-path-parser": "^1.1",
     "@types/uuid": "^10.0.0",
     "@vitejs/plugin-react-swc": "^4.2",
+    "@vitest/coverage-v8": "^4.0.18",
     "concurrently": "^9.2",
     "esbuild": "^0.27",
     "eslint": "^9.39",
@@ -63,6 +67,7 @@
     "vite": "^7.2",
     "vite-plugin-singlefile": "^2.3",
     "vite-plugin-svgr": "^4.5",
-    "vite-tsconfig-paths": "^5.1"
+    "vite-tsconfig-paths": "^5.1",
+    "vitest": "^4.0.18"
   }
 }
