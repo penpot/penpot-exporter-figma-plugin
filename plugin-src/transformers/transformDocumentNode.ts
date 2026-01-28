@@ -19,9 +19,11 @@ import type { ExportScope, PenpotDocument } from '@ui/types';
 
 export const transformDocumentNode = async (
   node: DocumentNode,
-  scope: ExportScope
+  scope: ExportScope,
+  includeExternalVariables: boolean = false,
+  externalVariableIds?: string[]
 ): Promise<PenpotDocument> => {
-  const tokens = await processTokens();
+  const tokens = await processTokens(includeExternalVariables, externalVariableIds);
 
   await registerPaintStyles();
   await registerTextStyles();
