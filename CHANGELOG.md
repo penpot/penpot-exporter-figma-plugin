@@ -1,5 +1,14 @@
 # penpot-exporter
 
+## 0.19.3
+
+### Patch Changes
+
+- [#340](https://github.com/penpot/penpot-exporter-figma-plugin/pull/340)
+  [`e9ddcea`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/e9ddcea20463ecdcedab63cf0de208030c54df1f)
+  Thanks [@SpykeRel04D](https://github.com/SpykeRel04D)! - Cleaning tracking objects to free up
+  memory
+
 ## 0.19.2
 
 ### Patch Changes
