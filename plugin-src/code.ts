@@ -11,6 +11,8 @@ type ExportMessage = {
   data: {
     scope: ExportScope;
     libraries: ExternalLibrary[];
+    includeExternalVariables?: boolean;
+    skipDetection?: boolean;
   };
 };
 
@@ -27,8 +29,10 @@ const onMessage: MessageEventHandler = message => {
     const exportMessage = message as ExportMessage;
     const scope = exportMessage.data?.scope ?? 'all';
     const libraries = exportMessage.data?.libraries ?? [];
+    const includeExternalVariables = exportMessage.data?.includeExternalVariables ?? false;
+    const skipDetection = exportMessage.data?.skipDetection ?? false;
 
-    handleExportMessage(scope, libraries);
+    handleExportMessage(scope, libraries, includeExternalVariables, skipDetection);
   }
 
   if (message.type === 'cancel') {

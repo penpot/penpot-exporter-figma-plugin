@@ -11,6 +11,15 @@ export type FormValues = {
   externalLibraries: ExternalLibrary[];
 };
 
+export type ExternalVariableInfo = {
+  variableId: string;
+  variableName: string;
+  collectionId: string;
+  collectionName: string;
+  libraryName: string | null;
+  usedIn: string[];
+};
+
 export type UseFigmaHook = {
   missingFonts: string[] | undefined;
   exporting: boolean;
@@ -27,10 +36,13 @@ export type UseFigmaHook = {
   exportTime: number | null;
   exportScope: ExportScope;
   exportLibraries: string[];
+  externalVariablesWarning: ExternalVariableInfo[] | null;
+  libraryNames: string[];
   setExportScope: (scope: ExportScope) => void;
   retry: () => void;
   cancel: () => void;
   exportPenpot: (data: FormValues) => void;
+  exportWithExternalVariables: (includeExternalVariables: boolean) => void;
   downloadBlob: () => void;
 };
 
@@ -43,7 +55,12 @@ export const useFigma = (): UseFigmaHook => {
   const [exportTime, setExportTime] = useState<number | null>(null);
   const [exportScope, setExportScope] = useState<ExportScope>('all');
   const [exportLibraries, setExportLibraries] = useState<string[]>([]);
+  const [externalVariablesWarning, setExternalVariablesWarning] = useState<
+    ExternalVariableInfo[] | null
+  >(null);
+  const [libraryNames, setLibraryNames] = useState<string[]>([]);
   const exportStartTimeRef = useRef<number | null>(null);
+  const pendingExportDataRef = useRef<FormValues | null>(null);
 
   const [step, setStep] = useState<Steps>('processing');
   const totalItemsRef = useRef<number>(0);
@@ -69,6 +86,12 @@ export const useFigma = (): UseFigmaHook => {
         setExportLibraries(pluginMessage.data);
         break;
       }
+      case 'EXTERNAL_VARIABLES_DETECTED': {
+        setExternalVariablesWarning(pluginMessage.data.variables);
+        setLibraryNames(pluginMessage.data.libraryNames);
+        setExporting(false);
+        break;
+      }
       case 'USER_DATA': {
         identify({ userId: pluginMessage.data.userId });
         track('Plugin Loaded');
@@ -85,9 +108,12 @@ export const useFigma = (): UseFigmaHook => {
         setExportScope('all');
         setStep('processing');
         setCurrentItem('');
+        setExternalVariablesWarning(null);
+        setLibraryNames([]);
 
         totalItemsRef.current = 0;
         exportStartTimeRef.current = null;
+        pendingExportDataRef.current = null;
 
         track('Plugin Reloaded');
 
@@ -219,6 +245,7 @@ export const useFigma = (): UseFigmaHook => {
   const exportPenpot = (data: FormValues): void => {
     setExporting(true);
     exportStartTimeRef.current = Date.now();
+    pendingExportDataRef.current = data;
 
     track('File Export Started', { scope: exportScope });
 
@@ -229,7 +256,33 @@ export const useFigma = (): UseFigmaHook => {
       }))
       .filter((lib): lib is ExternalLibrary => lib.uuid !== undefined);
 
-    postMessage('export', { scope: exportScope, libraries });
+    postMessage('export', { scope: exportScope, libraries, includeExternalVariables: false });
+  };
+
+  const exportWithExternalVariables = (includeExternalVariables: boolean): void => {
+    if (!pendingExportDataRef.current) return;
+
+    setExternalVariablesWarning(null);
+    setLibraryNames([]);
+    setExporting(true);
+    exportStartTimeRef.current = Date.now();
+
+    track('File Export Started', { scope: exportScope, includeExternalVariables });
+
+    const libraries = pendingExportDataRef.current.externalLibraries
+      .map(lib => ({
+        name: lib.name,
+        uuid: extractFileIdFromPenpotUrl(lib.uuid)
+      }))
+      .filter((lib): lib is ExternalLibrary => lib.uuid !== undefined);
+
+    // Skip detection when user has already made a choice
+    postMessage('export', {
+      scope: exportScope,
+      libraries,
+      includeExternalVariables,
+      skipDetection: true
+    });
   };
 
   useEffect(() => {
@@ -258,10 +311,13 @@ export const useFigma = (): UseFigmaHook => {
     exportTime,
     exportScope,
     exportLibraries,
+    externalVariablesWarning,
+    libraryNames,
     setExportScope,
     retry,
     cancel,
     exportPenpot,
+    exportWithExternalVariables,
     downloadBlob
   };
 };
