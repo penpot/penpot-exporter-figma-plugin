@@ -1,5 +1,6 @@
 import { variables } from '@plugin/libraries';
 import { translateSet, translateTheme } from '@plugin/translators/tokens';
+import { rgbToString } from '@plugin/utils/rgbToString';
 
 import type { Theme, Token, TokenSets, Tokens } from '@ui/lib/types/shapes/tokens';
 
@@ -7,7 +8,77 @@ const valueIsAlias = (value: Token['$value']): value is string => {
   return typeof value === 'string' && value.startsWith('{') && value.endsWith('}');
 };
 
-const resolveAlias = (token: Token): Token | null => {
+const isColorValue = (value: VariableValue): value is RGB | RGBA => {
+  return typeof value === 'object' && 'r' in value && 'g' in value && 'b' in value;
+};
+
+const isAliasValue = (value: VariableValue): value is VariableAlias => {
+  return typeof value === 'object' && 'id' in value;
+};
+
+const isNumberValue = (value: VariableValue): value is number => {
+  return typeof value === 'number';
+};
+
+const isStringValue = (value: VariableValue): value is string => {
+  return typeof value === 'string';
+};
+
+/**
+ * Resolves the final value of a variable, following alias chains if necessary.
+ * This handles external variables from Design Systems that are not in the local variables map.
+ */
+const resolveVariableValue = async (
+  variableId: string,
+  tokenType: string,
+  maxDepth: number = 10
+): Promise<Token['$value'] | null> => {
+  if (maxDepth <= 0) {
+    console.warn('Max alias resolution depth reached for variable:', variableId);
+    return null;
+  }
+
+  const variable = await figma.variables.getVariableByIdAsync(variableId);
+  if (!variable) {
+    return null;
+  }
+
+  // Get the value from the first available mode
+  const modeId = Object.keys(variable.valuesByMode)[0];
+  if (!modeId) {
+    return null;
+  }
+
+  const value = variable.valuesByMode[modeId];
+
+  // If the value is another alias, resolve it recursively
+  if (isAliasValue(value)) {
+    return resolveVariableValue(value.id, tokenType, maxDepth - 1);
+  }
+
+  // Resolve based on token type
+  if (tokenType === 'color' && isColorValue(value)) {
+    return rgbToString(value);
+  }
+
+  if (isNumberValue(value)) {
+    if (tokenType === 'opacity') {
+      return (value / 100).toString();
+    }
+    return value.toString();
+  }
+
+  if (isStringValue(value)) {
+    if (tokenType === 'fontFamilies') {
+      return [value];
+    }
+    return value;
+  }
+
+  return null;
+};
+
+const resolveAlias = async (token: Token): Promise<Token | null> => {
   if (!valueIsAlias(token.$value)) {
     return token;
   }
@@ -16,16 +87,29 @@ const resolveAlias = (token: Token): Token | null => {
 
   const variableId = $value.slice(1, -1);
 
+  // First, try to resolve from local variables map
   const resolvedVariableName = variables.get(variableId + '.' + $type) ?? variables.get(variableId);
-  if (!resolvedVariableName) {
-    return null;
+  if (resolvedVariableName) {
+    return {
+      $value: '{' + resolvedVariableName + '}',
+      $type,
+      $description
+    };
   }
 
-  return {
-    $value: '{' + resolvedVariableName + '}',
-    $type,
-    $description
-  };
+  // Variable not found in local map - it's likely an external variable from a Design System
+  // Resolve its final value instead of keeping the unresolvable alias
+  const resolvedValue = await resolveVariableValue(variableId, $type);
+  if (resolvedValue !== null) {
+    return {
+      $value: resolvedValue,
+      $type,
+      $description
+    };
+  }
+
+  // Could not resolve the variable at all
+  return null;
 };
 
 const isToken = (token: Token | Record<string, Token>): token is Token => {
@@ -34,11 +118,11 @@ const isToken = (token: Token | Record<string, Token>): token is Token => {
 
 // Tokens can be referencing other tokens, and the order is not guaranteed
 // so we need to resolve them after the first pass to resolve all aliases.
-const resolveAliases = (sets: TokenSets): TokenSets => {
+const resolveAliases = async (sets: TokenSets): Promise<TokenSets> => {
   for (const [setName, set] of Object.entries(sets)) {
     for (const [tokenName, tokenValue] of Object.entries(set)) {
       if (isToken(tokenValue)) {
-        const resolvedToken = resolveAlias(tokenValue);
+        const resolvedToken = await resolveAlias(tokenValue);
 
         if (!resolvedToken) {
           delete sets[setName][tokenName];
@@ -51,7 +135,7 @@ const resolveAliases = (sets: TokenSets): TokenSets => {
         const resolvedTokens: Record<string, Token> = {};
 
         for (const [tokenType, token] of Object.entries(tokenValue)) {
-          const resolvedToken = resolveAlias(token);
+          const resolvedToken = await resolveAlias(token);
 
           if (!resolvedToken) continue;
 
@@ -116,9 +200,11 @@ export const processTokens = async (): Promise<Tokens | undefined> => {
     return;
   }
 
+  const resolvedSets = await resolveAliases(sets);
+
   return {
     $metadata: { tokenSetOrder, activeThemes: [], activeSets },
     $themes: themes,
-    ...resolveAliases(sets)
+    ...resolvedSets
   };
 };
