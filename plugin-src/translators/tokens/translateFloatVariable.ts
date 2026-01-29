@@ -1,5 +1,6 @@
+import { isAliasValue, isNumberValue } from '@common/variables';
+
 import {
-  isAliasValue,
   translateAliasValue,
   translateGenericVariable,
   translateScope,
@@ -14,10 +15,6 @@ const isValidOpacityValue = (value: number): boolean => {
 
 const isValidFontWeightValue = (value: number): boolean => {
   return [100, 200, 300, 400, 500, 600, 700, 800, 900, 950].includes(value);
-};
-
-const isNumberValue = (value: VariableValue): value is number => {
-  return typeof value === 'number';
 };
 
 const translateValue = (value: VariableValue, tokenType: TokenType): Token['$value'] | null => {

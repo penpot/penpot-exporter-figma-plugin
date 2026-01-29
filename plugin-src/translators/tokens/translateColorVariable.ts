@@ -1,12 +1,10 @@
+import { isAliasValue, isColorValue } from '@common/variables';
+
 import { variables } from '@plugin/libraries';
-import { isAliasValue, translateAliasValue } from '@plugin/translators/tokens/translateAliasValue';
+import { translateAliasValue } from '@plugin/translators/tokens/translateAliasValue';
 import { rgbToString } from '@plugin/utils/rgbToString';
 
 import type { Token } from '@ui/lib/types/shapes/tokens';
-
-const isColorValue = (value: VariableValue): value is RGB | RGBA => {
-  return typeof value === 'object' && 'r' in value && 'g' in value && 'b' in value;
-};
 
 const translateColorValue = (value: VariableValue): Token['$value'] | null => {
   if (isAliasValue(value)) {
