@@ -14,7 +14,7 @@ const valueIsAlias = (value: Token['$value']): value is string => {
  * Resolves the final value of a variable, following alias chains if necessary.
  * This handles external variables from Design Systems that are not in the local variables map.
  */
-const resolveVariableValue = async (
+export const resolveVariableValue = async (
   variableId: string,
   tokenType: string,
   maxDepth: number = 10
@@ -64,7 +64,7 @@ const resolveVariableValue = async (
   return null;
 };
 
-const resolveAlias = async (token: Token): Promise<Token | null> => {
+export const resolveAlias = async (token: Token): Promise<Token | null> => {
   if (!valueIsAlias(token.$value)) {
     return token;
   }

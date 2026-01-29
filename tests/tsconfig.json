@@ -1,0 +1,15 @@
+{
+  "extends": "../tsconfig.base.json",
+  "compilerOptions": {
+    "target": "ES2019",
+    "lib": ["ES2019", "DOM"],
+    "module": "ESNext",
+    "moduleResolution": "Node",
+    "strict": true,
+    "typeRoots": ["../node_modules/@figma"],
+    "skipLibCheck": true,
+    "resolveJsonModule": true
+  },
+  "include": ["**/*.test.ts"],
+  "exclude": ["node_modules"]
+}
