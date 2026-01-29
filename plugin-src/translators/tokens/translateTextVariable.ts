@@ -1,5 +1,6 @@
+import { isAliasValue, isStringValue } from '@common/variables';
+
 import {
-  isAliasValue,
   translateAliasValue,
   translateGenericVariable,
   translateScope,
@@ -31,10 +32,6 @@ const VALID_FONT_WEIGHT_VALUES = [
 
 const isValidFontWeightValue = (value: string): boolean => {
   return VALID_FONT_WEIGHT_VALUES.includes(value.toLowerCase());
-};
-
-const isStringValue = (value: VariableValue): value is string => {
-  return typeof value === 'string';
 };
 
 const translateValue = (value: VariableValue, tokenType: TokenType): Token['$value'] | null => {

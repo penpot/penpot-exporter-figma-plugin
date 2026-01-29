@@ -1,3 +1,5 @@
+import { isAliasValue, isColorValue, isNumberValue, isStringValue } from '@common/variables';
+
 import { variables } from '@plugin/libraries';
 import { translateSet, translateTheme } from '@plugin/translators/tokens';
 import { rgbToString } from '@plugin/utils/rgbToString';
@@ -6,22 +8,6 @@ import type { Theme, Token, TokenSets, Tokens } from '@ui/lib/types/shapes/token
 
 const valueIsAlias = (value: Token['$value']): value is string => {
   return typeof value === 'string' && value.startsWith('{') && value.endsWith('}');
-};
-
-const isColorValue = (value: VariableValue): value is RGB | RGBA => {
-  return typeof value === 'object' && 'r' in value && 'g' in value && 'b' in value;
-};
-
-const isAliasValue = (value: VariableValue): value is VariableAlias => {
-  return typeof value === 'object' && 'id' in value;
-};
-
-const isNumberValue = (value: VariableValue): value is number => {
-  return typeof value === 'number';
-};
-
-const isStringValue = (value: VariableValue): value is string => {
-  return typeof value === 'string';
 };
 
 /**
