@@ -19,7 +19,7 @@ In Figma: `Plugins` → `Development` → `Import plugin from manifest…` → s
 
 ## Repository layout
 
-```
+```text
 plugin-src/           # Figma plugin runtime (esbuild → dist/code.js)
 ├── code.ts           # Entry point - handles UI messages
 ├── handleMessage.ts  # Export orchestration
@@ -45,7 +45,7 @@ dist/                 # Build output (generated)
 
 The export process follows this pipeline:
 
-```
+```text
 Figma Node → Processor → Transformer → Translator → Penpot Shape
 ```
 
@@ -95,7 +95,7 @@ export const translateSolidFill = (fill: SolidPaint): Fill => ({
 ## Key files to understand
 
 | File | Purpose |
-|------|---------|
+| --- | --- |
 | `plugin-src/code.ts` | Plugin entry point, message handling |
 | `plugin-src/handleMessage.ts` | Export orchestration |
 | `plugin-src/libraries.ts` | Global state (components, images, fonts) |
@@ -105,7 +105,7 @@ export const translateSolidFill = (fill: SolidPaint): Fill => ({
 ## Common commands
 
 | Command | Description |
-|---------|-------------|
+| --- | --- |
 | `npm install` | Install dependencies |
 | `npm run build` | Dev build (plugin + UI) |
 | `npm run build:prod` | Production build |
@@ -198,6 +198,7 @@ npx changeset
 ```
 
 Select the change type:
+
 - **patch:** Bug fixes, minor improvements
 - **minor:** New features (backward compatible)
 - **major:** Breaking changes
@@ -207,6 +208,7 @@ Write a concise description of the change. The changeset file goes in `.changese
 ### When to create changesets
 
 Create a changeset for any PR that:
+
 - Fixes a bug
 - Adds a feature
 - Changes behavior
