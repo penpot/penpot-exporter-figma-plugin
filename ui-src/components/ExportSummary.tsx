@@ -40,8 +40,8 @@ export const ExportSummary = (): JSX.Element | null => {
 
       {isLargeExport && (
         <Banner icon={<CircleAlert size={14} />} variant="warning">
-          This file is over 200 MB and will most likely have issues importing into Penpot. We
-          recommend splitting the file into smaller exports.
+          <strong>This file is over 200 MB</strong> and will most likely have issues importing into
+          Penpot. <strong>We recommend splitting the file</strong> into smaller exports.
         </Banner>
       )}
 
