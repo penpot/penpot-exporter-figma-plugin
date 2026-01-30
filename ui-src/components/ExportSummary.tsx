@@ -16,6 +16,8 @@ export const ExportSummary = (): JSX.Element | null => {
 
   const hasMissingFonts = missingFonts && missingFonts.length > 0;
   const isCurrentPageOnly = exportScope === 'current';
+  const exportSizeMB = exportedBlob.blob.size / (1024 * 1024);
+  const isLargeExport = exportSizeMB > 200;
 
   return (
     <Stack space="medium">
@@ -35,6 +37,13 @@ export const ExportSummary = (): JSX.Element | null => {
           )}
         </p>
       </Stack>
+
+      {isLargeExport && (
+        <Banner icon={<CircleAlert size={14} />} variant="warning">
+          This file is over 200 MB and will most likely have issues importing into Penpot. We
+          recommend splitting the file into smaller exports.
+        </Banner>
+      )}
 
       {isCurrentPageOnly && (
         <Banner icon={<Info size={14} />}>
