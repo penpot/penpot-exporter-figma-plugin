@@ -1,7 +1,11 @@
 import { getUserData } from '@plugin/getUserData';
-import { handleExportMessage, handleRetryMessage } from '@plugin/handleMessage';
+import {
+  handleExportMessage,
+  handleExternalVariablesChoice,
+  handleRetryMessage
+} from '@plugin/handleMessage';
 
-import type { ExportScope, ExternalLibrary } from '@ui/types';
+import type { ExportScope, ExternalLibrary, ExternalVariablesChoice } from '@ui/types';
 
 const BASE_HEIGHT = 500;
 const BASE_WIDTH = 560;
@@ -11,6 +15,13 @@ type ExportMessage = {
   data: {
     scope: ExportScope;
     libraries: ExternalLibrary[];
+  };
+};
+
+type ExternalVariablesChoiceMessage = {
+  type: 'external_variables_choice';
+  data: {
+    choice: ExternalVariablesChoice;
   };
 };
 
@@ -29,6 +40,15 @@ const onMessage: MessageEventHandler = message => {
     const libraries = exportMessage.data?.libraries ?? [];
 
     handleExportMessage(scope, libraries);
+  }
+
+  if (message.type === 'external_variables_choice') {
+    const choiceMessage = message as ExternalVariablesChoiceMessage;
+    const choice = choiceMessage.data?.choice;
+
+    if (choice) {
+      handleExternalVariablesChoice(choice);
+    }
   }
 
   if (message.type === 'cancel') {
