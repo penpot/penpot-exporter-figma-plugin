@@ -1,6 +1,6 @@
 {
   "name": "penpot-exporter",
-  "version": "0.19.2",
+  "version": "0.19.3",
   "description": "Penpot exporter",
   "type": "module",
   "scripts": {
