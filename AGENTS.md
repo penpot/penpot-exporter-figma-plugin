@@ -94,29 +94,29 @@ export const translateSolidFill = (fill: SolidPaint): Fill => ({
 
 ## Key files to understand
 
-| File | Purpose |
-| --- | --- |
-| `plugin-src/code.ts` | Plugin entry point, message handling |
-| `plugin-src/handleMessage.ts` | Export orchestration |
-| `plugin-src/libraries.ts` | Global state (components, images, fonts) |
-| `ui-src/lib/types/shapes/*.ts` | Penpot shape type definitions |
-| `DEV_GUIDE.md` | Penpot data model & Clojure spec syntax |
+| File                           | Purpose                                  |
+| ------------------------------ | ---------------------------------------- |
+| `plugin-src/code.ts`           | Plugin entry point, message handling     |
+| `plugin-src/handleMessage.ts`  | Export orchestration                     |
+| `plugin-src/libraries.ts`      | Global state (components, images, fonts) |
+| `ui-src/lib/types/shapes/*.ts` | Penpot shape type definitions            |
+| `DEV_GUIDE.md`                 | Penpot data model & Clojure spec syntax  |
 
 ## Common commands
 
-| Command | Description |
-| --- | --- |
-| `npm install` | Install dependencies |
-| `npm run build` | Dev build (plugin + UI) |
-| `npm run build:prod` | Production build |
-| `npm run build:watch` | Watch mode for development |
-| `npm run lint` | Run all linters |
-| `npm run fix-lint` | Auto-fix lint issues |
-| `npm run lint:tsc-ui` | Type-check UI code |
-| `npm run lint:tsc-plugin` | Type-check plugin code |
-| `npm test` | Run tests in watch mode |
-| `npm run test:run` | Run tests once |
-| `npm run test:coverage` | Run tests with coverage |
+| Command                   | Description                |
+| ------------------------- | -------------------------- |
+| `npm install`             | Install dependencies       |
+| `npm run build`           | Dev build (plugin + UI)    |
+| `npm run build:prod`      | Production build           |
+| `npm run build:watch`     | Watch mode for development |
+| `npm run lint`            | Run all linters            |
+| `npm run fix-lint`        | Auto-fix lint issues       |
+| `npm run lint:tsc-ui`     | Type-check UI code         |
+| `npm run lint:tsc-plugin` | Type-check plugin code     |
+| `npm test`                | Run tests in watch mode    |
+| `npm run test:run`        | Run tests once             |
+| `npm run test:coverage`   | Run tests with coverage    |
 
 ## Code conventions
 
