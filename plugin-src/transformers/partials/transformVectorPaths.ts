@@ -50,10 +50,42 @@ export const transformVectorPaths = (node: VectorNode): PathShape[] => {
 
   // Cache for vertex extraction to avoid re-parsing same path data
   const vertexCache = new Map<string, Set<string>>();
-  const getVertices = (pathData: string): Set<string> => {
+  const invalidPathData = new Set<string>();
+  const loggedInvalidPathData = new Set<string>();
+
+  const logInvalidPathData = (source: string, pathData: string, error: unknown): void => {
+    if (loggedInvalidPathData.has(pathData)) {
+      return;
+    }
+
+    loggedInvalidPathData.add(pathData);
+
+    console.warn('[Penpot Exporter] Skipping invalid SVG path', {
+      nodeId: node.id,
+      nodeName: node.name,
+      nodeType: node.type,
+      source,
+      error: error instanceof Error ? error.message : String(error),
+      pathLength: pathData.length
+    });
+  };
+
+  const getVertices = (pathData: string, source: string): Set<string> | undefined => {
+    if (invalidPathData.has(pathData)) {
+      return;
+    }
+
     let vertices = vertexCache.get(pathData);
     if (!vertices) {
-      vertices = extractVertices(pathData);
+      try {
+        vertices = extractVertices(pathData);
+      } catch (error) {
+        invalidPathData.add(pathData);
+        logInvalidPathData(source, pathData, error);
+
+        return;
+      }
+
       vertexCache.set(pathData, vertices);
     }
     return vertices;
@@ -63,7 +95,10 @@ export const transformVectorPaths = (node: VectorNode): PathShape[] => {
   // (vectorPaths may contain multiple subpaths in one entry, while fillGeometry has them separate)
   const combinedFillGeometryVertices = hasGeometry
     ? getCombinedVerticesCached(
-        fillGeometry.map(geo => geo.data),
+        fillGeometry.map((geo, index) => ({
+          data: geo.data,
+          source: `fillGeometry[${index}]`
+        })),
         getVertices
       )
     : new Set<string>();
@@ -95,20 +130,42 @@ export const transformVectorPaths = (node: VectorNode): PathShape[] => {
     // For windingRule 'NONE' paths when hasStrokes && hasGeometry:
     // Only EXCLUDE if this vectorPath visits the SAME vertices as the COMBINED fillGeometry
     else if (hasStrokes && hasGeometry && vectorPath.windingRule === 'NONE') {
-      currentHash = hashVertexSet(getVertices(vectorPath.data));
-      shouldInclude = currentHash !== combinedFillGeometryHash;
+      const vertices = getVertices(vectorPath.data, `vectorPaths[${i}]`);
+
+      if (vertices) {
+        currentHash = hashVertexSet(vertices);
+        shouldInclude = currentHash !== combinedFillGeometryHash;
+      }
     }
 
     if (shouldInclude) {
       // Lazy compute hash only when needed for deduplication
       if (currentHash === undefined) {
-        currentHash = hashVertexSet(getVertices(vectorPath.data));
+        const vertices = getVertices(vectorPath.data, `vectorPaths[${i}]`);
+
+        if (!vertices) {
+          continue;
+        }
+
+        currentHash = hashVertexSet(vertices);
       }
       // Deduplicate: skip if we've already seen a path with identical vertices (O(1) hash lookup)
       if (!seenVertexHashes.has(currentHash)) {
-        seenVertexHashes.add(currentHash);
-        includedVectorPathsData.push(vectorPath.data);
-        pathShapes.push(transformVectorPath(node, vectorPath, regions[i], count++));
+        const pathShape = transformVectorPath(
+          node,
+          vectorPath,
+          regions[i],
+          count,
+          `vectorPaths[${i}]`,
+          logInvalidPathData
+        );
+
+        if (pathShape) {
+          count += 1;
+          seenVertexHashes.add(currentHash);
+          includedVectorPathsData.push(vectorPath.data);
+          pathShapes.push(pathShape);
+        }
       }
     }
   }
@@ -119,7 +176,10 @@ export const transformVectorPaths = (node: VectorNode): PathShape[] => {
 
   // Compute combined vertices of included vectorPaths (reusing cached data)
   const combinedIncludedVectorPathVertices = getCombinedVerticesCached(
-    includedVectorPathsData,
+    includedVectorPathsData.map((data, index) => ({
+      data,
+      source: `includedVectorPathsData[${index}]`
+    })),
     getVertices
   );
   const combinedIncludedHash = hashVertexSet(combinedIncludedVectorPathVertices);
@@ -129,9 +189,25 @@ export const transformVectorPaths = (node: VectorNode): PathShape[] => {
   const shouldIncludeFillGeometry =
     includedVectorPathsData.length === 0 || combinedFillGeometryHash !== combinedIncludedHash;
 
-  const geometryShapes = shouldIncludeFillGeometry
-    ? fillGeometry.map(geometry => transformVectorPath(node, geometry, undefined, count++))
-    : [];
+  const geometryShapes: PathShape[] = [];
+
+  if (shouldIncludeFillGeometry) {
+    for (let i = 0; i < fillGeometry.length; i++) {
+      const geometryShape = transformVectorPath(
+        node,
+        fillGeometry[i],
+        undefined,
+        count,
+        `fillGeometry[${i}]`,
+        logInvalidPathData
+      );
+
+      if (geometryShape) {
+        count += 1;
+        geometryShapes.push(geometryShape);
+      }
+    }
+  }
 
   return [...geometryShapes, ...pathShapes];
 };
@@ -161,12 +237,18 @@ const extractVertices = (pathData: string): Set<string> => {
  * Uses a cache function to avoid re-parsing same paths.
  */
 const getCombinedVerticesCached = (
-  pathDataList: string[],
-  getVertices: (pathData: string) => Set<string>
+  pathDataList: { data: string; source: string }[],
+  getVertices: (pathData: string, source: string) => Set<string> | undefined
 ): Set<string> => {
   const combined = new Set<string>();
   for (const pathData of pathDataList) {
-    for (const vertex of getVertices(pathData)) {
+    const vertices = getVertices(pathData.data, pathData.source);
+
+    if (!vertices) {
+      continue;
+    }
+
+    for (const vertex of vertices) {
       combined.add(vertex);
     }
   }
@@ -193,9 +275,19 @@ const transformVectorPath = (
   node: VectorNode,
   vectorPath: VectorPath,
   vectorRegion: VectorRegion | undefined,
-  index: number
-): PathShape => {
-  const normalizedPaths = getParsedCommands(vectorPath.data);
+  index: number,
+  source: string,
+  logInvalidPathData: (source: string, pathData: string, error: unknown) => void
+): PathShape | undefined => {
+  let normalizedPaths: Command[];
+
+  try {
+    normalizedPaths = getParsedCommands(vectorPath.data);
+  } catch (error) {
+    logInvalidPathData(source, vectorPath.data, error);
+
+    return;
+  }
 
   return {
     type: 'path',
