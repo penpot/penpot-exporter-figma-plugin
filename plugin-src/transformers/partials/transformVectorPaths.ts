@@ -16,12 +16,26 @@ import type { PathShape } from '@ui/lib/types/shapes/pathShape';
 
 // Cache parsed SVG commands to avoid re-parsing same path data
 const parsedCache = new Map<string, Command[]>();
-const getParsedCommands = (pathData: string): Command[] => {
+const failedParsedPaths = new Set<string>();
+
+const getParsedCommands = (pathData: string): Command[] | undefined => {
+  if (failedParsedPaths.has(pathData)) {
+    return;
+  }
+
   let commands = parsedCache.get(pathData);
+
   if (!commands) {
-    commands = parseSVG(pathData);
+    try {
+      commands = parseSVG(pathData);
+    } catch {
+      failedParsedPaths.add(pathData);
+      return;
+    }
+
     parsedCache.set(pathData, commands);
   }
+
   return commands;
 };
 
@@ -31,6 +45,7 @@ const getParsedCommands = (pathData: string): Command[] => {
  */
 export const clearParsedCache = (): void => {
   parsedCache.clear();
+  failedParsedPaths.clear();
 };
 
 export const transformVectorPaths = (node: VectorNode): PathShape[] => {
@@ -45,7 +60,10 @@ export const transformVectorPaths = (node: VectorNode): PathShape[] => {
   const hasStrokes = node.strokes.length > 0;
   const vectorPaths = node.vectorPaths ?? [];
   const fillGeometry = node.fillGeometry ?? [];
-  const hasGeometry = fillGeometry.length > 0;
+  const validFillGeometry = fillGeometry.filter(
+    geometry => getParsedCommands(geometry.data) !== undefined
+  );
+  const hasGeometry = validFillGeometry.length > 0;
   let count = 0;
 
   // Cache for vertex extraction to avoid re-parsing same path data
@@ -63,7 +81,7 @@ export const transformVectorPaths = (node: VectorNode): PathShape[] => {
   // (vectorPaths may contain multiple subpaths in one entry, while fillGeometry has them separate)
   const combinedFillGeometryVertices = hasGeometry
     ? getCombinedVerticesCached(
-        fillGeometry.map(geo => geo.data),
+        validFillGeometry.map(geo => geo.data),
         getVertices
       )
     : new Set<string>();
@@ -77,6 +95,11 @@ export const transformVectorPaths = (node: VectorNode): PathShape[] => {
 
   for (let i = 0; i < vectorPaths.length; i++) {
     const vectorPath = vectorPaths[i];
+
+    if (getParsedCommands(vectorPath.data) === undefined) {
+      continue;
+    }
+
     let shouldInclude = false;
     let currentHash: string | undefined;
 
@@ -106,9 +129,13 @@ export const transformVectorPaths = (node: VectorNode): PathShape[] => {
       }
       // Deduplicate: skip if we've already seen a path with identical vertices (O(1) hash lookup)
       if (!seenVertexHashes.has(currentHash)) {
-        seenVertexHashes.add(currentHash);
-        includedVectorPathsData.push(vectorPath.data);
-        pathShapes.push(transformVectorPath(node, vectorPath, regions[i], count++));
+        const pathShape = transformVectorPath(node, vectorPath, regions[i], count);
+        if (pathShape) {
+          seenVertexHashes.add(currentHash);
+          includedVectorPathsData.push(vectorPath.data);
+          pathShapes.push(pathShape);
+          count++;
+        }
       }
     }
   }
@@ -129,9 +156,16 @@ export const transformVectorPaths = (node: VectorNode): PathShape[] => {
   const shouldIncludeFillGeometry =
     includedVectorPathsData.length === 0 || combinedFillGeometryHash !== combinedIncludedHash;
 
-  const geometryShapes = shouldIncludeFillGeometry
-    ? fillGeometry.map(geometry => transformVectorPath(node, geometry, undefined, count++))
-    : [];
+  const geometryShapes: PathShape[] = [];
+  if (shouldIncludeFillGeometry) {
+    for (const geometry of validFillGeometry) {
+      const geometryShape = transformVectorPath(node, geometry, undefined, count);
+      if (geometryShape) {
+        geometryShapes.push(geometryShape);
+        count++;
+      }
+    }
+  }
 
   return [...geometryShapes, ...pathShapes];
 };
@@ -144,6 +178,10 @@ export const transformVectorPaths = (node: VectorNode): PathShape[] => {
 const extractVertices = (pathData: string): Set<string> => {
   const vertices = new Set<string>();
   const commands = getParsedCommands(pathData);
+
+  if (!commands) {
+    return vertices;
+  }
 
   for (const cmd of commands) {
     if ('x' in cmd && 'y' in cmd && typeof cmd.x === 'number' && typeof cmd.y === 'number') {
@@ -194,13 +232,18 @@ const transformVectorPath = (
   vectorPath: VectorPath,
   vectorRegion: VectorRegion | undefined,
   index: number
-): PathShape => {
+): PathShape | undefined => {
   const normalizedPaths = getParsedCommands(vectorPath.data);
+  if (!normalizedPaths || normalizedPaths.length === 0) {
+    return;
+  }
+
+  const content = translateCommands(node, normalizedPaths);
 
   return {
     type: 'path',
     name: 'svg-path',
-    content: translateCommands(node, normalizedPaths),
+    content,
     svgAttrs: {
       fillRule: translateWindingRule(vectorPath.windingRule)
     },
