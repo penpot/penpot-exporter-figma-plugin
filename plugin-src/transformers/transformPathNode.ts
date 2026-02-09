@@ -48,27 +48,12 @@ const translatePathNode = (node: StarNode | PolygonNode): string | undefined => 
   const pathData = node.fillGeometry[0]?.data;
 
   if (!pathData) {
-    console.warn('[Penpot Exporter] Missing fillGeometry path data', {
-      nodeId: node.id,
-      nodeName: node.name,
-      nodeType: node.type
-    });
-
     return;
   }
 
   try {
     return translateCommands(node, parseSVG(pathData));
-  } catch (error) {
-    console.warn('[Penpot Exporter] Skipping invalid path node', {
-      nodeId: node.id,
-      nodeName: node.name,
-      nodeType: node.type,
-      source: 'fillGeometry[0]',
-      error: error instanceof Error ? error.message : String(error),
-      pathLength: pathData.length
-    });
-
+  } catch {
     return;
   }
 };

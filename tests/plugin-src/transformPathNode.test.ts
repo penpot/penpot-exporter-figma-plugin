@@ -1,5 +1,5 @@
 import type { Command } from 'svg-path-parser';
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 
 import { transformPathNode } from '@plugin/transformers/transformPathNode';
 
@@ -32,18 +32,9 @@ vi.mock('@plugin/transformers/partials', () => ({
 }));
 
 describe('transformPathNode', () => {
-  let consoleWarnSpy: ReturnType<typeof vi.spyOn>;
-
-  beforeEach(() => {
+  it('skips invalid path data without throwing', () => {
     vi.clearAllMocks();
-    consoleWarnSpy = vi.spyOn(console, 'warn').mockImplementation(() => undefined);
-  });
 
-  afterEach(() => {
-    consoleWarnSpy.mockRestore();
-  });
-
-  it('skips invalid path data and logs a warning', () => {
     parseSVGMock.mockImplementation(() => {
       throw new SyntaxError('Expected ".", [ \\t\\n\\r], [+\\-], or [0-9] but "n" found.');
     });
@@ -59,14 +50,5 @@ describe('transformPathNode', () => {
 
     expect(result).toBeUndefined();
     expect(translateCommandsMock).not.toHaveBeenCalled();
-    expect(consoleWarnSpy).toHaveBeenCalledWith(
-      '[Penpot Exporter] Skipping invalid path node',
-      expect.objectContaining({
-        nodeId: 'star-1',
-        nodeName: 'Broken Star',
-        nodeType: 'STAR',
-        source: 'fillGeometry[0]'
-      })
-    );
   });
 });

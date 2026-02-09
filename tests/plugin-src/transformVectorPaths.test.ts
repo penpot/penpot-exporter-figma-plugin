@@ -1,5 +1,5 @@
 import type { Command } from 'svg-path-parser';
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import {
   clearParsedCache,
@@ -32,19 +32,12 @@ vi.mock('@plugin/transformers/partials', () => ({
 }));
 
 describe('transformVectorPaths', () => {
-  let consoleWarnSpy: ReturnType<typeof vi.spyOn>;
-
   beforeEach(() => {
     vi.clearAllMocks();
     clearParsedCache();
-    consoleWarnSpy = vi.spyOn(console, 'warn').mockImplementation(() => undefined);
   });
 
-  afterEach(() => {
-    consoleWarnSpy.mockRestore();
-  });
-
-  it('skips invalid fillGeometry path and logs real-case context', () => {
+  it('skips invalid fillGeometry path without throwing', () => {
     parseSVGMock.mockImplementation(() => {
       throw new SyntaxError('Expected ".", [ \\t\\n\\r], [+\\-], or [0-9] but "n" found.');
     });
@@ -68,17 +61,5 @@ describe('transformVectorPaths', () => {
 
     expect(result).toEqual([]);
     expect(translateCommandsMock).not.toHaveBeenCalled();
-    expect(consoleWarnSpy).toHaveBeenCalledTimes(1);
-    expect(consoleWarnSpy).toHaveBeenCalledWith(
-      '[Penpot Exporter] Skipping invalid SVG path',
-      expect.objectContaining({
-        nodeId: '5179:3299',
-        nodeName: 'Rectangle 180',
-        nodeType: 'VECTOR',
-        source: 'fillGeometry[0]',
-        error: 'Expected ".", [ \\t\\n\\r], [+\\-], or [0-9] but "n" found.',
-        pathLength: 264
-      })
-    );
   });
 });
