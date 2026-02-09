@@ -1,5 +1,13 @@
 # penpot-exporter
 
+## 0.19.4
+
+### Patch Changes
+
+- [#350](https://github.com/penpot/penpot-exporter-figma-plugin/pull/350)
+  [`df15f8a`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/df15f8a72a632b2ba1df79f933d3de64641c5cec)
+  Thanks [@jordisala1991](https://github.com/jordisala1991)! - Fix error for malformed SVG
+
 ## 0.19.3
 
 ### Patch Changes
