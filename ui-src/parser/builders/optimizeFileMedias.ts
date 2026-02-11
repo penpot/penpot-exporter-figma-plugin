@@ -4,7 +4,6 @@ import { flushMessageQueue, sendMessage } from '@ui/context';
 import type { PenpotContext } from '@ui/lib/types/penpotContext';
 import type { Uuid } from '@ui/lib/types/utils/uuid';
 import { images } from '@ui/parser';
-import { detectMimeType } from '@ui/utils';
 
 const IMAGE_QUALITY = 0.8;
 
@@ -57,7 +56,6 @@ async function optimizeImage(bytes: Uint8Array<ArrayBuffer>): Promise<{
   width: number;
   height: number;
 }> {
-  const mimeType = detectMimeType(bytes);
   const url = URL.createObjectURL(new Blob([bytes]));
 
   try {
@@ -77,7 +75,7 @@ async function optimizeImage(bytes: Uint8Array<ArrayBuffer>): Promise<{
 
     context.drawImage(image, 0, 0);
 
-    const blob = await canvas.convertToBlob({ type: mimeType, quality: IMAGE_QUALITY });
+    const blob = await canvas.convertToBlob({ type: 'image/webp', quality: IMAGE_QUALITY });
 
     return {
       blob,
