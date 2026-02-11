@@ -4,8 +4,8 @@ import { flushMessageQueue, sendMessage } from '@ui/context';
 import type { PenpotContext } from '@ui/lib/types/penpotContext';
 import type { Uuid } from '@ui/lib/types/utils/uuid';
 import { images } from '@ui/parser';
-import { detectMimeType } from '@ui/utils';
 
+const IMAGE_FORMAT = 'image/webp';
 const IMAGE_QUALITY = 0.8;
 
 export const optimizeFileMedias = async (
@@ -57,8 +57,7 @@ async function optimizeImage(bytes: Uint8Array<ArrayBuffer>): Promise<{
   width: number;
   height: number;
 }> {
-  const mimeType = detectMimeType(bytes);
-  const url = URL.createObjectURL(new Blob([bytes], { type: mimeType }));
+  const url = URL.createObjectURL(new Blob([bytes]));
 
   try {
     const image = await new Promise<HTMLImageElement>((resolve, reject) => {
@@ -67,14 +66,6 @@ async function optimizeImage(bytes: Uint8Array<ArrayBuffer>): Promise<{
       img.onerror = (): void => reject();
       img.src = url;
     });
-
-    if (mimeType === 'image/gif') {
-      return {
-        blob: new Blob([bytes], { type: mimeType }),
-        width: image.width,
-        height: image.height
-      };
-    }
 
     const canvas = new OffscreenCanvas(image.width, image.height);
     const context = canvas.getContext('2d');
@@ -85,7 +76,7 @@ async function optimizeImage(bytes: Uint8Array<ArrayBuffer>): Promise<{
 
     context.drawImage(image, 0, 0);
 
-    const blob = await canvas.convertToBlob({ type: 'image/webp', quality: IMAGE_QUALITY });
+    const blob = await canvas.convertToBlob({ type: IMAGE_FORMAT, quality: IMAGE_QUALITY });
 
     return {
       blob,
