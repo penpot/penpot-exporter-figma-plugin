@@ -86,6 +86,23 @@ describe('vector geometry regression', () => {
     expect(result).toHaveLength(1);
   });
 
+  it('handles vectorPaths getter throwing a Figma internal error', () => {
+    const node = createVectorNode();
+
+    Object.defineProperty(node, 'vectorPaths', {
+      get: () => {
+        throw new Error('in get_vectorPaths: Figma Internal Error: vector is missing data');
+      }
+    });
+
+    let result: ReturnType<typeof transformVectorPaths> = [];
+
+    expect(() => {
+      result = transformVectorPaths(node);
+    }).not.toThrow();
+    expect(result).toHaveLength(0);
+  });
+
   it('returns undefined for star/polygon nodes with invalid fillGeometry path data', () => {
     const node = createPathNode({
       fillGeometry: [{ data: 'M 0 0 L nan 10 Z', windingRule: 'NONZERO' }]

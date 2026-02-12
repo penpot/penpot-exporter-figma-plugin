@@ -57,8 +57,15 @@ export const transformVectorPaths = (node: VectorNode): PathShape[] => {
     console.warn('Could not access the vector network', node.name, error);
   }
 
+  let vectorPaths: readonly VectorPath[] = [];
+
+  try {
+    vectorPaths = node.vectorPaths ?? [];
+  } catch (error) {
+    console.warn('Could not access vector paths', node.name, error);
+  }
+
   const hasStrokes = node.strokes.length > 0;
-  const vectorPaths = node.vectorPaths ?? [];
   const fillGeometry = node.fillGeometry ?? [];
   const validFillGeometry = fillGeometry.filter(
     geometry => getParsedCommands(geometry.data) !== undefined
