@@ -14,7 +14,11 @@ vi.mock('@plugin/transformers/partials', () => ({
 }));
 
 vi.mock('@plugin/translators/text/font', () => ({
-  translateFontName: (): undefined => undefined
+  translateFontName: (): Record<string, string> => ({
+    fontId: 'gfont-inter',
+    fontVariantId: 'regular',
+    fontWeight: '400'
+  })
 }));
 
 const createTextNode = (): TextNode =>
@@ -50,8 +54,11 @@ describe('text segment with undefined properties', () => {
     expect(() => transformTextStyle(node, segment)).not.toThrow();
 
     const result = transformTextStyle(node, segment);
-    expect(result.fontFamily).toBeUndefined();
-    expect(result.fontStyle).toBeUndefined();
+    expect(result.fontFamily).toBe('sourcesanspro');
+    expect(result.fontStyle).toBe('normal');
+    expect(result.fontId).toBe('sourcesanspro');
+    expect(result.fontVariantId).toBe('regular');
+    expect(result.fontWeight).toBe('400');
   });
 
   it('handles undefined fontSize without crashing', () => {
@@ -61,7 +68,7 @@ describe('text segment with undefined properties', () => {
     expect(() => transformTextStyle(node, segment)).not.toThrow();
 
     const result = transformTextStyle(node, segment);
-    expect(result.fontSize).toBeUndefined();
+    expect(result.fontSize).toBe('14');
   });
 
   it('handles undefined letterSpacing without crashing', () => {
