@@ -13,10 +13,7 @@ import {
 
 import type { TextNode as PenpotTextNode, TextStyle } from '@ui/lib/types/shapes/textShape';
 
-export const translateTextSegments = (
-  node: TextNode,
-  segments: TextSegment[]
-): PenpotTextNode[] => {
+export const translateTextSegments = (node: TextNode, segments: TextSegment[]): PenpotTextNode[] => {
   const partials = segments.map(segment => ({
     textNode: translateStyleTextSegment(node, segment),
     segment
