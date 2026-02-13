@@ -35,9 +35,9 @@ export const transformTextStyle = (node: TextNode, segment: TextSegment): TextSt
 
   return {
     ...partialTransformTextStyle(node, segment),
-    fontFamily: segment.fontName.family,
-    fontSize: segment.fontSize.toString(),
-    fontStyle: translateFontStyle(segment.fontName.style),
+    fontFamily: segment.fontName?.family,
+    fontSize: segment.fontSize?.toString(),
+    fontStyle: segment.fontName ? translateFontStyle(segment.fontName.style) : undefined,
     textDecoration: translateTextDecoration(segment),
     letterSpacing: translateLetterSpacing(segment),
     lineHeight: translateLineHeight(segment),
