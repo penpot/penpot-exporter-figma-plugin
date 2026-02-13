@@ -4,12 +4,23 @@ import { useEffect, useRef, useState } from 'preact/hooks';
 import { type MessageData, createInMemoryWritable, sendMessage } from '@ui/context';
 import { identify, track } from '@ui/metrics/mixpanel';
 import { parse } from '@ui/parser';
-import type { ExportScope, ExternalLibrary, Steps } from '@ui/types';
+import type {
+  ExportScope,
+  ExternalLibrary,
+  ExternalVariableInfo,
+  ExternalVariablesChoice,
+  Steps
+} from '@ui/types';
 import { extractFileIdFromPenpotUrl, fileSizeInMB, formatExportTime } from '@ui/utils';
 
 export type FormValues = {
   externalLibraries: ExternalLibrary[];
 };
+
+export type ExternalVariablesWarningState = {
+  libraries: string[];
+  variables: ExternalVariableInfo[];
+} | null;
 
 export type UseFigmaHook = {
   missingFonts: string[] | undefined;
@@ -27,11 +38,13 @@ export type UseFigmaHook = {
   exportTime: number | null;
   exportScope: ExportScope;
   exportLibraries: string[];
+  externalVariablesWarning: ExternalVariablesWarningState;
   setExportScope: (scope: ExportScope) => void;
   retry: () => void;
   cancel: () => void;
   exportPenpot: (data: FormValues) => void;
   downloadBlob: () => void;
+  handleExternalVariablesChoice: (choice: ExternalVariablesChoice) => void;
 };
 
 export const useFigma = (): UseFigmaHook => {
@@ -43,6 +56,8 @@ export const useFigma = (): UseFigmaHook => {
   const [exportTime, setExportTime] = useState<number | null>(null);
   const [exportScope, setExportScope] = useState<ExportScope>('all');
   const [exportLibraries, setExportLibraries] = useState<string[]>([]);
+  const [externalVariablesWarning, setExternalVariablesWarning] =
+    useState<ExternalVariablesWarningState>(null);
   const exportStartTimeRef = useRef<number | null>(null);
 
   const [step, setStep] = useState<Steps>('processing');
@@ -85,11 +100,26 @@ export const useFigma = (): UseFigmaHook => {
         setExportScope('all');
         setStep('processing');
         setCurrentItem('');
+        setExternalVariablesWarning(null);
 
         totalItemsRef.current = 0;
         exportStartTimeRef.current = null;
 
         track('Plugin Reloaded');
+
+        break;
+      }
+      case 'EXTERNAL_VARIABLES_DETECTED': {
+        setExporting(false);
+        setExternalVariablesWarning({
+          libraries: pluginMessage.data.libraries,
+          variables: pluginMessage.data.variables
+        });
+
+        track('External Variables Detected', {
+          libraries: pluginMessage.data.libraries,
+          variableCount: pluginMessage.data.variables.length
+        });
 
         break;
       }
@@ -204,6 +234,15 @@ export const useFigma = (): UseFigmaHook => {
     }
   };
 
+  const handleExternalVariablesChoice = (choice: ExternalVariablesChoice): void => {
+    setExternalVariablesWarning(null);
+    setExporting(true);
+
+    track('External Variables Choice', { choice });
+
+    postMessage('external_variables_choice', { choice });
+  };
+
   const retry = (): void => {
     track('Plugin Retry');
 
@@ -258,10 +297,12 @@ export const useFigma = (): UseFigmaHook => {
     exportTime,
     exportScope,
     exportLibraries,
+    externalVariablesWarning,
     setExportScope,
     retry,
     cancel,
     exportPenpot,
-    downloadBlob
+    downloadBlob,
+    handleExternalVariablesChoice
   };
 };
