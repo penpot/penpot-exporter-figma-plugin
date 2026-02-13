@@ -17,7 +17,7 @@ export const translateTextStyle = (figmaStyle: TextStyle): TypographyStyle => {
       ...translateFontName(figmaStyle.fontName),
       fontFamily: figmaStyle.fontName.family,
       fontSize: figmaStyle.fontSize.toString(),
-      fontStyle: translateFontStyle(figmaStyle.fontName.style),
+      fontStyle: translateFontStyle(figmaStyle),
       textDecoration: translateTextDecoration(figmaStyle),
       letterSpacing: translateLetterSpacing(figmaStyle),
       textTransform: translateTextTransform(figmaStyle),
