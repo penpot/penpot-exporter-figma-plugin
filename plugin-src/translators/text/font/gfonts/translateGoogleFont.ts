@@ -1,6 +1,5 @@
 import slugify from 'slugify';
 
-import { Cache } from '@plugin/Cache';
 import { translateFontVariantId } from '@plugin/translators/text/font/gfonts';
 import type { GoogleFont } from '@plugin/translators/text/font/gfonts/googleFont';
 
@@ -8,7 +7,12 @@ import type { TextTypography } from '@ui/lib/types/shapes/textShape';
 
 import { items as gfonts } from './gfonts.json';
 
-const fontsCache = new Cache<string, GoogleFont>({ max: 30 });
+/**
+ * Pre-built Map for O(1) font lookups by family name.
+ * Initialized once at module load instead of searching through 1,832 fonts per text segment.
+ * Replaces the previous LRU cache which still required O(n) search on cache misses.
+ */
+const gfontsByFamily = new Map<string, GoogleFont>(gfonts.map(font => [font.family, font]));
 
 export const translateGoogleFont = (
   fontName: FontName | undefined,
@@ -30,7 +34,5 @@ export const translateGoogleFont = (
 const getGoogleFont = (fontName: FontName | undefined): GoogleFont | undefined => {
   if (!fontName) return;
 
-  return fontsCache.get(fontName.family, () =>
-    gfonts.find(font => font.family === fontName.family)
-  );
+  return gfontsByFamily.get(fontName.family);
 };
