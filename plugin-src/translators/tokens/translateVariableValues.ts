@@ -9,7 +9,7 @@ export const translateVariableValues = (
   const value = variable.valuesByMode[modeId];
 
   const tokenTypes = translateScopes(variable);
-  const variableTypes = new Map<TokenType, string | string[]>();
+  const variableTypes = new Map<TokenType, Token['$value']>();
 
   for (const tokenType of tokenTypes) {
     const $value = translateValue(value, tokenType);
