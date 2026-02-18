@@ -47,7 +47,7 @@ describe('translateStyleTokenName', () => {
   });
 
   it('handles trailing . by replacing with D', () => {
-    expect(translateStyleTokenName('trailingD')).toBe('trailingD');
+    expect(translateStyleTokenName('trailing.')).toBe('trailingD');
   });
 
   it('collapses consecutive dots', () => {
