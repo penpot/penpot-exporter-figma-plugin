@@ -16,11 +16,6 @@ export const processStyleTokens = async (): Promise<[string, Set] | null> => {
     }
 
     if (entries.length > 0) {
-      if (entries.length > 1) {
-        console.warn(
-          `Effect style "${style.name}" has ${entries.length} shadows; only the first will be used as an applied token.`
-        );
-      }
       styleTokenNames.set(style.id, entries[0][0]);
     }
   }
