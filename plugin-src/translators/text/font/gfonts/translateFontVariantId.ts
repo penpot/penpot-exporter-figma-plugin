@@ -5,13 +5,15 @@ export const translateFontVariantId = (
   fontName: FontName,
   fontWeight: string
 ): string => {
+  const style = fontName.style?.toLowerCase();
+
   // check match directly by style
-  const variant = googleFont.variants?.find(variant => variant === fontName.style.toLowerCase());
+  const variant = style ? googleFont.variants?.find(variant => variant === style) : undefined;
 
   if (variant !== undefined) return variant;
 
   // check match by style and weight
-  const italic = fontName.style.toLowerCase().includes('italic') ? 'italic' : '';
+  const italic = style?.includes('italic') ? 'italic' : '';
   const variantWithWeight = googleFont.variants?.find(
     variant => variant === `${fontWeight}${italic}`
   );
