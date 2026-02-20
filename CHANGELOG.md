@@ -1,5 +1,41 @@
 # penpot-exporter
 
+## 0.20.0
+
+### Minor Changes
+
+- [#352](https://github.com/penpot/penpot-exporter-figma-plugin/pull/352)
+  [`43cde4c`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/43cde4c52ff03e73ca9a361ad843c2b9b01128ad)
+  Thanks [@SpykeRel04D](https://github.com/SpykeRel04D)! - Replace how images are being converted
+  using a modern format (webp)
+
+### Patch Changes
+
+- [#355](https://github.com/penpot/penpot-exporter-figma-plugin/pull/355)
+  [`12e9595`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/12e95951446761a4aba7b9b55b09cf1a144ab28e)
+  Thanks [@SpykeRel04D](https://github.com/SpykeRel04D)! - Handle text segments with undefined
+  properties (fontName, fontSize, letterSpacing, lineHeight) to prevent crashes during export.
+
+- [#358](https://github.com/penpot/penpot-exporter-figma-plugin/pull/358)
+  [`68908bf`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/68908bf3f65f74a3d4e9cc2848bb61da44cbcdb8)
+  Thanks [@SpykeRel04D](https://github.com/SpykeRel04D)! - Update google fonts list
+
+- [#360](https://github.com/penpot/penpot-exporter-figma-plugin/pull/360)
+  [`eb12cbf`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/eb12cbf88c41c58d68cbca4642acde169a365019)
+  Thanks [@SpykeRel04D](https://github.com/SpykeRel04D)! - Fix crash on some files after updating
+  how we handle undefined properties on texts nodes
+
+- [#356](https://github.com/penpot/penpot-exporter-figma-plugin/pull/356)
+  [`5ea862a`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/5ea862a92f70b28ecd259d33e16aa1a849462005)
+  Thanks [@SpykeRel04D](https://github.com/SpykeRel04D)! - Replaces O(n) linear searches with O(1)
+  Map lookups for font family resolution. Pre-builds Maps at module load instead of searching
+  through 1,832+ fonts per text segment.
+
+- [#354](https://github.com/penpot/penpot-exporter-figma-plugin/pull/354)
+  [`9d17b2f`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/9d17b2fb9a94b9515765bf1940daaeed6808afc2)
+  Thanks [@SpykeRel04D](https://github.com/SpykeRel04D)! - Handle vectorPath getter throwing Figma
+  internal error
+
 ## 0.19.4
 
 ### Patch Changes
