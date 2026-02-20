@@ -46,12 +46,8 @@ export const transformTextStyle = (node: TextNode, segment: TextSegment): TextSt
 };
 
 const partialTransformTextStyle = (node: TextNode, segment: TextSegment): TextStyle => {
-  const fontData = segment.fontName
-    ? translateFontName(segment.fontName)
-    : { fontId: 'sourcesanspro', fontVariantId: 'regular', fontWeight: '400' };
-
   return {
-    ...fontData,
+    ...translateFontName(segment.fontName),
     textAlign: translateHorizontalAlign(node.textAlignHorizontal)
   };
 };
