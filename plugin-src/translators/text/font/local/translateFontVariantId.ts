@@ -5,8 +5,10 @@ export const translateFontVariantId = (
   fontName: FontName,
   fontWeight: string
 ): string => {
+  const style = fontName.style?.toLowerCase();
+
   // check match by style and weight
-  const italic = fontName.style.toLowerCase().includes('italic');
+  const italic = style?.includes('italic') ?? false;
   const variantWithStyleWeight = localFont.variants?.find(
     variant => variant.weight === fontWeight && variant.style === (italic ? 'italic' : 'normal')
   );
@@ -14,16 +16,17 @@ export const translateFontVariantId = (
   if (variantWithStyleWeight !== undefined) return variantWithStyleWeight.id;
 
   // check match directly by suffix if exists
-  const variant = localFont.variants?.find(
-    variant => variant.suffix === fontName.style.toLowerCase().replace(/\s/g, '')
-  );
+  const normalizedStyle = style?.replace(/\s/g, '');
+  const variant = normalizedStyle
+    ? localFont.variants?.find(variant => variant.suffix === normalizedStyle)
+    : undefined;
 
   if (variant !== undefined) return variant.id;
 
   // check match directly by id
-  const variantById = localFont.variants?.find(
-    variant => variant.id === fontName.style.toLowerCase().replace(/\s/g, '')
-  );
+  const variantById = normalizedStyle
+    ? localFont.variants?.find(variant => variant.id === normalizedStyle)
+    : undefined;
 
   if (variantById !== undefined) return variantById.id;
 

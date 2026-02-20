@@ -7,7 +7,9 @@ export const translateLetterSpacing = (
     case 'PIXELS':
       return segment.letterSpacing.value.toString();
     case 'PERCENT':
-      return ((segment.fontSize * segment.letterSpacing.value) / 100).toString();
+      return segment.fontSize
+        ? ((segment.fontSize * segment.letterSpacing.value) / 100).toString()
+        : '0';
     default:
       return '0';
   }
