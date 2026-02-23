@@ -5,7 +5,7 @@ export const translateLineHeight = (
 
   switch (segment.lineHeight.unit) {
     case 'PIXELS':
-      return (segment.lineHeight.value / segment.fontSize).toString();
+      return segment.fontSize ? (segment.lineHeight.value / segment.fontSize).toString() : '1.2';
     case 'PERCENT':
       return (segment.lineHeight.value / 100).toString();
     default:

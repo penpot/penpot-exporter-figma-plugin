@@ -56,7 +56,7 @@ describe('text segment with undefined properties', () => {
     const result = transformTextStyle(node, segment);
     expect(result.fontFamily).toBe('sourcesanspro');
     expect(result.fontStyle).toBe('normal');
-    expect(result.fontId).toBe('sourcesanspro');
+    expect(result.fontId).toBe('gfont-inter');
     expect(result.fontVariantId).toBe('regular');
     expect(result.fontWeight).toBe('400');
   });
