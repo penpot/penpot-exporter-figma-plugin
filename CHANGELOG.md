@@ -1,5 +1,14 @@
 # penpot-exporter
 
+## 0.20.1
+
+### Patch Changes
+
+- [#361](https://github.com/penpot/penpot-exporter-figma-plugin/pull/361)
+  [`95b8047`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/95b8047414a319d756ab762fb4b1674f594a3ae3)
+  Thanks [@SpykeRel04D](https://github.com/SpykeRel04D)! - Reset `isSharedLibrary` flag between
+  exports to prevent a file without published components from being incorrectly
+
 ## 0.20.0
 
 ### Minor Changes
