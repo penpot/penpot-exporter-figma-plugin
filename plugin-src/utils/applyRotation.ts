@@ -61,8 +61,11 @@ export const applyInverseRotation = (
   boundingBox: Rect
 ): Point => applyRotation(point, inverseMatrix(transform), boundingBox);
 
-export const getRotation = (transform: Transform): number =>
-  Math.acos(transform[0][0]) * (180 / Math.PI);
+export const getRotation = (transform: Transform): number => {
+  const angle = Math.atan2(-transform[1][0], transform[0][0]) * (180 / Math.PI);
+
+  return ((angle % 360) + 360) % 360;
+};
 
 export const isTransformed = (transform: Transform): boolean => {
   return !isIdentityMatrix(transform);

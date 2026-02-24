@@ -97,6 +97,9 @@ describe('applyInverseRotation', () => {
 });
 
 describe('getRotation', () => {
+  // Figma absoluteTransform convention:
+  // For UI rotation R: [[cos(R), sin(R), tx], [-sin(R), cos(R), ty]]
+
   it('retorna 0 para matriz identidad', () => {
     const identity: Transform = [
       [1, 0, 0],
@@ -105,15 +108,17 @@ describe('getRotation', () => {
     expect(getRotation(identity)).toBeCloseTo(0, 5);
   });
 
-  it('calcula rotación de 90 grados', () => {
+  it('calcula rotación de 90 grados (Figma 90° CW)', () => {
+    // Figma 90°: [[cos90, sin90], [-sin90, cos90]] = [[0, 1], [-1, 0]]
     const rotation90: Transform = [
-      [0, -1, 0],
-      [1, 0, 0]
+      [0, 1, 0],
+      [-1, 0, 0]
     ];
     expect(getRotation(rotation90)).toBeCloseTo(90, 5);
   });
 
   it('calcula rotación de 180 grados', () => {
+    // Figma 180°: [[cos180, sin180], [-sin180, cos180]] = [[-1, 0], [0, -1]]
     const rotation180: Transform = [
       [-1, 0, 0],
       [0, -1, 0]
@@ -121,14 +126,46 @@ describe('getRotation', () => {
     expect(getRotation(rotation180)).toBeCloseTo(180, 5);
   });
 
-  it('calcula rotación de 45 grados', () => {
+  it('calcula rotación de 45 grados (Figma 45° CW)', () => {
     const cos45 = Math.cos(Math.PI / 4);
     const sin45 = Math.sin(Math.PI / 4);
+    // Figma 45°: [[cos45, sin45], [-sin45, cos45]]
     const rotation45: Transform = [
+      [cos45, sin45, 0],
+      [-sin45, cos45, 0]
+    ];
+    expect(getRotation(rotation45)).toBeCloseTo(45, 5);
+  });
+
+  it('calcula rotación de -45 grados como 315 (Figma -45° CCW)', () => {
+    const cos45 = Math.cos(Math.PI / 4);
+    const sin45 = Math.sin(Math.PI / 4);
+    // Figma -45°: [[cos(-45), sin(-45)], [-sin(-45), cos(-45)]] = [[cos45, -sin45], [sin45, cos45]]
+    const rotationNeg45: Transform = [
       [cos45, -sin45, 0],
       [sin45, cos45, 0]
     ];
-    expect(getRotation(rotation45)).toBeCloseTo(45, 5);
+    expect(getRotation(rotationNeg45)).toBeCloseTo(315, 5);
+  });
+
+  it('calcula rotación de -90 grados como 270 (Figma -90° CCW)', () => {
+    // Figma -90°: [[cos(-90), sin(-90)], [-sin(-90), cos(-90)]] = [[0, -1], [1, 0]]
+    const rotationNeg90: Transform = [
+      [0, -1, 0],
+      [1, 0, 0]
+    ];
+    expect(getRotation(rotationNeg90)).toBeCloseTo(270, 5);
+  });
+
+  it('calcula rotación de 30 grados (Figma 30° CW)', () => {
+    const cos30 = Math.cos(Math.PI / 6);
+    const sin30 = Math.sin(Math.PI / 6);
+    // Figma 30°: [[cos30, sin30], [-sin30, cos30]]
+    const rotation30: Transform = [
+      [cos30, sin30, 0],
+      [-sin30, cos30, 0]
+    ];
+    expect(getRotation(rotation30)).toBeCloseTo(30, 5);
   });
 });
 
