@@ -1,6 +1,7 @@
 import { isAliasValue, isColorValue, isNumberValue, isStringValue } from '@common/variables';
 
 import { variables } from '@plugin/libraries';
+import { processStyleTokens } from '@plugin/processors/processStyleTokens';
 import { translateSet, translateTheme } from '@plugin/translators/tokens';
 import { rgbToString } from '@plugin/utils/rgbToString';
 
@@ -180,6 +181,16 @@ export const processTokens = async (): Promise<Tokens | undefined> => {
         activeSets.push(setName);
       }
     }
+  }
+
+  const styleTokenResult = await processStyleTokens();
+
+  if (styleTokenResult) {
+    const [setName, set] = styleTokenResult;
+
+    sets[setName] = set;
+    tokenSetOrder.push(setName);
+    activeSets.push(setName);
   }
 
   if (tokenSetOrder.length === 0) {

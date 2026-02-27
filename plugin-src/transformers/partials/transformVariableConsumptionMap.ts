@@ -1,4 +1,4 @@
-import { translateAppliedTokens } from '@plugin/translators';
+import { translateAppliedStyleTokens, translateAppliedTokens } from '@plugin/translators';
 
 import type { ShapeAttributes } from '@ui/lib/types/shapes/shape';
 
@@ -6,6 +6,9 @@ export const transformVariableConsumptionMap = (
   node: SceneNode
 ): Pick<ShapeAttributes, 'appliedTokens'> => {
   return {
-    appliedTokens: translateAppliedTokens(node.boundVariables, node)
+    appliedTokens: {
+      ...translateAppliedStyleTokens(node),
+      ...translateAppliedTokens(node.boundVariables, node)
+    }
   };
 };
