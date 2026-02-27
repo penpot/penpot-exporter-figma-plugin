@@ -24,6 +24,15 @@ export type PenpotDocumentMessage = {
   data: PenpotDocument;
 };
 
+export type ImageBatchMessage = {
+  type: 'IMAGE_BATCH';
+  data: {
+    images: Record<string, Uint8Array<ArrayBuffer>>;
+    currentBatch: number;
+    totalBatches: number;
+  };
+};
+
 export type ProgressStepMessage = {
   type: 'PROGRESS_STEP';
   data: {
@@ -73,6 +82,7 @@ export type ExternalLibrariesMessage = {
 
 export type PluginMessage =
   | PenpotDocumentMessage
+  | ImageBatchMessage
   | ProgressStepMessage
   | ProgressProcessedItemsMessage
   | ProgressCurrentItemMessage
