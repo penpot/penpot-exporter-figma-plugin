@@ -22,6 +22,7 @@ type ComponentAttributes = {
   type?: 'component';
   path: string;
   showContent?: boolean;
+  hideInViewer?: boolean;
   mainInstanceId?: Uuid;
   mainInstancePage?: Uuid;
 };
