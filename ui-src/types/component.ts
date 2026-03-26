@@ -29,6 +29,7 @@ export type ComponentInstance = ShapeBaseAttributes &
   Children & {
     componentRoot: boolean;
     showContent?: boolean;
+    hideInViewer?: boolean;
     isOrphan: boolean;
     type: 'instance';
   };

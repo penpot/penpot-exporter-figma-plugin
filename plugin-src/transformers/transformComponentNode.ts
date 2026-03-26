@@ -45,6 +45,7 @@ export const transformComponentNode = async (node: ComponentNode): Promise<Compo
   const component: ComponentShape = {
     type: 'component',
     showContent: !node.clipsContent,
+    hideInViewer: !node.visible,
     componentRoot: true,
     mainInstance: true,
     variantId,

@@ -56,6 +56,7 @@ export const transformFrameNode = async (node: FrameNode | SectionNode): Promise
     type: 'frame',
     name: node.name,
     showContent: isSectionNode(node) ? true : !node.clipsContent,
+    hideInViewer: !node.visible,
     ...transformIds(node),
     ...transformFills(node),
     ...referencePoint,
