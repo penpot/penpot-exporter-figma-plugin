@@ -11,6 +11,15 @@ export type Set = {
   [key: string]: Token | Record<string, Token>;
 };
 
+export type ShadowTokenValue = {
+  color: string;
+  x: number;
+  y: number;
+  blur: number;
+  spread: number;
+  type: 'drop' | 'inset';
+};
+
 export type TokenType =
   | 'color'
   | 'number'
@@ -26,10 +35,11 @@ export type TokenType =
   | 'fontWeights'
   | 'textDecoration'
   | 'letterSpacing'
-  | 'textCase';
+  | 'textCase'
+  | 'shadow';
 
 export type Token = {
-  $value: string | string[];
+  $value: string | string[] | ShadowTokenValue;
   $type: TokenType;
   $description: string;
 };
@@ -83,5 +93,6 @@ export type TokenProperties =
   | 'fill'
   | 'strokeColor'
   | 'opacity'
+  | 'shadow'
   | 'x'
   | 'y';

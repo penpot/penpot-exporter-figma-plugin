@@ -1,4 +1,4 @@
-import { variables } from '@plugin/libraries';
+import { styleTokenNames, variables } from '@plugin/libraries';
 
 import type { TokenProperties } from '@ui/lib/types/shapes/tokens';
 
@@ -137,6 +137,22 @@ export const translateAppliedTokens = (
 
     if (variable) {
       appliedTokens[equivalence.penpot] = variable;
+    }
+  }
+
+  return appliedTokens;
+};
+
+export const translateAppliedStyleTokens = (
+  node: SceneNode
+): { [key in TokenProperties]?: string } => {
+  const appliedTokens: { [key in TokenProperties]?: string } = {};
+
+  if ('effectStyleId' in node && node.effectStyleId && node.effectStyleId.length > 0) {
+    const tokenName = styleTokenNames.get(node.effectStyleId as string);
+
+    if (tokenName) {
+      appliedTokens.shadow = tokenName;
     }
   }
 
