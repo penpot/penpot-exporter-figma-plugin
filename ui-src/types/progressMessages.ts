@@ -71,6 +71,23 @@ export type ExternalLibrariesMessage = {
   data: string[];
 };
 
+export type ExternalVariableInfo = {
+  id: string;
+  name: string;
+  collectionName: string;
+  libraryName: string;
+};
+
+export type ExternalVariablesDetectedMessage = {
+  type: 'EXTERNAL_VARIABLES_DETECTED';
+  data: {
+    variables: ExternalVariableInfo[];
+    libraries: string[];
+  };
+};
+
+export type ExternalVariablesChoice = 'export_as_is' | 'convert_to_local';
+
 export type PluginMessage =
   | PenpotDocumentMessage
   | ProgressStepMessage
@@ -80,7 +97,8 @@ export type PluginMessage =
   | ReloadMessage
   | ErrorMessage
   | UserDataMessage
-  | ExternalLibrariesMessage;
+  | ExternalLibrariesMessage
+  | ExternalVariablesDetectedMessage;
 
 /**
  * Types that should be buffered (only the latest message of each type is kept)
