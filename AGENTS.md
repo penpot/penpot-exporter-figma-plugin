@@ -72,7 +72,7 @@ return {
   ...transformIds(node),
   ...transformFills(node),
   ...transformStrokes(node),
-  ...(await transformChildren(node)),
+  ...(await transformChildren(node))
 };
 ```
 
