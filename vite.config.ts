@@ -1,10 +1,9 @@
 import { sentryVitePlugin } from '@sentry/vite-plugin';
-import react from '@vitejs/plugin-react-swc';
+import react from '@vitejs/plugin-react';
 import * as process from 'node:process';
 import { type UserConfig, defineConfig } from 'vite';
 import { viteSingleFile } from 'vite-plugin-singlefile';
 import svgr from 'vite-plugin-svgr';
-import tsconfigPaths from 'vite-tsconfig-paths';
 
 export default ({ mode }): UserConfig => {
   return defineConfig({
@@ -13,7 +12,6 @@ export default ({ mode }): UserConfig => {
       svgr(),
       react(),
       viteSingleFile({ removeViteModuleLoader: true }),
-      tsconfigPaths(),
       sentryVitePlugin({
         org: 'runroom-sl',
         project: 'penpot-exporter',
@@ -21,6 +19,7 @@ export default ({ mode }): UserConfig => {
       })
     ],
     resolve: {
+      tsconfigPaths: true,
       alias: {
         'react': 'preact/compat',
         'react-dom': 'preact/compat',
@@ -32,7 +31,6 @@ export default ({ mode }): UserConfig => {
       target: 'esnext',
       reportCompressedSize: false,
       outDir: '../dist',
-
       rollupOptions: {
         external: ['!../css/base.css']
       },

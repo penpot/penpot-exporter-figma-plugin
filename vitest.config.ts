@@ -13,10 +13,6 @@ export default defineConfig({
       exclude: ['**/*.test.ts', '**/node_modules/**']
     }
   },
-  esbuild: {
-    target: 'node18',
-    format: 'esm'
-  },
   resolve: {
     alias: {
       '@common': resolve(__dirname, './common'),

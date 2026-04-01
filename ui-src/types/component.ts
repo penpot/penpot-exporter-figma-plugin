@@ -35,7 +35,7 @@ export type ComponentInstance = ShapeBaseAttributes &
   };
 
 export type ComponentProperty = {
-  type: 'BOOLEAN' | 'TEXT' | 'INSTANCE_SWAP' | 'VARIANT';
+  type: 'BOOLEAN' | 'TEXT' | 'INSTANCE_SWAP' | 'VARIANT' | 'SLOT';
   defaultValue: string | boolean;
   preferredValues?: {
     type: 'COMPONENT' | 'COMPONENT_SET';
