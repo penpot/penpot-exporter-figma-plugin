@@ -1,5 +1,24 @@
 # penpot-exporter
 
+## 0.20.1
+
+### Patch Changes
+
+- [#361](https://github.com/penpot/penpot-exporter-figma-plugin/pull/361)
+  [`95b8047`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/95b8047414a319d756ab762fb4b1674f594a3ae3)
+  Thanks [@SpykeRel04D](https://github.com/SpykeRel04D)! - Reset `isSharedLibrary` flag between
+  exports to prevent a file without published components from being incorrectly
+
+- [#365](https://github.com/penpot/penpot-exporter-figma-plugin/pull/365)
+  [`05a9d07`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/05a9d07f2e15be6615b2e2c7db696804ef65d86a)
+  Thanks [@jordisala1991](https://github.com/jordisala1991)! - Upgrade all dependencies to latest
+  versions.
+
+- [#364](https://github.com/penpot/penpot-exporter-figma-plugin/pull/364)
+  [`a07ba07`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/a07ba077c960605d303e1468011516a8d893b89c)
+  Thanks [@SpykeRel04D](https://github.com/SpykeRel04D)! - Set hideInViewer true in Penpot when hide
+  is active in Figma
+
 ## 0.20.0
 
 ### Minor Changes
