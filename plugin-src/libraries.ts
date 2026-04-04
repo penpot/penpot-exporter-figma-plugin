@@ -1,8 +1,9 @@
+import type { ExternalVariableInfo } from '@plugin/processors/detectExternalVariables';
 import { clearParsedCache } from '@plugin/transformers/partials/transformVectorPaths';
 import { resetSharedLibrary } from '@plugin/transformers/transformComponentNode';
 
 import type { Uuid } from '@ui/lib/types/utils/uuid';
-import type { ComponentProperty, ComponentRoot } from '@ui/types';
+import type { ComponentProperty, ComponentRoot, ExportScope, ExternalLibrary } from '@ui/types';
 
 export const identifiers: Map<string, Uuid> = new Map();
 export const missingFonts: Set<string> = new Set();
@@ -17,6 +18,25 @@ export const variables: Map<string, string> = new Map();
 export const variableNames: Map<string, string> = new Map();
 export const uniqueVariableNames: Set<string> = new Set();
 export const externalLibraries: Map<string, string> = new Map();
+
+/**
+ * Pending export state - stored when waiting for user choice about external variables
+ */
+export type PendingExportState = {
+  scope: ExportScope;
+  libraries: ExternalLibrary[];
+  externalVariables: ExternalVariableInfo[];
+};
+
+export let pendingExport: PendingExportState | null = null;
+
+export const setPendingExport = (state: PendingExportState | null): void => {
+  pendingExport = state;
+};
+
+export const clearPendingExport = (): void => {
+  pendingExport = null;
+};
 
 /**
  * Clears all state maps and sets to prevent memory accumulation during exports.
@@ -36,6 +56,7 @@ export const clearAllState = (): void => {
   variableNames.clear();
   uniqueVariableNames.clear();
   externalLibraries.clear();
+  clearPendingExport();
   clearParsedCache();
   resetSharedLibrary();
 };
