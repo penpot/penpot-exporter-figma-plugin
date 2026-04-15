@@ -26,20 +26,22 @@ describe('translateEffectStyleToken', () => {
 
     const result = translateEffectStyleToken(style);
 
-    expect(result).toHaveLength(1);
-    const [name, token] = result[0];
+    expect(result).not.toBeNull();
+    const [name, token] = result!;
 
     expect(name).toBe('elevation.small');
     expect(token.$type).toBe('shadow');
     expect(token.$description).toBe('Small shadow');
-    expect(token.$value).toEqual({
-      color: 'rgba(0, 0, 0, 0.25)',
-      x: 0,
-      y: 4,
-      blur: 8,
-      spread: 0,
-      type: 'drop'
-    });
+    expect(token.$value).toEqual([
+      {
+        color: 'rgba(0, 0, 0, 0.25)',
+        x: 0,
+        y: 4,
+        blur: 8,
+        spread: 0,
+        inset: false
+      }
+    ]);
   });
 
   it('converts INNER_SHADOW to inset shadow token', () => {
@@ -60,20 +62,22 @@ describe('translateEffectStyleToken', () => {
 
     const result = translateEffectStyleToken(style);
 
-    expect(result).toHaveLength(1);
-    const [, token] = result[0];
+    expect(result).not.toBeNull();
+    const [, token] = result!;
 
-    expect(token.$value).toEqual({
-      color: 'rgba(255, 0, 0, 0.50)',
-      x: 2,
-      y: 2,
-      blur: 4,
-      spread: 1,
-      type: 'inset'
-    });
+    expect(token.$value).toEqual([
+      {
+        color: 'rgba(255, 0, 0, 0.50)',
+        x: 2,
+        y: 2,
+        blur: 4,
+        spread: 1,
+        inset: true
+      }
+    ]);
   });
 
-  it('produces separate tokens for multi-shadow styles', () => {
+  it('groups multi-shadow styles into a single token with array value', () => {
     const style = {
       name: 'multi-shadow',
       description: '',
@@ -87,7 +91,7 @@ describe('translateEffectStyleToken', () => {
           visible: true
         },
         {
-          type: 'DROP_SHADOW' as const,
+          type: 'INNER_SHADOW' as const,
           color: { r: 0, g: 0, b: 0, a: 0.2 },
           offset: { x: 0, y: 8 },
           radius: 16,
@@ -99,14 +103,32 @@ describe('translateEffectStyleToken', () => {
 
     const result = translateEffectStyleToken(style);
 
-    expect(result).toHaveLength(2);
-    expect(result[0][0]).toBe('multi-shadow');
-    expect(result[1][0]).toBe('multi-shadow-1');
-    expect(result[0][1].$type).toBe('shadow');
-    expect(result[1][1].$type).toBe('shadow');
+    expect(result).not.toBeNull();
+    const [name, token] = result!;
+
+    expect(name).toBe('multi-shadow');
+    expect(token.$type).toBe('shadow');
+    expect(token.$value).toEqual([
+      {
+        color: 'rgba(0, 0, 0, 0.10)',
+        x: 0,
+        y: 2,
+        blur: 4,
+        spread: 0,
+        inset: false
+      },
+      {
+        color: 'rgba(0, 0, 0, 0.20)',
+        x: 0,
+        y: 8,
+        blur: 16,
+        spread: 0,
+        inset: true
+      }
+    ]);
   });
 
-  it('returns empty array when only blur effects exist', () => {
+  it('returns null when only blur effects exist', () => {
     const style = {
       name: 'blur-only',
       description: '',
@@ -121,10 +143,10 @@ describe('translateEffectStyleToken', () => {
 
     const result = translateEffectStyleToken(style);
 
-    expect(result).toHaveLength(0);
+    expect(result).toBeNull();
   });
 
-  it('returns empty array when no effects exist', () => {
+  it('returns null when no effects exist', () => {
     const style = {
       name: 'empty',
       description: '',
@@ -133,7 +155,7 @@ describe('translateEffectStyleToken', () => {
 
     const result = translateEffectStyleToken(style);
 
-    expect(result).toHaveLength(0);
+    expect(result).toBeNull();
   });
 
   it('handles color with full alpha (a=1)', () => {
@@ -154,11 +176,11 @@ describe('translateEffectStyleToken', () => {
 
     const result = translateEffectStyleToken(style);
 
-    expect(result).toHaveLength(1);
-    const [, token] = result[0];
-    const value = token.$value as { color: string };
+    expect(result).not.toBeNull();
+    const [, token] = result!;
+    const [shadow] = token.$value as { color: string }[];
 
-    expect(value.color).toBe('rgb(0, 0, 0)');
+    expect(shadow.color).toBe('rgb(0, 0, 0)');
   });
 
   it('filters out non-shadow effects from mixed list', () => {
@@ -184,10 +206,11 @@ describe('translateEffectStyleToken', () => {
 
     const result = translateEffectStyleToken(style);
 
-    expect(result).toHaveLength(1);
-    const [, token] = result[0];
-    const value = token.$value as { type: string };
+    expect(result).not.toBeNull();
+    const [, token] = result!;
+    const shadows = token.$value as { inset: boolean }[];
 
-    expect(value.type).toBe('drop');
+    expect(shadows).toHaveLength(1);
+    expect(shadows[0].inset).toBe(false);
   });
 });

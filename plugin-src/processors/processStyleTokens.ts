@@ -9,15 +9,12 @@ export const processStyleTokens = async (): Promise<[string, Set] | null> => {
   const set: Set = {};
 
   for (const style of effectStyles) {
-    const entries = translateEffectStyleToken(style);
+    const entry = translateEffectStyleToken(style);
+    if (!entry) continue;
 
-    for (const [name, token] of entries) {
-      set[name] = token;
-    }
-
-    if (entries.length > 0) {
-      styleTokenNames.set(style.id, entries[0][0]);
-    }
+    const [name, token] = entry;
+    set[name] = token;
+    styleTokenNames.set(style.id, name);
   }
 
   if (Object.keys(set).length === 0) {

@@ -17,7 +17,7 @@ export type ShadowTokenValue = {
   y: number;
   blur: number;
   spread: number;
-  type: 'drop' | 'inset';
+  inset: boolean;
 };
 
 export type TokenType =
@@ -39,7 +39,7 @@ export type TokenType =
   | 'shadow';
 
 export type Token = {
-  $value: string | string[] | ShadowTokenValue;
+  $value: string | string[] | ShadowTokenValue[];
   $type: TokenType;
   $description: string;
 };

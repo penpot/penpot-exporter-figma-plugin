@@ -14,23 +14,23 @@ const translateShadowEffect = (effect: DropShadowEffect | InnerShadowEffect): Sh
     y: effect.offset.y,
     blur: effect.radius,
     spread: effect.spread ?? 0,
-    type: effect.type === 'DROP_SHADOW' ? 'drop' : 'inset'
+    inset: effect.type === 'INNER_SHADOW'
   };
 };
 
-export const translateEffectStyleToken = (style: EffectStyle): [string, Token][] => {
+export const translateEffectStyleToken = (style: EffectStyle): [string, Token] | null => {
   const shadows = style.effects.filter(isShadowEffect);
 
-  return shadows.map(effect => {
-    const name = translateStyleTokenName(style.name);
+  if (shadows.length === 0) return null;
 
-    return [
-      name,
-      {
-        $value: translateShadowEffect(effect),
-        $type: 'shadow' as const,
-        $description: style.description
-      }
-    ];
-  });
+  const name = translateStyleTokenName(style.name);
+
+  return [
+    name,
+    {
+      $value: shadows.map(translateShadowEffect),
+      $type: 'shadow' as const,
+      $description: style.description
+    }
+  ];
 };
