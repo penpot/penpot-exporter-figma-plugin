@@ -4,8 +4,9 @@
     "target": "ES2019",
     "lib": ["ES2019"],
     "strict": true,
-    "typeRoots": ["../node_modules/@figma"],
-    "moduleResolution": "Node",
+    "types": ["@figma/plugin-typings"],
+    "module": "ESNext",
+    "moduleResolution": "bundler",
     "skipLibCheck": true,
     "resolveJsonModule": true
   }

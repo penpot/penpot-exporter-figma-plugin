@@ -29,12 +29,13 @@ export type ComponentInstance = ShapeBaseAttributes &
   Children & {
     componentRoot: boolean;
     showContent?: boolean;
+    hideInViewer?: boolean;
     isOrphan: boolean;
     type: 'instance';
   };
 
 export type ComponentProperty = {
-  type: 'BOOLEAN' | 'TEXT' | 'INSTANCE_SWAP' | 'VARIANT';
+  type: 'BOOLEAN' | 'TEXT' | 'INSTANCE_SWAP' | 'VARIANT' | 'SLOT';
   defaultValue: string | boolean;
   preferredValues?: {
     type: 'COMPONENT' | 'COMPONENT_SET';

@@ -26,6 +26,10 @@ import type { ComponentShape } from '@ui/lib/types/shapes/componentShape';
 
 export let isSharedLibrary: boolean = false;
 
+export const resetSharedLibrary = (): void => {
+  isSharedLibrary = false;
+};
+
 export const transformComponentNode = async (node: ComponentNode): Promise<ComponentShape> => {
   const isVariant = node.parent?.type === 'COMPONENT_SET';
   const variantId = isVariant ? transformId(node.parent) : undefined;
@@ -41,6 +45,7 @@ export const transformComponentNode = async (node: ComponentNode): Promise<Compo
   const component: ComponentShape = {
     type: 'component',
     showContent: !node.clipsContent,
+    hideInViewer: !node.visible,
     componentRoot: true,
     mainInstance: true,
     variantId,

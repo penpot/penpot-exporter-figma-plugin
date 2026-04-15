@@ -1,6 +1,5 @@
 {
   "compilerOptions": {
-    "baseUrl": ".",
     "paths": {
       "@common/*": ["./common/*"],
       "@plugin/*": ["./plugin-src/*"],

@@ -1,4 +1,5 @@
 import { clearParsedCache } from '@plugin/transformers/partials/transformVectorPaths';
+import { resetSharedLibrary } from '@plugin/transformers/transformComponentNode';
 
 import type { Uuid } from '@ui/lib/types/utils/uuid';
 import type { ComponentProperty, ComponentRoot } from '@ui/types';
@@ -38,4 +39,5 @@ export const clearAllState = (): void => {
   externalLibraries.clear();
   styleTokenNames.clear();
   clearParsedCache();
+  resetSharedLibrary();
 };
