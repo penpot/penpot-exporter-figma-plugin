@@ -35,10 +35,10 @@ describe('translateEffectStyleToken', () => {
     expect(token.$value).toEqual([
       {
         color: 'rgba(0, 0, 0, 0.25)',
-        x: 0,
-        y: 4,
-        blur: 8,
-        spread: 0,
+        x: '0',
+        y: '4',
+        blur: '8',
+        spread: '0',
         inset: false
       }
     ]);
@@ -68,10 +68,10 @@ describe('translateEffectStyleToken', () => {
     expect(token.$value).toEqual([
       {
         color: 'rgba(255, 0, 0, 0.50)',
-        x: 2,
-        y: 2,
-        blur: 4,
-        spread: 1,
+        x: '2',
+        y: '2',
+        blur: '4',
+        spread: '1',
         inset: true
       }
     ]);
@@ -111,18 +111,18 @@ describe('translateEffectStyleToken', () => {
     expect(token.$value).toEqual([
       {
         color: 'rgba(0, 0, 0, 0.10)',
-        x: 0,
-        y: 2,
-        blur: 4,
-        spread: 0,
+        x: '0',
+        y: '2',
+        blur: '4',
+        spread: '0',
         inset: false
       },
       {
         color: 'rgba(0, 0, 0, 0.20)',
-        x: 0,
-        y: 8,
-        blur: 16,
-        spread: 0,
+        x: '0',
+        y: '8',
+        blur: '16',
+        spread: '0',
         inset: true
       }
     ]);

@@ -10,10 +10,10 @@ const isShadowEffect = (effect: Effect): effect is DropShadowEffect | InnerShado
 const translateShadowEffect = (effect: DropShadowEffect | InnerShadowEffect): ShadowTokenValue => {
   return {
     color: rgbToString(effect.color),
-    x: effect.offset.x,
-    y: effect.offset.y,
-    blur: effect.radius,
-    spread: effect.spread ?? 0,
+    x: String(effect.offset.x),
+    y: String(effect.offset.y),
+    blur: String(effect.radius),
+    spread: String(effect.spread ?? 0),
     inset: effect.type === 'INNER_SHADOW'
   };
 };

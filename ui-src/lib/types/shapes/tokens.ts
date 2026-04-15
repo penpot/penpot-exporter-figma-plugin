@@ -13,10 +13,10 @@ export type Set = {
 
 export type ShadowTokenValue = {
   color: string;
-  x: number;
-  y: number;
-  blur: number;
-  spread: number;
+  x: string;
+  y: string;
+  blur: string;
+  spread: string;
   inset: boolean;
 };
 
