@@ -158,4 +158,29 @@ describe('processStyleTokens', () => {
     expect(shadows).toHaveLength(5);
     expect(styleTokenNames.get('S:effect-multi')).toBe('Elevation');
   });
+
+  it('skips effect styles with only invisible shadow effects', async () => {
+    mockFigma.getLocalEffectStylesAsync.mockResolvedValue([
+      {
+        id: 'S:effect-hidden',
+        name: 'Hidden Shadow',
+        description: '',
+        effects: [
+          {
+            type: 'DROP_SHADOW',
+            color: { r: 0, g: 0, b: 0, a: 0.25 },
+            offset: { x: 0, y: 4 },
+            radius: 8,
+            spread: 0,
+            visible: false
+          }
+        ]
+      }
+    ]);
+
+    const result = await processStyleTokens();
+
+    expect(result).toBeNull();
+    expect(styleTokenNames.has('S:effect-hidden')).toBe(false);
+  });
 });

@@ -110,20 +110,20 @@ describe('translateEffectStyleToken', () => {
     expect(token.$type).toBe('shadow');
     expect(token.$value).toEqual([
       {
-        color: 'rgba(0, 0, 0, 0.10)',
-        x: '0',
-        y: '2',
-        blur: '4',
-        spread: '0',
-        inset: false
-      },
-      {
         color: 'rgba(0, 0, 0, 0.20)',
         x: '0',
         y: '8',
         blur: '16',
         spread: '0',
         inset: true
+      },
+      {
+        color: 'rgba(0, 0, 0, 0.10)',
+        x: '0',
+        y: '2',
+        blur: '4',
+        spread: '0',
+        inset: false
       }
     ]);
   });
@@ -212,5 +212,67 @@ describe('translateEffectStyleToken', () => {
 
     expect(shadows).toHaveLength(1);
     expect(shadows[0].inset).toBe(false);
+  });
+
+  it('skips invisible shadow effects', () => {
+    const style = {
+      name: 'mixed-visibility',
+      description: '',
+      effects: [
+        {
+          type: 'DROP_SHADOW' as const,
+          color: { r: 0, g: 0, b: 0, a: 0.1 },
+          offset: { x: 0, y: 2 },
+          radius: 4,
+          spread: 0,
+          visible: false
+        },
+        {
+          type: 'INNER_SHADOW' as const,
+          color: { r: 0, g: 0, b: 0, a: 0.2 },
+          offset: { x: 0, y: 8 },
+          radius: 16,
+          spread: 0,
+          visible: true
+        }
+      ]
+    } as EffectStyle;
+
+    const result = translateEffectStyleToken(style);
+
+    expect(result).not.toBeNull();
+    const [, token] = result!;
+
+    expect(token.$value).toEqual([
+      {
+        color: 'rgba(0, 0, 0, 0.20)',
+        x: '0',
+        y: '8',
+        blur: '16',
+        spread: '0',
+        inset: true
+      }
+    ]);
+  });
+
+  it('returns null when all shadow effects are invisible', () => {
+    const style = {
+      name: 'hidden-shadows',
+      description: '',
+      effects: [
+        {
+          type: 'DROP_SHADOW' as const,
+          color: { r: 0, g: 0, b: 0, a: 0.5 },
+          offset: { x: 0, y: 4 },
+          radius: 8,
+          spread: 0,
+          visible: false
+        }
+      ]
+    } as EffectStyle;
+
+    const result = translateEffectStyleToken(style);
+
+    expect(result).toBeNull();
   });
 });

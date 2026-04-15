@@ -7,6 +7,10 @@ const isShadowEffect = (effect: Effect): effect is DropShadowEffect | InnerShado
   return effect.type === 'DROP_SHADOW' || effect.type === 'INNER_SHADOW';
 };
 
+const isVisibleEffect = (effect: Effect): boolean => {
+  return effect.visible !== false;
+};
+
 const translateShadowEffect = (effect: DropShadowEffect | InnerShadowEffect): ShadowTokenValue => {
   return {
     color: rgbToString(effect.color),
@@ -19,7 +23,7 @@ const translateShadowEffect = (effect: DropShadowEffect | InnerShadowEffect): Sh
 };
 
 export const translateEffectStyleToken = (style: EffectStyle): [string, Token] | null => {
-  const shadows = style.effects.filter(isShadowEffect);
+  const shadows = style.effects.filter(isShadowEffect).filter(isVisibleEffect);
 
   if (shadows.length === 0) return null;
 
@@ -28,7 +32,8 @@ export const translateEffectStyleToken = (style: EffectStyle): [string, Token] |
   return [
     name,
     {
-      $value: shadows.map(translateShadowEffect),
+      // Figma applies shadows in reverse order, matching the existing shape export path.
+      $value: [...shadows].reverse().map(translateShadowEffect),
       $type: 'shadow' as const,
       $description: style.description
     }
