@@ -148,8 +148,8 @@ export const translateAppliedStyleTokens = (
 ): { [key in TokenProperties]?: string } => {
   const appliedTokens: { [key in TokenProperties]?: string } = {};
 
-  if ('effectStyleId' in node && node.effectStyleId && node.effectStyleId.length > 0) {
-    const tokenName = styleTokenNames.get(node.effectStyleId as string);
+  if ('effectStyleId' in node && node.effectStyleId) {
+    const tokenName = styleTokenNames.get(node.effectStyleId);
 
     if (tokenName) {
       appliedTokens.shadow = tokenName;

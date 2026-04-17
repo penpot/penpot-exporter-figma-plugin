@@ -1,6 +1,6 @@
 import { uniqueVariableNames } from '@plugin/libraries';
 
-export const translateStyleTokenName = (name: string): string => {
+export const sanitizeUniqueName = (name: string): string => {
   let sanitized = name
     .replace(/\//g, '.')
     .replace(/[^a-zA-Z0-9\-$_.]/g, '')

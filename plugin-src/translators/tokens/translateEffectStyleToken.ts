@@ -1,4 +1,4 @@
-import { translateStyleTokenName } from '@plugin/translators/tokens/translateStyleTokenName';
+import { sanitizeUniqueName } from '@plugin/translators/tokens/sanitizeUniqueName';
 import { rgbToString } from '@plugin/utils/rgbToString';
 
 import type { ShadowTokenValue, Token } from '@ui/lib/types/shapes/tokens';
@@ -27,13 +27,13 @@ export const translateEffectStyleToken = (style: EffectStyle): [string, Token] |
 
   if (shadows.length === 0) return null;
 
-  const name = translateStyleTokenName(style.name);
+  const name = sanitizeUniqueName(style.name);
 
   return [
     name,
     {
       // Figma applies shadows in reverse order, matching the existing shape export path.
-      $value: [...shadows].reverse().map(translateShadowEffect),
+      $value: shadows.reverse().map(translateShadowEffect),
       $type: 'shadow' as const,
       $description: style.description
     }

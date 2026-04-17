@@ -56,6 +56,7 @@ describe('processStyleTokens', () => {
   it('skips effect styles with no shadow effects', async () => {
     mockFigma.getLocalEffectStylesAsync.mockResolvedValue([
       {
+        id: 'S:blur',
         name: 'Blur',
         description: '',
         effects: [
@@ -71,6 +72,7 @@ describe('processStyleTokens', () => {
     const result = await processStyleTokens();
 
     expect(result).toBeNull();
+    expect(styleTokenNames.has('S:blur')).toBe(false);
   });
 
   it('populates styleTokenNames for effect styles', async () => {
