@@ -2,11 +2,16 @@ import { generateUuid, rgbToHex } from '@plugin/utils';
 
 import type { Shadow, ShadowStyle } from '@ui/lib/types/utils/shadow';
 
-export const translateShadowEffect = (effect: Effect): Shadow | undefined => {
-  if (effect.type !== 'DROP_SHADOW' && effect.type !== 'INNER_SHADOW') {
-    return;
-  }
+export const isShadowEffect = (effect: Effect): effect is DropShadowEffect | InnerShadowEffect => {
+  return effect.type === 'DROP_SHADOW' || effect.type === 'INNER_SHADOW';
+};
 
+// Returns shadow effects in Figma's paint order (reverse of the effects array).
+export const shadowEffectsInPaintOrder = (
+  effects: readonly Effect[]
+): (DropShadowEffect | InnerShadowEffect)[] => effects.filter(isShadowEffect).reverse();
+
+export const translateShadowEffect = (effect: DropShadowEffect | InnerShadowEffect): Shadow => {
   return {
     id: generateUuid(),
     style: translateShadowType(effect),
@@ -22,19 +27,8 @@ export const translateShadowEffect = (effect: Effect): Shadow | undefined => {
   };
 };
 
-export const translateShadowEffects = (effects: readonly Effect[]): Shadow[] => {
-  const shadows: Shadow[] = [];
-
-  for (const effect of effects) {
-    const shadow = translateShadowEffect(effect);
-    if (shadow) {
-      // effects are applied in reverse order in Figma, that's why we unshift
-      shadows.unshift(shadow);
-    }
-  }
-
-  return shadows;
-};
+export const translateShadowEffects = (effects: readonly Effect[]): Shadow[] =>
+  shadowEffectsInPaintOrder(effects).map(translateShadowEffect);
 
 const translateShadowType = (effect: DropShadowEffect | InnerShadowEffect): ShadowStyle => {
   switch (effect.type) {

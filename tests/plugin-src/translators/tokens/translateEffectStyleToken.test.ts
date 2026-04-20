@@ -214,6 +214,46 @@ describe('translateEffectStyleToken', () => {
     expect(shadows[0].inset).toBe(false);
   });
 
+  it('preserves reverse order after filtering non-shadow effects', () => {
+    const style = {
+      name: 'mixed-ordered',
+      description: '',
+      effects: [
+        {
+          type: 'LAYER_BLUR' as const,
+          radius: 10,
+          visible: true
+        },
+        {
+          type: 'DROP_SHADOW' as const,
+          color: { r: 0, g: 0, b: 0, a: 0.1 },
+          offset: { x: 0, y: 2 },
+          radius: 4,
+          spread: 0,
+          visible: true
+        },
+        {
+          type: 'DROP_SHADOW' as const,
+          color: { r: 0, g: 0, b: 0, a: 0.3 },
+          offset: { x: 0, y: 6 },
+          radius: 12,
+          spread: 0,
+          visible: true
+        }
+      ]
+    } as EffectStyle;
+
+    const result = translateEffectStyleToken(style);
+
+    expect(result).not.toBeNull();
+    const [, token] = result!;
+    const shadows = token.$value as { y: string }[];
+
+    expect(shadows).toHaveLength(2);
+    expect(shadows[0].y).toBe('6');
+    expect(shadows[1].y).toBe('2');
+  });
+
   it('skips invisible shadow effects', () => {
     const style = {
       name: 'mixed-visibility',
