@@ -1,5 +1,15 @@
 # penpot-exporter
 
+## 0.21.0
+
+### Minor Changes
+
+- [#359](https://github.com/penpot/penpot-exporter-figma-plugin/pull/359)
+  [`2c3e7d5`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/2c3e7d57c9a65d58aac9e5eb8aa72877e5e3c355)
+  Thanks [@SpykeRel04D](https://github.com/SpykeRel04D)! - Transform Figma Effect Styles (drop
+  shadow and inner shadow) into Penpot shadow tokens. Multi-shadow styles are preserved as a single
+  token
+
 ## 0.20.1
 
 ### Patch Changes
