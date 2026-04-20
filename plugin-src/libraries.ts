@@ -17,6 +17,7 @@ export const variables: Map<string, string> = new Map();
 export const variableNames: Map<string, string> = new Map();
 export const uniqueVariableNames: Set<string> = new Set();
 export const externalLibraries: Map<string, string> = new Map();
+export const styleTokenNames: Map<string, string> = new Map();
 
 /**
  * Clears all state maps and sets to prevent memory accumulation during exports.
@@ -36,6 +37,7 @@ export const clearAllState = (): void => {
   variableNames.clear();
   uniqueVariableNames.clear();
   externalLibraries.clear();
+  styleTokenNames.clear();
   clearParsedCache();
   resetSharedLibrary();
 };

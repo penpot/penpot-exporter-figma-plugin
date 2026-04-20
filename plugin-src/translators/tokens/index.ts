@@ -1,5 +1,7 @@
+export * from './sanitizeUniqueName';
 export * from './translateAliasValue';
 export * from './translateColorVariable';
+export * from './translateEffectStyleToken';
 export * from './translateFloatVariable';
 export * from './translateGenericVariable';
 export * from './translateScope';
