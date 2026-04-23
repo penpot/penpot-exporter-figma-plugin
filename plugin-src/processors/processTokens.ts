@@ -148,7 +148,7 @@ const getVariables = async (collection: VariableCollection): Promise<Variable[]>
     collection.variableIds.map(id => figma.variables.getVariableByIdAsync(id))
   );
 
-  return results.filter((v): v is Variable => v !== null);
+  return results.filter((v): v is Variable => !!v);
 };
 
 export const processTokens = async (): Promise<Tokens | undefined> => {
