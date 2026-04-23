@@ -144,17 +144,11 @@ const resolveAliases = async (sets: TokenSets): Promise<TokenSets> => {
 };
 
 const getVariables = async (collection: VariableCollection): Promise<Variable[]> => {
-  const variables: Variable[] = [];
+  const results = await Promise.all(
+    collection.variableIds.map(id => figma.variables.getVariableByIdAsync(id))
+  );
 
-  for (const variableId of collection.variableIds) {
-    const variable = await figma.variables.getVariableByIdAsync(variableId);
-
-    if (!variable) continue;
-
-    variables.push(variable);
-  }
-
-  return variables;
+  return results.filter((v): v is Variable => v !== null);
 };
 
 export const processTokens = async (): Promise<Tokens | undefined> => {
