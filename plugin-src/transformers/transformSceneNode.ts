@@ -36,6 +36,7 @@ export const transformSceneNode = async (node: SceneNode): Promise<PenpotNode | 
       break;
     case 'SECTION':
     case 'FRAME':
+    case 'SLOT':
       penpotNode = await transformFrameNode(node);
       break;
     case 'GROUP':
