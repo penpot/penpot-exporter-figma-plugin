@@ -1,5 +1,15 @@
 # penpot-exporter
 
+## 0.22.0
+
+### Minor Changes
+
+- [#371](https://github.com/penpot/penpot-exporter-figma-plugin/pull/371)
+  [`c3b6798`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/c3b67988571118da62114fa6517829cc087f74b0)
+  Thanks [@SpykeRel04D](https://github.com/SpykeRel04D)! - Export Figma slots as frames (temporary
+  workaround until Penpot supports slots natively): preserves slot contents that were previously
+  dropped from the export, rendered as regular frames without slot semantics.
+
 ## 0.21.0
 
 ### Minor Changes
