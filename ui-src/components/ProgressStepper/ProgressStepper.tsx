@@ -9,6 +9,7 @@ import styles from './ProgressStepper.module.css';
 
 type ProgressStepperProps = {
   currentStep: Steps;
+  currentStepName?: string;
 };
 
 const STEP_NAMES: Record<Steps, string> = {
@@ -20,12 +21,17 @@ const STEP_NAMES: Record<Steps, string> = {
   exporting: 'Package Penpot file'
 };
 
-export const ProgressStepper = ({ currentStep }: ProgressStepperProps): JSX.Element | null => {
+export const ProgressStepper = ({
+  currentStep,
+  currentStepName
+}: ProgressStepperProps): JSX.Element | null => {
   const currentStepIndex = PROGRESS_STEPS.indexOf(currentStep);
 
   if (currentStepIndex === -1) {
     return null;
   }
+
+  const activeStepName = currentStepName ?? STEP_NAMES[currentStep];
 
   return (
     <Stack space="2xsmall">
@@ -33,7 +39,7 @@ export const ProgressStepper = ({ currentStep }: ProgressStepperProps): JSX.Elem
         <strong>
           Step {currentStepIndex + 1} of {PROGRESS_STEPS.length}
         </strong>{' '}
-        — {STEP_NAMES[currentStep]}
+        — {activeStepName}
       </div>
 
       <Stack direction="column" space="3xsmall">
@@ -57,7 +63,7 @@ export const ProgressStepper = ({ currentStep }: ProgressStepperProps): JSX.Elem
               ) : (
                 <Circle size={13} />
               )}
-              {STEP_NAMES[step]}
+              {isCurrent ? activeStepName : STEP_NAMES[step]}
             </div>
           );
         })}

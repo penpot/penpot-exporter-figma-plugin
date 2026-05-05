@@ -14,6 +14,7 @@ import {
   registerTextStyles
 } from '@plugin/processors';
 import { isSharedLibrary } from '@plugin/transformers';
+import { isSlidesEditor } from '@plugin/utils';
 
 import type { ExportScope, PenpotDocument } from '@ui/types';
 
@@ -21,10 +22,14 @@ export const transformDocumentNode = async (
   node: DocumentNode,
   scope: ExportScope
 ): Promise<PenpotDocument> => {
-  const tokens = await processTokens();
+  const slidesMode = isSlidesEditor();
 
-  await registerPaintStyles();
-  await registerTextStyles();
+  const tokens = slidesMode ? undefined : await processTokens();
+
+  if (!slidesMode) {
+    await registerPaintStyles();
+    await registerTextStyles();
+  }
 
   const children = await processPages(node, scope);
   const [images, paintStyles, textStyles] = await processAssets();

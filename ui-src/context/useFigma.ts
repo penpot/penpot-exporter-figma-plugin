@@ -17,6 +17,8 @@ export type UseFigmaHook = {
   summary: boolean;
   error: boolean;
   step: Steps;
+  stepLabel: string | undefined;
+  stepName: string | undefined;
   progress: {
     currentItem: string;
     totalItems: number;
@@ -46,6 +48,8 @@ export const useFigma = (): UseFigmaHook => {
   const exportStartTimeRef = useRef<number | null>(null);
 
   const [step, setStep] = useState<Steps>('processing');
+  const [stepLabel, setStepLabel] = useState<string | undefined>(undefined);
+  const [stepName, setStepName] = useState<string | undefined>(undefined);
   const totalItemsRef = useRef<number>(0);
   const [currentItem, setCurrentItem] = useState('');
   const [processedItems, setProcessedItems] = useState(0);
@@ -149,6 +153,8 @@ export const useFigma = (): UseFigmaHook => {
       }
       case 'PROGRESS_STEP': {
         setStep(pluginMessage.data.step);
+        setStepLabel(pluginMessage.data.label);
+        setStepName(pluginMessage.data.name);
         setProgressPercentage(0);
         setProcessedItems(0);
 
@@ -248,6 +254,8 @@ export const useFigma = (): UseFigmaHook => {
     summary,
     error,
     step,
+    stepLabel,
+    stepName,
     progress: {
       currentItem,
       totalItems: totalItemsRef.current,

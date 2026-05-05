@@ -29,6 +29,8 @@ export type ProgressStepMessage = {
   data: {
     step: Steps;
     total: number;
+    label?: string;
+    name?: string;
   };
 };
 
