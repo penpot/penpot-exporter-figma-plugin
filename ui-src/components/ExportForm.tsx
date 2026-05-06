@@ -93,7 +93,7 @@ export const ExportForm = (): JSX.Element => {
         </Stack>
       )}
 
-      <ExternalLibrariesFieldSet />
+      {!isSlidesEditor && <ExternalLibrariesFieldSet />}
     </Stack>
   );
 
