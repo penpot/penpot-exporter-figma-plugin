@@ -20,7 +20,9 @@ const scopeOptions: SegmentedControlOption[] = [
 ];
 
 export const ExportForm = (): JSX.Element => {
-  const { cancel, exportPenpot, exportScope, exportLibraries, setExportScope } = useFigmaContext();
+  const { cancel, exportPenpot, exportScope, exportLibraries, setExportScope, editorType } =
+    useFigmaContext();
+  const isSlidesEditor = editorType === 'slides';
   const methods = useForm<FormValues>({
     defaultValues: {
       externalLibraries: []
@@ -74,19 +76,22 @@ export const ExportForm = (): JSX.Element => {
 
   const rightColumn = (
     <Stack space="medium">
-      <Stack space="xsmall">
-        <strong style={{ fontSize: 13 }}>Export scope</strong>
-        <div style={{ width: 'fit-content' }}>
-          <SegmentedControl
-            options={scopeOptions}
-            value={exportScope}
-            onChange={handleScopeChange}
-          />
-        </div>
-        <Muted>
-          For large documents, try exporting the current page first to test, then do a full export.
-        </Muted>
-      </Stack>
+      {!isSlidesEditor && (
+        <Stack space="xsmall">
+          <strong style={{ fontSize: 13 }}>Export scope</strong>
+          <div style={{ width: 'fit-content' }}>
+            <SegmentedControl
+              options={scopeOptions}
+              value={exportScope}
+              onChange={handleScopeChange}
+            />
+          </div>
+          <Muted>
+            For large documents, try exporting the current page first to test, then do a full
+            export.
+          </Muted>
+        </Stack>
+      )}
 
       <ExternalLibrariesFieldSet />
     </Stack>

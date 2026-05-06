@@ -45,6 +45,11 @@ const onMessage: MessageEventHandler = message => {
 figma.showUI(__html__, { themeColors: true, width: BASE_WIDTH, height: BASE_HEIGHT });
 figma.ui.onmessage = onMessage;
 
+figma.ui.postMessage({
+  type: 'EDITOR_TYPE',
+  data: figma.editorType
+});
+
 figma.teamLibrary
   .getAvailableLibraryVariableCollectionsAsync()
   .then(collections => {
