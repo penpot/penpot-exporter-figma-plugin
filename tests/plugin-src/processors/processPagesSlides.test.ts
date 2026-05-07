@@ -4,7 +4,7 @@ import { processPages } from '@plugin/processors/processPages';
 
 vi.mock('@plugin/transformers', () => ({
   transformPageNode: vi.fn(),
-  transformSceneNode: vi.fn(async (node: SceneNode) => ({
+  transformSceneNode: vi.fn(async (node: { id: string; name: string }) => ({
     type: 'frame',
     name: node.name,
     id: node.id
@@ -21,7 +21,9 @@ vi.mock('@common/sleep', () => ({
   yieldByTime: vi.fn(async () => {})
 }));
 
-const createSlide = (id: string, name: string): SlideNode =>
+type SlideLike = { id: string; name: string; type: 'SLIDE' };
+
+const createSlide = (id: string, name: string): SlideLike =>
   ({
     id,
     name,
@@ -33,7 +35,7 @@ const createSlide = (id: string, name: string): SlideNode =>
       [1, 0, 0],
       [0, 1, 0]
     ]
-  }) as unknown as SlideNode;
+  }) as unknown as SlideLike;
 
 describe('processPages in slides editor', () => {
   beforeEach(() => {
