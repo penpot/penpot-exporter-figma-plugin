@@ -1,9 +1,8 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { processPages } from '@plugin/processors/processPages';
+import { processSlides } from '@plugin/processors/processSlides';
 
 vi.mock('@plugin/transformers', () => ({
-  transformPageNode: vi.fn(),
   transformSceneNode: vi.fn(async (node: { id: string; name: string }) => ({
     type: 'frame',
     name: node.name,
@@ -13,8 +12,7 @@ vi.mock('@plugin/transformers', () => ({
 
 vi.mock('@plugin/utils', () => ({
   reportProgress: vi.fn(),
-  flushProgress: vi.fn(),
-  isSlidesEditor: (): boolean => figma.editorType === 'slides'
+  flushProgress: vi.fn()
 }));
 
 vi.mock('@common/sleep', () => ({
@@ -37,7 +35,7 @@ const createSlide = (id: string, name: string): SlideLike =>
     ]
   }) as unknown as SlideLike;
 
-describe('processPages in slides editor', () => {
+describe('processSlides', () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });
@@ -50,14 +48,13 @@ describe('processPages in slides editor', () => {
 
     // @ts-expect-error - Mocking global figma object
     global.figma = {
-      editorType: 'slides',
       loadAllPagesAsync: vi.fn(async () => {}),
-      getSlideGrid: vi.fn(() => slides)
+      getCanvasGrid: vi.fn(() => slides)
     };
 
     const root = { name: 'My deck', children: [] } as unknown as DocumentNode;
 
-    const result = await processPages(root, 'all');
+    const result = await processSlides(root);
 
     expect(figma.loadAllPagesAsync).toHaveBeenCalledTimes(1);
     expect(result).toHaveLength(1);
@@ -76,14 +73,13 @@ describe('processPages in slides editor', () => {
   it('returns an empty page when the slide grid is empty', async () => {
     // @ts-expect-error - Mocking global figma object
     global.figma = {
-      editorType: 'slides',
       loadAllPagesAsync: vi.fn(async () => {}),
-      getSlideGrid: vi.fn(() => [])
+      getCanvasGrid: vi.fn(() => [])
     };
 
     const root = { name: 'Empty deck', children: [] } as unknown as DocumentNode;
 
-    const result = await processPages(root, 'all');
+    const result = await processSlides(root);
 
     expect(result).toHaveLength(1);
     expect(result[0].children).toHaveLength(0);
@@ -92,14 +88,13 @@ describe('processPages in slides editor', () => {
   it('falls back to "Slides" name when document has no name', async () => {
     // @ts-expect-error - Mocking global figma object
     global.figma = {
-      editorType: 'slides',
       loadAllPagesAsync: vi.fn(async () => {}),
-      getSlideGrid: vi.fn(() => [])
+      getCanvasGrid: vi.fn(() => [])
     };
 
     const root = { name: '', children: [] } as unknown as DocumentNode;
 
-    const result = await processPages(root, 'all');
+    const result = await processSlides(root);
 
     expect(result[0].name).toBe('Slides');
   });

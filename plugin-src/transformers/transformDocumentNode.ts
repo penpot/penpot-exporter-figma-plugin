@@ -9,6 +9,7 @@ import {
 import {
   processAssets,
   processPages,
+  processSlides,
   processTokens,
   registerPaintStyles,
   registerTextStyles
@@ -31,7 +32,7 @@ export const transformDocumentNode = async (
     await registerTextStyles();
   }
 
-  const children = await processPages(node, scope);
+  const children = slidesMode ? await processSlides(node) : await processPages(node, scope);
   const [images, paintStyles, textStyles] = await processAssets();
 
   return {

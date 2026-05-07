@@ -68,9 +68,6 @@ export const transformSceneNode = async (node: SceneNode): Promise<PenpotNode | 
     case 'SLIDE':
       penpotNode = await transformSlideNode(node);
       break;
-    case 'INTERACTIVE_SLIDE_ELEMENT':
-      console.warn(`Skipping INTERACTIVE_SLIDE_ELEMENT (polls/embeds/YouTube): ${node.name}`);
-      return undefined;
   }
 
   if (penpotNode === undefined) {
