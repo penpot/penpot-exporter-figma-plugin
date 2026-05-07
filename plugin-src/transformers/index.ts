@@ -12,5 +12,6 @@ export * from './transformPathNode';
 export * from './transformRectangleNode';
 export * from './transformSceneNode';
 export * from './transformSlideNode';
+export * from './transformSlidesDocumentNode';
 export * from './transformTextNode';
 export * from './transformVectorNode';

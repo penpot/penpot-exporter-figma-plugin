@@ -5,7 +5,7 @@ import styles from './TwoColumnLayout.module.css';
 
 type TwoColumnLayoutProps = PropsWithChildren<{
   left: JSX.Element;
-  right: JSX.Element;
+  right: JSX.Element | null;
 }>;
 
 export const TwoColumnLayout = ({ left, right }: TwoColumnLayoutProps): JSX.Element => {

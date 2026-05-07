@@ -6,27 +6,13 @@ import {
   externalLibraries,
   missingFonts
 } from '@plugin/libraries';
-import {
-  processAssets,
-  processPages,
-  processTokens,
-  registerPaintStyles,
-  registerTextStyles
-} from '@plugin/processors';
+import { processAssets, processSlides } from '@plugin/processors';
 import { isSharedLibrary } from '@plugin/transformers';
 
-import type { ExportScope, PenpotDocument } from '@ui/types';
+import type { PenpotDocument } from '@ui/types';
 
-export const transformDocumentNode = async (
-  node: DocumentNode,
-  scope: ExportScope
-): Promise<PenpotDocument> => {
-  const tokens = await processTokens();
-
-  await registerPaintStyles();
-  await registerTextStyles();
-
-  const children = await processPages(node, scope);
+export const transformSlidesDocumentNode = async (node: DocumentNode): Promise<PenpotDocument> => {
+  const children = await processSlides(node);
   const [images, paintStyles, textStyles] = await processAssets();
 
   return {
@@ -35,7 +21,7 @@ export const transformDocumentNode = async (
     images,
     paintStyles,
     textStyles,
-    tokens,
+    tokens: undefined,
     components: toObject(components),
     componentProperties: toObject(componentProperties),
     externalLibraries: toObject(externalLibraries),

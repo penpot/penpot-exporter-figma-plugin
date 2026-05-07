@@ -10,8 +10,8 @@ import {
   textStyles,
   variantProperties
 } from '@plugin/libraries';
-import { transformDocumentNode } from '@plugin/transformers';
-import { flushProgress, reportProgress, resetProgress } from '@plugin/utils';
+import { transformDocumentNode, transformSlidesDocumentNode } from '@plugin/transformers';
+import { flushProgress, isSlidesEditor, reportProgress, resetProgress } from '@plugin/utils';
 
 import type { ExportScope, ExternalLibrary } from '@ui/types';
 
@@ -30,7 +30,9 @@ export const handleExportMessage = async (
   resetProgress();
 
   initializeExternalLibraries(libraries);
-  const document = await transformDocumentNode(figma.root, scope);
+  const document = isSlidesEditor()
+    ? await transformSlidesDocumentNode(figma.root)
+    : await transformDocumentNode(figma.root, scope);
 
   flushProgress();
 
