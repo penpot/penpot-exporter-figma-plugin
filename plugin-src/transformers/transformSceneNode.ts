@@ -9,7 +9,9 @@ import {
   transformLineNode,
   transformPathNode,
   transformRectangleNode,
+  transformShapeWithTextNode,
   transformSlideNode,
+  transformTableNode,
   transformTextNode,
   transformVectorNode
 } from '@plugin/transformers';
@@ -67,6 +69,12 @@ export const transformSceneNode = async (node: SceneNode): Promise<PenpotNode | 
       break;
     case 'SLIDE':
       penpotNode = await transformSlideNode(node);
+      break;
+    case 'TABLE':
+      penpotNode = await transformTableNode(node);
+      break;
+    case 'SHAPE_WITH_TEXT':
+      penpotNode = await transformShapeWithTextNode(node);
       break;
   }
 

@@ -31,7 +31,7 @@ export const transformSlideNode = async (node: SlideNode): Promise<FrameShape> =
   const frame = await transformFrameNode(node as unknown as FrameNode);
 
   hideDescendantArtboardsFromViewer(frame.children);
-  frame.hideInViewer = false;
+  frame.hideInViewer = node.isSkippedSlide;
 
   return frame;
 };
