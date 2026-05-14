@@ -81,5 +81,4 @@ describe('processSlides', () => {
     expect(result).toHaveLength(1);
     expect(result[0].children).toHaveLength(0);
   });
-
 });
