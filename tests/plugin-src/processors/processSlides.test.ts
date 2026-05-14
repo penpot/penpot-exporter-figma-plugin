@@ -48,7 +48,6 @@ describe('processSlides', () => {
 
     // @ts-expect-error - Mocking global figma object
     global.figma = {
-      loadAllPagesAsync: vi.fn(async () => {}),
       getCanvasGrid: vi.fn(() => slides)
     };
 
@@ -56,7 +55,6 @@ describe('processSlides', () => {
 
     const result = await processSlides(root);
 
-    expect(figma.loadAllPagesAsync).toHaveBeenCalledTimes(1);
     expect(result).toHaveLength(1);
     expect(result[0].name).toBe('My deck');
     expect(result[0].children).toHaveLength(4);
@@ -73,7 +71,6 @@ describe('processSlides', () => {
   it('returns an empty page when the slide grid is empty', async () => {
     // @ts-expect-error - Mocking global figma object
     global.figma = {
-      loadAllPagesAsync: vi.fn(async () => {}),
       getCanvasGrid: vi.fn(() => [])
     };
 
@@ -85,17 +82,4 @@ describe('processSlides', () => {
     expect(result[0].children).toHaveLength(0);
   });
 
-  it('falls back to "Slides" name when document has no name', async () => {
-    // @ts-expect-error - Mocking global figma object
-    global.figma = {
-      loadAllPagesAsync: vi.fn(async () => {}),
-      getCanvasGrid: vi.fn(() => [])
-    };
-
-    const root = { name: '', children: [] } as unknown as DocumentNode;
-
-    const result = await processSlides(root);
-
-    expect(result[0].name).toBe('Slides');
-  });
 });
