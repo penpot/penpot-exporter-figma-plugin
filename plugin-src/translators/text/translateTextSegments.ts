@@ -10,6 +10,7 @@ import {
   translateTextDecoration,
   translateTextTransform
 } from '@plugin/translators/text/properties';
+import { isFigJamEditor } from '@plugin/utils';
 
 import type { TextNode as PenpotTextNode, TextStyle } from '@ui/lib/types/shapes/textShape';
 
@@ -61,6 +62,8 @@ const translateStyleTextSegment = (node: TextNode, segment: TextSegment): Penpot
 };
 
 const hasTextStyle = (segment: TextSegment): boolean => {
+  if (isFigJamEditor()) return false;
+
   return segment.textStyleId !== undefined && segment.textStyleId.length > 0;
 };
 

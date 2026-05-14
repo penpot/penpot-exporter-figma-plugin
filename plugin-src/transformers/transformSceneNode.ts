@@ -2,15 +2,18 @@ import {
   transformBooleanNode,
   transformComponentNode,
   transformComponentSetNode,
+  transformConnectorNode,
   transformEllipseNode,
   transformFrameNode,
   transformGroupNode,
   transformInstanceNode,
   transformLineNode,
+  transformNodeAsImageRect,
   transformPathNode,
   transformRectangleNode,
   transformShapeWithTextNode,
   transformSlideNode,
+  transformStickyNode,
   transformTableNode,
   transformTextNode,
   transformVectorNode
@@ -75,6 +78,22 @@ export const transformSceneNode = async (node: SceneNode): Promise<PenpotNode | 
       break;
     case 'SHAPE_WITH_TEXT':
       penpotNode = await transformShapeWithTextNode(node);
+      break;
+    case 'STICKY':
+      penpotNode = transformStickyNode(node);
+      break;
+    case 'CONNECTOR':
+      penpotNode = await transformConnectorNode(node);
+      break;
+    case 'HIGHLIGHT':
+    case 'STAMP':
+    case 'WASHI_TAPE':
+    case 'WIDGET':
+    case 'EMBED':
+    case 'LINK_UNFURL':
+    case 'MEDIA':
+    case 'CODE_BLOCK':
+      penpotNode = await transformNodeAsImageRect(node);
       break;
   }
 

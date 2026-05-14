@@ -4,7 +4,7 @@ import {
   translateGradientLinearFill,
   translateGradientRadialFill
 } from '@plugin/translators/fills/gradients';
-import { rgbToHex } from '@plugin/utils';
+import { isFigJamEditor, rgbToHex } from '@plugin/utils';
 
 import type { Fill } from '@ui/lib/types/utils/fill';
 
@@ -46,6 +46,10 @@ export const translateFillStyleId = (
   fillStyleId: string | typeof figma.mixed | undefined
 ): string | undefined => {
   if (fillStyleId === figma.mixed || fillStyleId === undefined) return;
+
+  // FigJam has no design styles and exposes no style APIs, so registering a
+  // fillStyleId would just create a dangling reference and crash processPaintStyles.
+  if (isFigJamEditor()) return;
 
   if (!paintStyles.has(fillStyleId)) {
     paintStyles.set(fillStyleId, undefined);

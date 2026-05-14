@@ -1,7 +1,7 @@
 import { yieldByTime } from '@common/sleep';
 
 import { transformPageNode } from '@plugin/transformers';
-import { flushProgress, reportProgress } from '@plugin/utils';
+import { flushProgress, isFigJamEditor, reportProgress } from '@plugin/utils';
 
 import type { PenpotPage } from '@ui/lib/types/penpotPage';
 import type { ExportScope } from '@ui/types';
@@ -16,11 +16,17 @@ export const processPages = async (
   // Get pages to process based on scope
   const pagesToProcess = scope === 'current' ? [figma.currentPage] : node.children;
 
+  const figjam = isFigJamEditor();
+
   reportProgress({
     type: 'PROGRESS_STEP',
     data: {
       step: 'processing',
-      total: pagesToProcess.length
+      total: pagesToProcess.length,
+      ...(figjam && {
+        label: 'FigJam board scanned 🎨',
+        name: 'Scan FigJam board'
+      })
     }
   });
 

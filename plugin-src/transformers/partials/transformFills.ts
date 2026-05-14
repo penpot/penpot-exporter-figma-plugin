@@ -1,5 +1,6 @@
 import { translateFillStyleId, translateFills } from '@plugin/translators/fills';
 import type { TextSegment } from '@plugin/translators/text/paragraph';
+import { isFigJamEditor } from '@plugin/utils';
 
 import type { ShapeAttributes } from '@ui/lib/types/shapes/shape';
 import type { TextStyle } from '@ui/lib/types/shapes/textShape';
@@ -37,6 +38,10 @@ export const transformVectorFills = (
 const hasFillStyle = (
   node: (MinimalFillsMixin & DimensionAndPositionMixin) | VectorRegion | VectorNode | TextSegment
 ): boolean => {
+  // FigJam has no paint-style concept and exposes no style APIs. Treat every
+  // fill as inline so colors come from node.fills directly.
+  if (isFigJamEditor()) return false;
+
   return (
     node.fillStyleId !== figma.mixed &&
     node.fillStyleId !== undefined &&
