@@ -7,9 +7,6 @@ import type { PenpotPage } from '@ui/lib/types/penpotPage';
 import type { PenpotNode } from '@ui/types/penpotNode';
 
 export const processSlides = async (root: DocumentNode): Promise<PenpotPage[]> => {
-  // documentAccess: dynamic-page requires loading every page before reading slide content.
-  await figma.loadAllPagesAsync();
-
   // Reverse the grid: Penpot's layer panel renders the last child on top, and
   // the prototype playback follows the same order.
   const slides = figma.getCanvasGrid().flat().reverse();
