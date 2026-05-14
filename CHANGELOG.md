@@ -1,5 +1,20 @@
 # penpot-exporter
 
+## 0.22.0
+
+### Minor Changes
+
+- [#374](https://github.com/penpot/penpot-exporter-figma-plugin/pull/374)
+  [`c30069c`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/c30069c5b00dcde50e3f10a9bb08e2d0a7686c9c)
+  Thanks [@SpykeRel04D](https://github.com/SpykeRel04D)! - Add initial support for Figma Slides
+  files (.deck)
+
+- [#371](https://github.com/penpot/penpot-exporter-figma-plugin/pull/371)
+  [`c3b6798`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/c3b67988571118da62114fa6517829cc087f74b0)
+  Thanks [@SpykeRel04D](https://github.com/SpykeRel04D)! - Export Figma slots as frames (temporary
+  workaround until Penpot supports slots natively): preserves slot contents that were previously
+  dropped from the export, rendered as regular frames without slot semantics.
+
 ## 0.21.0
 
 ### Minor Changes
