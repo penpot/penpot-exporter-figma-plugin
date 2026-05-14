@@ -44,7 +44,7 @@ export const processSlides = async (root: DocumentNode): Promise<PenpotPage[]> =
 
   return [
     {
-      name: root.name || 'Slides',
+      name: root.name,
       children
     }
   ];
