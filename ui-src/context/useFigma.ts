@@ -17,6 +17,9 @@ export type UseFigmaHook = {
   summary: boolean;
   error: boolean;
   step: Steps;
+  stepLabel: string | undefined;
+  stepName: string | undefined;
+  editorType: 'figma' | 'slides' | 'figjam' | 'dev' | 'buzz';
   progress: {
     currentItem: string;
     totalItems: number;
@@ -43,9 +46,12 @@ export const useFigma = (): UseFigmaHook => {
   const [exportTime, setExportTime] = useState<number | null>(null);
   const [exportScope, setExportScope] = useState<ExportScope>('all');
   const [exportLibraries, setExportLibraries] = useState<string[]>([]);
+  const [editorType, setEditorType] = useState<UseFigmaHook['editorType']>('figma');
   const exportStartTimeRef = useRef<number | null>(null);
 
   const [step, setStep] = useState<Steps>('processing');
+  const [stepLabel, setStepLabel] = useState<string | undefined>(undefined);
+  const [stepName, setStepName] = useState<string | undefined>(undefined);
   const totalItemsRef = useRef<number>(0);
   const [currentItem, setCurrentItem] = useState('');
   const [processedItems, setProcessedItems] = useState(0);
@@ -67,6 +73,13 @@ export const useFigma = (): UseFigmaHook => {
     switch (pluginMessage.type) {
       case 'EXTERNAL_LIBRARIES': {
         setExportLibraries(pluginMessage.data);
+        break;
+      }
+      case 'EDITOR_TYPE': {
+        setEditorType(pluginMessage.data);
+        if (pluginMessage.data === 'slides') {
+          setExportScope('all');
+        }
         break;
       }
       case 'USER_DATA': {
@@ -149,6 +162,8 @@ export const useFigma = (): UseFigmaHook => {
       }
       case 'PROGRESS_STEP': {
         setStep(pluginMessage.data.step);
+        setStepLabel(pluginMessage.data.label);
+        setStepName(pluginMessage.data.name);
         setProgressPercentage(0);
         setProcessedItems(0);
 
@@ -248,6 +263,9 @@ export const useFigma = (): UseFigmaHook => {
     summary,
     error,
     step,
+    stepLabel,
+    stepName,
+    editorType,
     progress: {
       currentItem,
       totalItems: totalItemsRef.current,

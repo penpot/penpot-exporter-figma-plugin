@@ -16,15 +16,17 @@ const stepMessages: Record<Steps, string> = {
 };
 
 const StepProgress = (): JSX.Element | null => {
-  const { progress, step } = useFigmaContext();
+  const { progress, step, stepLabel } = useFigmaContext();
 
   if (!step) return null;
+
+  const message = stepLabel ?? stepMessages[step];
 
   switch (step) {
     case 'exporting':
       return (
         <p>
-          {stepMessages[step]}
+          {message}
           <br />
           <br />
         </p>
@@ -35,7 +37,7 @@ const StepProgress = (): JSX.Element | null => {
     case 'building':
       return (
         <p>
-          {`${progress.processedItems} of ${progress.totalItems}`} {stepMessages[step]}
+          {`${progress.processedItems} of ${progress.totalItems}`} {message}
           <br />
           <br />
         </p>
@@ -43,7 +45,7 @@ const StepProgress = (): JSX.Element | null => {
     case 'processing':
       return (
         <p>
-          {`${progress.processedItems} of ${progress.totalItems}`} {stepMessages[step]}
+          {`${progress.processedItems} of ${progress.totalItems}`} {message}
           <br />
           <span
             style={{
@@ -62,12 +64,12 @@ const StepProgress = (): JSX.Element | null => {
 };
 
 export const ExporterProgress = (): JSX.Element => {
-  const { progressPercentage, step } = useFigmaContext();
+  const { progressPercentage, step, stepName } = useFigmaContext();
 
   return (
     <Stack space="small">
       <strong style={{ fontSize: 15 }}>Exporting to Penpot</strong>
-      <ProgressStepper currentStep={step} />
+      <ProgressStepper currentStep={step} currentStepName={stepName} />
       <Stack space="2xsmall">
         <ProgressBar value={progressPercentage} />
         <StepProgress />

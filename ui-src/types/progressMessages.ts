@@ -29,6 +29,8 @@ export type ProgressStepMessage = {
   data: {
     step: Steps;
     total: number;
+    label?: string;
+    name?: string;
   };
 };
 
@@ -71,6 +73,11 @@ export type ExternalLibrariesMessage = {
   data: string[];
 };
 
+export type EditorTypeMessage = {
+  type: 'EDITOR_TYPE';
+  data: 'figma' | 'slides' | 'figjam' | 'dev' | 'buzz';
+};
+
 export type PluginMessage =
   | PenpotDocumentMessage
   | ProgressStepMessage
@@ -80,7 +87,8 @@ export type PluginMessage =
   | ReloadMessage
   | ErrorMessage
   | UserDataMessage
-  | ExternalLibrariesMessage;
+  | ExternalLibrariesMessage
+  | EditorTypeMessage;
 
 /**
  * Types that should be buffered (only the latest message of each type is kept)

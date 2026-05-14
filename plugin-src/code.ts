@@ -1,5 +1,6 @@
 import { getUserData } from '@plugin/getUserData';
 import { handleExportMessage, handleRetryMessage } from '@plugin/handleMessage';
+import { isSlidesEditor } from '@plugin/utils';
 
 import type { ExportScope, ExternalLibrary } from '@ui/types';
 
@@ -14,9 +15,17 @@ type ExportMessage = {
   };
 };
 
+const sendEditorType = (): void => {
+  figma.ui.postMessage({
+    type: 'EDITOR_TYPE',
+    data: figma.editorType
+  });
+};
+
 const onMessage: MessageEventHandler = message => {
   if (message.type === 'ready') {
     getUserData();
+    sendEditorType();
   }
 
   if (message.type === 'retry') {
@@ -45,22 +54,24 @@ const onMessage: MessageEventHandler = message => {
 figma.showUI(__html__, { themeColors: true, width: BASE_WIDTH, height: BASE_HEIGHT });
 figma.ui.onmessage = onMessage;
 
-figma.teamLibrary
-  .getAvailableLibraryVariableCollectionsAsync()
-  .then(collections => {
-    const libraryNames = Array.from(
-      new Set(
-        collections
-          .map(collection => collection.libraryName)
-          .filter((name): name is string => Boolean(name))
-      )
-    );
+if (!isSlidesEditor()) {
+  figma.teamLibrary
+    .getAvailableLibraryVariableCollectionsAsync()
+    .then(collections => {
+      const libraryNames = Array.from(
+        new Set(
+          collections
+            .map(collection => collection.libraryName)
+            .filter((name): name is string => Boolean(name))
+        )
+      );
 
-    figma.ui.postMessage({
-      type: 'EXTERNAL_LIBRARIES',
-      data: libraryNames
+      figma.ui.postMessage({
+        type: 'EXTERNAL_LIBRARIES',
+        data: libraryNames
+      });
+    })
+    .catch(error => {
+      console.warn('Could not fetch external libraries', error);
     });
-  })
-  .catch(error => {
-    console.warn('Could not fetch external libraries', error);
-  });
+}
