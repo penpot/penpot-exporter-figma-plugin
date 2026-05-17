@@ -69,6 +69,34 @@ describe('extractTextLayout', () => {
     expect(centerX - aabb.x).toBeCloseTo(148.27, 0);
   });
 
+  it('projects the text centre through a 45° rotation in <text transform>', () => {
+    // Local centre is (20 + 99/2, 50 - 28.8 + 36/2) = (69.5, 39.2).
+    // After rotate(45) around the SVG origin: x' = (cx - cy) / √2, y' = (cx + cy) / √2.
+    const localCx = 20 + (5 * 36 * 0.55) / 2;
+    const localCy = 50 - 28.8 + 36 / 2;
+    const cos = Math.cos(Math.PI / 4);
+    const sin = Math.sin(Math.PI / 4);
+    const expectedCx = localCx * cos - localCy * sin;
+    const expectedCy = localCx * sin + localCy * cos;
+
+    const layout = extractTextLayout(
+      '<svg><text font-size="36" transform="rotate(45)">' +
+        '<tspan x="20" y="50">Hello</tspan>' +
+        '</text></svg>',
+      aabb
+    );
+
+    expect(layout).toBeDefined();
+    const centerX = layout!.x + layout!.width / 2;
+    const centerY = layout!.y + layout!.height / 2;
+    expect(centerX).toBeCloseTo(aabb.x + expectedCx, 2);
+    expect(centerY).toBeCloseTo(aabb.y + expectedCy, 2);
+    // Width/height stay axis-aligned (the parent node's rotation rotates the
+    // rect around its centre downstream via transformRotationAndPosition).
+    expect(layout!.width).toBeCloseTo(99);
+    expect(layout!.height).toBeCloseTo(36);
+  });
+
   it("respects the <text> element's transform (translate + rotate)", () => {
     // Rotated arrow sample: text is centered around the projected midpoint.
     const layout = extractTextLayout(

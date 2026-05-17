@@ -1,7 +1,12 @@
 import { describe, expect, it } from 'vitest';
 
-import { IDENTITY, parseSvgTransform } from '@plugin/translators/shapeWithText/parseSvgTransform';
+import { parseSvgTransform } from '@plugin/translators/shapeWithText/parseSvgTransform';
 import { applyMatrixToPoint } from '@plugin/utils';
+
+const IDENTITY = [
+  [1, 0, 0],
+  [0, 1, 0]
+];
 
 const project = (m: number[][], x: number, y: number): number[] => applyMatrixToPoint(m, [x, y]);
 
@@ -9,6 +14,12 @@ describe('parseSvgTransform', () => {
   it('returns identity for missing or empty input', () => {
     expect(parseSvgTransform(undefined)).toEqual(IDENTITY);
     expect(parseSvgTransform('')).toEqual(IDENTITY);
+  });
+
+  it('returns a fresh identity reference each call (no shared mutable instance)', () => {
+    const a = parseSvgTransform(undefined);
+    const b = parseSvgTransform(undefined);
+    expect(a).not.toBe(b);
   });
 
   it('parses translate(tx, ty)', () => {

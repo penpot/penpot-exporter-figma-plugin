@@ -41,6 +41,8 @@ export const transformShapeWithTextNode = async (
     type: 'path',
     name: node.name,
     content,
+    constraintsH: 'scale',
+    constraintsV: 'scale',
     ...transformVectorIds(node, 0),
     ...transformFills(node),
     strokes: translateStrokes(node),

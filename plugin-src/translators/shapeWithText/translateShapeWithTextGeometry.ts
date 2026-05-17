@@ -2,12 +2,8 @@ import { type Command, parseSVG } from 'svg-path-parser';
 
 import { normalizeCommands } from '@plugin/translators/shapeWithText/normalizeCommands';
 import { numAttr, parseSvgAttrs } from '@plugin/translators/shapeWithText/parseSvgAttrs';
-import {
-  type AffineMatrix,
-  multiply,
-  parseSvgTransform
-} from '@plugin/translators/shapeWithText/parseSvgTransform';
-import { applyMatrixToPoint } from '@plugin/utils';
+import { multiply, parseSvgTransform } from '@plugin/translators/shapeWithText/parseSvgTransform';
+import { applyMatrixToCommand, translateCommandToPathString } from '@plugin/translators/vectors';
 
 // Cubic Bézier approximation of a quarter ellipse — (4/3) * (sqrt(2) - 1).
 // Used because the downstream path translator only handles M/L/C/Z commands.
@@ -81,45 +77,16 @@ const shapeToPath = (tag: string, attrs: Record<string, string>): string => {
   }
 };
 
-const serializeCommands = (commands: Command[], matrix: AffineMatrix): string => {
-  const project = (x: number, y: number): number[] => applyMatrixToPoint(matrix, [x, y]);
+const serializeCommands = (commands: Command[], matrix: Transform): string =>
+  commands
+    .map(c => translateCommandToPathString(applyMatrixToCommand(c, matrix)))
+    .filter(s => s.length > 0)
+    .join(' ');
 
-  const parts: string[] = [];
-
-  for (const c of commands) {
-    switch (c.command) {
-      case 'moveto': {
-        const [x, y] = project(c.x, c.y);
-        parts.push(`M ${x} ${y}`);
-        break;
-      }
-      case 'lineto': {
-        const [x, y] = project(c.x, c.y);
-        parts.push(`L ${x} ${y}`);
-        break;
-      }
-      case 'curveto': {
-        const [x1, y1] = project(c.x1, c.y1);
-        const [x2, y2] = project(c.x2, c.y2);
-        const [x, y] = project(c.x, c.y);
-        parts.push(`C ${x1} ${y1}, ${x2} ${y2}, ${x} ${y}`);
-        break;
-      }
-      case 'closepath':
-        parts.push('Z');
-        break;
-    }
-  }
-
-  return parts.join(' ');
-};
-
-const extractDrawablePaths = (
-  svg: string
-): Array<{ pathData: string; transform: AffineMatrix }> => {
+const extractDrawablePaths = (svg: string): Array<{ pathData: string; transform: Transform }> => {
   // Drop <defs> so clipPath/mask/gradient geometry isn't mistaken for the shape itself.
   const drawable = svg.replace(DEFS_REGEX, '');
-  const out: Array<{ pathData: string; transform: AffineMatrix }> = [];
+  const out: Array<{ pathData: string; transform: Transform }> = [];
   SHAPE_TAG_REGEX.lastIndex = 0;
 
   let match: RegExpExecArray | null;
@@ -153,7 +120,7 @@ export const translateShapeWithTextGeometry = (
   // via per-element `transform` attributes. Apply each element's transform to
   // its commands so the path lives in AABB-local coords, then translate by the
   // AABB's canvas position to land on the page.
-  const toCanvas: AffineMatrix = [
+  const toCanvas: Transform = [
     [1, 0, aabb.x],
     [0, 1, aabb.y]
   ];

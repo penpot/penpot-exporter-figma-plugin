@@ -1,18 +1,13 @@
-// Parses an SVG `transform="..."` attribute into a 2x3 affine matrix
-// [a c e]
-// [b d f]
-// represented as [[a, c, e], [b, d, f]] (same row-major shape as Figma's
-// Transform type). Supports the transform functions Figma's SVG export emits:
-// matrix(), translate(), rotate(angle [cx cy]), scale().
+// Parses an SVG `transform="..."` attribute into Figma's 2x3 affine `Transform`
+// shape: [[a, c, e], [b, d, f]]. Supports the transform functions Figma's SVG
+// export emits: matrix(), translate(), rotate(angle [cx cy]), scale().
 
-export type AffineMatrix = [[number, number, number], [number, number, number]];
+const TRANSFORM_FN_REGEX = /(matrix|translate|rotate|scale)\s*\(([^)]+)\)/gi;
 
-export const IDENTITY: AffineMatrix = [
+const identity = (): Transform => [
   [1, 0, 0],
   [0, 1, 0]
 ];
-
-const TRANSFORM_FN_REGEX = /(matrix|translate|rotate|scale)\s*\(([^)]+)\)/gi;
 
 const parseArgs = (input: string): number[] =>
   input
@@ -21,7 +16,7 @@ const parseArgs = (input: string): number[] =>
     .map(parseFloat)
     .filter(n => Number.isFinite(n));
 
-export const multiply = (a: AffineMatrix, b: AffineMatrix): AffineMatrix => [
+export const multiply = (a: Transform, b: Transform): Transform => [
   [
     a[0][0] * b[0][0] + a[0][1] * b[1][0],
     a[0][0] * b[0][1] + a[0][1] * b[1][1],
@@ -34,7 +29,7 @@ export const multiply = (a: AffineMatrix, b: AffineMatrix): AffineMatrix => [
   ]
 ];
 
-const rotation = (degrees: number, cx = 0, cy = 0): AffineMatrix => {
+const rotation = (degrees: number, cx = 0, cy = 0): Transform => {
   const rad = (degrees * Math.PI) / 180;
   const cos = Math.cos(rad);
   const sin = Math.sin(rad);
@@ -45,17 +40,17 @@ const rotation = (degrees: number, cx = 0, cy = 0): AffineMatrix => {
   ];
 };
 
-export const parseSvgTransform = (input: string | undefined): AffineMatrix => {
-  if (!input) return IDENTITY;
+export const parseSvgTransform = (input: string | undefined): Transform => {
+  if (!input) return identity();
 
-  let result: AffineMatrix = IDENTITY;
+  let result: Transform = identity();
   TRANSFORM_FN_REGEX.lastIndex = 0;
 
   let match: RegExpExecArray | null;
   while ((match = TRANSFORM_FN_REGEX.exec(input)) !== null) {
     const fn = match[1].toLowerCase();
     const args = parseArgs(match[2]);
-    let local: AffineMatrix = IDENTITY;
+    let local: Transform = identity();
 
     switch (fn) {
       case 'matrix':
