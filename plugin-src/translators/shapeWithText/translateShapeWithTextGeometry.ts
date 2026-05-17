@@ -1,6 +1,7 @@
 import { type Command, parseSVG } from 'svg-path-parser';
 
 import { normalizeCommands } from '@plugin/translators/shapeWithText/normalizeCommands';
+import { numAttr, parseSvgAttrs } from '@plugin/translators/shapeWithText/parseSvgAttrs';
 import {
   type AffineMatrix,
   multiply,
@@ -14,31 +15,12 @@ const KAPPA = 0.5522847498307933;
 
 const DEFS_REGEX = /<defs\b[^>]*>[\s\S]*?<\/defs>/gi;
 const SHAPE_TAG_REGEX = /<(path|rect|circle|ellipse|polygon)\b([^>]*?)\/?>/gi;
-const ATTR_REGEX = /([\w-]+)\s*=\s*"([^"]*)"/g;
-
-const num = (value: string | undefined, fallback = 0): number => {
-  if (value === undefined) return fallback;
-  const parsed = parseFloat(value);
-  return Number.isFinite(parsed) ? parsed : fallback;
-};
-
-const parseAttrs = (input: string): Record<string, string> => {
-  const result: Record<string, string> = {};
-  ATTR_REGEX.lastIndex = 0;
-
-  let match: RegExpExecArray | null;
-  while ((match = ATTR_REGEX.exec(input)) !== null) {
-    result[match[1]] = match[2];
-  }
-
-  return result;
-};
 
 const rectToPath = (attrs: Record<string, string>): string => {
-  const x = num(attrs.x);
-  const y = num(attrs.y);
-  const width = num(attrs.width);
-  const height = num(attrs.height);
+  const x = numAttr(attrs.x);
+  const y = numAttr(attrs.y);
+  const width = numAttr(attrs.width);
+  const height = numAttr(attrs.height);
 
   return `M ${x} ${y} L ${x + width} ${y} L ${x + width} ${y + height} L ${x} ${y + height} Z`;
 };
@@ -60,10 +42,10 @@ const ellipseToPath = (cx: number, cy: number, rx: number, ry: number): string =
 };
 
 const circleElToPath = (attrs: Record<string, string>): string =>
-  ellipseToPath(num(attrs.cx), num(attrs.cy), num(attrs.r), num(attrs.r));
+  ellipseToPath(numAttr(attrs.cx), numAttr(attrs.cy), numAttr(attrs.r), numAttr(attrs.r));
 
 const ellipseElToPath = (attrs: Record<string, string>): string =>
-  ellipseToPath(num(attrs.cx), num(attrs.cy), num(attrs.rx), num(attrs.ry));
+  ellipseToPath(numAttr(attrs.cx), numAttr(attrs.cy), numAttr(attrs.rx), numAttr(attrs.ry));
 
 const polygonToPath = (attrs: Record<string, string>): string => {
   const tokens = (attrs.points ?? '')
@@ -143,7 +125,7 @@ const extractDrawablePaths = (
   let match: RegExpExecArray | null;
   while ((match = SHAPE_TAG_REGEX.exec(drawable)) !== null) {
     const tag = match[1].toLowerCase();
-    const attrs = parseAttrs(match[2]);
+    const attrs = parseSvgAttrs(match[2]);
     const pathData = shapeToPath(tag, attrs);
     if (!pathData) continue;
     out.push({ pathData, transform: parseSvgTransform(attrs.transform) });

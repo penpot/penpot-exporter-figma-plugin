@@ -46,6 +46,12 @@ export const transformShapeWithTextNode = async (
     ...transformSceneNode(node)
   };
 
+  // Spread order matters: transformDimension + transformRotationAndPosition set
+  // the parent node's bounds and rotation, then extractTextLayout overrides
+  // x/y/width/height with the actual <text> bounds from Figma's SVG so the
+  // label sits inside the shape's interior instead of spanning the whole AABB.
+  // When there's no <text> in the SVG, extractTextLayout returns undefined and
+  // the spread is a no-op.
   const text: TextShape = {
     type: 'text',
     name: node.name,

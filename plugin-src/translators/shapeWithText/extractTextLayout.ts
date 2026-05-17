@@ -1,3 +1,4 @@
+import { numAttr, parseSvgAttrs } from '@plugin/translators/shapeWithText/parseSvgAttrs';
 import { parseSvgTransform } from '@plugin/translators/shapeWithText/parseSvgTransform';
 import { applyMatrixToPoint } from '@plugin/utils';
 
@@ -9,7 +10,6 @@ import type { ShapeGeomAttributes } from '@ui/lib/types/shapes/shape';
 
 const TEXT_REGEX = /<text\b([^>]*)>([\s\S]*?)<\/text>/i;
 const TSPAN_REGEX = /<tspan\b([^>]*)>([\s\S]*?)<\/tspan>/g;
-const ATTR_REGEX = /([\w-]+)\s*=\s*"([^"]*)"/g;
 
 // Conservative glyph-width-to-fontSize ratio used as a lower bound on the wrap
 // container width. The ratio inferred from Figma's tspan deltas captures the
@@ -24,25 +24,7 @@ const DESCENDER_RATIO = 0.2;
 
 type Tspan = { x: number; y: number; chars: number };
 
-type Rect = { x: number; y: number; width: number; height: number };
-
-const num = (value: string | undefined): number => {
-  if (value === undefined) return 0;
-  const parsed = parseFloat(value);
-  return Number.isFinite(parsed) ? parsed : 0;
-};
-
-const parseAttrs = (input: string): Record<string, string> => {
-  const result: Record<string, string> = {};
-  ATTR_REGEX.lastIndex = 0;
-
-  let match: RegExpExecArray | null;
-  while ((match = ATTR_REGEX.exec(input)) !== null) {
-    result[match[1]] = match[2];
-  }
-
-  return result;
-};
+type Bounds = { x: number; y: number; width: number; height: number };
 
 const parseTspans = (body: string): Tspan[] => {
   const tspans: Tspan[] = [];
@@ -50,10 +32,10 @@ const parseTspans = (body: string): Tspan[] => {
 
   let match: RegExpExecArray | null;
   while ((match = TSPAN_REGEX.exec(body)) !== null) {
-    const attrs = parseAttrs(match[1]);
+    const attrs = parseSvgAttrs(match[1]);
     tspans.push({
-      x: num(attrs.x),
-      y: num(attrs.y),
+      x: numAttr(attrs.x),
+      y: numAttr(attrs.y),
       chars: match[2].length
     });
   }
@@ -85,7 +67,7 @@ const deriveCharWidthRatio = (tspans: Tspan[], fontSize: number): number => {
   return Number.isFinite(ratio) && ratio > 0 ? ratio : FALLBACK_CHAR_WIDTH_RATIO;
 };
 
-const textLocalBounds = (tspans: Tspan[], fontSize: number): Rect => {
+const textLocalBounds = (tspans: Tspan[], fontSize: number): Bounds => {
   const ratio = deriveCharWidthRatio(tspans, fontSize);
   const lineWidths = tspans.map(t => t.chars * fontSize * ratio);
 
@@ -113,7 +95,7 @@ export const extractTextLayout = (
   const textMatch = svg.match(TEXT_REGEX);
   if (!textMatch) return;
 
-  const attrs = parseAttrs(textMatch[1]);
+  const attrs = parseSvgAttrs(textMatch[1]);
   const tspans = parseTspans(textMatch[2]);
   if (tspans.length === 0) return;
 
