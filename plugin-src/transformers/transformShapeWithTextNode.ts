@@ -8,6 +8,7 @@ import {
   transformSceneNode,
   transformVectorIds
 } from '@plugin/transformers/partials';
+import { transformNodeAsImageRect } from '@plugin/transformers/transformNodeAsImageRect';
 import { translateStrokes } from '@plugin/translators';
 import {
   exportShapeWithTextSvg,
@@ -18,6 +19,7 @@ import {
 
 import type { GroupShape } from '@ui/lib/types/shapes/groupShape';
 import type { PathShape } from '@ui/lib/types/shapes/pathShape';
+import type { RectShape } from '@ui/lib/types/shapes/rectShape';
 import type { TextShape } from '@ui/lib/types/shapes/textShape';
 
 // Penpot has no native ShapeWithText equivalent, so emit a GroupShape wrapping
@@ -25,15 +27,15 @@ import type { TextShape } from '@ui/lib/types/shapes/textShape';
 // templates per shapeType) and a TextShape for the editable label.
 export const transformShapeWithTextNode = async (
   node: ShapeWithTextNode
-): Promise<GroupShape | undefined> => {
+): Promise<GroupShape | RectShape | undefined> => {
   const aabb = node.absoluteBoundingBox;
-  if (!aabb) return;
+  if (!aabb) return await transformNodeAsImageRect(node);
 
   const svg = await exportShapeWithTextSvg(node);
-  if (!svg) return;
+  if (!svg) return await transformNodeAsImageRect(node);
 
   const content = translateShapeWithTextGeometry(node, svg, aabb);
-  if (!content) return;
+  if (!content) return await transformNodeAsImageRect(node);
 
   const shape: PathShape = {
     type: 'path',
@@ -42,7 +44,6 @@ export const transformShapeWithTextNode = async (
     ...transformVectorIds(node, 0),
     ...transformFills(node),
     strokes: translateStrokes(node),
-    ...transformBlend(node),
     ...transformSceneNode(node)
   };
 

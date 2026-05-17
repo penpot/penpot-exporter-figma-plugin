@@ -4,10 +4,11 @@ import { transformShapeWithTextNode } from '@plugin/transformers/transformShapeW
 
 import type { GroupShape } from '@ui/lib/types/shapes/groupShape';
 import type { PathShape } from '@ui/lib/types/shapes/pathShape';
+import type { RectShape } from '@ui/lib/types/shapes/rectShape';
 import type { TextShape } from '@ui/lib/types/shapes/textShape';
 
 vi.mock('@plugin/transformers/partials', () => ({
-  transformBlend: (): Record<string, never> => ({}),
+  transformBlend: (): { opacity: number } => ({ opacity: 0.5 }),
   transformDimension: (): { width: number; height: number } => ({ width: 100, height: 50 }),
   transformFills: (): { fills: never[] } => ({ fills: [] }),
   transformIds: (): { id: string; shapeRef: undefined } => ({
@@ -27,6 +28,22 @@ vi.mock('@plugin/transformers', () => ({
     type: 'group',
     name: 'fake group'
   })
+}));
+
+const { transformNodeAsImageRect } = vi.hoisted(() => ({
+  transformNodeAsImageRect: vi.fn(
+    async (): Promise<RectShape | undefined> =>
+      ({
+        type: 'rect',
+        name: 'fallback rect',
+        id: 'fallback-id',
+        fills: []
+      }) as unknown as RectShape
+  )
+}));
+
+vi.mock('@plugin/transformers/transformNodeAsImageRect', () => ({
+  transformNodeAsImageRect
 }));
 
 vi.mock('@plugin/translators', () => ({
@@ -94,8 +111,11 @@ describe('transformShapeWithTextNode', () => {
     const [shape, text] = result.children as [PathShape, TextShape];
     expect(shape.type).toBe('path');
     expect(shape.content).toBe('M 10 20 L 20 30 Z');
+    expect(shape.opacity).toBeUndefined();
     expect(text.type).toBe('text');
     expect(text.characters).toBe('Hello');
+    expect(text.opacity).toBeUndefined();
+    expect(result.opacity).toBe(0.5);
   });
 
   it("applies the SVG element's transform and the AABB offset to path coords", async () => {
@@ -132,12 +152,18 @@ describe('transformShapeWithTextNode', () => {
     expect(text.characters).toBe('');
   });
 
-  it('returns undefined when no drawable element can be extracted from the SVG', async () => {
+  it('falls back to a rasterized rect when no drawable element can be extracted from the SVG', async () => {
     const result = await transformShapeWithTextNode(
       createShapeWithTextNode({ svg: '<svg><text>only text</text></svg>' })
     );
 
-    expect(result).toBeUndefined();
+    expect(result).toEqual(
+      expect.objectContaining({
+        type: 'rect',
+        id: 'fallback-id'
+      })
+    );
+    expect(transformNodeAsImageRect).toHaveBeenCalled();
   });
 
   it('converts <rect>, <circle>, <ellipse>, <polygon> into commands', async () => {
@@ -179,12 +205,18 @@ describe('transformShapeWithTextNode', () => {
     expect(shape.content).not.toContain('100');
   });
 
-  it('returns undefined when exportAsync throws', async () => {
+  it('falls back to a rasterized rect when SVG export fails', async () => {
     const result = await transformShapeWithTextNode(
       createShapeWithTextNode({ exportThrows: true })
     );
 
-    expect(result).toBeUndefined();
+    expect(result).toEqual(
+      expect.objectContaining({
+        type: 'rect',
+        id: 'fallback-id'
+      })
+    );
+    expect(transformNodeAsImageRect).toHaveBeenCalled();
   });
 
   it('exports SVG as a string with text kept as <text> elements', async () => {

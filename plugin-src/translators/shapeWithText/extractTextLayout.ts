@@ -26,6 +26,26 @@ type Tspan = { x: number; y: number; chars: number };
 
 type Bounds = { x: number; y: number; width: number; height: number };
 
+const decodeCodePointEntity = (value: string, radix: number, fallback: string): string => {
+  const codePoint = parseInt(value, radix);
+  return Number.isInteger(codePoint) && codePoint >= 0 && codePoint <= 0x10ffff
+    ? String.fromCodePoint(codePoint)
+    : fallback;
+};
+
+const decodeXmlText = (input: string): string => {
+  return input
+    .replace(/&#x([0-9a-f]+);/gi, (match, hex: string) => decodeCodePointEntity(hex, 16, match))
+    .replace(/&#([0-9]+);/g, (match, decimal: string) => decodeCodePointEntity(decimal, 10, match))
+    .replace(/&quot;/g, '"')
+    .replace(/&apos;/g, "'")
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .replace(/&amp;/g, '&');
+};
+
+const countTextChars = (input: string): number => Array.from(decodeXmlText(input)).length;
+
 const parseTspans = (body: string): Tspan[] => {
   const tspans: Tspan[] = [];
   TSPAN_REGEX.lastIndex = 0;
@@ -36,7 +56,7 @@ const parseTspans = (body: string): Tspan[] => {
     tspans.push({
       x: numAttr(attrs.x),
       y: numAttr(attrs.y),
-      chars: match[2].length
+      chars: countTextChars(match[2])
     });
   }
 

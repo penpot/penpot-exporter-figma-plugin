@@ -37,6 +37,17 @@ describe('extractTextLayout', () => {
     expect(layout!.y).toBeCloseTo(aabb.y + 50 - 28.8);
   });
 
+  it('counts decoded XML entities instead of raw escaped source length', () => {
+    const layout = extractTextLayout(
+      '<svg><text font-size="10"><tspan x="20" y="50">&amp;</tspan></text></svg>',
+      aabb
+    );
+
+    expect(layout).toBeDefined();
+    expect(layout!.width).toBeCloseTo(5.5);
+    expect(layout!.x).toBeCloseTo(aabb.x + 20);
+  });
+
   it('preserves the derived centre while floors the wrap width to the fallback', () => {
     // Mirrors the Figma "Normal left Arrow" sample. Lines centred under the
     // derived ratio share a centre; width is floored to fallback*longestChars*fontSize
