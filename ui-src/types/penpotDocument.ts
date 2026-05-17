@@ -15,5 +15,6 @@ export type PenpotDocument = {
   componentProperties: Record<string, ComponentProperty>;
   externalLibraries: Record<string, string>;
   missingFonts: string[];
+  pendingImageBatches?: number;
   isShared: boolean;
 };
