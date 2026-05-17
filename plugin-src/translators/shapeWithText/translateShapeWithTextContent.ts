@@ -1,15 +1,16 @@
 import { transformFills } from '@plugin/transformers/partials';
 import { transformTextStyle, translateTextSegments } from '@plugin/translators/text';
-import {
-  translateGrowType,
-  translateHorizontalAlign,
-  translateVerticalAlign
-} from '@plugin/translators/text/properties';
 
 import type { TextAttributes, TextShape } from '@ui/lib/types/shapes/textShape';
 
-export const transformText = (node: TextNode): TextAttributes & Pick<TextShape, 'growType'> => {
-  const styledTextSegments = node.getStyledTextSegments([
+// ShapeWithTextNode embeds text via TextSublayerNode, which does not expose
+// textAlignHorizontal/textAlignVertical/textAutoResize. Figma renders these
+// shapes with center/center alignment and a fixed size matched to the shape,
+// so we hardcode those defaults.
+export const translateShapeWithTextContent = (
+  node: ShapeWithTextNode
+): TextAttributes & Pick<TextShape, 'growType'> => {
+  const styledTextSegments = node.text.getStyledTextSegments([
     'fontName',
     'fontSize',
     'fontWeight',
@@ -24,13 +25,11 @@ export const transformText = (node: TextNode): TextAttributes & Pick<TextShape, 
     'textStyleId'
   ]);
 
-  const textAlign = translateHorizontalAlign(node.textAlignHorizontal);
-
   return {
-    characters: node.characters,
+    characters: node.text.characters,
     content: {
       type: 'root',
-      verticalAlign: translateVerticalAlign(node.textAlignVertical),
+      verticalAlign: 'center',
       children: styledTextSegments.length
         ? [
             {
@@ -38,15 +37,15 @@ export const transformText = (node: TextNode): TextAttributes & Pick<TextShape, 
               children: [
                 {
                   type: 'paragraph',
-                  children: translateTextSegments(node, styledTextSegments, textAlign),
-                  ...transformTextStyle(styledTextSegments[0], textAlign),
-                  ...transformFills(node)
+                  children: translateTextSegments(node.text, styledTextSegments, 'center'),
+                  ...transformTextStyle(styledTextSegments[0], 'center'),
+                  ...transformFills(node.text)
                 }
               ]
             }
           ]
         : undefined
     },
-    growType: translateGrowType(node)
+    growType: 'fixed'
   };
 };

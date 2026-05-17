@@ -1,0 +1,142 @@
+import { parseSvgTransform } from '@plugin/translators/shapeWithText/parseSvgTransform';
+import { applyMatrixToPoint } from '@plugin/utils';
+
+import type { ShapeGeomAttributes } from '@ui/lib/types/shapes/shape';
+
+// Figma's SVG export lays out the text precisely via tspan x/y per line. We
+// derive the text box from those tspans so the Penpot text shape lands inside
+// the parent shape instead of spanning the whole AABB.
+
+const TEXT_REGEX = /<text\b([^>]*)>([\s\S]*?)<\/text>/i;
+const TSPAN_REGEX = /<tspan\b([^>]*)>([\s\S]*?)<\/tspan>/g;
+const ATTR_REGEX = /([\w-]+)\s*=\s*"([^"]*)"/g;
+
+// Conservative glyph-width-to-fontSize ratio used as a lower bound on the wrap
+// container width. The ratio inferred from Figma's tspan deltas captures the
+// AVERAGE width assuming uniform glyphs, which is consistently narrower than
+// Penpot's real glyph rendering — using only the derived width causes Penpot
+// to over-wrap. This bound is also the single-tspan fallback.
+const FALLBACK_CHAR_WIDTH_RATIO = 0.55;
+
+// Approximate ascender / descender splits around the baseline.
+const ASCENDER_RATIO = 0.8;
+const DESCENDER_RATIO = 0.2;
+
+type Tspan = { x: number; y: number; chars: number };
+
+type Rect = { x: number; y: number; width: number; height: number };
+
+const num = (value: string | undefined): number => {
+  if (value === undefined) return 0;
+  const parsed = parseFloat(value);
+  return Number.isFinite(parsed) ? parsed : 0;
+};
+
+const parseAttrs = (input: string): Record<string, string> => {
+  const result: Record<string, string> = {};
+  ATTR_REGEX.lastIndex = 0;
+
+  let match: RegExpExecArray | null;
+  while ((match = ATTR_REGEX.exec(input)) !== null) {
+    result[match[1]] = match[2];
+  }
+
+  return result;
+};
+
+const parseTspans = (body: string): Tspan[] => {
+  const tspans: Tspan[] = [];
+  TSPAN_REGEX.lastIndex = 0;
+
+  let match: RegExpExecArray | null;
+  while ((match = TSPAN_REGEX.exec(body)) !== null) {
+    const attrs = parseAttrs(match[1]);
+    tspans.push({
+      x: num(attrs.x),
+      y: num(attrs.y),
+      chars: match[2].length
+    });
+  }
+
+  return tspans;
+};
+
+// Centered multi-line text in Figma's SVG export shows each line's tspan.x as
+// `boxLeft + (boxWidth - lineWidth) / 2`. Pick the longest and shortest lines
+// (by char count) to back out an effective char-width ratio for this font.
+const deriveCharWidthRatio = (tspans: Tspan[], fontSize: number): number => {
+  if (tspans.length < 2) return FALLBACK_CHAR_WIDTH_RATIO;
+
+  let widest = tspans[0];
+  let narrowest = tspans[0];
+  for (const t of tspans) {
+    if (t.chars > widest.chars) widest = t;
+    if (t.chars < narrowest.chars) narrowest = t;
+  }
+
+  const charsDelta = widest.chars - narrowest.chars;
+  if (charsDelta <= 0) return FALLBACK_CHAR_WIDTH_RATIO;
+
+  // tspan.x of the widest line is smallest (line takes the most space, so it's
+  // pushed least to the right by centering).
+  const xDelta = narrowest.x - widest.x;
+  const ratio = (2 * xDelta) / (charsDelta * fontSize);
+
+  return Number.isFinite(ratio) && ratio > 0 ? ratio : FALLBACK_CHAR_WIDTH_RATIO;
+};
+
+const textLocalBounds = (tspans: Tspan[], fontSize: number): Rect => {
+  const ratio = deriveCharWidthRatio(tspans, fontSize);
+  const lineWidths = tspans.map(t => t.chars * fontSize * ratio);
+
+  // Under the derived ratio each line's center coincides (that's the property
+  // the ratio is solved for). Take any line's center as the box centre.
+  const centerX = tspans[0].x + lineWidths[0] / 2;
+
+  // The derived width captures the AVERAGE glyph width under uniform-glyph
+  // assumption, which underestimates Penpot's real glyph rendering and causes
+  // over-wrapping. Floor the width at the fallback ratio applied to the
+  // longest line so the wrap container stays roomy enough.
+  const maxChars = Math.max(...tspans.map(t => t.chars));
+  const width = Math.max(Math.max(...lineWidths), maxChars * fontSize * FALLBACK_CHAR_WIDTH_RATIO);
+
+  const top = Math.min(...tspans.map(t => t.y)) - fontSize * ASCENDER_RATIO;
+  const bottom = Math.max(...tspans.map(t => t.y)) + fontSize * DESCENDER_RATIO;
+
+  return { x: centerX - width / 2, y: top, width, height: bottom - top };
+};
+
+export const extractTextLayout = (
+  svg: string,
+  aabb: { x: number; y: number }
+): Pick<ShapeGeomAttributes, 'x' | 'y' | 'width' | 'height'> | undefined => {
+  const textMatch = svg.match(TEXT_REGEX);
+  if (!textMatch) return;
+
+  const attrs = parseAttrs(textMatch[1]);
+  const tspans = parseTspans(textMatch[2]);
+  if (tspans.length === 0) return;
+
+  const fontSize = parseFloat(attrs['font-size'] ?? '');
+  if (!Number.isFinite(fontSize) || fontSize <= 0) return;
+
+  const local = textLocalBounds(tspans, fontSize);
+
+  // Project the text's center through the <text transform> to land in AABB-
+  // local space, then offset by the AABB origin. The text shape's own
+  // rotation comes from the parent node via transformRotationAndPosition, so
+  // the rotation component of the transform is reflected by Penpot rotating
+  // the rect around its centre — we just position it.
+  const elementTransform = parseSvgTransform(attrs.transform);
+  const [cx, cy] = applyMatrixToPoint(elementTransform, [
+    local.x + local.width / 2,
+    local.y + local.height / 2
+  ]);
+
+  return {
+    x: aabb.x + cx - local.width / 2,
+    y: aabb.y + cy - local.height / 2,
+    width: local.width,
+    height: local.height
+  };
+};

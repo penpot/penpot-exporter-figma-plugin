@@ -4,37 +4,44 @@ import { translateFontName } from '@plugin/translators/text/font';
 import { type TextSegment, translateParagraphProperties } from '@plugin/translators/text/paragraph';
 import {
   translateFontStyle,
-  translateHorizontalAlign,
   translateLetterSpacing,
   translateLineHeight,
   translateTextDecoration,
   translateTextTransform
 } from '@plugin/translators/text/properties';
 
-import type { TextNode as PenpotTextNode, TextStyle } from '@ui/lib/types/shapes/textShape';
+import type {
+  TextNode as PenpotTextNode,
+  TextHorizontalAlign,
+  TextStyle
+} from '@ui/lib/types/shapes/textShape';
 
 export const translateTextSegments = (
-  node: TextNode,
-  segments: TextSegment[]
+  node: NonResizableTextMixin,
+  segments: TextSegment[],
+  textAlign: TextHorizontalAlign
 ): PenpotTextNode[] => {
   const partials = segments.map(segment => ({
-    textNode: translateStyleTextSegment(node, segment),
+    textNode: translateStyleTextSegment(segment, textAlign),
     segment
   }));
 
   return translateParagraphProperties(node, partials);
 };
 
-export const transformTextStyle = (node: TextNode, segment: TextSegment): TextStyle => {
+export const transformTextStyle = (
+  segment: TextSegment,
+  textAlign: TextHorizontalAlign
+): TextStyle => {
   if (hasTextStyle(segment)) {
     return {
-      ...partialTransformTextStyle(node, segment),
+      ...partialTransformTextStyle(segment, textAlign),
       textStyleId: translateTextStyleId(segment.textStyleId)
     };
   }
 
   return {
-    ...partialTransformTextStyle(node, segment),
+    ...partialTransformTextStyle(segment, textAlign),
     fontFamily: segment.fontName?.family ?? 'sourcesanspro',
     fontSize: segment.fontSize?.toString() ?? '14',
     fontStyle: translateFontStyle(segment),
@@ -45,17 +52,23 @@ export const transformTextStyle = (node: TextNode, segment: TextSegment): TextSt
   };
 };
 
-const partialTransformTextStyle = (node: TextNode, segment: TextSegment): TextStyle => {
+const partialTransformTextStyle = (
+  segment: TextSegment,
+  textAlign: TextHorizontalAlign
+): TextStyle => {
   return {
     ...translateFontName(segment.fontName),
-    textAlign: translateHorizontalAlign(node.textAlignHorizontal)
+    textAlign
   };
 };
 
-const translateStyleTextSegment = (node: TextNode, segment: TextSegment): PenpotTextNode => {
+const translateStyleTextSegment = (
+  segment: TextSegment,
+  textAlign: TextHorizontalAlign
+): PenpotTextNode => {
   return {
     text: segment.characters,
-    ...transformTextStyle(node, segment),
+    ...transformTextStyle(segment, textAlign),
     ...transformFills(segment)
   };
 };

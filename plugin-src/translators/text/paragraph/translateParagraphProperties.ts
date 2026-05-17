@@ -27,7 +27,7 @@ type PartialTranslation = {
 };
 
 export const translateParagraphProperties = (
-  node: TextNode,
+  node: NonResizableTextMixin,
   partials: { textNode: PenpotTextNode; segment: TextSegment }[]
 ): PenpotTextNode[] => {
   const splitSegments: PartialTranslation[] = [];
@@ -52,7 +52,7 @@ const splitTextNodeByEOL = (node: PenpotTextNode): PenpotTextNode[] => {
 };
 
 const addParagraphProperties = (
-  node: TextNode,
+  node: NonResizableTextMixin,
   partials: PartialTranslation[]
 ): PenpotTextNode[] => {
   const formattedParagraphs: PenpotTextNode[] = [];

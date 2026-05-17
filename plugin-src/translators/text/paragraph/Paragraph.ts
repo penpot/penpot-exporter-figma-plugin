@@ -10,7 +10,11 @@ export class Paragraph {
   private firstTextNode: PenpotTextNode | null = null;
   private list = new List();
 
-  public format(node: TextNode, textNode: PenpotTextNode, segment: TextSegment): PenpotTextNode[] {
+  public format(
+    node: NonResizableTextMixin,
+    textNode: PenpotTextNode,
+    segment: TextSegment
+  ): PenpotTextNode[] {
     const textNodes: PenpotTextNode[] = [];
 
     const spacing = this.applySpacing(segment, node);
@@ -30,7 +34,7 @@ export class Paragraph {
   private applyIndentation(
     textNode: PenpotTextNode,
     segment: TextSegment,
-    node: TextNode
+    node: NonResizableTextMixin
   ): PenpotTextNode | undefined {
     if (this.isParagraphStarting || this.isFirstTextNode(textNode)) {
       this.list.update(textNode, segment);
@@ -41,7 +45,10 @@ export class Paragraph {
     }
   }
 
-  private applySpacing(segment: TextSegment, node: TextNode): PenpotTextNode | undefined {
+  private applySpacing(
+    segment: TextSegment,
+    node: NonResizableTextMixin
+  ): PenpotTextNode | undefined {
     if (this.isParagraphStarting) {
       const isList = getListType(segment) !== 'NONE';
 

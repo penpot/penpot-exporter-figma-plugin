@@ -5,7 +5,7 @@ import type { ShapeAttributes } from '@ui/lib/types/shapes/shape';
 import type { TextStyle } from '@ui/lib/types/shapes/textShape';
 
 export const transformFills = (
-  node: (MinimalFillsMixin & DimensionAndPositionMixin) | VectorRegion | VectorNode | TextSegment
+  node: MinimalFillsMixin | VectorRegion | VectorNode | TextSegment
 ): Pick<ShapeAttributes, 'fills' | 'fillStyleId'> | Pick<TextStyle, 'fills' | 'fillStyleId'> => {
   if (hasFillStyle(node)) {
     return {
@@ -35,7 +35,7 @@ export const transformVectorFills = (
 };
 
 const hasFillStyle = (
-  node: (MinimalFillsMixin & DimensionAndPositionMixin) | VectorRegion | VectorNode | TextSegment
+  node: MinimalFillsMixin | VectorRegion | VectorNode | TextSegment
 ): boolean => {
   return (
     node.fillStyleId !== figma.mixed &&

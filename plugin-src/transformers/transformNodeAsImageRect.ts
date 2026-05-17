@@ -12,7 +12,7 @@ import type { RectShape } from '@ui/lib/types/shapes/rectShape';
 // Shared helper for node types Penpot cannot model natively. The node is
 // rasterized to PNG and embedded as an image fill on a rect. Used by node-type
 // specific transformers as a fallback strategy.
-export type RasterizableNode = TableNode | ShapeWithTextNode;
+export type RasterizableNode = TableNode;
 
 export const transformNodeAsImageRect = async (
   node: RasterizableNode
