@@ -120,8 +120,10 @@ describe('transformShapeWithTextNode', () => {
     expect(result.opacity).toBe(0.5);
   });
 
-  it("applies the SVG element's transform and the AABB offset to path coords", async () => {
-    // 90° rotation via element-level transform, then translate by AABB origin (100, 200).
+  it("applies the SVG element's transform and aligns the path bbox to AABB", async () => {
+    // 90° rotation maps (0,0)/(10,0)/(10,5)/(0,5) to (0,0)/(0,10)/(-5,10)/(-5,0).
+    // Bounds top-left is (-5, 0); the path is shifted so that point lands at
+    // aabb.(x, y) = (100, 200).
     const node = createShapeWithTextNode({
       svg: '<svg><path d="M 0 0 L 10 0 L 10 5 L 0 5 Z" transform="rotate(90)"/></svg>',
       absoluteBoundingBox: { x: 100, y: 200, width: 10, height: 10 } as Rect
@@ -130,7 +132,7 @@ describe('transformShapeWithTextNode', () => {
     const result = (await transformShapeWithTextNode(node)) as GroupShape;
     const shape = result.children?.[0] as PathShape;
 
-    expect(shape.content).toBe('M 100 200 L 100 210 L 95 210 L 95 200 Z');
+    expect(shape.content).toBe('M 105 200 L 105 210 L 100 210 L 100 200 Z');
   });
 
   it('concatenates multiple <path d="…"/> entries from the SVG', async () => {
@@ -156,6 +158,45 @@ describe('transformShapeWithTextNode', () => {
     expect(result.children).toHaveLength(1);
     const [shape] = result.children as [PathShape];
     expect(shape.type).toBe('path');
+  });
+
+  it('parses a drop shadow filter from the SVG and applies it to the PathShape', async () => {
+    // Figma's plugin API hides effects on ShapeWithTextNode, but the SVG
+    // export still contains the <filter> definitions. Verify the shadow is
+    // recovered from there and lands on the path child.
+    const svg = [
+      '<svg>',
+      '<defs>',
+      '<filter id="filter0_d_1_2" x="-2" y="0" width="60" height="40">',
+      '<feFlood flood-opacity="0" result="BackgroundImageFix"/>',
+      '<feColorMatrix in="SourceAlpha" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"/>',
+      '<feOffset dx="0" dy="4"/>',
+      '<feGaussianBlur stdDeviation="2"/>',
+      '<feColorMatrix values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0"/>',
+      '</filter>',
+      '</defs>',
+      '<path d="M 0 0 L 10 10 Z"/>',
+      '</svg>'
+    ].join('');
+
+    const result = (await transformShapeWithTextNode(
+      createShapeWithTextNode({ svg })
+    )) as GroupShape;
+    const [shape] = result.children as [PathShape];
+
+    expect(shape.shadow).toBeDefined();
+    expect(shape.shadow).toHaveLength(1);
+    expect(shape.shadow?.[0].style).toBe('drop-shadow');
+    expect(shape.shadow?.[0].offsetY).toBe(4);
+    expect(shape.shadow?.[0].blur).toBe(2);
+    expect(shape.shadow?.[0].color.opacity).toBeCloseTo(0.25);
+  });
+
+  it('leaves shadow undefined when the SVG has no <filter>', async () => {
+    const result = (await transformShapeWithTextNode(createShapeWithTextNode())) as GroupShape;
+    const [shape] = result.children as [PathShape];
+
+    expect(shape.shadow).toBeUndefined();
   });
 
   it('falls back to a rasterized rect when no drawable element can be extracted from the SVG', async () => {

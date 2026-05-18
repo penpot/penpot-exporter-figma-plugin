@@ -70,38 +70,31 @@ export const transformInstanceIds = (
   };
 };
 
-export const transformMaskIds = (node: SceneNode): Pick<ShapeBaseAttributes, 'id' | 'shapeRef'> => {
+// Derived IDs reuse a node's identity but prefix it so multiple Penpot shapes
+// can map back to the same Figma node (mask + masked group, vector + per-region
+// paths, shape-with-text group + path/text children) without colliding.
+const transformPrefixedIds = (
+  node: SceneNode,
+  prefix: string
+): Pick<ShapeBaseAttributes, 'id' | 'shapeRef'> => {
   const normalizedId = normalizeNodeId(node.id);
   const relatedNodeId = getRelatedNodeId(node.id);
 
   return {
-    id: parseFigmaId(`M${normalizedId}`),
-    shapeRef: relatedNodeId ? parseFigmaId(`M${relatedNodeId}`) : undefined
+    id: parseFigmaId(`${prefix}${normalizedId}`),
+    shapeRef: relatedNodeId ? parseFigmaId(`${prefix}${relatedNodeId}`) : undefined
   };
 };
+
+export const transformMaskIds = (node: SceneNode): Pick<ShapeBaseAttributes, 'id' | 'shapeRef'> =>
+  transformPrefixedIds(node, 'M');
 
 export const transformVectorIds = (
   node: SceneNode,
   index: number
-): Pick<ShapeBaseAttributes, 'id' | 'shapeRef'> => {
-  const normalizedId = normalizeNodeId(node.id);
-  const relatedNodeId = getRelatedNodeId(node.id);
-
-  return {
-    id: parseFigmaId(`V${index}${normalizedId}`),
-    shapeRef: relatedNodeId ? parseFigmaId(`V${index}${relatedNodeId}`) : undefined
-  };
-};
+): Pick<ShapeBaseAttributes, 'id' | 'shapeRef'> => transformPrefixedIds(node, `V${index}`);
 
 export const transformChildIds = (
   node: SceneNode,
   index: number
-): Pick<ShapeBaseAttributes, 'id' | 'shapeRef'> => {
-  const normalizedId = normalizeNodeId(node.id);
-  const relatedNodeId = getRelatedNodeId(node.id);
-
-  return {
-    id: parseFigmaId(`C${index}${normalizedId}`),
-    shapeRef: relatedNodeId ? parseFigmaId(`C${index}${relatedNodeId}`) : undefined
-  };
-};
+): Pick<ShapeBaseAttributes, 'id' | 'shapeRef'> => transformPrefixedIds(node, `C${index}`);

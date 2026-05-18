@@ -13,11 +13,17 @@ import type { ShapeGeomAttributes } from '@ui/lib/types/shapes/shape';
 // the parent shape instead of spanning the whole AABB.
 
 // Glyph-width-to-fontSize ratio approximating Inter Bold (Figma Slides' default
-// for shape-with-text). Used to estimate line widths from char counts. The real
-// ratio varies per glyph (e.g. "A"/"W" wider, "i"/"l" narrower) so per-line
-// centres reconstructed from tspan.x differ slightly from Figma's actual
-// rendered centres; averaging across lines minimises that drift.
-const FALLBACK_CHAR_WIDTH_RATIO = 0.55;
+// for shape-with-text). Used to estimate per-line centres from tspan.x — the
+// real ratio varies per glyph so averaging across lines absorbs the drift.
+const CENTER_CHAR_WIDTH_RATIO = 0.55;
+
+// Width ratio for sizing the wrap container. Larger than the centring ratio so
+// Penpot's real glyph rendering (which uses wider faces than Inter at the
+// same nominal size, especially on bold uppercase like "DII ENERO 2026")
+// doesn't over-wrap text to a second line. The box is centred on the same
+// point either way, so this only affects how much horizontal room the text
+// gets before Penpot decides to wrap.
+const WRAP_CHAR_WIDTH_RATIO = 0.7;
 
 // Approximate ascender / descender splits around the baseline.
 const ASCENDER_RATIO = 0.8;
@@ -66,18 +72,17 @@ const parseTspans = (body: string): Tspan[] => {
 
 const textLocalBounds = (tspans: Tspan[], fontSize: number): Bounds => {
   // Each tspan.x is the left edge of its line. Estimating that line's centre
-  // under the fallback ratio and averaging across lines lands very close to
+  // under the centring ratio and averaging across lines lands very close to
   // Figma's rendered centre. Earlier versions tried to back out the real
   // char-width ratio from the relative tspan offsets, but that breaks when
   // lines differ only by narrow glyphs (e.g. a trailing space) and produces
   // wildly wrong centres.
-  const lineCenters = tspans.map(t => t.x + (t.chars * fontSize * FALLBACK_CHAR_WIDTH_RATIO) / 2);
+  const lineCenters = tspans.map(t => t.x + (t.chars * fontSize * CENTER_CHAR_WIDTH_RATIO) / 2);
   const centerX = lineCenters.reduce((sum, c) => sum + c, 0) / lineCenters.length;
 
-  // Wrap container width sized to the longest line at the fallback ratio so
-  // Penpot's real glyph rendering doesn't over-wrap.
+  // Wrap container width sized to the longest line at the wider wrap ratio.
   const maxChars = Math.max(...tspans.map(t => t.chars));
-  const width = maxChars * fontSize * FALLBACK_CHAR_WIDTH_RATIO;
+  const width = maxChars * fontSize * WRAP_CHAR_WIDTH_RATIO;
 
   const top = Math.min(...tspans.map(t => t.y)) - fontSize * ASCENDER_RATIO;
   const bottom = Math.max(...tspans.map(t => t.y)) + fontSize * DESCENDER_RATIO;
@@ -87,7 +92,8 @@ const textLocalBounds = (tspans: Tspan[], fontSize: number): Bounds => {
 
 export const extractTextLayout = (
   svg: string,
-  aabb: { x: number; y: number }
+  aabb: { x: number; y: number },
+  svgOrigin: { x: number; y: number } = { x: 0, y: 0 }
 ): Pick<ShapeGeomAttributes, 'x' | 'y' | 'width' | 'height'> | undefined => {
   const textMatch = stripSvgDefs(svg).match(/<text\b([^>]*)>([\s\S]*?)<\/text>/i);
   if (!textMatch) return;
@@ -101,8 +107,10 @@ export const extractTextLayout = (
 
   const local = textLocalBounds(tspans, fontSize);
 
-  // Project the text's center through the <text transform> to land in AABB-
-  // local space, then offset by the AABB origin. The text shape's own
+  // Project the text's center through the <text transform> to land in SVG-
+  // local space, then translate to canvas: subtract svgOrigin (the geometry's
+  // bounding-box top-left in SVG coords, which accounts for shadow/blur
+  // margin Figma added to the viewBox) and add aabb. The text shape's own
   // rotation comes from the parent node via transformRotationAndPosition, so
   // the rotation component of the transform is reflected by Penpot rotating
   // the rect around its centre — we just position it.
@@ -113,8 +121,8 @@ export const extractTextLayout = (
   ]);
 
   return {
-    x: aabb.x + cx - local.width / 2,
-    y: aabb.y + cy - local.height / 2,
+    x: aabb.x + (cx - svgOrigin.x) - local.width / 2,
+    y: aabb.y + (cy - svgOrigin.y) - local.height / 2,
     width: local.width,
     height: local.height
   };

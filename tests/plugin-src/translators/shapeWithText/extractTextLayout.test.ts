@@ -19,8 +19,11 @@ describe('extractTextLayout', () => {
     ).toBeUndefined();
   });
 
-  it('positions a single-line text using the fallback char-width ratio', () => {
-    // fontSize 36, "Hello" = 5 chars * 36 * 0.55 = 99 wide
+  it('positions a single-line text using the centring and wrap ratios', () => {
+    // fontSize 36, "Hello" = 5 chars.
+    // Centre (CENTER ratio 0.55): 20 + 5 * 36 * 0.55 / 2 = 69.5
+    // Width (WRAP ratio 0.7): 5 * 36 * 0.7 = 126
+    // Box left: 69.5 - 63 = 6.5
     // ascender 28.8, descender 7.2 → height 36
     const layout = extractTextLayout(
       '<svg><text font-size="36"><tspan x="20" y="50">Hello</tspan></text></svg>',
@@ -28,32 +31,32 @@ describe('extractTextLayout', () => {
     );
 
     expect(layout).toBeDefined();
-    expect(layout!.width).toBeCloseTo(99);
+    expect(layout!.width).toBeCloseTo(126);
     expect(layout!.height).toBeCloseTo(36);
-    // tspan.x is treated as the start of the only line; with the fallback ratio
-    // applied to a single tspan, the derived width matches the fallback so the
-    // box left aligns to tspan.x.
-    expect(layout!.x).toBeCloseTo(aabb.x + 20);
+    expect(layout!.x).toBeCloseTo(aabb.x + 6.5);
     expect(layout!.y).toBeCloseTo(aabb.y + 50 - 28.8);
   });
 
   it('counts decoded XML entities instead of raw escaped source length', () => {
+    // "&" decoded = 1 char.
+    // Width: 1 * 10 * 0.7 = 7. Centre: 20 + 1 * 10 * 0.55 / 2 = 22.75.
+    // Box left: 22.75 - 3.5 = 19.25.
     const layout = extractTextLayout(
       '<svg><text font-size="10"><tspan x="20" y="50">&amp;</tspan></text></svg>',
       aabb
     );
 
     expect(layout).toBeDefined();
-    expect(layout!.width).toBeCloseTo(5.5);
-    expect(layout!.x).toBeCloseTo(aabb.x + 20);
+    expect(layout!.width).toBeCloseTo(7);
+    expect(layout!.x).toBeCloseTo(aabb.x + 19.25);
   });
 
-  it('centres on the averaged per-line midpoint under the fallback ratio', () => {
+  it('centres on the averaged per-line midpoint under the centring ratio', () => {
     // Figma "Normal left Arrow" sample.
     // line0 midpoint: 78.2881 + 12 * 36 * 0.55 / 2 = 197.09
     // line1 midpoint: 119.098 + 5 * 36 * 0.55 / 2 = 168.598
     // averaged centre: 182.844
-    // width: 12 * 36 * 0.55 = 237.6
+    // width: 12 * 36 * 0.7 = 302.4
     const layout = extractTextLayout(
       '<svg><text font-size="36">' +
         '<tspan x="78.2881" y="95.0909">Normal left </tspan>' +
@@ -64,7 +67,7 @@ describe('extractTextLayout', () => {
 
     expect(layout).toBeDefined();
     expect(layout!.height).toBeCloseTo(48 + 36, 0);
-    expect(layout!.width).toBeCloseTo(237.6, 1);
+    expect(layout!.width).toBeCloseTo(302.4, 1);
     const centerX = layout!.x + layout!.width / 2;
     expect(centerX - aabb.x).toBeCloseTo(182.844, 1);
   });
@@ -116,7 +119,8 @@ describe('extractTextLayout', () => {
     expect(centerY).toBeCloseTo(aabb.y + expectedCy, 2);
     // Width/height stay axis-aligned (the parent node's rotation rotates the
     // rect around its centre downstream via transformRotationAndPosition).
-    expect(layout!.width).toBeCloseTo(99);
+    // Width uses WRAP ratio 0.7 (5 * 36 * 0.7 = 126).
+    expect(layout!.width).toBeCloseTo(126);
     expect(layout!.height).toBeCloseTo(36);
   });
 
