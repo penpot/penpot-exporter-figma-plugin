@@ -93,7 +93,12 @@ export const normalizeCommands = (commands: Command[]): Command[] => {
       case 'elliptical arc':
         // Arcs aren't used by any of the 29 ShapeWithText shapeTypes Figma
         // emits today (rounded corners come through as cubics). Degrade to a
-        // straight line so an unexpected arc never silently disappears.
+        // straight line so an unexpected arc never silently disappears, and
+        // log so a regression is at least visible in the console.
+        console.warn('normalizeCommands: elliptical arc degraded to lineto', {
+          x: c.x,
+          y: c.y
+        });
         out.push({ command: 'lineto', code: 'L', relative: false, x: c.x, y: c.y });
         lastCubicControl = lastQuadControl = null;
         break;

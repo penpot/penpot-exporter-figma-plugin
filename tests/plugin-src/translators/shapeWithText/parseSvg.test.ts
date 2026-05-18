@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { parseSvgTransform } from '@plugin/translators/shapeWithText/parseSvgTransform';
+import { parseSvgTransform } from '@plugin/translators/shapeWithText/parseSvg';
 import { applyMatrixToPoint } from '@plugin/utils';
 
 const IDENTITY = [

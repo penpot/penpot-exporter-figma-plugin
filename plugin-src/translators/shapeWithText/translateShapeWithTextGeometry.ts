@@ -3,20 +3,15 @@ import { type Command, parseSVG } from 'svg-path-parser';
 import {
   numAttr,
   parseSvgAttrs,
+  parseSvgTransform,
   stripSvgDefs
-} from '@plugin/translators/shapeWithText/parseSvgAttrs';
-import { multiply, parseSvgTransform } from '@plugin/translators/shapeWithText/parseSvgTransform';
-import {
-  applyMatrixToCommand,
-  normalizeCommands,
-  translateCommandToPathString
-} from '@plugin/translators/vectors';
+} from '@plugin/translators/shapeWithText/parseSvg';
+import { normalizeCommands, serializeCommands } from '@plugin/translators/vectors';
+import { multiplyMatrix } from '@plugin/utils';
 
 // Cubic Bézier approximation of a quarter ellipse — (4/3) * (sqrt(2) - 1).
 // Used because the downstream path translator only handles M/L/C/Z commands.
 const KAPPA = 0.5522847498307933;
-
-const SHAPE_TAG_REGEX = /<(path|rect|circle|ellipse|polygon)\b([^>]*?)\/?>/gi;
 
 const rectToPath = (attrs: Record<string, string>): string => {
   const x = numAttr(attrs.x);
@@ -83,19 +78,13 @@ const shapeToPath = (tag: string, attrs: Record<string, string>): string => {
   }
 };
 
-const serializeCommands = (commands: Command[], matrix: Transform): string =>
-  commands
-    .map(c => translateCommandToPathString(applyMatrixToCommand(c, matrix)))
-    .filter(s => s.length > 0)
-    .join(' ');
-
 const extractDrawablePaths = (svg: string): Array<{ pathData: string; transform: Transform }> => {
   const drawable = stripSvgDefs(svg);
+  const regex = /<(path|rect|circle|ellipse|polygon)\b([^>]*?)\/?>/gi;
   const out: Array<{ pathData: string; transform: Transform }> = [];
-  SHAPE_TAG_REGEX.lastIndex = 0;
 
   let match: RegExpExecArray | null;
-  while ((match = SHAPE_TAG_REGEX.exec(drawable)) !== null) {
+  while ((match = regex.exec(drawable)) !== null) {
     const tag = match[1].toLowerCase();
     const attrs = parseSvgAttrs(match[2]);
     const pathData = shapeToPath(tag, attrs);
@@ -144,7 +133,7 @@ export const translateShapeWithTextGeometry = (
       });
       continue;
     }
-    parts.push(serializeCommands(commands, multiply(toCanvas, transform)));
+    parts.push(serializeCommands(commands, multiplyMatrix(toCanvas, transform)));
   }
 
   const joined = parts.join(' ').trim();

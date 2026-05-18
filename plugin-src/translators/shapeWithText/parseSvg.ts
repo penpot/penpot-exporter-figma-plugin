@@ -1,8 +1,37 @@
+// Lightweight SVG parsing helpers shared by the shape-with-text geometry and
+// text-layout extractors. Regex-based because the plugin runs in Figma's
+// QuickJS worker where DOMParser is not available.
+//
+// Assumes Figma's SVG export shape: flat structure (no nested <g>), double-
+// quoted attribute values without XML-entity-encoded quotes inside, and no
+// comments or CDATA in the drawable region. If Figma's export ever stops
+// matching these assumptions, these helpers need to be revisited.
+import { multiplyMatrix } from '@plugin/utils';
+
+export const stripSvgDefs = (svg: string): string =>
+  svg.replace(/<defs\b[^>]*>[\s\S]*?<\/defs>/gi, '');
+
+export const parseSvgAttrs = (input: string): Record<string, string> => {
+  const regex = /([\w-]+)\s*=\s*"([^"]*)"/g;
+  const result: Record<string, string> = {};
+
+  let match: RegExpExecArray | null;
+  while ((match = regex.exec(input)) !== null) {
+    result[match[1]] = match[2];
+  }
+
+  return result;
+};
+
+export const numAttr = (value: string | undefined, fallback = 0): number => {
+  if (value === undefined) return fallback;
+  const parsed = parseFloat(value);
+  return Number.isFinite(parsed) ? parsed : fallback;
+};
+
 // Parses an SVG `transform="..."` attribute into Figma's 2x3 affine `Transform`
 // shape: [[a, c, e], [b, d, f]]. Supports the transform functions Figma's SVG
 // export emits: matrix(), translate(), rotate(angle [cx cy]), scale().
-
-const TRANSFORM_FN_REGEX = /(matrix|translate|rotate|scale)\s*\(([^)]+)\)/gi;
 
 const identity = (): Transform => [
   [1, 0, 0],
@@ -15,19 +44,6 @@ const parseArgs = (input: string): number[] =>
     .split(/[\s,]+/)
     .map(parseFloat)
     .filter(n => Number.isFinite(n));
-
-export const multiply = (a: Transform, b: Transform): Transform => [
-  [
-    a[0][0] * b[0][0] + a[0][1] * b[1][0],
-    a[0][0] * b[0][1] + a[0][1] * b[1][1],
-    a[0][0] * b[0][2] + a[0][1] * b[1][2] + a[0][2]
-  ],
-  [
-    a[1][0] * b[0][0] + a[1][1] * b[1][0],
-    a[1][0] * b[0][1] + a[1][1] * b[1][1],
-    a[1][0] * b[0][2] + a[1][1] * b[1][2] + a[1][2]
-  ]
-];
 
 const rotation = (degrees: number, cx = 0, cy = 0): Transform => {
   const rad = (degrees * Math.PI) / 180;
@@ -43,11 +59,11 @@ const rotation = (degrees: number, cx = 0, cy = 0): Transform => {
 export const parseSvgTransform = (input: string | undefined): Transform => {
   if (!input) return identity();
 
+  const regex = /(matrix|translate|rotate|scale)\s*\(([^)]+)\)/gi;
   let result: Transform = identity();
-  TRANSFORM_FN_REGEX.lastIndex = 0;
-
   let match: RegExpExecArray | null;
-  while ((match = TRANSFORM_FN_REGEX.exec(input)) !== null) {
+
+  while ((match = regex.exec(input)) !== null) {
     const fn = match[1].toLowerCase();
     const args = parseArgs(match[2]);
     let local: Transform = identity();
@@ -81,7 +97,7 @@ export const parseSvgTransform = (input: string | undefined): Transform => {
       }
     }
 
-    result = multiply(result, local);
+    result = multiplyMatrix(result, local);
   }
 
   return result;

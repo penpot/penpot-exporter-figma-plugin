@@ -1,6 +1,6 @@
 import type { Command } from 'svg-path-parser';
 
-import { applyMatrixToPoint } from '@plugin/utils';
+import { applyMatrixToPoint } from '@plugin/utils/applyMatrixToPoint';
 
 export const applyMatrixToCommand = (command: Command, matrix: Transform): Command => {
   const project = (x: number, y: number): { x: number; y: number } => {

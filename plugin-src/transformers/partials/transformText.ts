@@ -1,5 +1,4 @@
-import { transformFills } from '@plugin/transformers/partials';
-import { transformTextStyle, translateTextSegments } from '@plugin/translators/text';
+import { buildTextContent } from '@plugin/translators/text';
 import {
   translateGrowType,
   translateHorizontalAlign,
@@ -24,29 +23,14 @@ export const transformText = (node: TextNode): TextAttributes & Pick<TextShape, 
     'textStyleId'
   ]);
 
-  const textAlign = translateHorizontalAlign(node.textAlignHorizontal);
-
   return {
     characters: node.characters,
-    content: {
-      type: 'root',
-      verticalAlign: translateVerticalAlign(node.textAlignVertical),
-      children: styledTextSegments.length
-        ? [
-            {
-              type: 'paragraph-set',
-              children: [
-                {
-                  type: 'paragraph',
-                  children: translateTextSegments(node, styledTextSegments, textAlign),
-                  ...transformTextStyle(styledTextSegments[0], textAlign),
-                  ...transformFills(node)
-                }
-              ]
-            }
-          ]
-        : undefined
-    },
+    content: buildTextContent(
+      node,
+      styledTextSegments,
+      translateHorizontalAlign(node.textAlignHorizontal),
+      translateVerticalAlign(node.textAlignVertical)
+    ),
     growType: translateGrowType(node)
   };
 };

@@ -1,17 +1,12 @@
 import type { Command } from 'svg-path-parser';
 
-import { translateNonRotatedCommands } from '@plugin/translators/vectors/translateNonRotatedCommands';
-import { translateRotatedCommands } from '@plugin/translators/vectors/translateRotatedCommands';
-import { isTransformed } from '@plugin/utils';
+import { normalizeCommands } from '@plugin/translators/vectors/normalizeCommands';
+import { serializeCommands } from '@plugin/translators/vectors/serializeCommands';
 
-export const translateCommands = (node: LayoutMixin, commands: Command[]): string => {
-  if (node.absoluteBoundingBox && isTransformed(node.absoluteTransform)) {
-    return translateRotatedCommands(commands, node.absoluteTransform, node.absoluteBoundingBox);
-  }
-
-  return translateNonRotatedCommands(
-    commands,
-    node.absoluteTransform[0][2],
-    node.absoluteTransform[1][2]
-  );
-};
+// Figma's `absoluteTransform` already encodes rotation + translation as a 2x3
+// affine. Applying it directly to each command produces the same canvas-space
+// coordinates as the previous rotated/non-rotated split, which is provably
+// equivalent: rotating around the bbox centre with a reference-point offset
+// reduces algebraically to `transform * point`.
+export const translateCommands = (node: LayoutMixin, commands: Command[]): string =>
+  serializeCommands(normalizeCommands(commands), node.absoluteTransform);

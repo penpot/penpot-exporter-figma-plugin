@@ -1,9 +1,9 @@
 import {
   numAttr,
   parseSvgAttrs,
+  parseSvgTransform,
   stripSvgDefs
-} from '@plugin/translators/shapeWithText/parseSvgAttrs';
-import { parseSvgTransform } from '@plugin/translators/shapeWithText/parseSvgTransform';
+} from '@plugin/translators/shapeWithText/parseSvg';
 import { applyMatrixToPoint } from '@plugin/utils';
 
 import type { ShapeGeomAttributes } from '@ui/lib/types/shapes/shape';
@@ -11,9 +11,6 @@ import type { ShapeGeomAttributes } from '@ui/lib/types/shapes/shape';
 // Figma's SVG export lays out the text precisely via tspan x/y per line. We
 // derive the text box from those tspans so the Penpot text shape lands inside
 // the parent shape instead of spanning the whole AABB.
-
-const TEXT_REGEX = /<text\b([^>]*)>([\s\S]*?)<\/text>/i;
-const TSPAN_REGEX = /<tspan\b([^>]*)>([\s\S]*?)<\/tspan>/g;
 
 // Conservative glyph-width-to-fontSize ratio used as a lower bound on the wrap
 // container width. The ratio inferred from Figma's tspan deltas captures the
@@ -51,11 +48,11 @@ const decodeXmlText = (input: string): string => {
 const countTextChars = (input: string): number => Array.from(decodeXmlText(input)).length;
 
 const parseTspans = (body: string): Tspan[] => {
+  const regex = /<tspan\b([^>]*)>([\s\S]*?)<\/tspan>/g;
   const tspans: Tspan[] = [];
-  TSPAN_REGEX.lastIndex = 0;
 
   let match: RegExpExecArray | null;
-  while ((match = TSPAN_REGEX.exec(body)) !== null) {
+  while ((match = regex.exec(body)) !== null) {
     const attrs = parseSvgAttrs(match[1]);
     tspans.push({
       x: numAttr(attrs.x),
@@ -116,7 +113,7 @@ export const extractTextLayout = (
   svg: string,
   aabb: { x: number; y: number }
 ): Pick<ShapeGeomAttributes, 'x' | 'y' | 'width' | 'height'> | undefined => {
-  const textMatch = stripSvgDefs(svg).match(TEXT_REGEX);
+  const textMatch = stripSvgDefs(svg).match(/<text\b([^>]*)>([\s\S]*?)<\/text>/i);
   if (!textMatch) return;
 
   const attrs = parseSvgAttrs(textMatch[1]);
