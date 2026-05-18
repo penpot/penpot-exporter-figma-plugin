@@ -4,14 +4,15 @@ import {
   transformDimension,
   transformFills,
   transformIds,
+  transformOverrides,
   transformRotationAndPosition,
   transformSceneNode,
+  transformVariableConsumptionMap,
   transformVectorIds
 } from '@plugin/transformers/partials';
 import { transformNodeAsImageRect } from '@plugin/transformers/transformNodeAsImageRect';
 import { translateStrokes } from '@plugin/translators';
 import {
-  exportShapeWithTextSvg,
   extractTextLayout,
   translateShapeWithTextContent,
   translateShapeWithTextGeometry
@@ -25,13 +26,17 @@ import type { TextShape } from '@ui/lib/types/shapes/textShape';
 // Penpot has no native ShapeWithText equivalent, so emit a GroupShape wrapping
 // a PathShape (geometry pulled from Figma's SVG export to avoid hardcoded
 // templates per shapeType) and a TextShape for the editable label.
+//
+// Text alignment / vertical alignment / autoresize are hardcoded because
+// TextSublayerNode does not expose them; Figma renders shape-with-text with
+// center/center alignment and a fixed size matched to the shape.
 export const transformShapeWithTextNode = async (
   node: ShapeWithTextNode
 ): Promise<GroupShape | RectShape | undefined> => {
   const aabb = node.absoluteBoundingBox;
   if (!aabb) return await transformNodeAsImageRect(node);
 
-  const svg = await exportShapeWithTextSvg(node);
+  const svg = await exportSvg(node);
   if (!svg) return await transformNodeAsImageRect(node);
 
   const content = translateShapeWithTextGeometry(node, svg, aabb);
@@ -66,10 +71,28 @@ export const transformShapeWithTextNode = async (
     ...transformSceneNode(node)
   };
 
+  // No transformEffects: ShapeWithTextNode has MinimalBlendMixin (opacity +
+  // blendMode) but not the full BlendMixin — Figma does not expose shadows or
+  // blur on shape-with-text.
   return {
     ...transformIds(node),
     ...transformGroupNodeLike(node),
     ...transformBlend(node),
+    ...transformVariableConsumptionMap(node),
+    ...transformOverrides(node),
     children: [shape, text]
   };
+};
+
+const exportSvg = async (node: ShapeWithTextNode): Promise<string | undefined> => {
+  try {
+    return await node.exportAsync({
+      format: 'SVG_STRING',
+      svgOutlineText: false,
+      svgIdAttribute: false
+    });
+  } catch (error) {
+    console.warn(`Failed to export shape-with-text "${node.name}" as SVG`, error);
+    return;
+  }
 };

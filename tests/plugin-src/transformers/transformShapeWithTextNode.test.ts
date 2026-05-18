@@ -15,8 +15,10 @@ vi.mock('@plugin/transformers/partials', () => ({
     id: 'group-id',
     shapeRef: undefined
   }),
+  transformOverrides: (): Record<string, never> => ({}),
   transformRotationAndPosition: (): { x: number; y: number } => ({ x: 10, y: 20 }),
   transformSceneNode: (): Record<string, never> => ({}),
+  transformVariableConsumptionMap: (): Record<string, never> => ({}),
   transformVectorIds: (_node: unknown, index: number): { id: string; shapeRef: undefined } => ({
     id: `child-${index}`,
     shapeRef: undefined

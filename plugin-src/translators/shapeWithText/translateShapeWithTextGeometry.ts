@@ -1,15 +1,21 @@
 import { type Command, parseSVG } from 'svg-path-parser';
 
-import { normalizeCommands } from '@plugin/translators/shapeWithText/normalizeCommands';
-import { numAttr, parseSvgAttrs } from '@plugin/translators/shapeWithText/parseSvgAttrs';
+import {
+  numAttr,
+  parseSvgAttrs,
+  stripSvgDefs
+} from '@plugin/translators/shapeWithText/parseSvgAttrs';
 import { multiply, parseSvgTransform } from '@plugin/translators/shapeWithText/parseSvgTransform';
-import { applyMatrixToCommand, translateCommandToPathString } from '@plugin/translators/vectors';
+import {
+  applyMatrixToCommand,
+  normalizeCommands,
+  translateCommandToPathString
+} from '@plugin/translators/vectors';
 
 // Cubic Bézier approximation of a quarter ellipse — (4/3) * (sqrt(2) - 1).
 // Used because the downstream path translator only handles M/L/C/Z commands.
 const KAPPA = 0.5522847498307933;
 
-const DEFS_REGEX = /<defs\b[^>]*>[\s\S]*?<\/defs>/gi;
 const SHAPE_TAG_REGEX = /<(path|rect|circle|ellipse|polygon)\b([^>]*?)\/?>/gi;
 
 const rectToPath = (attrs: Record<string, string>): string => {
@@ -84,8 +90,7 @@ const serializeCommands = (commands: Command[], matrix: Transform): string =>
     .join(' ');
 
 const extractDrawablePaths = (svg: string): Array<{ pathData: string; transform: Transform }> => {
-  // Drop <defs> so clipPath/mask/gradient geometry isn't mistaken for the shape itself.
-  const drawable = svg.replace(DEFS_REGEX, '');
+  const drawable = stripSvgDefs(svg);
   const out: Array<{ pathData: string; transform: Transform }> = [];
   SHAPE_TAG_REGEX.lastIndex = 0;
 

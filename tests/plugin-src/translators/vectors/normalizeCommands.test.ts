@@ -1,7 +1,7 @@
 import { parseSVG } from 'svg-path-parser';
 import { describe, expect, it } from 'vitest';
 
-import { normalizeCommands } from '@plugin/translators/shapeWithText/normalizeCommands';
+import { normalizeCommands } from '@plugin/translators/vectors/normalizeCommands';
 
 const summarize = (path: string): string[] => normalizeCommands(parseSVG(path)).map(c => c.command);
 

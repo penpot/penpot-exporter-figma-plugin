@@ -1,4 +1,8 @@
-import { numAttr, parseSvgAttrs } from '@plugin/translators/shapeWithText/parseSvgAttrs';
+import {
+  numAttr,
+  parseSvgAttrs,
+  stripSvgDefs
+} from '@plugin/translators/shapeWithText/parseSvgAttrs';
 import { parseSvgTransform } from '@plugin/translators/shapeWithText/parseSvgTransform';
 import { applyMatrixToPoint } from '@plugin/utils';
 
@@ -112,7 +116,7 @@ export const extractTextLayout = (
   svg: string,
   aabb: { x: number; y: number }
 ): Pick<ShapeGeomAttributes, 'x' | 'y' | 'width' | 'height'> | undefined => {
-  const textMatch = svg.match(TEXT_REGEX);
+  const textMatch = stripSvgDefs(svg).match(TEXT_REGEX);
   if (!textMatch) return;
 
   const attrs = parseSvgAttrs(textMatch[1]);
