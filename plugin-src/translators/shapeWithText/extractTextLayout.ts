@@ -12,11 +12,11 @@ import type { ShapeGeomAttributes } from '@ui/lib/types/shapes/shape';
 // derive the text box from those tspans so the Penpot text shape lands inside
 // the parent shape instead of spanning the whole AABB.
 
-// Conservative glyph-width-to-fontSize ratio used as a lower bound on the wrap
-// container width. The ratio inferred from Figma's tspan deltas captures the
-// AVERAGE width assuming uniform glyphs, which is consistently narrower than
-// Penpot's real glyph rendering — using only the derived width causes Penpot
-// to over-wrap. This bound is also the single-tspan fallback.
+// Glyph-width-to-fontSize ratio approximating Inter Bold (Figma Slides' default
+// for shape-with-text). Used to estimate line widths from char counts. The real
+// ratio varies per glyph (e.g. "A"/"W" wider, "i"/"l" narrower) so per-line
+// centres reconstructed from tspan.x differ slightly from Figma's actual
+// rendered centres; averaging across lines minimises that drift.
 const FALLBACK_CHAR_WIDTH_RATIO = 0.55;
 
 // Approximate ascender / descender splits around the baseline.
@@ -64,44 +64,20 @@ const parseTspans = (body: string): Tspan[] => {
   return tspans;
 };
 
-// Centered multi-line text in Figma's SVG export shows each line's tspan.x as
-// `boxLeft + (boxWidth - lineWidth) / 2`. Pick the longest and shortest lines
-// (by char count) to back out an effective char-width ratio for this font.
-const deriveCharWidthRatio = (tspans: Tspan[], fontSize: number): number => {
-  if (tspans.length < 2) return FALLBACK_CHAR_WIDTH_RATIO;
-
-  let widest = tspans[0];
-  let narrowest = tspans[0];
-  for (const t of tspans) {
-    if (t.chars > widest.chars) widest = t;
-    if (t.chars < narrowest.chars) narrowest = t;
-  }
-
-  const charsDelta = widest.chars - narrowest.chars;
-  if (charsDelta <= 0) return FALLBACK_CHAR_WIDTH_RATIO;
-
-  // tspan.x of the widest line is smallest (line takes the most space, so it's
-  // pushed least to the right by centering).
-  const xDelta = narrowest.x - widest.x;
-  const ratio = (2 * xDelta) / (charsDelta * fontSize);
-
-  return Number.isFinite(ratio) && ratio > 0 ? ratio : FALLBACK_CHAR_WIDTH_RATIO;
-};
-
 const textLocalBounds = (tspans: Tspan[], fontSize: number): Bounds => {
-  const ratio = deriveCharWidthRatio(tspans, fontSize);
-  const lineWidths = tspans.map(t => t.chars * fontSize * ratio);
+  // Each tspan.x is the left edge of its line. Estimating that line's centre
+  // under the fallback ratio and averaging across lines lands very close to
+  // Figma's rendered centre. Earlier versions tried to back out the real
+  // char-width ratio from the relative tspan offsets, but that breaks when
+  // lines differ only by narrow glyphs (e.g. a trailing space) and produces
+  // wildly wrong centres.
+  const lineCenters = tspans.map(t => t.x + (t.chars * fontSize * FALLBACK_CHAR_WIDTH_RATIO) / 2);
+  const centerX = lineCenters.reduce((sum, c) => sum + c, 0) / lineCenters.length;
 
-  // Under the derived ratio each line's center coincides (that's the property
-  // the ratio is solved for). Take any line's center as the box centre.
-  const centerX = tspans[0].x + lineWidths[0] / 2;
-
-  // The derived width captures the AVERAGE glyph width under uniform-glyph
-  // assumption, which underestimates Penpot's real glyph rendering and causes
-  // over-wrapping. Floor the width at the fallback ratio applied to the
-  // longest line so the wrap container stays roomy enough.
+  // Wrap container width sized to the longest line at the fallback ratio so
+  // Penpot's real glyph rendering doesn't over-wrap.
   const maxChars = Math.max(...tspans.map(t => t.chars));
-  const width = Math.max(Math.max(...lineWidths), maxChars * fontSize * FALLBACK_CHAR_WIDTH_RATIO);
+  const width = maxChars * fontSize * FALLBACK_CHAR_WIDTH_RATIO;
 
   const top = Math.min(...tspans.map(t => t.y)) - fontSize * ASCENDER_RATIO;
   const bottom = Math.max(...tspans.map(t => t.y)) + fontSize * DESCENDER_RATIO;

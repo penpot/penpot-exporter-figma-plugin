@@ -48,10 +48,12 @@ describe('extractTextLayout', () => {
     expect(layout!.x).toBeCloseTo(aabb.x + 20);
   });
 
-  it('preserves the derived centre while floors the wrap width to the fallback', () => {
-    // Mirrors the Figma "Normal left Arrow" sample. Lines centred under the
-    // derived ratio share a centre; width is floored to fallback*longestChars*fontSize
-    // so Penpot's real glyph rendering doesn't over-wrap.
+  it('centres on the averaged per-line midpoint under the fallback ratio', () => {
+    // Figma "Normal left Arrow" sample.
+    // line0 midpoint: 78.2881 + 12 * 36 * 0.55 / 2 = 197.09
+    // line1 midpoint: 119.098 + 5 * 36 * 0.55 / 2 = 168.598
+    // averaged centre: 182.844
+    // width: 12 * 36 * 0.55 = 237.6
     const layout = extractTextLayout(
       '<svg><text font-size="36">' +
         '<tspan x="78.2881" y="95.0909">Normal left </tspan>' +
@@ -62,11 +64,32 @@ describe('extractTextLayout', () => {
 
     expect(layout).toBeDefined();
     expect(layout!.height).toBeCloseTo(48 + 36, 0);
-    // longest line = 12 chars * 36 * 0.55 = 237.6
     expect(layout!.width).toBeCloseTo(237.6, 1);
-    // Centre of the box should match the derived line centres.
     const centerX = layout!.x + layout!.width / 2;
-    expect(centerX - aabb.x).toBeCloseTo(148.27, 0);
+    expect(centerX - aabb.x).toBeCloseTo(182.844, 1);
+  });
+
+  it('recovers a sensible centre when lines only differ by a trailing space', () => {
+    // Figma "Inverted Triangle" sample with `<text transform="translate(214 112) rotate(180)">`.
+    // The previous heuristic derived a tiny char-width ratio from the 1.51px
+    // x-offset between lines (whose only delta is a narrow space character),
+    // landing the text in the wrong half of the shape. The new averaging
+    // approach lands it close to the shape's centre instead.
+    const layout = extractTextLayout(
+      '<svg><text transform="translate(214 112) rotate(180)" font-size="36">' +
+        '<tspan x="0.551872" y="37.0909">Inverted </tspan>' +
+        '<tspan x="2.05515" y="85.0909">Triangle</tspan>' +
+        '</text></svg>',
+      { x: 0, y: 0 }
+    );
+
+    expect(layout).toBeDefined();
+    const centerX = layout!.x + layout!.width / 2;
+    // Old heuristic placed the centre at aabb-local x ≈ 199.85 (upper-right
+    // of the 285-wide AABB). The new heuristic lands at ≈128.55 — within
+    // ~14px of the triangle centroid (142.5), matching Figma's visual centre.
+    expect(centerX).toBeGreaterThan(120);
+    expect(centerX).toBeLessThan(140);
   });
 
   it('projects the text centre through a 45° rotation in <text transform>', () => {
