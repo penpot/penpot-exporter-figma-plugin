@@ -68,17 +68,39 @@ vi.mock('@plugin/translators/shapeWithText/translateShapeWithTextContent', () =>
 
 type ShapeWithTextArg = Parameters<typeof transformShapeWithTextNode>[0];
 
+// Default editable: one shape path.
+// Default outlined: same shape path + one trailing text path (5x5 box at 1,1).
+// Caller can override either independently.
+const DEFAULT_EDITABLE = '<svg><path d="M 0 0 L 10 10 Z"/></svg>';
+const DEFAULT_OUTLINED =
+  '<svg><path d="M 0 0 L 10 10 Z"/><path d="M 1 1 L 6 1 L 6 6 L 1 6 Z"/></svg>';
+
 const createShapeWithTextNode = (
   overrides: Partial<ShapeWithTextArg> & {
     svg?: string;
+    outlinedSvg?: string;
     exportThrows?: boolean;
+    outlineExportThrows?: boolean;
     characters?: string;
   } = {}
 ): ShapeWithTextArg => {
-  const { svg, exportThrows, characters = 'Hello', ...rest } = overrides;
-  const exportAsync = exportThrows
-    ? vi.fn().mockRejectedValue(new Error('boom'))
-    : vi.fn().mockResolvedValue(svg ?? '<svg><path d="M 0 0 L 10 10 Z"/></svg>');
+  const {
+    svg,
+    outlinedSvg,
+    exportThrows,
+    outlineExportThrows,
+    characters = 'Hello',
+    ...rest
+  } = overrides;
+
+  const exportAsync = vi.fn(async (opts: { svgOutlineText?: boolean }): Promise<string> => {
+    if (opts.svgOutlineText === true) {
+      if (outlineExportThrows) throw new Error('outline-boom');
+      return outlinedSvg ?? DEFAULT_OUTLINED;
+    }
+    if (exportThrows) throw new Error('boom');
+    return svg ?? DEFAULT_EDITABLE;
+  });
 
   return {
     id: '7:1',
@@ -120,12 +142,25 @@ describe('transformShapeWithTextNode', () => {
     expect(result.opacity).toBe(0.5);
   });
 
+  it('places the text shape using the outlined path bbox aligned to aabb + svgOrigin', async () => {
+    // aabb = (10, 20). geometry svgOrigin = (0, 0) since the shape path
+    // bounding box starts at (0, 0). Outlined text path bbox = (1, 1) → (6, 6).
+    // text x = aabb.x + (1 - 0) = 11
+    // text y = aabb.y + (1 - 0) = 21
+    const result = (await transformShapeWithTextNode(createShapeWithTextNode())) as GroupShape;
+    const text = result.children?.[1] as TextShape;
+
+    expect(text.x).toBe(11);
+    expect(text.y).toBe(21);
+    expect(text.width).toBe(5);
+    expect(text.height).toBe(5);
+  });
+
   it("applies the SVG element's transform and aligns the path bbox to AABB", async () => {
-    // 90° rotation maps (0,0)/(10,0)/(10,5)/(0,5) to (0,0)/(0,10)/(-5,10)/(-5,0).
-    // Bounds top-left is (-5, 0); the path is shifted so that point lands at
-    // aabb.(x, y) = (100, 200).
     const node = createShapeWithTextNode({
       svg: '<svg><path d="M 0 0 L 10 0 L 10 5 L 0 5 Z" transform="rotate(90)"/></svg>',
+      outlinedSvg:
+        '<svg><path d="M 0 0 L 10 0 L 10 5 L 0 5 Z" transform="rotate(90)"/><path d="M 0 0 L 1 1 Z"/></svg>',
       absoluteBoundingBox: { x: 100, y: 200, width: 10, height: 10 } as Rect
     });
 
@@ -135,9 +170,11 @@ describe('transformShapeWithTextNode', () => {
     expect(shape.content).toBe('M 105 200 L 105 210 L 100 210 L 100 200 Z');
   });
 
-  it('concatenates multiple <path d="…"/> entries from the SVG', async () => {
+  it('concatenates multiple <path d="…"/> entries from the editable SVG', async () => {
     const node = createShapeWithTextNode({
-      svg: '<svg><path d="M 0 0 L 5 5"/><path d="M 10 10 L 20 20"/></svg>'
+      svg: '<svg><path d="M 0 0 L 5 5"/><path d="M 10 10 L 20 20"/></svg>',
+      outlinedSvg:
+        '<svg><path d="M 0 0 L 5 5"/><path d="M 10 10 L 20 20"/><path d="M 0 0 L 1 1"/></svg>'
     });
 
     const result = (await transformShapeWithTextNode(node)) as GroupShape;
@@ -146,24 +183,39 @@ describe('transformShapeWithTextNode', () => {
     expect((shape.content.match(/M /g) ?? []).length).toBe(2);
   });
 
-  it('omits the TextShape when the embedded text is empty', async () => {
-    // Penpot auto-deletes empty text shapes on blur, so an empty scaffold would
-    // disappear after the first edit. Drop the text child entirely; the
-    // user-facing behaviour matches Figma (double-clicking the shape lets the
-    // user add text via Penpot's own affordances).
+  it('omits the TextShape (and the outlined export) when text is empty', async () => {
+    const node = createShapeWithTextNode({ characters: '' });
+    const result = (await transformShapeWithTextNode(node)) as GroupShape;
+
+    expect(result.children).toHaveLength(1);
+    expect(node.exportAsync).toHaveBeenCalledTimes(1);
+    expect(node.exportAsync).toHaveBeenCalledWith(
+      expect.objectContaining({ svgOutlineText: false })
+    );
+  });
+
+  it('still emits the PathShape when the outlined export fails (drops only the text child)', async () => {
     const result = (await transformShapeWithTextNode(
-      createShapeWithTextNode({ characters: '' })
+      createShapeWithTextNode({ outlineExportThrows: true })
     )) as GroupShape;
 
     expect(result.children).toHaveLength(1);
-    const [shape] = result.children as [PathShape];
-    expect(shape.type).toBe('path');
+    expect((result.children?.[0] as PathShape).type).toBe('path');
   });
 
-  it('parses a drop shadow filter from the SVG and applies it to the PathShape', async () => {
-    // Figma's plugin API hides effects on ShapeWithTextNode, but the SVG
-    // export still contains the <filter> definitions. Verify the shadow is
-    // recovered from there and lands on the path child.
+  it('omits the TextShape when outlined has no more drawables than editable', async () => {
+    // Edge case: outlined export missing the text path. extractTextLayout
+    // returns undefined → text child not emitted, but path child still goes out.
+    const result = (await transformShapeWithTextNode(
+      createShapeWithTextNode({
+        outlinedSvg: '<svg><path d="M 0 0 L 10 10 Z"/></svg>'
+      })
+    )) as GroupShape;
+
+    expect(result.children).toHaveLength(1);
+  });
+
+  it('parses a drop shadow filter from the editable SVG and applies it to the PathShape', async () => {
     const svg = [
       '<svg>',
       '<defs>',
@@ -199,7 +251,7 @@ describe('transformShapeWithTextNode', () => {
     expect(shape.shadow).toBeUndefined();
   });
 
-  it('falls back to a rasterized rect when no drawable element can be extracted from the SVG', async () => {
+  it('falls back to a rasterized rect when no drawable element can be extracted', async () => {
     const result = await transformShapeWithTextNode(
       createShapeWithTextNode({ svg: '<svg><text>only text</text></svg>' })
     );
@@ -224,11 +276,10 @@ describe('transformShapeWithTextNode', () => {
     ].join('');
 
     const result = (await transformShapeWithTextNode(
-      createShapeWithTextNode({ svg })
+      createShapeWithTextNode({ svg, outlinedSvg: svg })
     )) as GroupShape;
     const shape = result.children?.[0] as PathShape;
 
-    // 4 subpaths, each starting with M
     expect((shape.content.match(/M /g) ?? []).length).toBe(4);
     expect(shape.content).toContain('Z');
     expect(shape.content).toContain('C ');
@@ -243,16 +294,15 @@ describe('transformShapeWithTextNode', () => {
     ].join('');
 
     const result = (await transformShapeWithTextNode(
-      createShapeWithTextNode({ svg })
+      createShapeWithTextNode({ svg, outlinedSvg: svg })
     )) as GroupShape;
     const shape = result.children?.[0] as PathShape;
 
-    // Only the visible path; the clipPath path inside <defs> is dropped.
     expect((shape.content.match(/M /g) ?? []).length).toBe(1);
     expect(shape.content).not.toContain('100');
   });
 
-  it('falls back to a rasterized rect when SVG export fails', async () => {
+  it('falls back to a rasterized rect when editable SVG export fails', async () => {
     const result = await transformShapeWithTextNode(
       createShapeWithTextNode({ exportThrows: true })
     );
@@ -266,15 +316,18 @@ describe('transformShapeWithTextNode', () => {
     expect(transformNodeAsImageRect).toHaveBeenCalled();
   });
 
-  it('exports SVG as a string with text kept as <text> elements', async () => {
+  it('issues both exports (editable + outlined) when the node has text', async () => {
     const node = createShapeWithTextNode();
     await transformShapeWithTextNode(node);
 
-    expect(node.exportAsync).toHaveBeenCalledWith(
-      expect.objectContaining({
-        format: 'SVG_STRING',
-        svgOutlineText: false
-      })
+    expect(node.exportAsync).toHaveBeenCalledTimes(2);
+    expect(node.exportAsync).toHaveBeenNthCalledWith(
+      1,
+      expect.objectContaining({ format: 'SVG_STRING', svgOutlineText: false })
+    );
+    expect(node.exportAsync).toHaveBeenNthCalledWith(
+      2,
+      expect.objectContaining({ format: 'SVG_STRING', svgOutlineText: true })
     );
   });
 });

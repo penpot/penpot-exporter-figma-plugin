@@ -16,6 +16,7 @@ import {
   type ShapeWithTextGeometry,
   extractShadows,
   extractTextLayout,
+  extractTextLines,
   translateShapeWithTextContent,
   translateShapeWithTextGeometry
 } from '@plugin/translators/shapeWithText';
@@ -34,6 +35,12 @@ import type { TextShape } from '@ui/lib/types/shapes/textShape';
 // Text alignment / vertical alignment / autoresize are hardcoded because
 // TextSublayerNode does not expose them; Figma renders shape-with-text with
 // center/center alignment and a fixed size matched to the shape.
+//
+// Two SVG exports are issued when the node has text: one with svgOutlineText
+// off (preserves shape geometry + a <text> element) and one with it on (the
+// same shape geometry plus a single <path> containing the rendered glyphs).
+// The outlined export's text path bbox gives the exact label region without
+// any font-width heuristic.
 export const transformShapeWithTextNode = async (
   node: ShapeWithTextNode
 ): Promise<GroupShape | RectShape | undefined> => {
@@ -43,15 +50,20 @@ export const transformShapeWithTextNode = async (
     return rasterFallback(node);
   }
 
-  const svg = await exportSvg(node);
-  if (!svg) return rasterFallback(node);
+  const editableSvg = await exportSvg(node, false);
+  if (!editableSvg) return rasterFallback(node);
 
-  const geometry = translateShapeWithTextGeometry(node, svg, aabb);
+  const geometry = translateShapeWithTextGeometry(node, editableSvg, aabb);
   if (!geometry) return rasterFallback(node);
 
-  const children: (PathShape | TextShape)[] = [buildPathChild(node, svg, geometry)];
+  const children: (PathShape | TextShape)[] = [buildPathChild(node, editableSvg, geometry)];
+
   if (node.text.characters.length > 0) {
-    children.push(buildTextChild(node, svg, aabb, geometry.svgOrigin));
+    const outlinedSvg = await exportSvg(node, true);
+    if (outlinedSvg) {
+      const textChild = buildTextChild(node, editableSvg, outlinedSvg, aabb, geometry.svgOrigin);
+      if (textChild) children.push(textChild);
+    }
   }
 
   return {
@@ -89,37 +101,56 @@ const buildPathChild = (
 
 // Spread order matters: transformDimension + transformRotationAndPosition set
 // the text node's bounds and rotation from the parent's AABB, then
-// extractTextLayout overrides x/y/width/height with the actual <text> bounds
-// from Figma's SVG so the label sits inside the shape's interior instead of
+// extractTextLayout overrides x/y/width/height with the bbox of the outlined
+// text path(s) so the label sits inside the shape's interior instead of
 // spanning the whole AABB.
+//
+// extractTextLines pulls the per-line text from the editable SVG's <tspan>s
+// and forces Penpot to wrap at the same positions Figma did — without this,
+// Penpot re-wraps using its own glyph metrics and the line count drifts (e.g.
+// a 2-line label becomes 3 lines).
 const buildTextChild = (
   node: ShapeWithTextNode,
-  svg: string,
+  editableSvg: string,
+  outlinedSvg: string,
   aabb: Rect,
   svgOrigin: { x: number; y: number }
-): TextShape => ({
-  type: 'text',
-  name: node.text.characters,
-  ...transformChildIds(node, 1),
-  ...translateShapeWithTextContent(node),
-  ...transformDimension(node),
-  ...transformRotationAndPosition(node),
-  ...extractTextLayout(svg, aabb, svgOrigin),
-  ...transformSceneNode(node)
-});
+): TextShape | undefined => {
+  const layout = extractTextLayout(editableSvg, outlinedSvg, aabb, svgOrigin);
+  if (!layout) return;
+
+  const forcedLines = extractTextLines(editableSvg);
+
+  return {
+    type: 'text',
+    name: node.text.characters,
+    ...transformChildIds(node, 1),
+    ...translateShapeWithTextContent(node, forcedLines),
+    ...transformDimension(node),
+    ...transformRotationAndPosition(node),
+    ...layout,
+    ...transformSceneNode(node)
+  };
+};
 
 const rasterFallback = (node: ShapeWithTextNode): Promise<RectShape | undefined> =>
   transformNodeAsImageRect(node);
 
-const exportSvg = async (node: ShapeWithTextNode): Promise<string | undefined> => {
+const exportSvg = async (
+  node: ShapeWithTextNode,
+  svgOutlineText: boolean
+): Promise<string | undefined> => {
   try {
     return await node.exportAsync({
       format: 'SVG_STRING',
-      svgOutlineText: false,
+      svgOutlineText,
       svgIdAttribute: false
     });
   } catch (error) {
-    console.warn(`Failed to export shape-with-text "${node.name}" as SVG`, error);
+    console.warn(
+      `Failed to export shape-with-text "${node.name}" as SVG (outline=${svgOutlineText})`,
+      error
+    );
     return;
   }
 };
