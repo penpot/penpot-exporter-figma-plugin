@@ -50,7 +50,10 @@ const polygonToPath = (attrs: Record<string, string>): string => {
     .split(/[\s,]+/)
     .map(parseFloat);
 
-  if (tokens.length < 4 || tokens.length % 2 !== 0) return '';
+  if (tokens.length < 4 || tokens.length % 2 !== 0) {
+    console.warn('Skipping <polygon> with malformed points attribute', { points: attrs.points });
+    return '';
+  }
 
   const cmds: string[] = [`M ${tokens[0]} ${tokens[1]}`];
   for (let i = 2; i < tokens.length; i += 2) {

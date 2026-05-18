@@ -1,14 +1,14 @@
 import { transformGroupNodeLike } from '@plugin/transformers';
 import {
   transformBlend,
+  transformChildIds,
   transformDimension,
   transformFills,
   transformIds,
   transformOverrides,
   transformRotationAndPosition,
   transformSceneNode,
-  transformVariableConsumptionMap,
-  transformVectorIds
+  transformVariableConsumptionMap
 } from '@plugin/transformers/partials';
 import { transformNodeAsImageRect } from '@plugin/transformers/transformNodeAsImageRect';
 import { translateStrokes } from '@plugin/translators';
@@ -34,7 +34,10 @@ export const transformShapeWithTextNode = async (
   node: ShapeWithTextNode
 ): Promise<GroupShape | RectShape | undefined> => {
   const aabb = node.absoluteBoundingBox;
-  if (!aabb) return await transformNodeAsImageRect(node);
+  if (!aabb) {
+    console.warn(`Shape-with-text "${node.name}" missing absoluteBoundingBox; rasterizing`);
+    return await transformNodeAsImageRect(node);
+  }
 
   const svg = await exportSvg(node);
   if (!svg) return await transformNodeAsImageRect(node);
@@ -46,28 +49,9 @@ export const transformShapeWithTextNode = async (
     type: 'path',
     name: node.name,
     content,
-    constraintsH: 'scale',
-    constraintsV: 'scale',
-    ...transformVectorIds(node, 0),
+    ...transformChildIds(node, 0),
     ...transformFills(node),
     strokes: translateStrokes(node),
-    ...transformSceneNode(node)
-  };
-
-  // Spread order matters: transformDimension + transformRotationAndPosition set
-  // the parent node's bounds and rotation, then extractTextLayout overrides
-  // x/y/width/height with the actual <text> bounds from Figma's SVG so the
-  // label sits inside the shape's interior instead of spanning the whole AABB.
-  // When there's no <text> in the SVG, extractTextLayout returns undefined and
-  // the spread is a no-op.
-  const text: TextShape = {
-    type: 'text',
-    name: node.name,
-    ...transformVectorIds(node, 1),
-    ...translateShapeWithTextContent(node),
-    ...transformDimension(node),
-    ...transformRotationAndPosition(node),
-    ...extractTextLayout(svg, aabb),
     ...transformSceneNode(node)
   };
 
@@ -80,9 +64,24 @@ export const transformShapeWithTextNode = async (
     ...transformBlend(node),
     ...transformVariableConsumptionMap(node),
     ...transformOverrides(node),
-    children: [shape, text]
+    children: node.text.characters.length > 0 ? [shape, buildTextChild(node, svg, aabb)] : [shape]
   };
 };
+
+// Spread order matters: transformDimension + transformRotationAndPosition set
+// the parent node's bounds and rotation, then extractTextLayout overrides
+// x/y/width/height with the actual <text> bounds from Figma's SVG so the label
+// sits inside the shape's interior instead of spanning the whole AABB.
+const buildTextChild = (node: ShapeWithTextNode, svg: string, aabb: Rect): TextShape => ({
+  type: 'text',
+  name: node.text.characters,
+  ...transformChildIds(node, 1),
+  ...translateShapeWithTextContent(node),
+  ...transformDimension(node),
+  ...transformRotationAndPosition(node),
+  ...extractTextLayout(svg, aabb),
+  ...transformSceneNode(node)
+});
 
 const exportSvg = async (node: ShapeWithTextNode): Promise<string | undefined> => {
   try {

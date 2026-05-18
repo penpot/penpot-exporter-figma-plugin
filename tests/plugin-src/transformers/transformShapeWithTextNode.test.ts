@@ -9,6 +9,10 @@ import type { TextShape } from '@ui/lib/types/shapes/textShape';
 
 vi.mock('@plugin/transformers/partials', () => ({
   transformBlend: (): { opacity: number } => ({ opacity: 0.5 }),
+  transformChildIds: (_node: unknown, index: number): { id: string; shapeRef: undefined } => ({
+    id: `child-${index}`,
+    shapeRef: undefined
+  }),
   transformDimension: (): { width: number; height: number } => ({ width: 100, height: 50 }),
   transformFills: (): { fills: never[] } => ({ fills: [] }),
   transformIds: (): { id: string; shapeRef: undefined } => ({
@@ -18,11 +22,7 @@ vi.mock('@plugin/transformers/partials', () => ({
   transformOverrides: (): Record<string, never> => ({}),
   transformRotationAndPosition: (): { x: number; y: number } => ({ x: 10, y: 20 }),
   transformSceneNode: (): Record<string, never> => ({}),
-  transformVariableConsumptionMap: (): Record<string, never> => ({}),
-  transformVectorIds: (_node: unknown, index: number): { id: string; shapeRef: undefined } => ({
-    id: `child-${index}`,
-    shapeRef: undefined
-  })
+  transformVariableConsumptionMap: (): Record<string, never> => ({})
 }));
 
 vi.mock('@plugin/transformers', () => ({
@@ -144,14 +144,18 @@ describe('transformShapeWithTextNode', () => {
     expect((shape.content.match(/M /g) ?? []).length).toBe(2);
   });
 
-  it('still emits a TextShape when the embedded text is empty', async () => {
+  it('omits the TextShape when the embedded text is empty', async () => {
+    // Penpot auto-deletes empty text shapes on blur, so an empty scaffold would
+    // disappear after the first edit. Drop the text child entirely; the
+    // user-facing behaviour matches Figma (double-clicking the shape lets the
+    // user add text via Penpot's own affordances).
     const result = (await transformShapeWithTextNode(
       createShapeWithTextNode({ characters: '' })
     )) as GroupShape;
 
-    const [, text] = result.children as [PathShape, TextShape];
-    expect(text.type).toBe('text');
-    expect(text.characters).toBe('');
+    expect(result.children).toHaveLength(1);
+    const [shape] = result.children as [PathShape];
+    expect(shape.type).toBe('path');
   });
 
   it('falls back to a rasterized rect when no drawable element can be extracted from the SVG', async () => {
