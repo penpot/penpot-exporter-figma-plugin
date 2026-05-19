@@ -3,21 +3,11 @@ import { generateUuid, rgbToHex } from '@plugin/utils';
 
 import type { Shadow, ShadowStyle } from '@ui/lib/types/utils/shadow';
 
-// Figma's plugin API types ShapeWithTextNode with MinimalBlendMixin only, so
-// node.effects is not accessible at runtime — yet Figma's UI still lets users
-// add shadow/blur on shape-with-text and exports them inside the SVG. Parse
-// the SVG <filter> definitions to recover the shadow so it survives the
-// round-trip into Penpot.
-//
-// Figma's shape-with-text shadow presets ("low" / "medium" / "high") stack
-// multiple drop-shadow layers inside one <filter>. Each layer is a chain of
-// (optional) feMorphology → feOffset → feGaussianBlur → feColorMatrix,
-// separated from the next layer by a `feColorMatrix in="SourceAlpha"` reset.
-// The filter id encodes the layer types in order — e.g. `filter0_dddd_` is
-// four stacked drop shadows, `filter0_did_` is drop-inner-drop.
+// MinimalBlendMixin exposes no `effects`; recover shadows from SVG <filter>.
+// Filter id letters (e.g. `filter0_did_` = drop-inner-drop) encode each
+// layer's style; chains inside the body are separated by SourceAlpha resets.
 
-// Filter element regexes are evaluated per-call (no shared lastIndex) to avoid
-// reentrancy bugs and keep this module's behaviour deterministic.
+// Regex factories so each call gets a fresh lastIndex (no reentrancy bugs).
 const filterRegex = (): RegExp => /<filter\b([^>]*)>([\s\S]*?)<\/filter>/gi;
 const sourceAlphaResetRegex = (): RegExp =>
   /<feColorMatrix\b[^>]*\bin\s*=\s*"SourceAlpha"[^>]*\/>/gi;
@@ -27,10 +17,8 @@ const FE_BLUR = /<feGaussianBlur\b([^/>]*)\/?>/;
 const FE_MORPHOLOGY = /<feMorphology\b([^/>]*)\/?>/;
 const FILTER_ID_LETTERS = /^filter\d+_([a-z]+)_/i;
 
-// Indices into the flattened 4x5 feColorMatrix `values` attribute. The matrix
-// rows are (R_out G_out B_out A_out) and the columns are (R_in G_in B_in A_in
-// 1). Figma's shadow colour matrix sets the RGB constants on each row's last
-// column and the alpha multiplier at row 4 column 4.
+// Indices into the flattened 4x5 feColorMatrix `values`: RGB constants at each
+// row's last column, alpha multiplier at row 4 column 4.
 const COLOR_MATRIX_INDEX = {
   R: 4,
   G: 9,
@@ -73,8 +61,8 @@ const parseColorMatrix = (values: string): ParsedColor => {
 };
 
 const findColorMatrixValues = (chain: string): string | undefined => {
-  // The chain may have a leading `in="SourceAlpha"` matrix (the boundary that
-  // opened it) — skip those and return the last colour-applying matrix.
+  // Skip the leading `in="SourceAlpha"` boundary matrix; return the last
+  // colour-applying one.
   const regex = feColorMatrixRegex();
   let lastValues: string | undefined;
   let match: RegExpExecArray | null;
@@ -89,9 +77,7 @@ const findColorMatrixValues = (chain: string): string | undefined => {
 };
 
 const extractSpread = (chain: string): number => {
-  // Figma encodes shadow spread as `feMorphology operator="dilate"` (positive)
-  // or `operator="erode"` (negative, common on inner shadows and some
-  // elevation presets).
+  // Spread = feMorphology radius; `erode` → negative (inner shadows).
   const morphMatch = chain.match(FE_MORPHOLOGY);
   if (!morphMatch) return 0;
 
@@ -112,9 +98,6 @@ const buildShadow = (chain: string, style: ShadowStyle): Shadow | undefined => {
   const colorValues = findColorMatrixValues(chain);
   const color = colorValues ? parseColorMatrix(colorValues) : BLACK_OPAQUE;
 
-  // Figma's UI "Blur" value maps 1:1 to SVG feGaussianBlur stdDeviation in the
-  // export, which in turn maps 1:1 to Penpot's Shadow.blur — same convention
-  // used by translateShadowEffects for non-shape-with-text nodes.
   return {
     id: generateUuid(),
     style,
@@ -130,12 +113,9 @@ const buildShadow = (chain: string, style: ShadowStyle): Shadow | undefined => {
   };
 };
 
-const splitChains = (body: string): string[] => {
-  // The leading segment (before the first SourceAlpha reset) is the filter
-  // preamble (feFlood etc.) — drop it. Each remaining segment is one shadow
-  // chain matched 1:1 with the style letters in the filter id.
-  return body.split(sourceAlphaResetRegex()).slice(1);
-};
+// Drop the preamble (feFlood etc.) before the first SourceAlpha reset; each
+// remaining segment is one chain, matched 1:1 with the filter-id style letters.
+const splitChains = (body: string): string[] => body.split(sourceAlphaResetRegex()).slice(1);
 
 const extractFilterShadows = (id: string, body: string): Shadow[] => {
   const styles = parseShadowStyles(id);
@@ -144,8 +124,6 @@ const extractFilterShadows = (id: string, body: string): Shadow[] => {
   const chains = splitChains(body);
 
   return styles.flatMap((style, index) => {
-    // If chain count diverges from style count (defensive), reuse the last
-    // available chain so a malformed filter doesn't drop shadows silently.
     const chain = chains[index] ?? chains[chains.length - 1];
     if (!chain) return [];
 

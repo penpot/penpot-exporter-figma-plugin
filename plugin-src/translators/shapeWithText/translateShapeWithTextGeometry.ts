@@ -7,9 +7,6 @@ import { serializeCommands } from '@plugin/translators/vectors';
 
 export type ShapeWithTextGeometry = {
   content: string;
-  // SVG-local origin of the drawn geometry's bounding box. Subtracted from any
-  // other SVG-local coordinate (e.g. text positions) to align with the aabb's
-  // canvas origin, accounting for Figma's render-bounds-sized viewBox.
   svgOrigin: { x: number; y: number };
 };
 
@@ -38,10 +35,8 @@ export const translateShapeWithTextGeometry = (
   const bounds = computePathBounds(subpaths);
   if (!bounds) return;
 
-  // Figma's SVG viewBox includes the shape's render bounds (effects extents
-  // like shadow/blur), so SVG-local (0,0) does NOT match aabb.(x,y). Align the
-  // drawn geometry's bounding-box top-left to aabb.(x,y) instead — works
-  // regardless of how much margin Figma added for effects.
+  // SVG viewBox includes effects extents (shadow/blur), so SVG (0,0) ≠ aabb
+  // top-left. Align geometry bbox top-left to aabb instead.
   const toCanvas: Transform = [
     [1, 0, aabb.x - bounds.minX],
     [0, 1, aabb.y - bounds.minY]

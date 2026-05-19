@@ -1,9 +1,5 @@
 import { type Command, makeAbsolute } from 'svg-path-parser';
 
-// The downstream serializer only renders M/L/C/Z. Figma's SVG export uses the
-// full SVG command set (H, V, S, Q, T, A), so we rewrite each variant into
-// absolute M/L/C/Z before serialization.
-
 type CubicControls = { x1: number; y1: number; x2: number; y2: number; x: number; y: number };
 
 const cubic = (controls: CubicControls): Command => ({
@@ -37,9 +33,8 @@ const reflect = (
 
 export const normalizeCommands = (commands: Command[]): Command[] => {
   const out: Command[] = [];
-  // Last cubic/quadratic control points; nulled by any non-matching command so
-  // smooth-curve reflection follows the SVG spec ("assume current point if the
-  // previous command was not a matching curve").
+  // SVG spec: smooth-curve reflection assumes current point unless the previous
+  // command was a matching curve — null these on any other command.
   let lastCubicControl: { x: number; y: number } | null = null;
   let lastQuadControl: { x: number; y: number } | null = null;
 
@@ -91,10 +86,8 @@ export const normalizeCommands = (commands: Command[]): Command[] => {
       }
 
       case 'elliptical arc':
-        // Arcs aren't used by any of the 29 ShapeWithText shapeTypes Figma
-        // emits today (rounded corners come through as cubics). Degrade to a
-        // straight line so an unexpected arc never silently disappears, and
-        // log so a regression is at least visible in the console.
+        // No current Figma ShapeWithText emits arcs; degrade + warn so a
+        // future regression is visible instead of silently lost.
         console.warn('normalizeCommands: elliptical arc degraded to lineto', {
           x: c.x,
           y: c.y

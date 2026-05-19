@@ -10,10 +10,8 @@ import { normalizeCommands } from '@plugin/translators/vectors';
 import { applyMatrixToCommand } from '@plugin/utils';
 
 // Cubic Bézier approximation of a quarter ellipse — (4/3) * (sqrt(2) - 1).
-// Used because the downstream path translator only handles M/L/C/Z commands.
 const KAPPA = 0.5522847498307933;
 
-// SVG primitives Figma may emit inside a shape-with-text export.
 const DRAWABLE_TAGS = ['path', 'rect', 'circle', 'ellipse', 'polygon'] as const;
 type DrawableTag = (typeof DRAWABLE_TAGS)[number];
 
@@ -23,8 +21,7 @@ const rectToPath = (attrs: Record<string, string>): string => {
   const width = numAttr(attrs.width);
   const height = numAttr(attrs.height);
 
-  // SVG spec: if only one of rx/ry is given, the other defaults to it. Treat
-  // missing attributes as "use the other axis"; if both missing, no rounding.
+  // SVG spec: if only one of rx/ry is given, the other defaults to it.
   const rxRaw = attrs.rx !== undefined ? numAttr(attrs.rx) : undefined;
   const ryRaw = attrs.ry !== undefined ? numAttr(attrs.ry) : undefined;
   const rx = Math.min(rxRaw ?? ryRaw ?? 0, width / 2);
@@ -34,7 +31,6 @@ const rectToPath = (attrs: Record<string, string>): string => {
     return `M ${x} ${y} L ${x + width} ${y} L ${x + width} ${y + height} L ${x} ${y + height} Z`;
   }
 
-  // Rounded rect via cubic Bézier corners, traced top-left clockwise.
   const ox = rx * KAPPA;
   const oy = ry * KAPPA;
   const x0 = x;
@@ -125,8 +121,6 @@ export const extractDrawablePaths = (svg: string): Drawable[] => {
   return out;
 };
 
-// Parses each drawable's path data, normalizes to M/L/C/Z, and applies the
-// element's transform. `onError` lets the caller log context-specific warnings.
 export const parseDrawables = (
   drawables: Drawable[],
   onError?: (pathData: string) => void
@@ -149,9 +143,6 @@ export const parseDrawables = (
 
 export type PathBounds = { minX: number; minY: number; maxX: number; maxY: number };
 
-// Coordinates that contribute to a command's reach. Control points are
-// included; for the cubic approximations the geometry helpers emit, they stay
-// within the shape's visual bounds.
 const commandPoints = (c: Command): Array<readonly [number, number]> => {
   switch (c.command) {
     case 'moveto':

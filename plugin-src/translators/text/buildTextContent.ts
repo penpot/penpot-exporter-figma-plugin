@@ -8,10 +8,6 @@ import type {
   TextVerticalAlign
 } from '@ui/lib/types/shapes/textShape';
 
-// Shared root → paragraph-set → paragraph wrapper for Penpot text content. Used
-// by transformText (TextNode) and translateShapeWithTextContent (TextSublayerNode).
-// Each caller is responsible for fetching its own styled segments and deciding
-// the alignment values.
 export const buildTextContent = (
   node: NonResizableTextMixin & MinimalFillsMixin,
   styledTextSegments: TextSegment[],

@@ -1,11 +1,5 @@
-// Lightweight SVG parsing helpers shared by the shape-with-text geometry and
-// text-layout extractors. Regex-based because the plugin runs in Figma's
-// QuickJS worker where DOMParser is not available.
-//
-// Assumes Figma's SVG export shape: flat structure (no nested <g>), double-
-// quoted attribute values without XML-entity-encoded quotes inside, and no
-// comments or CDATA in the drawable region. If Figma's export ever stops
-// matching these assumptions, these helpers need to be revisited.
+// Regex-based SVG parsing — Figma's QuickJS worker has no DOMParser. Assumes
+// Figma's export shape: flat (no nested <g>), double-quoted attrs, no CDATA.
 import { multiplyMatrix } from '@plugin/utils';
 
 export const stripSvgDefs = (svg: string): string =>
@@ -29,10 +23,6 @@ export const numAttr = (value: string | undefined, fallback = 0): number => {
   return Number.isFinite(parsed) ? parsed : fallback;
 };
 
-// Parses an SVG `transform="..."` attribute into Figma's 2x3 affine `Transform`
-// shape: [[a, c, e], [b, d, f]]. Supports the transform functions Figma's SVG
-// export emits: matrix(), translate(), rotate(angle [cx cy]), scale().
-
 const identity = (): Transform => [
   [1, 0, 0],
   [0, 1, 0]
@@ -49,7 +39,6 @@ const rotation = (degrees: number, cx = 0, cy = 0): Transform => {
   const rad = (degrees * Math.PI) / 180;
   const cos = Math.cos(rad);
   const sin = Math.sin(rad);
-  // translate(cx, cy) * rotate(angle) * translate(-cx, -cy)
   return [
     [cos, -sin, cx - cos * cx + sin * cy],
     [sin, cos, cy - sin * cx - cos * cy]

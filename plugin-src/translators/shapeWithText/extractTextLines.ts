@@ -1,12 +1,5 @@
 import { stripSvgDefs } from '@plugin/translators/shapeWithText/parseSvg';
 
-// Reads the text content of each <tspan> inside the editable SVG export's
-// <text> element. Penpot renders text with its own font metrics, which differ
-// just enough from Figma's that an exact bbox isn't sufficient to reproduce
-// the same line wrapping. We use these per-line strings to inject hard `\n`
-// breaks into the Penpot text content, forcing Penpot to wrap at the same
-// positions Figma did.
-
 const decodeCodePointEntity = (value: string, radix: number, fallback: string): string => {
   const codePoint = parseInt(value, radix);
   return Number.isInteger(codePoint) && codePoint >= 0 && codePoint <= 0x10ffff
@@ -14,9 +7,8 @@ const decodeCodePointEntity = (value: string, radix: number, fallback: string): 
     : fallback;
 };
 
-// Named entities decoded before numeric so a user-authored literal like
-// `&#x41;` (encoded by Figma as `&amp;#x41;`) survives intact: `&amp;` ->
-// `&` happens last, leaving the literal text rather than turning into `A`.
+// `&amp;` decoded last so a user-authored `&#x41;` (sent as `&amp;#x41;`)
+// survives intact instead of turning into `A`.
 const NAMED_ENTITIES: Record<string, string> = {
   quot: '"',
   apos: "'",

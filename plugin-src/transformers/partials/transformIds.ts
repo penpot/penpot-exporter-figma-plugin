@@ -70,9 +70,7 @@ export const transformInstanceIds = (
   };
 };
 
-// Derived IDs reuse a node's identity but prefix it so multiple Penpot shapes
-// can map back to the same Figma node (mask + masked group, vector + per-region
-// paths, shape-with-text group + path/text children) without colliding.
+// Prefix lets multiple Penpot shapes share one Figma id without colliding.
 const transformPrefixedIds = (
   node: SceneNode,
   prefix: string

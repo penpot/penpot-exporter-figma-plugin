@@ -6,13 +6,8 @@ import {
 
 import type { ShapeGeomAttributes } from '@ui/lib/types/shapes/shape';
 
-// Derives the Penpot text shape's x/y/width/height from Figma's outlined SVG
-// export. Figma renders the label's glyphs into a single <path> element placed
-// after the shape's geometry drawables — counting the drawables in the
-// editable (text-preserving) export tells us where the shape drawables end and
-// the outlined text begins. The bbox of those text-only paths is the exact
-// rendered text region for any font/script/size, replacing the previous
-// char-width heuristic that only matched Inter Bold.
+// Text region = bbox of the drawables added by the outlined export beyond
+// the editable export's shape drawables.
 export const extractTextLayout = (
   editableSvg: string,
   outlinedSvg: string,
@@ -23,9 +18,6 @@ export const extractTextLayout = (
   const shapeDrawables = extractDrawablePaths(editableSvg);
   const allDrawables = extractDrawablePaths(outlinedSvg);
 
-  // Outlined export must contain at least every shape drawable plus the text
-  // path(s). If counts diverge below that (e.g. Figma changed export format),
-  // we have no reliable way to separate shape from text — bail.
   if (allDrawables.length <= shapeDrawables.length) return;
 
   const textDrawables = allDrawables.slice(shapeDrawables.length);
@@ -33,13 +25,8 @@ export const extractTextLayout = (
   const bounds = computePathBounds(subpaths);
   if (!bounds) return;
 
-  // Figma's outlined SVG renders glyphs in canvas-space (rotation already
-  // applied), so `bounds` is the canvas-space AABB of the rendered text. For
-  // an axis-aligned rotation (0/90/180/270) the pre-rotation selrect that
-  // Penpot stores can be derived by mapping the canvas AABB into the text's
-  // local orientation around its center. For other rotations the canvas AABB
-  // is larger than the true local rect — bail and let the caller fall back
-  // to the node's AABB.
+  // Glyph bbox is canvas-space; only axis-aligned rotations give a true
+  // local rect, others bail to AABB fallback.
   const normalizedRot = ((rotation % 360) + 360) % 360;
   const isAxisAligned = [0, 90, 180, 270].some(angle => Math.abs(normalizedRot - angle) < 0.01);
   if (!isAxisAligned) return;
@@ -50,11 +37,8 @@ export const extractTextLayout = (
   const centerX = (bounds.minX + bounds.maxX) / 2;
   const centerY = (bounds.minY + bounds.maxY) / 2;
 
-  // Pad is applied along the text's reading axis (local x) to absorb Penpot
-  // font-metric drift — Penpot renders the same string slightly wider than
-  // Figma, and without slack a forced line would overflow and re-wrap. In
-  // canvas space the reading axis is whichever axis aligns with local x after
-  // rotation: canvas x for 0/180, canvas y for 90/270.
+  // Pad along reading axis absorbs Penpot font-metric drift; without it a
+  // forced line overflows and re-wraps.
   const readingSpan = swapAxes ? bbHeight : bbWidth;
   const pad = Math.max(readingSpan * 0.2, 8);
 
