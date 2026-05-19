@@ -316,6 +316,32 @@ describe('transformShapeWithTextNode', () => {
     expect(transformNodeAsImageRect).toHaveBeenCalled();
   });
 
+  it('skips the glyph-bbox layout override when the node is rotated', async () => {
+    // Rotated SWT must inherit dimensions from the node instead of the glyph
+    // AABB; otherwise applying `transformRotationAndPosition` on top would
+    // rotate the bbox a second time and misalign the label.
+    const node = createShapeWithTextNode({ rotation: 45 } as Partial<ShapeWithTextArg>);
+    const result = (await transformShapeWithTextNode(node)) as GroupShape;
+    const text = result.children?.[1] as TextShape;
+
+    expect(text).toBeDefined();
+    expect(text.width).toBe(100);
+    expect(text.height).toBe(50);
+    expect(text.x).toBe(10);
+    expect(text.y).toBe(20);
+  });
+
+  it('still emits the text child for rotated nodes when outlined export is missing', async () => {
+    const node = createShapeWithTextNode({
+      rotation: 30,
+      outlinedSvg: '<svg><path d="M 0 0 L 10 10 Z"/></svg>'
+    } as Partial<ShapeWithTextArg>);
+    const result = (await transformShapeWithTextNode(node)) as GroupShape;
+
+    expect(result.children).toHaveLength(2);
+    expect((result.children?.[1] as TextShape).type).toBe('text');
+  });
+
   it('issues both exports (editable + outlined) when the node has text', async () => {
     const node = createShapeWithTextNode();
     await transformShapeWithTextNode(node);

@@ -105,6 +105,13 @@ const buildPathChild = (
 // text path(s) so the label sits inside the shape's interior instead of
 // spanning the whole AABB.
 //
+// Rotated nodes skip that override: the glyph bbox in the SVG is the canvas-
+// space AABB of already-rotated text, and re-applying the node's rotation on
+// top would double-rotate the label. For rotated SWT we fall back to the
+// node's own (unrotated) dimensions so the text inherits the parent's
+// rotation cleanly. Cost: the text rect fills the whole shape interior
+// instead of the tight glyph region.
+//
 // extractTextLines pulls the per-line text from the editable SVG's <tspan>s
 // and forces Penpot to wrap at the same positions Figma did — without this,
 // Penpot re-wraps using its own glyph metrics and the line count drifts (e.g.
@@ -116,8 +123,12 @@ const buildTextChild = (
   aabb: Rect,
   svgOrigin: { x: number; y: number }
 ): TextShape | undefined => {
-  const layout = extractTextLayout(editableSvg, outlinedSvg, aabb, svgOrigin);
-  if (!layout) return;
+  const isRotated = !!node.rotation;
+  const layout = isRotated
+    ? undefined
+    : extractTextLayout(editableSvg, outlinedSvg, aabb, svgOrigin);
+
+  if (!isRotated && !layout) return;
 
   const forcedLines = extractTextLines(editableSvg);
 
@@ -128,7 +139,7 @@ const buildTextChild = (
     ...translateShapeWithTextContent(node, forcedLines),
     ...transformDimension(node),
     ...transformRotationAndPosition(node),
-    ...layout,
+    ...(layout ?? {}),
     ...transformSceneNode(node)
   };
 };

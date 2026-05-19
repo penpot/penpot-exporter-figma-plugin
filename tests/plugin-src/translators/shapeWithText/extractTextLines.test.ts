@@ -42,6 +42,12 @@ describe('extractTextLines', () => {
     ).toEqual(['A & B', '<tag>', '"quoted"', 'A', '中']);
   });
 
+  it('preserves a user-authored numeric entity (decodes &amp; last)', () => {
+    expect(
+      extractTextLines('<svg><text><tspan x="0" y="0">&amp;#x41;</tspan></text></svg>')
+    ).toEqual(['&#x41;']);
+  });
+
   it('ignores tspans inside <defs>', () => {
     expect(
       extractTextLines(
