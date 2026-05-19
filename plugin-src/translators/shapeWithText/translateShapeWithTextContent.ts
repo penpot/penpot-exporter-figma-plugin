@@ -7,17 +7,42 @@ export const translateShapeWithTextContent = (
   node: ShapeWithTextNode,
   forcedLines: string[] = []
 ): TextAttributes & Pick<TextShape, 'growType'> => {
-  const styledTextSegments = node.text.getStyledTextSegments(STYLED_TEXT_SEGMENT_FIELDS);
+  const rawSegments = node.text.getStyledTextSegments(STYLED_TEXT_SEGMENT_FIELDS);
+  const styledTextSegments = rawSegments.map(normalizeSegment);
 
-  const characters = forcedLines.length > 1 ? forcedLines.join('\n') : node.text.characters;
+  const rawCharacters = forcedLines.length > 1 ? forcedLines.join('\n') : node.text.characters;
+  const characters = normalizeNewlines(rawCharacters);
   const segments = injectForcedBreaks(styledTextSegments, forcedLines);
 
   return {
     characters,
-    content: buildTextContent(node.text, segments, 'center', 'center'),
+    content: buildTextContent(buildTextContentNode(node), segments, 'center', 'center'),
     growType: 'fixed'
   };
 };
+
+// ShapeWithText uses U+2028 / U+2029 for breaks; paragraph engine only splits on `\n`.
+const UNICODE_NEWLINES = /[\u2028\u2029]/g;
+const normalizeNewlines = (text: string): string => text.replace(UNICODE_NEWLINES, '\n');
+
+// Clear textStyleId: refs an internal style we don't export, would drop decoration/size.
+const normalizeSegment = (segment: TextSegment): TextSegment => ({
+  ...segment,
+  textStyleId: '',
+  characters: normalizeNewlines(segment.characters)
+});
+
+// Force spacing to 0: non-zero defaults stack extra `\n` per source `\n` in the engine.
+type BuildTextContentNode = Parameters<typeof buildTextContent>[0];
+
+const buildTextContentNode = (node: ShapeWithTextNode): BuildTextContentNode =>
+  ({
+    paragraphIndent: 0,
+    paragraphSpacing: 0,
+    listSpacing: 0,
+    fills: node.text.fills,
+    fillStyleId: node.text.fillStyleId
+  }) as unknown as BuildTextContentNode;
 
 const injectForcedBreaks = (segments: TextSegment[], forcedLines: string[]): TextSegment[] => {
   if (segments.length === 0 || forcedLines.length <= 1) return segments;
