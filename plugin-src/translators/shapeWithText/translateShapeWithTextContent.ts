@@ -1,4 +1,4 @@
-import { buildTextContent } from '@plugin/translators/text';
+import { STYLED_TEXT_SEGMENT_FIELDS, buildTextContent } from '@plugin/translators/text';
 import type { TextSegment } from '@plugin/translators/text/paragraph';
 
 import type { TextAttributes, TextShape } from '@ui/lib/types/shapes/textShape';
@@ -7,20 +7,7 @@ export const translateShapeWithTextContent = (
   node: ShapeWithTextNode,
   forcedLines: string[] = []
 ): TextAttributes & Pick<TextShape, 'growType'> => {
-  const styledTextSegments = node.text.getStyledTextSegments([
-    'fontName',
-    'fontSize',
-    'fontWeight',
-    'lineHeight',
-    'letterSpacing',
-    'textCase',
-    'textDecoration',
-    'indentation',
-    'listOptions',
-    'fills',
-    'fillStyleId',
-    'textStyleId'
-  ]);
+  const styledTextSegments = node.text.getStyledTextSegments(STYLED_TEXT_SEGMENT_FIELDS);
 
   const characters = forcedLines.length > 1 ? forcedLines.join('\n') : node.text.characters;
   const segments = injectForcedBreaks(styledTextSegments, forcedLines);

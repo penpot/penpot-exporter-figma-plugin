@@ -1,7 +1,6 @@
 import {
   type Drawable,
   computePathBounds,
-  extractDrawablePaths,
   parseDrawables
 } from '@plugin/translators/shapeWithText/extractDrawables';
 
@@ -42,24 +41,4 @@ export const extractTextLayoutFromDrawables = (
     width: localW,
     height: localH
   };
-};
-
-export const extractTextLayout = (
-  editableSvg: string,
-  outlinedSvg: string,
-  aabb: { x: number; y: number; width: number; height: number },
-  svgOrigin: { x: number; y: number } = { x: 0, y: 0 },
-  rotation = 0
-): Pick<ShapeGeomAttributes, 'x' | 'y' | 'width' | 'height'> | undefined => {
-  const shapeDrawables = extractDrawablePaths(editableSvg);
-  const allDrawables = extractDrawablePaths(outlinedSvg);
-
-  if (allDrawables.length <= shapeDrawables.length) return;
-
-  return extractTextLayoutFromDrawables(
-    allDrawables.slice(shapeDrawables.length),
-    aabb,
-    svgOrigin,
-    rotation
-  );
 };

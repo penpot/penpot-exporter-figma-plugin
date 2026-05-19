@@ -1,4 +1,4 @@
-import { buildTextContent } from '@plugin/translators/text';
+import { STYLED_TEXT_SEGMENT_FIELDS, buildTextContent } from '@plugin/translators/text';
 import {
   translateGrowType,
   translateHorizontalAlign,
@@ -8,20 +8,7 @@ import {
 import type { TextAttributes, TextShape } from '@ui/lib/types/shapes/textShape';
 
 export const transformText = (node: TextNode): TextAttributes & Pick<TextShape, 'growType'> => {
-  const styledTextSegments = node.getStyledTextSegments([
-    'fontName',
-    'fontSize',
-    'fontWeight',
-    'lineHeight',
-    'letterSpacing',
-    'textCase',
-    'textDecoration',
-    'indentation',
-    'listOptions',
-    'fills',
-    'fillStyleId',
-    'textStyleId'
-  ]);
+  const styledTextSegments = node.getStyledTextSegments(STYLED_TEXT_SEGMENT_FIELDS);
 
   return {
     characters: node.characters,

@@ -107,6 +107,8 @@ export const transformVectorPaths = (node: VectorNode): PathShape[] => {
     } else if (nodeHasFills(node, vectorPath, regions[i])) {
       shouldInclude = true;
     } else if (hasStrokes && hasGeometry && vectorPath.windingRule === 'NONE') {
+      // windingRule 'NONE' = no fills; keep it only if it draws strokes
+      // the combined fillGeometry doesn't already cover (same-vertex check).
       currentHash = hashVertexSet(getVertices(vectorPath.data));
       shouldInclude = currentHash !== combinedFillGeometryHash;
     }

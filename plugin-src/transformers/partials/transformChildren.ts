@@ -24,6 +24,7 @@ export const transformChildren = async (node: ChildrenMixin): Promise<Children> 
   transformChildrenDepth++;
   const currentDepth = transformChildrenDepth;
 
+  // Break promise chain past depth 5 so GC can run between nested calls.
   const shouldDefer = currentDepth > 5;
 
   let children: PenpotNode[];
