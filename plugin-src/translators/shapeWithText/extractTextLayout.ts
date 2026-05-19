@@ -16,7 +16,7 @@ import type { ShapeGeomAttributes } from '@ui/lib/types/shapes/shape';
 export const extractTextLayout = (
   editableSvg: string,
   outlinedSvg: string,
-  aabb: { x: number; y: number },
+  aabb: { x: number; y: number; width: number; height: number },
   svgOrigin: { x: number; y: number } = { x: 0, y: 0 }
 ): Pick<ShapeGeomAttributes, 'x' | 'y' | 'width' | 'height'> | undefined => {
   const shapeDrawables = extractDrawablePaths(editableSvg);
@@ -32,10 +32,21 @@ export const extractTextLayout = (
   const bounds = computePathBounds(subpaths);
   if (!bounds) return;
 
+  // Frame width is set to the full shape AABB width — wider than the tight
+  // glyph bbox — so Penpot's font metrics (which render slightly wider than
+  // Figma's) can't push a forced-line over the frame edge and trigger a wrap
+  // that splits the line further. The x is shifted to keep the frame's
+  // horizontal center aligned with the glyph bbox center, so center-aligned
+  // text still sits where Figma placed it (matters for asymmetric shapes like
+  // arrows where the text isn't centered on the AABB).
+  const glyphCenterX = (bounds.minX + bounds.maxX) / 2;
+  const width = aabb.width;
+  const height = bounds.maxY - bounds.minY;
+
   return {
-    x: aabb.x + (bounds.minX - svgOrigin.x),
+    x: aabb.x + (glyphCenterX - svgOrigin.x) - width / 2,
     y: aabb.y + (bounds.minY - svgOrigin.y),
-    width: bounds.maxX - bounds.minX,
-    height: bounds.maxY - bounds.minY
+    width,
+    height
   };
 };

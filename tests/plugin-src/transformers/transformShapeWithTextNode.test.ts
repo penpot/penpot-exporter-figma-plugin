@@ -142,17 +142,16 @@ describe('transformShapeWithTextNode', () => {
     expect(result.opacity).toBe(0.5);
   });
 
-  it('places the text shape using the outlined path bbox aligned to aabb + svgOrigin', async () => {
-    // aabb = (10, 20). geometry svgOrigin = (0, 0) since the shape path
-    // bounding box starts at (0, 0). Outlined text path bbox = (1, 1) → (6, 6).
-    // text x = aabb.x + (1 - 0) = 11
-    // text y = aabb.y + (1 - 0) = 21
+  it('places the text shape centered on the glyph bbox with aabb-width frame', async () => {
+    // aabb = (10, 20, 100x50). geometry svgOrigin = (0, 0). Outlined text path
+    // bbox = (1, 1) → (6, 6): glyph centerX = 3.5, minY = 1, height = 5.
+    // frame width = aabb.width = 100; x = aabb.x + (centerX - svgOriginX) - width/2.
     const result = (await transformShapeWithTextNode(createShapeWithTextNode())) as GroupShape;
     const text = result.children?.[1] as TextShape;
 
-    expect(text.x).toBe(11);
+    expect(text.x).toBe(10 + 3.5 - 50);
     expect(text.y).toBe(21);
-    expect(text.width).toBe(5);
+    expect(text.width).toBe(100);
     expect(text.height).toBe(5);
   });
 

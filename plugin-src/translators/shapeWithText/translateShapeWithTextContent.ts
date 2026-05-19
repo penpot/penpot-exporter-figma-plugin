@@ -39,7 +39,7 @@ export const translateShapeWithTextContent = (
   return {
     characters,
     content: buildTextContent(node.text, segments, 'center', 'center'),
-    growType: 'fixed'
+    growType: 'auto-width'
   };
 };
 
