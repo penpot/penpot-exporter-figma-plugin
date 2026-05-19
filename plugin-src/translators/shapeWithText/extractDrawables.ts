@@ -9,7 +9,6 @@ import {
 import { normalizeCommands } from '@plugin/translators/vectors';
 import { applyMatrixToCommand } from '@plugin/utils';
 
-// Cubic Bézier approximation of a quarter ellipse — (4/3) * (sqrt(2) - 1).
 const KAPPA = 0.5522847498307933;
 
 const DRAWABLE_TAGS = ['path', 'rect', 'circle', 'ellipse', 'polygon'] as const;
@@ -21,7 +20,6 @@ const rectToPath = (attrs: Record<string, string>): string => {
   const width = numAttr(attrs.width);
   const height = numAttr(attrs.height);
 
-  // SVG spec: if only one of rx/ry is given, the other defaults to it.
   const rxRaw = attrs.rx !== undefined ? numAttr(attrs.rx) : undefined;
   const ryRaw = attrs.ry !== undefined ? numAttr(attrs.ry) : undefined;
   const rx = Math.min(rxRaw ?? ryRaw ?? 0, width / 2);

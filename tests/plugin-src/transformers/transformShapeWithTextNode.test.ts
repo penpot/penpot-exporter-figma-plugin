@@ -109,6 +109,10 @@ const createShapeWithTextNode = (
     shapeType: 'DIAMOND',
     visible: true,
     locked: false,
+    absoluteTransform: [
+      [1, 0, 10],
+      [0, 1, 20]
+    ],
     absoluteBoundingBox: { x: 10, y: 20, width: 100, height: 50 },
     text: { characters, getStyledTextSegments: () => [] },
     exportAsync,
@@ -315,10 +319,12 @@ describe('transformShapeWithTextNode', () => {
   });
 
   it('skips the glyph-bbox layout override when the node is rotated', async () => {
-    // Rotated SWT must inherit dimensions from the node instead of the glyph
-    // AABB; otherwise applying `transformRotationAndPosition` on top would
-    // rotate the bbox a second time and misalign the label.
-    const node = createShapeWithTextNode({ rotation: 45 } as Partial<ShapeWithTextArg>);
+    const node = createShapeWithTextNode({
+      absoluteTransform: [
+        [Math.SQRT1_2, -Math.SQRT1_2, 10],
+        [Math.SQRT1_2, Math.SQRT1_2, 20]
+      ]
+    } as Partial<ShapeWithTextArg>);
     const result = (await transformShapeWithTextNode(node)) as GroupShape;
     const text = result.children?.[1] as TextShape;
 
@@ -331,13 +337,33 @@ describe('transformShapeWithTextNode', () => {
 
   it('still emits the text child for rotated nodes when outlined export is missing', async () => {
     const node = createShapeWithTextNode({
-      rotation: 30,
+      absoluteTransform: [
+        [Math.cos(Math.PI / 6), -Math.sin(Math.PI / 6), 10],
+        [Math.sin(Math.PI / 6), Math.cos(Math.PI / 6), 20]
+      ],
       outlinedSvg: '<svg><path d="M 0 0 L 10 10 Z"/></svg>'
     } as Partial<ShapeWithTextArg>);
     const result = (await transformShapeWithTextNode(node)) as GroupShape;
 
     expect(result.children).toHaveLength(2);
     expect((result.children?.[1] as TextShape).type).toBe('text');
+  });
+
+  it('uses absolute rotation even when the local node rotation is zero', async () => {
+    const node = createShapeWithTextNode({
+      rotation: 0,
+      absoluteTransform: [
+        [Math.SQRT1_2, -Math.SQRT1_2, 10],
+        [Math.SQRT1_2, Math.SQRT1_2, 20]
+      ]
+    } as Partial<ShapeWithTextArg>);
+    const result = (await transformShapeWithTextNode(node)) as GroupShape;
+    const text = result.children?.[1] as TextShape;
+
+    expect(text.width).toBe(100);
+    expect(text.height).toBe(50);
+    expect(text.x).toBe(10);
+    expect(text.y).toBe(20);
   });
 
   it('issues both exports (editable + outlined) when the node has text', async () => {

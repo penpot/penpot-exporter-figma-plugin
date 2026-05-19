@@ -1,3 +1,4 @@
+export * from './analyzeEditableShapeWithTextSvg';
 export * from './extractDrawables';
 export * from './extractShadows';
 export * from './extractTextLayout';

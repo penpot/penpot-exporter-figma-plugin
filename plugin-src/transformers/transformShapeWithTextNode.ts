@@ -13,13 +13,13 @@ import {
 import { transformNodeAsImageRect } from '@plugin/transformers/transformNodeAsImageRect';
 import { translateStrokes } from '@plugin/translators';
 import {
-  type ShapeWithTextGeometry,
-  extractShadows,
-  extractTextLayout,
-  extractTextLines,
-  translateShapeWithTextContent,
-  translateShapeWithTextGeometry
+  type EditableShapeWithTextAnalysis,
+  analyzeEditableShapeWithTextSvg,
+  extractDrawablePaths,
+  extractTextLayoutFromDrawables,
+  translateShapeWithTextContent
 } from '@plugin/translators/shapeWithText';
+import { getRotation } from '@plugin/utils';
 
 import type { GroupShape } from '@ui/lib/types/shapes/groupShape';
 import type { PathShape } from '@ui/lib/types/shapes/pathShape';
@@ -38,15 +38,15 @@ export const transformShapeWithTextNode = async (
   const editableSvg = await exportSvg(node, false);
   if (!editableSvg) return rasterFallback(node);
 
-  const geometry = translateShapeWithTextGeometry(node, editableSvg, aabb);
-  if (!geometry) return rasterFallback(node);
+  const editableAnalysis = analyzeEditableShapeWithTextSvg(node, editableSvg, aabb);
+  if (!editableAnalysis) return rasterFallback(node);
 
-  const children: (PathShape | TextShape)[] = [buildPathChild(node, editableSvg, geometry)];
+  const children: (PathShape | TextShape)[] = [buildPathChild(node, editableAnalysis)];
 
   if (node.text.characters.length > 0) {
     const outlinedSvg = await exportSvg(node, true);
     if (outlinedSvg) {
-      const textChild = buildTextChild(node, editableSvg, outlinedSvg, aabb, geometry.svgOrigin);
+      const textChild = buildTextChild(node, outlinedSvg, aabb, editableAnalysis);
       if (textChild) children.push(textChild);
     }
   }
@@ -63,44 +63,42 @@ export const transformShapeWithTextNode = async (
 
 const buildPathChild = (
   node: ShapeWithTextNode,
-  svg: string,
-  geometry: ShapeWithTextGeometry
+  analysis: EditableShapeWithTextAnalysis
 ): PathShape => {
-  // MinimalBlendMixin exposes no `effects`; recover shadows from SVG <filter>.
-  const shadow = extractShadows(svg);
-
   return {
     type: 'path',
     name: node.name,
-    content: geometry.content,
+    content: analysis.content,
     ...transformChildIds(node, 0),
     ...transformFills(node),
     strokes: translateStrokes(node),
-    ...(shadow.length > 0 ? { shadow } : {}),
+    ...(analysis.shadow.length > 0 ? { shadow: analysis.shadow } : {}),
     ...transformSceneNode(node)
   };
 };
 
-// Spread order matters: `layout` must override the AABB-derived bounds last.
 const buildTextChild = (
   node: ShapeWithTextNode,
-  editableSvg: string,
   outlinedSvg: string,
   aabb: Rect,
-  svgOrigin: { x: number; y: number }
+  editableAnalysis: EditableShapeWithTextAnalysis
 ): TextShape | undefined => {
-  const rotation = node.rotation ?? 0;
-  const layout = extractTextLayout(editableSvg, outlinedSvg, aabb, svgOrigin, rotation);
+  const rotation = getRotation(node.absoluteTransform);
+  const outlinedDrawables = extractDrawablePaths(outlinedSvg);
+  const layout = extractTextLayoutFromDrawables(
+    outlinedDrawables.slice(editableAnalysis.drawableCount),
+    aabb,
+    editableAnalysis.svgOrigin,
+    rotation
+  );
 
   if (!rotation && !layout) return;
-
-  const forcedLines = extractTextLines(editableSvg);
 
   return {
     type: 'text',
     name: node.text.characters,
     ...transformChildIds(node, 1),
-    ...translateShapeWithTextContent(node, forcedLines),
+    ...translateShapeWithTextContent(node, editableAnalysis.forcedLines),
     ...transformDimension(node),
     ...transformRotationAndPosition(node),
     ...(layout ?? {}),

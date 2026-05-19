@@ -7,8 +7,6 @@ const decodeCodePointEntity = (value: string, radix: number, fallback: string): 
     : fallback;
 };
 
-// `&amp;` decoded last so a user-authored `&#x41;` (sent as `&amp;#x41;`)
-// survives intact instead of turning into `A`.
 const NAMED_ENTITIES: Record<string, string> = {
   quot: '"',
   apos: "'",

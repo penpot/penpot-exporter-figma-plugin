@@ -7,16 +7,8 @@ const nodeActsAsMask = (node: SceneNode): boolean => {
   return 'isMask' in node && node.isMask;
 };
 
-/**
- * Tracks the current nesting depth to detect deeply nested structures.
- */
 let transformChildrenDepth = 0;
 
-/**
- * Defers execution to a new macrotask to break the promise chain.
- * This allows garbage collection to run between nested calls,
- * preventing memory accumulation in deeply nested structures.
- */
 const deferToMacrotask = <T>(fn: () => Promise<T>): Promise<T> => {
   return new Promise((resolve, reject) => {
     setTimeout(() => {
@@ -32,8 +24,6 @@ export const transformChildren = async (node: ChildrenMixin): Promise<Children> 
   transformChildrenDepth++;
   const currentDepth = transformChildrenDepth;
 
-  // For deeply nested structures (depth > 5), defer to a new macrotask
-  // to break the promise chain and allow garbage collection
   const shouldDefer = currentDepth > 5;
 
   let children: PenpotNode[];

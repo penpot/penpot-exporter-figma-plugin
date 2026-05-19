@@ -1,5 +1,3 @@
-// Regex-based SVG parsing — Figma's QuickJS worker has no DOMParser. Assumes
-// Figma's export shape: flat (no nested <g>), double-quoted attrs, no CDATA.
 import { multiplyMatrix } from '@plugin/utils';
 
 export const stripSvgDefs = (svg: string): string =>

@@ -3,11 +3,6 @@ import { generateUuid, rgbToHex } from '@plugin/utils';
 
 import type { Shadow, ShadowStyle } from '@ui/lib/types/utils/shadow';
 
-// MinimalBlendMixin exposes no `effects`; recover shadows from SVG <filter>.
-// Filter id letters (e.g. `filter0_did_` = drop-inner-drop) encode each
-// layer's style; chains inside the body are separated by SourceAlpha resets.
-
-// Regex factories so each call gets a fresh lastIndex (no reentrancy bugs).
 const filterRegex = (): RegExp => /<filter\b([^>]*)>([\s\S]*?)<\/filter>/gi;
 const sourceAlphaResetRegex = (): RegExp =>
   /<feColorMatrix\b[^>]*\bin\s*=\s*"SourceAlpha"[^>]*\/>/gi;
@@ -17,8 +12,6 @@ const FE_BLUR = /<feGaussianBlur\b([^/>]*)\/?>/;
 const FE_MORPHOLOGY = /<feMorphology\b([^/>]*)\/?>/;
 const FILTER_ID_LETTERS = /^filter\d+_([a-z]+)_/i;
 
-// Indices into the flattened 4x5 feColorMatrix `values`: RGB constants at each
-// row's last column, alpha multiplier at row 4 column 4.
 const COLOR_MATRIX_INDEX = {
   R: 4,
   G: 9,
@@ -61,8 +54,6 @@ const parseColorMatrix = (values: string): ParsedColor => {
 };
 
 const findColorMatrixValues = (chain: string): string | undefined => {
-  // Skip the leading `in="SourceAlpha"` boundary matrix; return the last
-  // colour-applying one.
   const regex = feColorMatrixRegex();
   let lastValues: string | undefined;
   let match: RegExpExecArray | null;
@@ -77,7 +68,6 @@ const findColorMatrixValues = (chain: string): string | undefined => {
 };
 
 const extractSpread = (chain: string): number => {
-  // Spread = feMorphology radius; `erode` → negative (inner shadows).
   const morphMatch = chain.match(FE_MORPHOLOGY);
   if (!morphMatch) return 0;
 
@@ -113,8 +103,6 @@ const buildShadow = (chain: string, style: ShadowStyle): Shadow | undefined => {
   };
 };
 
-// Drop the preamble (feFlood etc.) before the first SourceAlpha reset; each
-// remaining segment is one chain, matched 1:1 with the filter-id style letters.
 const splitChains = (body: string): string[] => body.split(sourceAlphaResetRegex()).slice(1);
 
 const extractFilterShadows = (id: string, body: string): Shadow[] => {
