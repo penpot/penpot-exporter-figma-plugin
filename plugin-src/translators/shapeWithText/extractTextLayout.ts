@@ -17,7 +17,8 @@ export const extractTextLayout = (
   editableSvg: string,
   outlinedSvg: string,
   aabb: { x: number; y: number; width: number; height: number },
-  svgOrigin: { x: number; y: number } = { x: 0, y: 0 }
+  svgOrigin: { x: number; y: number } = { x: 0, y: 0 },
+  rotation = 0
 ): Pick<ShapeGeomAttributes, 'x' | 'y' | 'width' | 'height'> | undefined => {
   const shapeDrawables = extractDrawablePaths(editableSvg);
   const allDrawables = extractDrawablePaths(outlinedSvg);
@@ -32,21 +33,41 @@ export const extractTextLayout = (
   const bounds = computePathBounds(subpaths);
   if (!bounds) return;
 
-  // Frame width is set to the full shape AABB width — wider than the tight
-  // glyph bbox — so Penpot's font metrics (which render slightly wider than
-  // Figma's) can't push a forced-line over the frame edge and trigger a wrap
-  // that splits the line further. The x is shifted to keep the frame's
-  // horizontal center aligned with the glyph bbox center, so center-aligned
-  // text still sits where Figma placed it (matters for asymmetric shapes like
-  // arrows where the text isn't centered on the AABB).
-  const glyphCenterX = (bounds.minX + bounds.maxX) / 2;
-  const width = aabb.width;
-  const height = bounds.maxY - bounds.minY;
+  // Figma's outlined SVG renders glyphs in canvas-space (rotation already
+  // applied), so `bounds` is the canvas-space AABB of the rendered text. For
+  // an axis-aligned rotation (0/90/180/270) the pre-rotation selrect that
+  // Penpot stores can be derived by mapping the canvas AABB into the text's
+  // local orientation around its center. For other rotations the canvas AABB
+  // is larger than the true local rect — bail and let the caller fall back
+  // to the node's AABB.
+  const normalizedRot = ((rotation % 360) + 360) % 360;
+  const isAxisAligned = [0, 90, 180, 270].some(angle => Math.abs(normalizedRot - angle) < 0.01);
+  if (!isAxisAligned) return;
+  const swapAxes = Math.abs(normalizedRot - 90) < 0.01 || Math.abs(normalizedRot - 270) < 0.01;
+
+  const bbWidth = bounds.maxX - bounds.minX;
+  const bbHeight = bounds.maxY - bounds.minY;
+  const centerX = (bounds.minX + bounds.maxX) / 2;
+  const centerY = (bounds.minY + bounds.maxY) / 2;
+
+  // Pad is applied along the text's reading axis (local x) to absorb Penpot
+  // font-metric drift — Penpot renders the same string slightly wider than
+  // Figma, and without slack a forced line would overflow and re-wrap. In
+  // canvas space the reading axis is whichever axis aligns with local x after
+  // rotation: canvas x for 0/180, canvas y for 90/270.
+  const readingSpan = swapAxes ? bbHeight : bbWidth;
+  const pad = Math.max(readingSpan * 0.2, 8);
+
+  const localW = readingSpan + pad;
+  const localH = swapAxes ? bbWidth : bbHeight;
+
+  const canvasCenterX = aabb.x + (centerX - svgOrigin.x);
+  const canvasCenterY = aabb.y + (centerY - svgOrigin.y);
 
   return {
-    x: aabb.x + (glyphCenterX - svgOrigin.x) - width / 2,
-    y: aabb.y + (bounds.minY - svgOrigin.y),
-    width,
-    height
+    x: canvasCenterX - localW / 2,
+    y: canvasCenterY - localH / 2,
+    width: localW,
+    height: localH
   };
 };

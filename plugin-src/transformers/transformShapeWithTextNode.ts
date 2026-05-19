@@ -101,16 +101,17 @@ const buildPathChild = (
 
 // Spread order matters: transformDimension + transformRotationAndPosition set
 // the text node's bounds and rotation from the parent's AABB, then
-// extractTextLayout overrides x/y/width/height with the bbox of the outlined
-// text path(s) so the label sits inside the shape's interior instead of
-// spanning the whole AABB.
+// extractTextLayout overrides x/y/width/height with the pre-rotation selrect
+// derived from the outlined text path(s), so the label sits inside the
+// shape's interior instead of spanning the whole AABB.
 //
-// Rotated nodes skip that override: the glyph bbox in the SVG is the canvas-
-// space AABB of already-rotated text, and re-applying the node's rotation on
-// top would double-rotate the label. For rotated SWT we fall back to the
-// node's own (unrotated) dimensions so the text inherits the parent's
-// rotation cleanly. Cost: the text rect fills the whole shape interior
-// instead of the tight glyph region.
+// extractTextLayout handles axis-aligned rotations (0/90/180/270) by mapping
+// the canvas-space glyph bbox into the text's local orientation around its
+// center; Penpot then rotates that selrect around its center and the text
+// lands where Figma rendered it. For non-axis-aligned rotations the canvas
+// AABB is larger than the true local rect, so the override is skipped and
+// the text falls back to the node's full AABB (the label inherits the
+// parent's rotation cleanly, at the cost of filling the shape interior).
 //
 // extractTextLines pulls the per-line text from the editable SVG's <tspan>s
 // and forces Penpot to wrap at the same positions Figma did — without this,
@@ -123,12 +124,10 @@ const buildTextChild = (
   aabb: Rect,
   svgOrigin: { x: number; y: number }
 ): TextShape | undefined => {
-  const isRotated = !!node.rotation;
-  const layout = isRotated
-    ? undefined
-    : extractTextLayout(editableSvg, outlinedSvg, aabb, svgOrigin);
+  const rotation = node.rotation ?? 0;
+  const layout = extractTextLayout(editableSvg, outlinedSvg, aabb, svgOrigin, rotation);
 
-  if (!isRotated && !layout) return;
+  if (!rotation && !layout) return;
 
   const forcedLines = extractTextLines(editableSvg);
 
