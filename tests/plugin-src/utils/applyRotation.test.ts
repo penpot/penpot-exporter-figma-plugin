@@ -1,8 +1,16 @@
+import type {
+  ClosePathCommand,
+  Command,
+  CurveToCommand,
+  HorizontalLineToCommand,
+  VerticalLineToCommand
+} from 'svg-path-parser';
 import { describe, expect, it } from 'vitest';
 
 import {
   applyInverseRotation,
   applyRotation,
+  applyRotationToSegment,
   getRotation,
   isTransformed
 } from '@plugin/utils/applyRotation';
@@ -157,5 +165,80 @@ describe('isTransformed', () => {
     // Aunque tenga traslación, la parte de rotación/escala es identidad
     // Pero isTransformed solo verifica la parte superior izquierda 2x2
     expect(isTransformed(combined)).toBe(false);
+  });
+});
+
+describe('applyRotationToSegment', () => {
+  const boundingBox: Rect = { x: 0, y: 0, width: 100, height: 100 };
+  const rotation90: Transform = [
+    [0, -1, 0],
+    [1, 0, 0]
+  ];
+
+  it('retorna comando horizontal sin cambios', () => {
+    const command = {
+      command: 'horizontal lineto',
+      code: 'H',
+      x: 50
+    } as HorizontalLineToCommand;
+    const result = applyRotationToSegment(command, rotation90, boundingBox);
+    expect(result).toBe(command);
+    expect(result.command).toBe('horizontal lineto');
+  });
+
+  it('retorna comando vertical sin cambios', () => {
+    const command = {
+      command: 'vertical lineto',
+      code: 'V',
+      y: 50
+    } as VerticalLineToCommand;
+    const result = applyRotationToSegment(command, rotation90, boundingBox);
+    expect(result).toBe(command);
+    expect(result.command).toBe('vertical lineto');
+  });
+
+  it('retorna comando closepath sin cambios', () => {
+    const command = {
+      command: 'closepath',
+      code: 'Z'
+    } as ClosePathCommand;
+    const result = applyRotationToSegment(command, rotation90, boundingBox);
+    expect(result).toBe(command);
+    expect(result.command).toBe('closepath');
+  });
+
+  it('aplica rotación a comando lineto', () => {
+    const command = {
+      command: 'lineto',
+      code: 'L',
+      x: 75,
+      y: 50
+    } as Command;
+    const result = applyRotationToSegment(command, rotation90, boundingBox) as Command & {
+      x: number;
+      y: number;
+    };
+    expect(result.x).toBeCloseTo(50, 5);
+    expect(result.y).toBeCloseTo(75, 5);
+  });
+
+  it('aplica rotación a comando curveto con puntos de control', () => {
+    const command = {
+      command: 'curveto',
+      code: 'C',
+      x: 75,
+      y: 50,
+      x1: 60,
+      y1: 40,
+      x2: 70,
+      y2: 45
+    } as CurveToCommand;
+    const result = applyRotationToSegment(command, rotation90, boundingBox) as CurveToCommand;
+    expect(result.x).toBeCloseTo(50, 5);
+    expect(result.y).toBeCloseTo(75, 5);
+    expect(result.x1).toBeCloseTo(60, 5);
+    expect(result.y1).toBeCloseTo(60, 5);
+    expect(result.x2).toBeCloseTo(55, 5);
+    expect(result.y2).toBeCloseTo(70, 5);
   });
 });

@@ -2,7 +2,7 @@ import type { Command } from 'svg-path-parser';
 
 import { applyMatrixToCommand } from '@plugin/utils';
 
-export const translateCommandToPathString = (command: Command): string => {
+const serializeCommand = (command: Command): string => {
   switch (command.command) {
     case 'moveto':
       return `M ${command.x} ${command.y}`;
@@ -19,6 +19,6 @@ export const translateCommandToPathString = (command: Command): string => {
 
 export const serializeCommands = (commands: Command[], matrix: Transform): string =>
   commands
-    .map(c => translateCommandToPathString(applyMatrixToCommand(c, matrix)))
+    .map(c => serializeCommand(applyMatrixToCommand(c, matrix)))
     .filter(s => s.length > 0)
     .join(' ');

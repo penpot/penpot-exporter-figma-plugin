@@ -1,7 +1,17 @@
 import type { Command } from 'svg-path-parser';
 
-import { normalizeCommands } from '@plugin/translators/vectors/normalizeCommands';
-import { serializeCommands } from '@plugin/translators/vectors/serializeCommands';
+import { translateNonRotatedCommands } from '@plugin/translators/vectors/translateNonRotatedCommands';
+import { translateRotatedCommands } from '@plugin/translators/vectors/translateRotatedCommands';
+import { isTransformed } from '@plugin/utils';
 
-export const translateCommands = (node: LayoutMixin, commands: Command[]): string =>
-  serializeCommands(normalizeCommands(commands), node.absoluteTransform);
+export const translateCommands = (node: LayoutMixin, commands: Command[]): string => {
+  if (node.absoluteBoundingBox && isTransformed(node.absoluteTransform)) {
+    return translateRotatedCommands(commands, node.absoluteTransform, node.absoluteBoundingBox);
+  }
+
+  return translateNonRotatedCommands(
+    commands,
+    node.absoluteTransform[0][2],
+    node.absoluteTransform[1][2]
+  );
+};
