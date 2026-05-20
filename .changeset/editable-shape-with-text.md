@@ -2,4 +2,4 @@
 'penpot-exporter': minor
 ---
 
-Export `ShapeWithText` nodes (Figma Slides primitives like arrows, triangles, speech bubbles, stars) as an editable Penpot group containing an editable path and an editable text label, instead of a rasterized PNG.
+Export Figma `ShapeWithText` nodes as an editable Penpot group with a path and a text shape, instead of a rasterized PNG. Falls back to raster export when extraction fails.
