@@ -8,6 +8,38 @@ import { useFigmaContext } from '@ui/context';
 import type { ErrorPayload } from '@ui/types';
 import { ERROR_ISSUES_URL, buildErrorIssueUrl, formatErrorReport } from '@ui/utils';
 
+const copyTextToClipboard = async (text: string): Promise<boolean> => {
+  if (navigator.clipboard?.writeText) {
+    try {
+      await navigator.clipboard.writeText(text);
+      return true;
+    } catch {
+      // Falls through to legacy fallback below (Figma iframe usually blocks clipboard API).
+    }
+  }
+
+  const textarea = document.createElement('textarea');
+  textarea.value = text;
+  textarea.setAttribute('readonly', '');
+  textarea.style.position = 'fixed';
+  textarea.style.top = '0';
+  textarea.style.left = '0';
+  textarea.style.opacity = '0';
+  document.body.appendChild(textarea);
+  textarea.focus();
+  textarea.select();
+
+  let succeeded = false;
+  try {
+    succeeded = document.execCommand('copy');
+  } catch {
+    succeeded = false;
+  }
+
+  document.body.removeChild(textarea);
+  return succeeded;
+};
+
 const ErrorDetails = ({
   error,
   editorType
@@ -15,17 +47,13 @@ const ErrorDetails = ({
   error: ErrorPayload;
   editorType: string;
 }): JSX.Element => {
-  const [copied, setCopied] = useState(false);
+  const [copyState, setCopyState] = useState<'idle' | 'copied' | 'failed'>('idle');
   const report = formatErrorReport(error, editorType);
 
   const handleCopy = async (): Promise<void> => {
-    try {
-      await navigator.clipboard.writeText(report);
-      setCopied(true);
-      window.setTimeout(() => setCopied(false), 2000);
-    } catch {
-      setCopied(false);
-    }
+    const ok = await copyTextToClipboard(report);
+    setCopyState(ok ? 'copied' : 'failed');
+    window.setTimeout(() => setCopyState('idle'), 2000);
   };
 
   return (
@@ -48,7 +76,11 @@ const ErrorDetails = ({
         {report}
       </pre>
       <Button secondary onClick={handleCopy} fullWidth>
-        {copied ? 'Copied!' : 'Copy error details'}
+        {copyState === 'copied'
+          ? 'Copied!'
+          : copyState === 'failed'
+            ? 'Copy failed — select the text above and copy manually'
+            : 'Copy error details'}
       </Button>
     </Stack>
   );
