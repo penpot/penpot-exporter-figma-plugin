@@ -1,5 +1,7 @@
 import type { PenpotDocument } from '@ui/types';
 
+import type { ErrorPayload } from './errorPayload';
+
 export type ExportScope = 'all' | 'current';
 
 export type Steps =
@@ -58,7 +60,7 @@ export type ReloadMessage = {
 
 export type ErrorMessage = {
   type: 'ERROR';
-  data: string;
+  data: ErrorPayload;
 };
 
 export type UserDataMessage = {
