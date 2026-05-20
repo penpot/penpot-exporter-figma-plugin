@@ -1,11 +1,3 @@
-import type {
-  ClosePathCommand,
-  Command,
-  CurveToCommand,
-  HorizontalLineToCommand,
-  VerticalLineToCommand
-} from 'svg-path-parser';
-
 import type { Point } from '@ui/lib/types/utils/point';
 
 export const applyRotation = (point: Point, transform: Transform, boundingBox: Rect): Point => {
@@ -20,39 +12,6 @@ export const applyRotation = (point: Point, transform: Transform, boundingBox: R
     x: centerPoint.x + rotatedPoint.x,
     y: centerPoint.y + rotatedPoint.y
   };
-};
-
-export const applyRotationToSegment = (
-  command: Command,
-  transform: Transform,
-  boundingBox: Rect
-): Command => {
-  if (isHorizontalLineTo(command)) {
-    return command;
-  }
-  if (isVerticalLineTo(command)) {
-    return command;
-  }
-  if (isClosePath(command)) {
-    return command;
-  }
-
-  const rotated = applyRotation({ x: command.x, y: command.y }, transform, boundingBox);
-
-  if (isCurveTo(command)) {
-    const curve1 = applyRotation({ x: command.x1, y: command.y1 }, transform, boundingBox);
-    const curve2 = applyRotation({ x: command.x2, y: command.y2 }, transform, boundingBox);
-
-    command.x1 = curve1.x;
-    command.y1 = curve1.y;
-    command.x2 = curve2.x;
-    command.y2 = curve2.y;
-  }
-
-  command.x = rotated.x;
-  command.y = rotated.y;
-
-  return command;
 };
 
 export const applyInverseRotation = (
@@ -91,17 +50,6 @@ const calculateCenter = (boundingBox: Rect): Point => ({
   x: boundingBox.x + boundingBox.width / 2,
   y: boundingBox.y + boundingBox.height / 2
 });
-
-const isCurveTo = (command: Command): command is CurveToCommand => command.command === 'curveto';
-
-const isHorizontalLineTo = (command: Command): command is HorizontalLineToCommand =>
-  command.command === 'horizontal lineto';
-
-const isVerticalLineTo = (command: Command): command is VerticalLineToCommand =>
-  command.command === 'vertical lineto';
-
-const isClosePath = (command: Command): command is ClosePathCommand =>
-  command.command === 'closepath';
 
 const cleanNumber = (value: number, epsilon = 1e-6, decimals = 6): number => {
   return Math.abs(value) < epsilon ? 0 : +value.toFixed(decimals);
