@@ -13,19 +13,10 @@ const hasFillGeometry = (node: GeometryMixin): boolean => {
   return node.fillGeometry.length > 0;
 };
 
-const safeGetVectorNetwork = (node: VectorLikeMixin): VectorNetwork | undefined => {
-  try {
-    return node.vectorNetwork;
-  } catch (error) {
-    console.warn('Could not access the vector network', error);
-    return undefined;
-  }
-};
-
 export const transformStrokes = (
   node: GeometryMixin | (GeometryMixin & IndividualStrokesMixin)
 ): Pick<ShapeAttributes, 'strokes'> => {
-  const vectorNetwork = isVectorLike(node) ? safeGetVectorNetwork(node) : undefined;
+  const vectorNetwork = isVectorLike(node) ? node.vectorNetwork : undefined;
 
   const strokeCaps = (stroke: Stroke): Stroke => {
     if (!hasFillGeometry(node) && vectorNetwork && vectorNetwork.vertices.length > 0) {
@@ -48,14 +39,11 @@ export const transformStrokesFromVector = (
   vector: Command[],
   vectorRegion: VectorRegion | undefined
 ): Pick<ShapeAttributes, 'strokes'> => {
-  const vectorNetwork = safeGetVectorNetwork(node);
-
   const strokeCaps = (stroke: Stroke): Stroke => {
     if (vectorRegion !== undefined) return stroke;
-    if (!vectorNetwork) return stroke;
 
-    const startVertex = findVertex(vectorNetwork.vertices, vector[0]);
-    const endVertex = findVertex(vectorNetwork.vertices, vector[vector.length - 1]);
+    const startVertex = findVertex(node.vectorNetwork.vertices, vector[0]);
+    const endVertex = findVertex(node.vectorNetwork.vertices, vector[vector.length - 1]);
 
     if (!startVertex || !endVertex) return stroke;
 
