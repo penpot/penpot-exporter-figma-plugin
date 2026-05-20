@@ -49,7 +49,7 @@ export const transformSceneNode = async (node: SceneNode): Promise<PenpotNode | 
       penpotNode = transformTextNode(node);
       break;
     case 'VECTOR':
-      penpotNode = transformVectorNode(node);
+      penpotNode = await transformVectorNode(node);
       break;
     case 'LINE':
       penpotNode = transformLineNode(node);
