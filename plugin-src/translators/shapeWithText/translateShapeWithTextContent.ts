@@ -1,5 +1,6 @@
+import type { FillsLike } from '@plugin/transformers/partials';
 import { STYLED_TEXT_SEGMENT_FIELDS, buildTextContent } from '@plugin/translators/text';
-import type { TextSegment } from '@plugin/translators/text/paragraph';
+import type { ParagraphMixin, TextSegment } from '@plugin/translators/text/paragraph';
 
 import type { TextAttributes, TextShape } from '@ui/lib/types/shapes/textShape';
 
@@ -33,16 +34,13 @@ const normalizeSegment = (segment: TextSegment): TextSegment => ({
 });
 
 // Force spacing to 0: non-zero defaults stack extra `\n` per source `\n` in the engine.
-type BuildTextContentNode = Parameters<typeof buildTextContent>[0];
-
-const buildTextContentNode = (node: ShapeWithTextNode): BuildTextContentNode =>
-  ({
-    paragraphIndent: 0,
-    paragraphSpacing: 0,
-    listSpacing: 0,
-    fills: node.text.fills,
-    fillStyleId: node.text.fillStyleId
-  }) as unknown as BuildTextContentNode;
+const buildTextContentNode = (node: ShapeWithTextNode): ParagraphMixin & FillsLike => ({
+  paragraphIndent: 0,
+  paragraphSpacing: 0,
+  listSpacing: 0,
+  fills: node.text.fills,
+  fillStyleId: node.text.fillStyleId
+});
 
 const injectForcedBreaks = (segments: TextSegment[], forcedLines: string[]): TextSegment[] => {
   if (segments.length === 0 || forcedLines.length <= 1) return segments;

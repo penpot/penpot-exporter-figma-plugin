@@ -1,7 +1,11 @@
 import { textStyles } from '@plugin/libraries';
 import { transformFills } from '@plugin/transformers/partials';
 import { translateFontName } from '@plugin/translators/text/font';
-import { type TextSegment, translateParagraphProperties } from '@plugin/translators/text/paragraph';
+import {
+  type ParagraphMixin,
+  type TextSegment,
+  translateParagraphProperties
+} from '@plugin/translators/text/paragraph';
 import {
   translateFontStyle,
   translateLetterSpacing,
@@ -17,7 +21,7 @@ import type {
 } from '@ui/lib/types/shapes/textShape';
 
 export const translateTextSegments = (
-  node: NonResizableTextMixin,
+  node: ParagraphMixin,
   segments: TextSegment[],
   textAlign: TextHorizontalAlign
 ): PenpotTextNode[] => {
