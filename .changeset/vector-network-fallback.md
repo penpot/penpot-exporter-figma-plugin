@@ -2,4 +2,4 @@
 'penpot-exporter': patch
 ---
 
-Rasterize vector nodes when Figma cannot expose their vector network.
+Avoid crashing when Figma cannot expose a vector's network data.
