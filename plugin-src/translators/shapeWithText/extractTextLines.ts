@@ -1,4 +1,4 @@
-import { stripSvgDefs } from '@plugin/translators/shapeWithText/parseSvg';
+import { stripSvgDefs } from '@plugin/translators/shapeWithText/svgAttrs';
 
 const decodeCodePointEntity = (value: string, radix: number, fallback: string): string => {
   const codePoint = parseInt(value, radix);
