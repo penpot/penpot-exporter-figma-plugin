@@ -15,6 +15,8 @@ import { getRotation } from '@plugin/utils';
 import type { FrameShape } from '@ui/lib/types/shapes/frameShape';
 import type { RectShape } from '@ui/lib/types/shapes/rectShape';
 
+const TABLE_CORNER_RADIUS = 8;
+
 export const transformTableNode = async (
   node: TableNode
 ): Promise<FrameShape | RectShape | undefined> => {
@@ -32,6 +34,10 @@ export const transformTableNode = async (
       name: node.name,
       showContent: false,
       hideInViewer: !node.visible,
+      r1: TABLE_CORNER_RADIUS,
+      r2: TABLE_CORNER_RADIUS,
+      r3: TABLE_CORNER_RADIUS,
+      r4: TABLE_CORNER_RADIUS,
       ...transformIds(node),
       ...transformFills(node),
       strokes: [DEFAULT_TABLE_STROKE],
