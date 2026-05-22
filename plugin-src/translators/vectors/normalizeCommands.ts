@@ -84,17 +84,6 @@ export const normalizeCommands = (commands: Command[]): Command[] => {
         lastQuadControl = q;
         break;
       }
-
-      case 'elliptical arc':
-        // No current Figma ShapeWithText emits arcs; degrade + warn so a
-        // future regression is visible instead of silently lost.
-        console.warn('normalizeCommands: elliptical arc degraded to lineto', {
-          x: c.x,
-          y: c.y
-        });
-        out.push({ command: 'lineto', code: 'L', relative: false, x: c.x, y: c.y });
-        lastCubicControl = lastQuadControl = null;
-        break;
     }
   }
 

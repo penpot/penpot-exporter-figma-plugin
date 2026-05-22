@@ -70,25 +70,29 @@ export const transformInstanceIds = (
   };
 };
 
-export const transformMaskIds = (node: SceneNode): Pick<ShapeBaseAttributes, 'id' | 'shapeRef'> => {
-  const normalizedId = normalizeNodeId(node.id);
-  const relatedNodeId = getRelatedNodeId(node.id);
-
-  return {
-    id: parseFigmaId(`M${normalizedId}`),
-    shapeRef: relatedNodeId ? parseFigmaId(`M${relatedNodeId}`) : undefined
-  };
-};
-
-export const transformVectorIds = (
+// Prefix lets multiple Penpot shapes share one Figma id without colliding.
+const transformPrefixedIds = (
   node: SceneNode,
-  index: number
+  prefix: string
 ): Pick<ShapeBaseAttributes, 'id' | 'shapeRef'> => {
   const normalizedId = normalizeNodeId(node.id);
   const relatedNodeId = getRelatedNodeId(node.id);
 
   return {
-    id: parseFigmaId(`V${index}${normalizedId}`),
-    shapeRef: relatedNodeId ? parseFigmaId(`V${index}${relatedNodeId}`) : undefined
+    id: parseFigmaId(`${prefix}${normalizedId}`),
+    shapeRef: relatedNodeId ? parseFigmaId(`${prefix}${relatedNodeId}`) : undefined
   };
 };
+
+export const transformMaskIds = (node: SceneNode): Pick<ShapeBaseAttributes, 'id' | 'shapeRef'> =>
+  transformPrefixedIds(node, 'M');
+
+export const transformVectorIds = (
+  node: SceneNode,
+  index: number
+): Pick<ShapeBaseAttributes, 'id' | 'shapeRef'> => transformPrefixedIds(node, `V${index}`);
+
+export const transformChildIds = (
+  node: SceneNode,
+  index: number
+): Pick<ShapeBaseAttributes, 'id' | 'shapeRef'> => transformPrefixedIds(node, `C${index}`);

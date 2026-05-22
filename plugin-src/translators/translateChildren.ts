@@ -29,8 +29,7 @@ export const translateMaskChildren = async (
     maskChild.type === 'LINK_UNFURL' ||
     maskChild.type === 'MEDIA' ||
     maskChild.type === 'SECTION' ||
-    maskChild.type === 'TABLE' ||
-    maskChild.type === 'SHAPE_WITH_TEXT'
+    maskChild.type === 'TABLE'
   ) {
     return await translateChildren(children);
   }

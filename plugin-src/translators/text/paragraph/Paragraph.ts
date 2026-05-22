@@ -1,6 +1,9 @@
 import { List } from '@plugin/translators/text/paragraph/List';
 import { getListType } from '@plugin/translators/text/paragraph/getListType';
-import type { TextSegment } from '@plugin/translators/text/paragraph/translateParagraphProperties';
+import type {
+  ParagraphMixin,
+  TextSegment
+} from '@plugin/translators/text/paragraph/translateParagraphProperties';
 
 import type { TextNode as PenpotTextNode } from '@ui/lib/types/shapes/textShape';
 
@@ -10,7 +13,11 @@ export class Paragraph {
   private firstTextNode: PenpotTextNode | null = null;
   private list = new List();
 
-  public format(node: TextNode, textNode: PenpotTextNode, segment: TextSegment): PenpotTextNode[] {
+  public format(
+    node: ParagraphMixin,
+    textNode: PenpotTextNode,
+    segment: TextSegment
+  ): PenpotTextNode[] {
     const textNodes: PenpotTextNode[] = [];
 
     const spacing = this.applySpacing(segment, node);
@@ -30,7 +37,7 @@ export class Paragraph {
   private applyIndentation(
     textNode: PenpotTextNode,
     segment: TextSegment,
-    node: TextNode
+    node: ParagraphMixin
   ): PenpotTextNode | undefined {
     if (this.isParagraphStarting || this.isFirstTextNode(textNode)) {
       this.list.update(textNode, segment);
@@ -41,7 +48,7 @@ export class Paragraph {
     }
   }
 
-  private applySpacing(segment: TextSegment, node: TextNode): PenpotTextNode | undefined {
+  private applySpacing(segment: TextSegment, node: ParagraphMixin): PenpotTextNode | undefined {
     if (this.isParagraphStarting) {
       const isList = getListType(segment) !== 'NONE';
 

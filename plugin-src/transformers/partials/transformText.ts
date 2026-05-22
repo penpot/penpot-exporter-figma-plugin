@@ -1,46 +1,23 @@
-import { transformFills } from '@plugin/transformers/partials';
-import { transformTextStyle, translateTextSegments } from '@plugin/translators/text';
-import { translateGrowType, translateVerticalAlign } from '@plugin/translators/text/properties';
+import { STYLED_TEXT_SEGMENT_FIELDS, buildTextContent } from '@plugin/translators/text';
+import {
+  translateGrowType,
+  translateHorizontalAlign,
+  translateVerticalAlign
+} from '@plugin/translators/text/properties';
 
 import type { TextAttributes, TextShape } from '@ui/lib/types/shapes/textShape';
 
 export const transformText = (node: TextNode): TextAttributes & Pick<TextShape, 'growType'> => {
-  const styledTextSegments = node.getStyledTextSegments([
-    'fontName',
-    'fontSize',
-    'fontWeight',
-    'lineHeight',
-    'letterSpacing',
-    'textCase',
-    'textDecoration',
-    'indentation',
-    'listOptions',
-    'fills',
-    'fillStyleId',
-    'textStyleId'
-  ]);
+  const styledTextSegments = node.getStyledTextSegments(STYLED_TEXT_SEGMENT_FIELDS);
 
   return {
     characters: node.characters,
-    content: {
-      type: 'root',
-      verticalAlign: translateVerticalAlign(node.textAlignVertical),
-      children: styledTextSegments.length
-        ? [
-            {
-              type: 'paragraph-set',
-              children: [
-                {
-                  type: 'paragraph',
-                  children: translateTextSegments(node, styledTextSegments),
-                  ...transformTextStyle(node, styledTextSegments[0]),
-                  ...transformFills(node)
-                }
-              ]
-            }
-          ]
-        : undefined
-    },
+    content: buildTextContent(
+      node,
+      styledTextSegments,
+      translateHorizontalAlign(node.textAlignHorizontal),
+      translateVerticalAlign(node.textAlignVertical)
+    ),
     growType: translateGrowType(node)
   };
 };

@@ -21,13 +21,18 @@ export type TextSegment = Pick<
   | 'textStyleId'
 >;
 
+export type ParagraphMixin = Pick<
+  NonResizableTextMixin,
+  'paragraphIndent' | 'paragraphSpacing' | 'listSpacing'
+>;
+
 type PartialTranslation = {
   textNodes: PenpotTextNode[];
   segment: TextSegment;
 };
 
 export const translateParagraphProperties = (
-  node: TextNode,
+  node: ParagraphMixin,
   partials: { textNode: PenpotTextNode; segment: TextSegment }[]
 ): PenpotTextNode[] => {
   const splitSegments: PartialTranslation[] = [];
@@ -52,7 +57,7 @@ const splitTextNodeByEOL = (node: PenpotTextNode): PenpotTextNode[] => {
 };
 
 const addParagraphProperties = (
-  node: TextNode,
+  node: ParagraphMixin,
   partials: PartialTranslation[]
 ): PenpotTextNode[] => {
   const formattedParagraphs: PenpotTextNode[] = [];
