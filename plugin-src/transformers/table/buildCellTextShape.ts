@@ -1,4 +1,5 @@
 import { transformChildIds } from '@plugin/transformers/partials';
+import { cellName } from '@plugin/transformers/table/cellName';
 import { STYLED_TEXT_SEGMENT_FIELDS, buildTextContent } from '@plugin/translators/text';
 
 import type { TextShape } from '@ui/lib/types/shapes/textShape';
@@ -12,18 +13,17 @@ export const buildCellTextShape = (
   row: number,
   column: number,
   cellX: number,
-  cellY: number
+  cellY: number,
+  cellWidth: number,
+  cellHeight: number
 ): TextShape => {
   const segments = cell.text.getStyledTextSegments(STYLED_TEXT_SEGMENT_FIELDS);
   const cellIndex = row * table.numColumns + column;
   const textIndex = table.numRows * table.numColumns + cellIndex;
 
-  const width = Math.max(0, cell.width - CELL_PADDING_X * 2);
-  const height = Math.max(0, cell.height - CELL_PADDING_Y * 2);
-
   return {
     type: 'text',
-    name: cell.text.characters.slice(0, 64) || `R${row + 1}C${column + 1}`,
+    name: cellName(cell, row, column),
     blocked: false,
     hidden: false,
     ...transformChildIds(table, textIndex),
@@ -32,8 +32,8 @@ export const buildCellTextShape = (
     growType: 'fixed',
     x: cellX + CELL_PADDING_X,
     y: cellY + CELL_PADDING_Y,
-    width,
-    height,
+    width: Math.max(0, cellWidth - CELL_PADDING_X * 2),
+    height: Math.max(0, cellHeight - CELL_PADDING_Y * 2),
     rotation: 0
   };
 };

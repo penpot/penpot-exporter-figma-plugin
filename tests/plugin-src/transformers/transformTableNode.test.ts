@@ -65,6 +65,7 @@ const createTableNode = (
     cells?: (row: number, column: number) => CellSpec;
     cellAtThrows?: boolean;
     absoluteBoundingBox?: Rect | null;
+    absoluteTransform?: Transform;
     rowHeights?: number[];
     columnWidths?: number[];
   } = {}
@@ -73,6 +74,10 @@ const createTableNode = (
     cells = (): CellSpec => ({}),
     cellAtThrows = false,
     absoluteBoundingBox = { x: 0, y: 0, width: 200, height: 100 } as Rect,
+    absoluteTransform = [
+      [1, 0, 0],
+      [0, 1, 0]
+    ] as Transform,
     rowHeights,
     columnWidths
   } = options;
@@ -106,10 +111,7 @@ const createTableNode = (
     numRows: rows,
     numColumns: columns,
     absoluteBoundingBox,
-    absoluteTransform: [
-      [1, 0, 0],
-      [0, 1, 0]
-    ],
+    absoluteTransform,
     width: 200,
     height: 100,
     fills: [],
@@ -175,6 +177,20 @@ describe('transformTableNode', () => {
 
   it('falls back to raster when cellAt throws', async () => {
     const result = await transformTableNode(createTableNode(2, 2, { cellAtThrows: true }));
+
+    expect(transformNodeAsImageRect).toHaveBeenCalled();
+    expect((result as RectShape).type).toBe('rect');
+  });
+
+  it('falls back to raster when table is rotated', async () => {
+    const result = await transformTableNode(
+      createTableNode(2, 2, {
+        absoluteTransform: [
+          [0, -1, 0],
+          [1, 0, 0]
+        ] as Transform
+      })
+    );
 
     expect(transformNodeAsImageRect).toHaveBeenCalled();
     expect((result as RectShape).type).toBe('rect');
