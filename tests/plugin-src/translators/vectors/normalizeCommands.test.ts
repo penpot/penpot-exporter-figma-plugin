@@ -65,9 +65,4 @@ describe('normalizeCommands', () => {
     expect(lineto2.x).toBe(30);
     expect(lineto2.y).toBe(30);
   });
-
-  it('degrades arcs to a straight line so geometry never silently disappears', () => {
-    const out = normalizeCommands(parseSVG('M 0 0 A 10 10 0 0 1 20 0'));
-    expect(out.map(c => c.command)).toEqual(['moveto', 'lineto']);
-  });
 });

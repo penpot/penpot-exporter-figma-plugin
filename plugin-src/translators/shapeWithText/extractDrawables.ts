@@ -1,11 +1,7 @@
 import { type Command, parseSVG } from 'svg-path-parser';
 
-import {
-  numAttr,
-  parseSvgAttrs,
-  parseSvgTransform,
-  stripSvgDefs
-} from '@plugin/translators/shapeWithText/parseSvg';
+import { parseSvgTransform } from '@plugin/translators/shapeWithText/parseSvgTransform';
+import { numAttr, parseSvgAttrs, stripSvgDefs } from '@plugin/translators/shapeWithText/svgAttrs';
 import { normalizeCommands } from '@plugin/translators/vectors';
 import { applyMatrixToCommand } from '@plugin/utils';
 

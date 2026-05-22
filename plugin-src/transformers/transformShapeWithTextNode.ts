@@ -30,10 +30,7 @@ export const transformShapeWithTextNode = async (
   node: ShapeWithTextNode
 ): Promise<GroupShape | RectShape | undefined> => {
   const aabb = node.absoluteBoundingBox;
-  if (!aabb) {
-    console.warn(`Shape-with-text "${node.name}" missing absoluteBoundingBox; rasterizing`);
-    return rasterFallback(node);
-  }
+  if (!aabb) return;
 
   const editableSvg = await exportSvg(node, false);
   if (!editableSvg) return rasterFallback(node);

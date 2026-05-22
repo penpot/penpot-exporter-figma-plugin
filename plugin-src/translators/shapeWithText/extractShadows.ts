@@ -1,4 +1,4 @@
-import { numAttr, parseSvgAttrs } from '@plugin/translators/shapeWithText/parseSvg';
+import { numAttr, parseSvgAttrs } from '@plugin/translators/shapeWithText/svgAttrs';
 import { generateUuid, rgbToHex } from '@plugin/utils';
 
 import type { Shadow, ShadowStyle } from '@ui/lib/types/utils/shadow';

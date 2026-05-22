@@ -1,5 +1,5 @@
 import { getUserData } from '@plugin/getUserData';
-import { handleExportMessage, handleRetryMessage } from '@plugin/handleMessage';
+import { handleExportMessage, handleRetryMessage, postPluginError } from '@plugin/handleMessage';
 import { isSlidesEditor } from '@plugin/utils';
 
 import type { ExportScope, ExternalLibrary } from '@ui/types';
@@ -23,31 +23,35 @@ const sendEditorType = (): void => {
 };
 
 const onMessage: MessageEventHandler = message => {
-  if (message.type === 'ready') {
-    getUserData();
-    sendEditorType();
-  }
+  try {
+    if (message.type === 'ready') {
+      getUserData();
+      sendEditorType();
+    }
 
-  if (message.type === 'retry') {
-    handleRetryMessage();
-  }
+    if (message.type === 'retry') {
+      handleRetryMessage();
+    }
 
-  if (message.type === 'export') {
-    const exportMessage = message as ExportMessage;
-    const scope = exportMessage.data?.scope ?? 'all';
-    const libraries = exportMessage.data?.libraries ?? [];
+    if (message.type === 'export') {
+      const exportMessage = message as ExportMessage;
+      const scope = exportMessage.data?.scope ?? 'all';
+      const libraries = exportMessage.data?.libraries ?? [];
 
-    handleExportMessage(scope, libraries);
-  }
+      handleExportMessage(scope, libraries);
+    }
 
-  if (message.type === 'cancel') {
-    figma.closePlugin();
-  }
+    if (message.type === 'cancel') {
+      figma.closePlugin();
+    }
 
-  if (message.type === 'resize') {
-    const width = message.width ?? BASE_WIDTH;
-    const height = message.height ?? BASE_HEIGHT;
-    figma.ui.resize(width, height);
+    if (message.type === 'resize') {
+      const width = message.width ?? BASE_WIDTH;
+      const height = message.height ?? BASE_HEIGHT;
+      figma.ui.resize(width, height);
+    }
+  } catch (error) {
+    postPluginError(error);
   }
 };
 

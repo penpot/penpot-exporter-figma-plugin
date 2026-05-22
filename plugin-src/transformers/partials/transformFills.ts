@@ -4,8 +4,10 @@ import type { TextSegment } from '@plugin/translators/text/paragraph';
 import type { ShapeAttributes } from '@ui/lib/types/shapes/shape';
 import type { TextStyle } from '@ui/lib/types/shapes/textShape';
 
+export type FillsLike = Pick<MinimalFillsMixin, 'fills' | 'fillStyleId'>;
+
 export const transformFills = (
-  node: MinimalFillsMixin | VectorRegion | VectorNode | TextSegment
+  node: FillsLike | VectorRegion | VectorNode | TextSegment
 ): Pick<ShapeAttributes, 'fills' | 'fillStyleId'> | Pick<TextStyle, 'fills' | 'fillStyleId'> => {
   if (hasFillStyle(node)) {
     return {
@@ -34,9 +36,7 @@ export const transformVectorFills = (
   return transformFills(fillsNode);
 };
 
-const hasFillStyle = (
-  node: MinimalFillsMixin | VectorRegion | VectorNode | TextSegment
-): boolean => {
+const hasFillStyle = (node: FillsLike | VectorRegion | VectorNode | TextSegment): boolean => {
   return (
     node.fillStyleId !== figma.mixed &&
     node.fillStyleId !== undefined &&

@@ -1,11 +1,18 @@
 import { exportStream } from '@penpot/library';
+import * as Sentry from '@sentry/react';
 import { useEffect, useRef, useState } from 'preact/hooks';
 
 import { type MessageData, createInMemoryWritable, sendMessage } from '@ui/context';
 import { identify, track } from '@ui/metrics/mixpanel';
 import { parse } from '@ui/parser';
-import type { ExportScope, ExternalLibrary, Steps } from '@ui/types';
+import type { ErrorOrigin, ErrorPayload, ExportScope, ExternalLibrary, Steps } from '@ui/types';
 import { extractFileIdFromPenpotUrl, fileSizeInMB, formatExportTime } from '@ui/utils';
+
+const buildUiErrorPayload = (reason: unknown, origin: ErrorOrigin): ErrorPayload => ({
+  message: reason instanceof Error ? reason.message : String(reason),
+  stack: reason instanceof Error ? reason.stack : undefined,
+  origin
+});
 
 export type FormValues = {
   externalLibraries: ExternalLibrary[];
@@ -15,7 +22,7 @@ export type UseFigmaHook = {
   missingFonts: string[] | undefined;
   exporting: boolean;
   summary: boolean;
-  error: boolean;
+  error: ErrorPayload | null;
   step: Steps;
   stepLabel: string | undefined;
   stepName: string | undefined;
@@ -41,7 +48,7 @@ export const useFigma = (): UseFigmaHook => {
   const [missingFonts, setMissingFonts] = useState<string[]>();
   const [exporting, setExporting] = useState(false);
   const [summary, setSummary] = useState(false);
-  const [error, setError] = useState(false);
+  const [error, setError] = useState<ErrorPayload | null>(null);
   const [exportedBlob, setExportedBlob] = useState<{ blob: Blob; filename: string } | null>(null);
   const [exportTime, setExportTime] = useState<number | null>(null);
   const [exportScope, setExportScope] = useState<ExportScope>('all');
@@ -57,8 +64,37 @@ export const useFigma = (): UseFigmaHook => {
   const [processedItems, setProcessedItems] = useState(0);
   const [progressPercentage, setProgressPercentage] = useState(0);
 
+  const editorTypeRef = useRef(editorType);
+  editorTypeRef.current = editorType;
+
   const postMessage = (type: string, data?: unknown): void => {
     parent.postMessage({ pluginMessage: { type, data } }, '*');
+  };
+
+  const handleError = (payload: ErrorPayload): void => {
+    setError(payload);
+    setExporting(false);
+    track('Error', {
+      'Error Message': payload.message,
+      'Error Origin': payload.origin,
+      'Error Step': payload.step,
+      'Error Layer': payload.layer
+    });
+
+    if (payload.origin === 'plugin') {
+      const sentryError = new Error(payload.message);
+      if (payload.stack) sentryError.stack = payload.stack;
+      Sentry.captureException(sentryError, {
+        tags: {
+          errorOrigin: payload.origin,
+          errorStep: payload.step ?? 'unknown'
+        },
+        extra: {
+          layer: payload.layer,
+          editorType: editorTypeRef.current
+        }
+      });
+    }
   };
 
   const calculatePercentage = (item: number, total: number): number => {
@@ -92,7 +128,7 @@ export const useFigma = (): UseFigmaHook => {
         setMissingFonts(undefined);
         setExporting(false);
         setSummary(false);
-        setError(false);
+        setError(null);
         setExportedBlob(null);
         setExportTime(null);
         setExportScope('all');
@@ -190,11 +226,9 @@ export const useFigma = (): UseFigmaHook => {
         break;
       }
       case 'ERROR': {
-        setError(true);
-        setExporting(false);
-        track('Error', { 'Error Message': pluginMessage.data });
+        handleError(pluginMessage.data);
 
-        throw new Error(pluginMessage.data);
+        break;
       }
     }
   };
@@ -248,12 +282,24 @@ export const useFigma = (): UseFigmaHook => {
   };
 
   useEffect(() => {
+    const onWindowError = (event: ErrorEvent): void => {
+      handleError(buildUiErrorPayload(event.error ?? event.message, 'ui'));
+    };
+
+    const onUnhandledRejection = (event: PromiseRejectionEvent): void => {
+      handleError(buildUiErrorPayload(event.reason, 'unhandled-rejection'));
+    };
+
     window.addEventListener('message', onMessage);
+    window.addEventListener('error', onWindowError);
+    window.addEventListener('unhandledrejection', onUnhandledRejection);
 
     postMessage('ready');
 
     return (): void => {
       window.removeEventListener('message', onMessage);
+      window.removeEventListener('error', onWindowError);
+      window.removeEventListener('unhandledrejection', onUnhandledRejection);
     };
   }, []);
 

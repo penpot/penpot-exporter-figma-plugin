@@ -1,6 +1,6 @@
-import { transformFills } from '@plugin/transformers/partials';
+import { type FillsLike, transformFills } from '@plugin/transformers/partials';
 import { transformTextStyle, translateTextSegments } from '@plugin/translators/text';
-import type { TextSegment } from '@plugin/translators/text/paragraph';
+import type { ParagraphMixin, TextSegment } from '@plugin/translators/text/paragraph';
 
 import type {
   TextContent,
@@ -9,7 +9,7 @@ import type {
 } from '@ui/lib/types/shapes/textShape';
 
 export const buildTextContent = (
-  node: NonResizableTextMixin & MinimalFillsMixin,
+  node: ParagraphMixin & FillsLike,
   styledTextSegments: TextSegment[],
   textAlign: TextHorizontalAlign,
   verticalAlign: TextVerticalAlign
