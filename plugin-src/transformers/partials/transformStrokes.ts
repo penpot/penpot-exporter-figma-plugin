@@ -46,10 +46,9 @@ export const transformStrokes = (
 export const transformStrokesFromVector = (
   node: VectorNode,
   vector: Command[],
-  vectorRegion: VectorRegion | undefined
+  vectorRegion: VectorRegion | undefined,
+  vectorNetwork: VectorNetwork | undefined
 ): Pick<ShapeAttributes, 'strokes'> => {
-  const vectorNetwork = safeGetVectorNetwork(node);
-
   const strokeCaps = (stroke: Stroke): Stroke => {
     if (vectorRegion !== undefined) return stroke;
     if (!vectorNetwork) return stroke;
