@@ -4,7 +4,6 @@ import { transformShapeWithTextNode } from '@plugin/transformers/transformShapeW
 
 import type { GroupShape } from '@ui/lib/types/shapes/groupShape';
 import type { PathShape } from '@ui/lib/types/shapes/pathShape';
-import type { RectShape } from '@ui/lib/types/shapes/rectShape';
 import type { TextShape } from '@ui/lib/types/shapes/textShape';
 
 vi.mock('@plugin/transformers/partials', () => ({
@@ -30,22 +29,6 @@ vi.mock('@plugin/transformers', () => ({
     type: 'group',
     name: 'fake group'
   })
-}));
-
-const { transformNodeAsImageRect } = vi.hoisted(() => ({
-  transformNodeAsImageRect: vi.fn(
-    async (): Promise<RectShape | undefined> =>
-      ({
-        type: 'rect',
-        name: 'fallback rect',
-        id: 'fallback-id',
-        fills: []
-      }) as unknown as RectShape
-  )
-}));
-
-vi.mock('@plugin/transformers/transformNodeAsImageRect', () => ({
-  transformNodeAsImageRect
 }));
 
 vi.mock('@plugin/translators', () => ({
@@ -253,18 +236,12 @@ describe('transformShapeWithTextNode', () => {
     expect(shape.shadow).toBeUndefined();
   });
 
-  it('falls back to a rasterized rect when no drawable element can be extracted', async () => {
+  it('returns undefined when no drawable element can be extracted', async () => {
     const result = await transformShapeWithTextNode(
       createShapeWithTextNode({ svg: '<svg><text>only text</text></svg>' })
     );
 
-    expect(result).toEqual(
-      expect.objectContaining({
-        type: 'rect',
-        id: 'fallback-id'
-      })
-    );
-    expect(transformNodeAsImageRect).toHaveBeenCalled();
+    expect(result).toBeUndefined();
   });
 
   it('converts <rect>, <circle>, <ellipse>, <polygon> into commands', async () => {
@@ -304,18 +281,12 @@ describe('transformShapeWithTextNode', () => {
     expect(shape.content).not.toContain('100');
   });
 
-  it('falls back to a rasterized rect when editable SVG export fails', async () => {
+  it('returns undefined when editable SVG export fails', async () => {
     const result = await transformShapeWithTextNode(
       createShapeWithTextNode({ exportThrows: true })
     );
 
-    expect(result).toEqual(
-      expect.objectContaining({
-        type: 'rect',
-        id: 'fallback-id'
-      })
-    );
-    expect(transformNodeAsImageRect).toHaveBeenCalled();
+    expect(result).toBeUndefined();
   });
 
   it('skips the glyph-bbox layout override when the node is rotated', async () => {
