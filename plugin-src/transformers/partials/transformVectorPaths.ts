@@ -49,16 +49,18 @@ export const clearParsedCache = (): void => {
 };
 
 export const transformVectorPaths = (node: VectorNode): PathShape[] => {
-  let regions: readonly VectorRegion[] = [];
-
+  // Resolve vectorNetwork once; reading it per subpath crashes the plugin on
+  // large vectors via accumulated Figma WASM state.
+  let vectorNetwork: VectorNetwork | undefined;
   try {
-    regions = node.vectorNetwork?.regions ?? [];
+    vectorNetwork = node.vectorNetwork ?? undefined;
   } catch (error) {
     console.warn('Could not access the vector network', node.name, error);
   }
 
-  let vectorPaths: readonly VectorPath[] = [];
+  const regions: readonly VectorRegion[] = vectorNetwork ? (vectorNetwork.regions ?? []) : [];
 
+  let vectorPaths: readonly VectorPath[] = [];
   try {
     vectorPaths = node.vectorPaths ?? [];
   } catch (error) {
@@ -136,7 +138,7 @@ export const transformVectorPaths = (node: VectorNode): PathShape[] => {
       }
       // Deduplicate: skip if we've already seen a path with identical vertices (O(1) hash lookup)
       if (!seenVertexHashes.has(currentHash)) {
-        const pathShape = transformVectorPath(node, vectorPath, regions[i], count);
+        const pathShape = transformVectorPath(node, vectorPath, regions[i], count, vectorNetwork);
         if (pathShape) {
           seenVertexHashes.add(currentHash);
           includedVectorPathsData.push(vectorPath.data);
@@ -166,7 +168,7 @@ export const transformVectorPaths = (node: VectorNode): PathShape[] => {
   const geometryShapes: PathShape[] = [];
   if (shouldIncludeFillGeometry) {
     for (const geometry of validFillGeometry) {
-      const geometryShape = transformVectorPath(node, geometry, undefined, count);
+      const geometryShape = transformVectorPath(node, geometry, undefined, count, vectorNetwork);
       if (geometryShape) {
         geometryShapes.push(geometryShape);
         count++;
@@ -238,7 +240,8 @@ const transformVectorPath = (
   node: VectorNode,
   vectorPath: VectorPath,
   vectorRegion: VectorRegion | undefined,
-  index: number
+  index: number,
+  vectorNetwork: VectorNetwork | undefined
 ): PathShape | undefined => {
   const normalizedPaths = getParsedCommands(vectorPath.data);
   if (!normalizedPaths || normalizedPaths.length === 0) {
@@ -258,7 +261,7 @@ const transformVectorPath = (
     constraintsV: 'scale',
     ...transformVectorIds(node, index),
     ...transformVectorFills(node, vectorPath, vectorRegion),
-    ...transformStrokesFromVector(node, normalizedPaths, vectorRegion),
+    ...transformStrokesFromVector(node, normalizedPaths, vectorRegion, vectorNetwork),
     ...transformEffects(node),
     ...transformSceneNode(node),
     ...transformBlend(node),

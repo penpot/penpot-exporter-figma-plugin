@@ -103,6 +103,27 @@ describe('vector geometry regression', () => {
     expect(result).toHaveLength(0);
   });
 
+  it('reads vectorNetwork only once per vector', () => {
+    const node = createVectorNode({
+      vectorPaths: [
+        { data: 'M 0 0 L 10 10 Z', windingRule: 'NONZERO' },
+        { data: 'M 20 20 L 30 30 Z', windingRule: 'NONZERO' }
+      ]
+    });
+
+    let readCount = 0;
+    Object.defineProperty(node, 'vectorNetwork', {
+      get: () => {
+        readCount++;
+        return { regions: [], vertices: [] };
+      }
+    });
+
+    transformVectorPaths(node);
+
+    expect(readCount).toBe(1);
+  });
+
   it('returns undefined for star/polygon nodes with invalid fillGeometry path data', () => {
     const node = createPathNode({
       fillGeometry: [{ data: 'M 0 0 L nan 10 Z', windingRule: 'NONZERO' }]
