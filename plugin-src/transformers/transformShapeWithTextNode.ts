@@ -10,7 +10,6 @@ import {
   transformSceneNode,
   transformVariableConsumptionMap
 } from '@plugin/transformers/partials';
-import { transformNodeAsImageRect } from '@plugin/transformers/transformNodeAsImageRect';
 import { translateStrokes } from '@plugin/translators';
 import {
   type EditableShapeWithTextAnalysis,
@@ -23,20 +22,19 @@ import { getRotation } from '@plugin/utils';
 
 import type { GroupShape } from '@ui/lib/types/shapes/groupShape';
 import type { PathShape } from '@ui/lib/types/shapes/pathShape';
-import type { RectShape } from '@ui/lib/types/shapes/rectShape';
 import type { TextShape } from '@ui/lib/types/shapes/textShape';
 
 export const transformShapeWithTextNode = async (
   node: ShapeWithTextNode
-): Promise<GroupShape | RectShape | undefined> => {
+): Promise<GroupShape | undefined> => {
   const aabb = node.absoluteBoundingBox;
   if (!aabb) return;
 
   const editableSvg = await exportSvg(node, false);
-  if (!editableSvg) return rasterFallback(node);
+  if (!editableSvg) return;
 
   const editableAnalysis = analyzeEditableShapeWithTextSvg(node, editableSvg, aabb);
-  if (!editableAnalysis) return rasterFallback(node);
+  if (!editableAnalysis) return;
 
   const children: (PathShape | TextShape)[] = [buildPathChild(node, editableAnalysis)];
 
@@ -102,9 +100,6 @@ const buildTextChild = (
     ...transformSceneNode(node)
   };
 };
-
-const rasterFallback = (node: ShapeWithTextNode): Promise<RectShape | undefined> =>
-  transformNodeAsImageRect(node);
 
 const exportSvg = async (
   node: ShapeWithTextNode,
