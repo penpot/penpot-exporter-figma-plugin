@@ -104,7 +104,6 @@ const createTableNode = (
 
 describe('transformTableNode', () => {
   beforeEach(() => {
-    vi.spyOn(console, 'warn').mockImplementation(() => {});
     uuidCounter = 0;
   });
 
@@ -155,10 +154,10 @@ describe('transformTableNode', () => {
     expect(result).toBeUndefined();
   });
 
-  it('returns undefined when cellAt throws', async () => {
-    const result = await transformTableNode(createTableNode(2, 2, { cellAtThrows: true }));
-
-    expect(result).toBeUndefined();
+  it('propagates the error when cellAt throws', async () => {
+    await expect(transformTableNode(createTableNode(2, 2, { cellAtThrows: true }))).rejects.toThrow(
+      'cell-boom'
+    );
   });
 
   it('returns undefined when table is rotated', async () => {
