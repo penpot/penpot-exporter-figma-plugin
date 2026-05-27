@@ -8,22 +8,18 @@ import {
   transformVariableConsumptionMap
 } from '@plugin/transformers/partials';
 import { buildCellFrames, buildGridCells } from '@plugin/transformers/table';
-import { transformNodeAsImageRect } from '@plugin/transformers/transformNodeAsImageRect';
 import { DEFAULT_TABLE_STROKE, computeTableGeometry } from '@plugin/translators/table';
 import { getRotation } from '@plugin/utils';
 
 import type { FrameShape } from '@ui/lib/types/shapes/frameShape';
-import type { RectShape } from '@ui/lib/types/shapes/rectShape';
 
 const TABLE_CORNER_RADIUS = 8;
 
-export const transformTableNode = async (
-  node: TableNode
-): Promise<FrameShape | RectShape | undefined> => {
+export const transformTableNode = async (node: TableNode): Promise<FrameShape | undefined> => {
   try {
-    if (!node.absoluteBoundingBox) return rasterFallback(node);
-    if (node.numRows === 0 || node.numColumns === 0) return rasterFallback(node);
-    if (getRotation(node.absoluteTransform) !== 0) return rasterFallback(node);
+    if (!node.absoluteBoundingBox) return;
+    if (node.numRows === 0 || node.numColumns === 0) return;
+    if (getRotation(node.absoluteTransform) !== 0) return;
 
     const geom = computeTableGeometry(node);
     const cells = buildCellFrames(node, geom);
@@ -54,10 +50,7 @@ export const transformTableNode = async (
       children: cells.map(({ frame }) => frame)
     };
   } catch (error) {
-    console.warn(`Failed to parse table "${node.name}", rasterizing`, error);
-    return rasterFallback(node);
+    console.warn(`Failed to parse table "${node.name}"`, error);
+    return;
   }
 };
-
-const rasterFallback = (node: TableNode): Promise<RectShape | undefined> =>
-  transformNodeAsImageRect(node);

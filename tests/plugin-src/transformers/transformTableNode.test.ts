@@ -3,7 +3,6 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { transformTableNode } from '@plugin/transformers/transformTableNode';
 
 import type { FrameShape } from '@ui/lib/types/shapes/frameShape';
-import type { RectShape } from '@ui/lib/types/shapes/rectShape';
 import type { TextShape } from '@ui/lib/types/shapes/textShape';
 
 vi.mock('@plugin/transformers/partials', () => ({
@@ -21,22 +20,6 @@ vi.mock('@plugin/transformers/partials', () => ({
   transformRotationAndPosition: (): { x: number; y: number } => ({ x: 0, y: 0 }),
   transformSceneNode: (): Record<string, never> => ({}),
   transformVariableConsumptionMap: (): Record<string, never> => ({})
-}));
-
-const { transformNodeAsImageRect } = vi.hoisted(() => ({
-  transformNodeAsImageRect: vi.fn(
-    async (): Promise<RectShape | undefined> =>
-      ({
-        type: 'rect',
-        name: 'fallback rect',
-        id: 'fallback-id',
-        fills: []
-      }) as unknown as RectShape
-  )
-}));
-
-vi.mock('@plugin/transformers/transformNodeAsImageRect', () => ({
-  transformNodeAsImageRect
 }));
 
 vi.mock('@plugin/translators/text', () => ({
@@ -123,7 +106,6 @@ describe('transformTableNode', () => {
   beforeEach(() => {
     vi.spyOn(console, 'warn').mockImplementation(() => {});
     uuidCounter = 0;
-    transformNodeAsImageRect.mockClear();
   });
 
   afterEach(() => {
@@ -161,28 +143,25 @@ describe('transformTableNode', () => {
     expect(populated.children).toHaveLength(1);
   });
 
-  it('falls back to raster when numRows is 0', async () => {
+  it('returns undefined when numRows is 0', async () => {
     const result = await transformTableNode(createTableNode(0, 3));
 
-    expect(transformNodeAsImageRect).toHaveBeenCalled();
-    expect((result as RectShape).type).toBe('rect');
+    expect(result).toBeUndefined();
   });
 
-  it('falls back to raster when absoluteBoundingBox is null', async () => {
+  it('returns undefined when absoluteBoundingBox is null', async () => {
     const result = await transformTableNode(createTableNode(2, 2, { absoluteBoundingBox: null }));
 
-    expect(transformNodeAsImageRect).toHaveBeenCalled();
-    expect((result as RectShape).type).toBe('rect');
+    expect(result).toBeUndefined();
   });
 
-  it('falls back to raster when cellAt throws', async () => {
+  it('returns undefined when cellAt throws', async () => {
     const result = await transformTableNode(createTableNode(2, 2, { cellAtThrows: true }));
 
-    expect(transformNodeAsImageRect).toHaveBeenCalled();
-    expect((result as RectShape).type).toBe('rect');
+    expect(result).toBeUndefined();
   });
 
-  it('falls back to raster when table is rotated', async () => {
+  it('returns undefined when table is rotated', async () => {
     const result = await transformTableNode(
       createTableNode(2, 2, {
         absoluteTransform: [
@@ -192,8 +171,7 @@ describe('transformTableNode', () => {
       })
     );
 
-    expect(transformNodeAsImageRect).toHaveBeenCalled();
-    expect((result as RectShape).type).toBe('rect');
+    expect(result).toBeUndefined();
   });
 
   it('positions cell frames using cumulative row heights and column widths', async () => {

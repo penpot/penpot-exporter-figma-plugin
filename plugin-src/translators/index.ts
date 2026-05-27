@@ -6,7 +6,6 @@ export * from './translateChildren';
 export * from './translateConstraints';
 export * from './translateGrids';
 export * from './translateLayout';
-export * from './translateNodeAsImageFill';
 export * from './translateRotation';
 export * from './translateShadowEffects';
 export * from './translateStrokes';
