@@ -1,5 +1,41 @@
 # penpot-exporter
 
+## 0.23.0
+
+### Minor Changes
+
+- [#376](https://github.com/penpot/penpot-exporter-figma-plugin/pull/376)
+  [`e93e7b0`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/e93e7b0a493b974316cff8c4250788d16d49ebc1)
+  Thanks [@SpykeRel04D](https://github.com/SpykeRel04D)! - Export Figma `ShapeWithText` nodes as an
+  editable Penpot group with a path and a text shape, instead of a rasterized PNG.
+
+- [#381](https://github.com/penpot/penpot-exporter-figma-plugin/pull/381)
+  [`fa8415e`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/fa8415e8dcad8a4b6685ff97071d53f40d9f09bf)
+  Thanks [@SpykeRel04D](https://github.com/SpykeRel04D)! - Export Figma `Table` nodes as editable
+  Penpot frames with grid layout instead of a flat raster.
+
+### Patch Changes
+
+- [#377](https://github.com/penpot/penpot-exporter-figma-plugin/pull/377)
+  [`b3da750`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/b3da750a1906483350a28cb9a7586b66d32cc8e7)
+  Thanks [@SpykeRel04D](https://github.com/SpykeRel04D)! - Show an error screen instead of freezing
+  when an export fails.
+
+- [#382](https://github.com/penpot/penpot-exporter-figma-plugin/pull/382)
+  [`5d01a57`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/5d01a5702a9f348be8fe788a39781b7e69eec647)
+  Thanks [@SpykeRel04D](https://github.com/SpykeRel04D)! - Fix plugin crash when exporting files
+  with large or complex vectors.
+
+- [#378](https://github.com/penpot/penpot-exporter-figma-plugin/pull/378)
+  [`428104b`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/428104bdf6c95500d2fd3a81d31af44664c9e14d)
+  Thanks [@SpykeRel04D](https://github.com/SpykeRel04D)! - Avoid crashing when Figma cannot expose a
+  vector's network data.
+
+- [#379](https://github.com/penpot/penpot-exporter-figma-plugin/pull/379)
+  [`504c3a4`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/504c3a4a9c8d5cfe8f3cd0f7930bc8620713400f)
+  Thanks [@SpykeRel04D](https://github.com/SpykeRel04D)! - Consolidate vector path translation into
+  a single affine pipeline.
+
 ## 0.22.0
 
 ### Minor Changes
