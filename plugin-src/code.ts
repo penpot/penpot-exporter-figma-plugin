@@ -1,6 +1,6 @@
 import { getUserData } from '@plugin/getUserData';
 import { handleExportMessage, handleRetryMessage, postPluginError } from '@plugin/handleMessage';
-import { isSlidesEditor } from '@plugin/utils';
+import { isFigJamEditor, isSlidesEditor } from '@plugin/utils';
 
 import type { ExportScope, ExternalLibrary } from '@ui/types';
 
@@ -58,7 +58,7 @@ const onMessage: MessageEventHandler = message => {
 figma.showUI(__html__, { themeColors: true, width: BASE_WIDTH, height: BASE_HEIGHT });
 figma.ui.onmessage = onMessage;
 
-if (!isSlidesEditor()) {
+if (!isSlidesEditor() && !isFigJamEditor()) {
   figma.teamLibrary
     .getAvailableLibraryVariableCollectionsAsync()
     .then(collections => {

@@ -10,11 +10,16 @@ import {
   textStyles,
   variantProperties
 } from '@plugin/libraries';
-import { transformDocumentNode, transformSlidesDocumentNode } from '@plugin/transformers';
+import {
+  transformDocumentNode,
+  transformFigJamDocumentNode,
+  transformSlidesDocumentNode
+} from '@plugin/transformers';
 import {
   flushProgress,
   getCurrentItem,
   getCurrentStep,
+  isFigJamEditor,
   isSlidesEditor,
   reportProgress,
   resetProgress
@@ -56,7 +61,9 @@ export const handleExportMessage = async (
     initializeExternalLibraries(libraries);
     const document = isSlidesEditor()
       ? await transformSlidesDocumentNode(figma.root)
-      : await transformDocumentNode(figma.root, scope);
+      : isFigJamEditor()
+        ? await transformFigJamDocumentNode(figma.root)
+        : await transformDocumentNode(figma.root, scope);
 
     flushProgress();
 

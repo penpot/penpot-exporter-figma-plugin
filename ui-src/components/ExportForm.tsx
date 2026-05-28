@@ -9,7 +9,7 @@ import { type FormValues, useFigmaContext } from '@ui/context';
 
 export const ExportForm = (): JSX.Element => {
   const { cancel, exportPenpot, editorType } = useFigmaContext();
-  const isSlidesEditor = editorType === 'slides';
+  const hideDesignControls = editorType === 'slides' || editorType === 'figjam';
   const methods = useForm<FormValues>({
     defaultValues: {
       externalLibraries: []
@@ -49,7 +49,7 @@ export const ExportForm = (): JSX.Element => {
     </Stack>
   );
 
-  const rightColumn = isSlidesEditor ? null : <DesignExportControls />;
+  const rightColumn = hideDesignControls ? null : <DesignExportControls />;
 
   return (
     <FormProvider {...methods}>

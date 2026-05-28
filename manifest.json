@@ -4,7 +4,7 @@
   "api": "1.0.0",
   "main": "dist/code.js",
   "ui": "dist/index.html",
-  "editorType": ["figma", "slides"],
+  "editorType": ["figma", "slides", "figjam"],
   "networkAccess": {
     "allowedDomains": [
       "https://o4508183201316864.ingest.de.sentry.io",

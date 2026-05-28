@@ -3,6 +3,7 @@ export * from './translateBlendMode';
 export * from './translateBlurEffects';
 export * from './translateBoolType';
 export * from './translateChildren';
+export * from './translateConnectorStrokeCap';
 export * from './translateConstraints';
 export * from './translateGrids';
 export * from './translateLayout';
