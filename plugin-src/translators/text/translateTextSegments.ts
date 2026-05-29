@@ -1,6 +1,6 @@
 import { textStyles } from '@plugin/libraries';
 import { transformFills } from '@plugin/transformers/partials';
-import { translateFontName } from '@plugin/translators/text/font';
+import { remapFigJamFontName, translateFontName } from '@plugin/translators/text/font';
 import {
   type ParagraphMixin,
   type TextSegment,
@@ -47,7 +47,7 @@ export const transformTextStyle = (
 
   return {
     ...partialTransformTextStyle(segment, textAlign),
-    fontFamily: segment.fontName?.family ?? 'sourcesanspro',
+    fontFamily: remapFigJamFontName(segment.fontName)?.family ?? 'sourcesanspro',
     fontSize: segment.fontSize?.toString() ?? '14',
     fontStyle: translateFontStyle(segment),
     textDecoration: translateTextDecoration(segment),

@@ -18,7 +18,8 @@ vi.mock('@plugin/translators/text/font', () => ({
     fontId: 'gfont-inter',
     fontVariantId: 'regular',
     fontWeight: '400'
-  })
+  }),
+  remapFigJamFontName: (fontName: FontName | undefined): FontName | undefined => fontName
 }));
 
 const createTextNode = (): TextNode =>
