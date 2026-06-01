@@ -1,8 +1,10 @@
 import {
   type FillsLike,
   transformChildIds,
+  transformDimensionAndPosition,
   transformFills,
-  transformIds
+  transformIds,
+  transformSceneNode
 } from '@plugin/transformers/partials';
 import { translateZeroRotation } from '@plugin/translators';
 import { STYLED_TEXT_SEGMENT_FIELDS, buildTextContent } from '@plugin/translators/text';
@@ -13,14 +15,23 @@ import type { FrameShape } from '@ui/lib/types/shapes/frameShape';
 import type { TextShape } from '@ui/lib/types/shapes/textShape';
 import type { Shadow } from '@ui/lib/types/utils/shadow';
 
+// Hardcoded v1 styling — FigJam does not expose sticky padding, corner radius,
+// shadow, or the author footer styling via API. These values approximate the
+// Figma render.
 const STICKY_PADDING = 16;
 const STICKY_CORNER_RADIUS = 0;
 const STICKY_AUTHOR_FONT_SIZE = 12;
-const STICKY_AUTHOR_FONT_FAMILY = 'sourcesanspro';
+const STICKY_AUTHOR_FONT_FAMILY = 'Source Sans Pro';
 const STICKY_AUTHOR_HEIGHT = 20;
 const STICKY_AUTHOR_GAP = 8;
 const STICKY_MIN_HEIGHT_FOR_AUTHOR = 80;
-const STICKY_AUTHOR_FILLS = [{ fillColor: '#000000', fillOpacity: 0.6 }];
+const STICKY_AUTHOR_PAINT: SolidPaint = {
+  type: 'SOLID',
+  color: { r: 0, g: 0, b: 0 },
+  opacity: 0.6,
+  visible: true,
+  blendMode: 'NORMAL'
+};
 
 const showAuthor = (node: StickyNode): boolean =>
   node.authorVisible && Boolean(node.authorName) && node.height >= STICKY_MIN_HEIGHT_FOR_AUTHOR;
@@ -40,24 +51,19 @@ const buildStickyShadow = (node: StickyNode): Shadow => ({
 });
 
 export const transformStickyNode = (node: StickyNode): FrameShape => {
-  const x = node.absoluteTransform[0][2];
-  const y = node.absoluteTransform[1][2];
+  const dimensionAndPosition = transformDimensionAndPosition(node);
   const withAuthor = showAuthor(node);
 
   const children: TextShape[] = [];
-  const bodyChild = buildBodyChild(node, x, y, withAuthor);
+  const bodyChild = buildBodyChild(node, dimensionAndPosition, withAuthor);
   if (bodyChild) children.push(bodyChild);
-  if (withAuthor) children.push(buildAuthorChild(node, x, y));
+  if (withAuthor) children.push(buildAuthorChild(node, dimensionAndPosition));
 
   return {
     type: 'frame',
     name: node.name,
     showContent: true,
     hideInViewer: !node.visible,
-    x,
-    y,
-    width: node.width,
-    height: node.height,
     r1: STICKY_CORNER_RADIUS,
     r2: STICKY_CORNER_RADIUS,
     r3: STICKY_CORNER_RADIUS,
@@ -65,15 +71,18 @@ export const transformStickyNode = (node: StickyNode): FrameShape => {
     shadow: [buildStickyShadow(node)],
     ...transformIds(node),
     ...transformFills(node),
+    ...dimensionAndPosition,
+    ...transformSceneNode(node),
     ...translateZeroRotation(),
     children
   };
 };
 
+type FramePosition = ReturnType<typeof transformDimensionAndPosition>;
+
 const buildBodyChild = (
   node: StickyNode,
-  frameX: number,
-  frameY: number,
+  frame: FramePosition,
   withAuthor: boolean
 ): TextShape | undefined => {
   if (node.text.characters.length === 0) return;
@@ -98,10 +107,10 @@ const buildBodyChild = (
   return {
     type: 'text',
     name: node.text.characters,
-    x: frameX + STICKY_PADDING,
-    y: frameY + STICKY_PADDING,
-    width: Math.max(node.width - STICKY_PADDING * 2, 0),
-    height: Math.max(node.height - STICKY_PADDING * 2 - authorReserve, 0),
+    x: frame.x + STICKY_PADDING,
+    y: frame.y + STICKY_PADDING,
+    width: Math.max(frame.width - STICKY_PADDING * 2, 0),
+    height: Math.max(frame.height - STICKY_PADDING * 2 - authorReserve, 0),
     characters: node.text.characters,
     content: buildTextContent(paragraphMixin, segments, 'left', 'top'),
     growType: 'fixed',
@@ -110,41 +119,45 @@ const buildBodyChild = (
   };
 };
 
-const buildAuthorChild = (node: StickyNode, frameX: number, frameY: number): TextShape => ({
-  type: 'text',
-  name: node.authorName,
-  x: frameX + STICKY_PADDING,
-  y: frameY + node.height - STICKY_PADDING - STICKY_AUTHOR_HEIGHT,
-  width: Math.max(node.width - STICKY_PADDING * 2, 0),
-  height: STICKY_AUTHOR_HEIGHT,
-  characters: node.authorName,
-  content: {
-    type: 'root',
-    verticalAlign: 'top',
-    children: [
-      {
-        type: 'paragraph-set',
-        children: [
-          {
-            type: 'paragraph',
-            textAlign: 'left',
-            fontFamily: STICKY_AUTHOR_FONT_FAMILY,
-            fontSize: `${STICKY_AUTHOR_FONT_SIZE}`,
-            fills: STICKY_AUTHOR_FILLS,
-            children: [
-              {
-                text: node.authorName,
-                fontFamily: STICKY_AUTHOR_FONT_FAMILY,
-                fontSize: `${STICKY_AUTHOR_FONT_SIZE}`,
-                fills: STICKY_AUTHOR_FILLS
-              }
-            ]
-          }
-        ]
-      }
-    ]
-  },
-  growType: 'fixed',
-  ...transformChildIds(node, 1),
-  ...translateZeroRotation()
-});
+const buildAuthorChild = (node: StickyNode, frame: FramePosition): TextShape => {
+  const paragraphMixin: ParagraphMixin & FillsLike = {
+    paragraphIndent: 0,
+    paragraphSpacing: 0,
+    listSpacing: 0,
+    fills: [STICKY_AUTHOR_PAINT],
+    fillStyleId: ''
+  };
+  const segments: TextSegment[] = [
+    {
+      characters: node.authorName,
+      start: 0,
+      end: node.authorName.length,
+      fontName: { family: STICKY_AUTHOR_FONT_FAMILY, style: 'Regular' },
+      fontSize: STICKY_AUTHOR_FONT_SIZE,
+      fontWeight: 400,
+      lineHeight: { unit: 'AUTO' },
+      letterSpacing: { unit: 'PIXELS', value: 0 },
+      textCase: 'ORIGINAL',
+      textDecoration: 'NONE',
+      indentation: 0,
+      listOptions: { type: 'NONE' },
+      fills: [STICKY_AUTHOR_PAINT],
+      fillStyleId: '',
+      textStyleId: ''
+    }
+  ];
+
+  return {
+    type: 'text',
+    name: node.authorName,
+    x: frame.x + STICKY_PADDING,
+    y: frame.y + frame.height - STICKY_PADDING - STICKY_AUTHOR_HEIGHT,
+    width: Math.max(frame.width - STICKY_PADDING * 2, 0),
+    height: STICKY_AUTHOR_HEIGHT,
+    characters: node.authorName,
+    content: buildTextContent(paragraphMixin, segments, 'left', 'top'),
+    growType: 'fixed',
+    ...transformChildIds(node, 1),
+    ...translateZeroRotation()
+  };
+};

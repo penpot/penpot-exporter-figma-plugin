@@ -13,7 +13,7 @@ import {
   translateTextDecoration,
   translateTextTransform
 } from '@plugin/translators/text/properties';
-import { isFigJamEditor } from '@plugin/utils';
+import { editorSupportsStylesApi } from '@plugin/utils';
 
 import type {
   TextNode as PenpotTextNode,
@@ -79,9 +79,7 @@ const translateStyleTextSegment = (
 };
 
 const hasTextStyle = (segment: TextSegment): boolean => {
-  // FigJam has no text styles API (`figma.getStyleByIdAsync` is missing),
-  // so style references would crash during processAssets. Render inline.
-  if (isFigJamEditor()) return false;
+  if (!editorSupportsStylesApi()) return false;
 
   return segment.textStyleId !== undefined && segment.textStyleId.length > 0;
 };
