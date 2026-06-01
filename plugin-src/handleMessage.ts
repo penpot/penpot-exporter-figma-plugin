@@ -25,12 +25,18 @@ import {
   resetProgress
 } from '@plugin/utils';
 
-import type { ErrorPayload, ExportScope, ExternalLibrary } from '@ui/types';
+import type { ErrorPayload, ExportScope, ExternalLibrary, PenpotDocument } from '@ui/types';
 
 const initializeExternalLibraries = (libraries: ExternalLibrary[]): void => {
   for (const library of libraries) {
     externalLibraries.set(library.name, library.uuid);
   }
+};
+
+const buildDocument = async (scope: ExportScope): Promise<PenpotDocument> => {
+  if (isSlidesEditor()) return transformSlidesDocumentNode(figma.root);
+  if (isFigJamEditor()) return transformFigJamDocumentNode(figma.root);
+  return transformDocumentNode(figma.root, scope);
 };
 
 const buildErrorPayload = (error: unknown): ErrorPayload => ({
@@ -59,11 +65,7 @@ export const handleExportMessage = async (
     resetProgress();
 
     initializeExternalLibraries(libraries);
-    const document = isSlidesEditor()
-      ? await transformSlidesDocumentNode(figma.root)
-      : isFigJamEditor()
-        ? await transformFigJamDocumentNode(figma.root)
-        : await transformDocumentNode(figma.root, scope);
+    const document = await buildDocument(scope);
 
     flushProgress();
 
