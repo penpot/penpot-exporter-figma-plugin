@@ -1,14 +1,10 @@
-import { type Command } from 'svg-path-parser';
-
 import { transformIds, transformSceneNode } from '@plugin/transformers/partials';
 import { translateZeroRotation } from '@plugin/translators';
 import { translateFills } from '@plugin/translators/fills';
 import {
-  computePathBounds,
-  extractDrawablePaths,
-  parseDrawables
+  buildPathContentFromDrawables,
+  extractDrawablePaths
 } from '@plugin/translators/shapeWithText';
-import { serializeCommands } from '@plugin/translators/vectors';
 
 import type { PathShape } from '@ui/lib/types/shapes/pathShape';
 
@@ -27,27 +23,19 @@ export const transformConnectorNode = async (
   const drawables = extractDrawablePaths(svg);
   if (drawables.length === 0) return;
 
-  const subpaths = parseDrawables(drawables, pathData => {
+  const result = buildPathContentFromDrawables(drawables, aabb, pathData => {
     console.warn('Skipping connector subpath with invalid SVG', {
       nodeId: node.id,
       nodeName: node.name,
       pathData
     });
   });
-  const bounds = computePathBounds(subpaths);
-  if (!bounds) return;
-
-  const toCanvas: Transform = [
-    [1, 0, aabb.x - bounds.minX],
-    [0, 1, aabb.y - bounds.minY]
-  ];
-  const content = serializeAll(subpaths, toCanvas);
-  if (!content) return;
+  if (!result) return;
 
   return {
     type: 'path',
     name: node.name,
-    content,
+    content: result.content,
     ...transformIds(node),
     fills: translateFills(node.strokes),
     strokes: [],
@@ -55,12 +43,6 @@ export const transformConnectorNode = async (
     ...transformSceneNode(node)
   };
 };
-
-const serializeAll = (subpaths: Command[][], toCanvas: Transform): string =>
-  subpaths
-    .map(commands => serializeCommands(commands, toCanvas))
-    .join(' ')
-    .trim();
 
 const exportSvg = async (node: ConnectorNode): Promise<string | undefined> => {
   try {

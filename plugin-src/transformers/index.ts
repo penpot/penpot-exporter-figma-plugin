@@ -1,3 +1,4 @@
+export * from './buildPenpotDocument';
 export * from './transformBooleanNode';
 export * from './transformComponentNode';
 export * from './transformComponentSetNode';

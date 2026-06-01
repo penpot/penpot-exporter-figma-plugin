@@ -15,11 +15,9 @@ import type { FrameShape } from '@ui/lib/types/shapes/frameShape';
 import type { TextShape } from '@ui/lib/types/shapes/textShape';
 import type { Shadow } from '@ui/lib/types/utils/shadow';
 
-// Hardcoded v1 styling — FigJam does not expose sticky padding, corner radius,
-// shadow, or the author footer styling via API. These values approximate the
-// Figma render.
+// Hardcoded v1 styling — FigJam does not expose sticky padding, shadow, or the
+// author footer styling via API. These values approximate the Figma render.
 const STICKY_PADDING = 16;
-const STICKY_CORNER_RADIUS = 0;
 const STICKY_AUTHOR_FONT_SIZE = 12;
 const STICKY_AUTHOR_FONT_FAMILY = 'Source Sans Pro';
 const STICKY_AUTHOR_HEIGHT = 20;
@@ -32,6 +30,9 @@ const STICKY_AUTHOR_PAINT: SolidPaint = {
   visible: true,
   blendMode: 'NORMAL'
 };
+
+type FramePosition = ReturnType<typeof transformDimensionAndPosition>;
+type ChildLayout = { x: number; y: number; width: number; height: number };
 
 const showAuthor = (node: StickyNode): boolean =>
   node.authorVisible && Boolean(node.authorName) && node.height >= STICKY_MIN_HEIGHT_FOR_AUTHOR;
@@ -64,10 +65,10 @@ export const transformStickyNode = (node: StickyNode): FrameShape => {
     name: node.name,
     showContent: true,
     hideInViewer: !node.visible,
-    r1: STICKY_CORNER_RADIUS,
-    r2: STICKY_CORNER_RADIUS,
-    r3: STICKY_CORNER_RADIUS,
-    r4: STICKY_CORNER_RADIUS,
+    r1: 0,
+    r2: 0,
+    r3: 0,
+    r4: 0,
     shadow: [buildStickyShadow(node)],
     ...transformIds(node),
     ...transformFills(node),
@@ -78,7 +79,26 @@ export const transformStickyNode = (node: StickyNode): FrameShape => {
   };
 };
 
-type FramePosition = ReturnType<typeof transformDimensionAndPosition>;
+const buildStickyTextChild = (
+  node: StickyNode,
+  characters: string,
+  paragraphMixin: ParagraphMixin & FillsLike,
+  segments: TextSegment[],
+  layout: ChildLayout,
+  childIndex: number
+): TextShape => ({
+  type: 'text',
+  name: characters,
+  x: layout.x,
+  y: layout.y,
+  width: Math.max(layout.width, 0),
+  height: Math.max(layout.height, 0),
+  characters,
+  content: buildTextContent(paragraphMixin, segments, 'left', 'top'),
+  growType: 'fixed',
+  ...transformChildIds(node, childIndex),
+  ...translateZeroRotation()
+});
 
 const buildBodyChild = (
   node: StickyNode,
@@ -87,13 +107,7 @@ const buildBodyChild = (
 ): TextShape | undefined => {
   if (node.text.characters.length === 0) return;
 
-  const rawSegments = node.text.getStyledTextSegments(STYLED_TEXT_SEGMENT_FIELDS);
-  // Clearing textStyleId avoids FigJam's missing `figma.getStyleByIdAsync` API.
-  const segments: TextSegment[] = rawSegments.map(segment => ({
-    ...segment,
-    textStyleId: ''
-  }));
-
+  const segments = node.text.getStyledTextSegments(STYLED_TEXT_SEGMENT_FIELDS);
   const paragraphMixin: ParagraphMixin & FillsLike = {
     paragraphIndent: node.text.paragraphIndent,
     paragraphSpacing: node.text.paragraphSpacing,
@@ -104,19 +118,19 @@ const buildBodyChild = (
 
   const authorReserve = withAuthor ? STICKY_AUTHOR_HEIGHT + STICKY_AUTHOR_GAP : 0;
 
-  return {
-    type: 'text',
-    name: node.text.characters,
-    x: frame.x + STICKY_PADDING,
-    y: frame.y + STICKY_PADDING,
-    width: Math.max(frame.width - STICKY_PADDING * 2, 0),
-    height: Math.max(frame.height - STICKY_PADDING * 2 - authorReserve, 0),
-    characters: node.text.characters,
-    content: buildTextContent(paragraphMixin, segments, 'left', 'top'),
-    growType: 'fixed',
-    ...transformChildIds(node, 0),
-    ...translateZeroRotation()
-  };
+  return buildStickyTextChild(
+    node,
+    node.text.characters,
+    paragraphMixin,
+    segments,
+    {
+      x: frame.x + STICKY_PADDING,
+      y: frame.y + STICKY_PADDING,
+      width: frame.width - STICKY_PADDING * 2,
+      height: frame.height - STICKY_PADDING * 2 - authorReserve
+    },
+    0
+  );
 };
 
 const buildAuthorChild = (node: StickyNode, frame: FramePosition): TextShape => {
@@ -147,17 +161,17 @@ const buildAuthorChild = (node: StickyNode, frame: FramePosition): TextShape => 
     }
   ];
 
-  return {
-    type: 'text',
-    name: node.authorName,
-    x: frame.x + STICKY_PADDING,
-    y: frame.y + frame.height - STICKY_PADDING - STICKY_AUTHOR_HEIGHT,
-    width: Math.max(frame.width - STICKY_PADDING * 2, 0),
-    height: STICKY_AUTHOR_HEIGHT,
-    characters: node.authorName,
-    content: buildTextContent(paragraphMixin, segments, 'left', 'top'),
-    growType: 'fixed',
-    ...transformChildIds(node, 1),
-    ...translateZeroRotation()
-  };
+  return buildStickyTextChild(
+    node,
+    node.authorName,
+    paragraphMixin,
+    segments,
+    {
+      x: frame.x + STICKY_PADDING,
+      y: frame.y + frame.height - STICKY_PADDING - STICKY_AUTHOR_HEIGHT,
+      width: frame.width - STICKY_PADDING * 2,
+      height: STICKY_AUTHOR_HEIGHT
+    },
+    1
+  );
 };

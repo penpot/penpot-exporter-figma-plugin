@@ -1,11 +1,7 @@
-import {
-  computePathBounds,
-  extractDrawablePaths,
-  parseDrawables
-} from '@plugin/translators/shapeWithText/extractDrawables';
+import { buildPathContentFromDrawables } from '@plugin/translators/shapeWithText/buildPathContentFromDrawables';
+import { extractDrawablePaths } from '@plugin/translators/shapeWithText/extractDrawables';
 import { extractShadows } from '@plugin/translators/shapeWithText/extractShadows';
 import { extractTextLines } from '@plugin/translators/shapeWithText/extractTextLines';
-import { serializeCommands } from '@plugin/translators/vectors';
 
 import type { Shadow } from '@ui/lib/types/utils/shadow';
 
@@ -32,32 +28,20 @@ export const analyzeEditableShapeWithTextSvg = (
     return;
   }
 
-  const subpaths = parseDrawables(drawables, () => {
+  const result = buildPathContentFromDrawables(drawables, aabb, () => {
     console.warn('Skipping shape-with-text subpath with invalid SVG', {
       nodeId: node.id,
       nodeName: node.name,
       shapeType: node.shapeType
     });
   });
-  const bounds = computePathBounds(subpaths);
-  if (!bounds) return;
-
-  const toCanvas: Transform = [
-    [1, 0, aabb.x - bounds.minX],
-    [0, 1, aabb.y - bounds.minY]
-  ];
-  const content = subpaths
-    .map(commands => serializeCommands(commands, toCanvas))
-    .join(' ')
-    .trim();
-
-  if (!content) return;
+  if (!result) return;
 
   return {
-    content,
+    content: result.content,
     drawableCount: drawables.length,
     forcedLines: extractTextLines(svg),
     shadow: extractShadows(svg),
-    svgOrigin: { x: bounds.minX, y: bounds.minY }
+    svgOrigin: { x: result.bounds.minX, y: result.bounds.minY }
   };
 };
