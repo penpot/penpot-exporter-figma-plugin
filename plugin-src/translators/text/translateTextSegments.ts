@@ -1,6 +1,6 @@
 import { textStyles } from '@plugin/libraries';
 import { transformFills } from '@plugin/transformers/partials';
-import { translateFontName } from '@plugin/translators/text/font';
+import { remapFigJamFontName, translateFontName } from '@plugin/translators/text/font';
 import {
   type ParagraphMixin,
   type TextSegment,
@@ -13,6 +13,7 @@ import {
   translateTextDecoration,
   translateTextTransform
 } from '@plugin/translators/text/properties';
+import { editorSupportsStylesApi } from '@plugin/utils';
 
 import type {
   TextNode as PenpotTextNode,
@@ -46,7 +47,7 @@ export const transformTextStyle = (
 
   return {
     ...partialTransformTextStyle(segment, textAlign),
-    fontFamily: segment.fontName?.family ?? 'sourcesanspro',
+    fontFamily: remapFigJamFontName(segment.fontName)?.family ?? 'sourcesanspro',
     fontSize: segment.fontSize?.toString() ?? '14',
     fontStyle: translateFontStyle(segment),
     textDecoration: translateTextDecoration(segment),
@@ -78,6 +79,8 @@ const translateStyleTextSegment = (
 };
 
 const hasTextStyle = (segment: TextSegment): boolean => {
+  if (!editorSupportsStylesApi()) return false;
+
   return segment.textStyleId !== undefined && segment.textStyleId.length > 0;
 };
 

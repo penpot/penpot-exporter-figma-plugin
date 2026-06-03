@@ -113,7 +113,7 @@ export const useFigma = (): UseFigmaHook => {
       }
       case 'EDITOR_TYPE': {
         setEditorType(pluginMessage.data);
-        if (pluginMessage.data === 'slides') {
+        if (pluginMessage.data === 'slides' || pluginMessage.data === 'figjam') {
           setExportScope('all');
         }
         break;

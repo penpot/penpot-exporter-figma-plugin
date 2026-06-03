@@ -1,5 +1,6 @@
 import { translateFillStyleId, translateFills } from '@plugin/translators/fills';
 import type { TextSegment } from '@plugin/translators/text/paragraph';
+import { editorSupportsStylesApi } from '@plugin/utils';
 
 import type { ShapeAttributes } from '@ui/lib/types/shapes/shape';
 import type { TextStyle } from '@ui/lib/types/shapes/textShape';
@@ -37,6 +38,8 @@ export const transformVectorFills = (
 };
 
 const hasFillStyle = (node: FillsLike | VectorRegion | VectorNode | TextSegment): boolean => {
+  if (!editorSupportsStylesApi()) return false;
+
   return (
     node.fillStyleId !== figma.mixed &&
     node.fillStyleId !== undefined &&
