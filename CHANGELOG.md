@@ -1,5 +1,21 @@
 # penpot-exporter
 
+## 0.24.0
+
+### Minor Changes
+
+- [#384](https://github.com/penpot/penpot-exporter-figma-plugin/pull/384)
+  [`f956622`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/f956622bdbed6a284652bd9a95224beee08ae604)
+  Thanks [@SpykeRel04D](https://github.com/SpykeRel04D)! - Add support for FigJam files, exporting
+  stickies and connectors as editable Penpot shapes.
+
+### Patch Changes
+
+- [#388](https://github.com/penpot/penpot-exporter-figma-plugin/pull/388)
+  [`1df9c1f`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/1df9c1fe69f47d427b78661bcdf69c2824894a20)
+  Thanks [@SpykeRel04D](https://github.com/SpykeRel04D)! - Fix export crash on grids with non-finite
+  numeric values (e.g. from deleted variables).
+
 ## 0.23.0
 
 ### Minor Changes
