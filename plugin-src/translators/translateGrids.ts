@@ -4,7 +4,7 @@ import type {
   RowsColsLayoutGrid
 } from '@figma/plugin-typings/plugin-api-standalone';
 
-import { rgbToHex } from '@plugin/utils';
+import { finiteOrUndefined, rgbToHex } from '@plugin/utils';
 
 import type {
   ColumnGrid,
@@ -15,23 +15,30 @@ import type {
 } from '@ui/lib/types/utils/grid';
 
 export const translateGrids = (layoutGrids: readonly LayoutGrid[]): Grid[] => {
-  return layoutGrids.map(grid => {
-    switch (grid.pattern) {
-      case 'GRID':
-        return translateSquareGrid(grid);
-      case 'ROWS':
-      case 'COLUMNS':
-        return translateRowColsGrid(grid);
-    }
-  });
+  return layoutGrids
+    .map(grid => {
+      switch (grid.pattern) {
+        case 'GRID':
+          return translateSquareGrid(grid);
+        case 'ROWS':
+        case 'COLUMNS':
+          return translateRowColsGrid(grid);
+      }
+    })
+    .filter((grid): grid is Grid => grid !== undefined);
 };
 
-const translateSquareGrid = (layoutGrid: GridLayoutGrid): SquareGrid => {
+const translateSquareGrid = (layoutGrid: GridLayoutGrid): SquareGrid | undefined => {
+  const size = finiteOrUndefined(layoutGrid.sectionSize);
+
+  // `size` is required for a square grid; drop the grid when there is no valid value.
+  if (size === undefined) return;
+
   return {
     type: 'square',
     display: layoutGrid.visible ? layoutGrid.visible : false,
     params: {
-      size: layoutGrid.sectionSize,
+      size,
       color: {
         color: layoutGrid.color ? rgbToHex(layoutGrid.color) : '#000000',
         opacity: layoutGrid.color ? layoutGrid.color.a : 0
@@ -50,10 +57,10 @@ const translateRowColsGrid = (layoutGrid: RowsColsLayoutGrid): RowGrid | ColumnG
         opacity: layoutGrid.color ? layoutGrid.color.a : 0
       },
       type: translateGridAlignment(layoutGrid.alignment),
-      size: layoutGrid.count === Infinity ? undefined : layoutGrid.count,
-      margin: layoutGrid.offset,
-      gutter: layoutGrid.gutterSize,
-      itemLength: layoutGrid.sectionSize
+      size: finiteOrUndefined(layoutGrid.count),
+      margin: finiteOrUndefined(layoutGrid.offset),
+      gutter: finiteOrUndefined(layoutGrid.gutterSize),
+      itemLength: finiteOrUndefined(layoutGrid.sectionSize)
     }
   };
 };
