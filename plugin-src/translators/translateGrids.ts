@@ -18,7 +18,6 @@ export const translateGrids = (layoutGrids: readonly LayoutGrid[]): Grid[] => {
   return layoutGrids
     .map(grid => {
       switch (grid.pattern) {
-        // `size` is required for a square grid, so it may be dropped (undefined).
         case 'GRID':
           return translateSquareGrid(grid);
         case 'ROWS':
@@ -32,6 +31,7 @@ export const translateGrids = (layoutGrids: readonly LayoutGrid[]): Grid[] => {
 const translateSquareGrid = (layoutGrid: GridLayoutGrid): SquareGrid | undefined => {
   const size = finiteOrUndefined(layoutGrid.sectionSize);
 
+  // `size` is required for a square grid; drop the grid when there is no valid value.
   if (size === undefined) return;
 
   return {
