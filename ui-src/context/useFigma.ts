@@ -55,6 +55,7 @@ export const useFigma = (): UseFigmaHook => {
   const [exportLibraries, setExportLibraries] = useState<string[]>([]);
   const [editorType, setEditorType] = useState<UseFigmaHook['editorType']>('figma');
   const exportStartTimeRef = useRef<number | null>(null);
+  const collectedImagesRef = useRef<Record<string, Uint8Array<ArrayBuffer>>>({});
 
   const [step, setStep] = useState<Steps>('processing');
   const [stepLabel, setStepLabel] = useState<string | undefined>(undefined);
@@ -137,8 +138,14 @@ export const useFigma = (): UseFigmaHook => {
 
         totalItemsRef.current = 0;
         exportStartTimeRef.current = null;
+        collectedImagesRef.current = {};
 
         track('Plugin Reloaded');
+
+        break;
+      }
+      case 'PENPOT_IMAGE': {
+        collectedImagesRef.current[pluginMessage.data.key] = pluginMessage.data.bytes;
 
         break;
       }
@@ -146,6 +153,11 @@ export const useFigma = (): UseFigmaHook => {
         if (pluginMessage.data.missingFonts) {
           setMissingFonts(pluginMessage.data.missingFonts);
         }
+
+        // Images arrive streamed as PENPOT_IMAGE messages before this document;
+        // attach the collected bytes so the parser sees the full asset record.
+        pluginMessage.data.images = collectedImagesRef.current;
+        collectedImagesRef.current = {};
 
         const context = await parse(pluginMessage.data);
 
@@ -226,6 +238,7 @@ export const useFigma = (): UseFigmaHook => {
         break;
       }
       case 'ERROR': {
+        collectedImagesRef.current = {};
         handleError(pluginMessage.data);
 
         break;
@@ -268,6 +281,7 @@ export const useFigma = (): UseFigmaHook => {
   const exportPenpot = (data: FormValues): void => {
     setExporting(true);
     exportStartTimeRef.current = Date.now();
+    collectedImagesRef.current = {};
 
     track('File Export Started', { scope: exportScope });
 

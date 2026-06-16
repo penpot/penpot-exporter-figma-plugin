@@ -3,12 +3,10 @@ import { yieldByTime } from '@common/sleep';
 import { images } from '@plugin/libraries';
 import { flushProgress, reportProgress } from '@plugin/utils';
 
-export const processImages = async (
-  currentAsset: number
-): Promise<Record<string, Uint8Array<ArrayBuffer>>> => {
-  const processedImages: Record<string, Uint8Array<ArrayBuffer>> = {};
-
-  if (images.size === 0) return processedImages;
+// Images are streamed to the UI one by one (PENPOT_IMAGE messages) instead of
+// being returned in bulk, so they never get accumulated plugin-side.
+export const processImages = async (currentAsset: number): Promise<void> => {
+  if (images.size === 0) return;
 
   let currentImage = currentAsset;
 
@@ -17,7 +15,12 @@ export const processImages = async (
       const bytes = await image?.getBytesAsync();
 
       if (bytes) {
-        processedImages[key] = bytes as Uint8Array<ArrayBuffer>;
+        // Stream each image to the UI immediately instead of accumulating its
+        // bytes in memory, keeping the plugin-side peak at ~1 image at a time.
+        reportProgress({
+          type: 'PENPOT_IMAGE',
+          data: { key, bytes: bytes as Uint8Array<ArrayBuffer> }
+        });
       }
     } catch {
       // Skip images without valid data (e.g., empty image fills)
@@ -37,6 +40,4 @@ export const processImages = async (
   flushProgress();
 
   await yieldByTime(undefined, true);
-
-  return processedImages;
 };

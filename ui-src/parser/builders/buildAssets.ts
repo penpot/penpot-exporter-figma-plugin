@@ -13,7 +13,7 @@ export const buildAssets = async (
   context: PenpotContext,
   document: PenpotDocument
 ): Promise<void> => {
-  const { images, paintStyles, textStyles } = document;
+  const { images = {}, paintStyles, textStyles } = document;
 
   const imagesToOptimize = Object.entries(images);
   const paintStylesToRegister = Object.entries(paintStyles);

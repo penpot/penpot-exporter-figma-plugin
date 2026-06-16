@@ -26,6 +26,14 @@ export type PenpotDocumentMessage = {
   data: PenpotDocument;
 };
 
+export type PenpotImageMessage = {
+  type: 'PENPOT_IMAGE';
+  data: {
+    key: string;
+    bytes: Uint8Array<ArrayBuffer>;
+  };
+};
+
 export type ProgressStepMessage = {
   type: 'PROGRESS_STEP';
   data: {
@@ -82,6 +90,7 @@ export type EditorTypeMessage = {
 
 export type PluginMessage =
   | PenpotDocumentMessage
+  | PenpotImageMessage
   | ProgressStepMessage
   | ProgressProcessedItemsMessage
   | ProgressCurrentItemMessage
