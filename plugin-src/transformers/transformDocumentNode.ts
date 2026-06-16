@@ -27,12 +27,11 @@ export const transformDocumentNode = async (
   await registerTextStyles();
 
   const children = await processPages(node, scope);
-  const [images, paintStyles, textStyles] = await processAssets();
+  const [paintStyles, textStyles] = await processAssets();
 
   return {
     name: node.name,
     children,
-    images,
     paintStyles,
     textStyles,
     tokens,

@@ -3,14 +3,10 @@ import { yieldByTime } from '@common/sleep';
 import { images } from '@plugin/libraries';
 import { flushProgress, reportProgress } from '@plugin/utils';
 
-export const processImages = async (
-  currentAsset: number
-): Promise<Record<string, Uint8Array<ArrayBuffer>>> => {
-  // Images are streamed to the UI one by one (PENPOT_IMAGE messages) rather than
-  // returned in bulk, so the document built downstream carries an empty record.
-  const noImages: Record<string, Uint8Array<ArrayBuffer>> = {};
-
-  if (images.size === 0) return noImages;
+// Images are streamed to the UI one by one (PENPOT_IMAGE messages) instead of
+// being returned in bulk, so they never get accumulated plugin-side.
+export const processImages = async (currentAsset: number): Promise<void> => {
+  if (images.size === 0) return;
 
   let currentImage = currentAsset;
 
@@ -44,6 +40,4 @@ export const processImages = async (
   flushProgress();
 
   await yieldByTime(undefined, true);
-
-  return noImages;
 };

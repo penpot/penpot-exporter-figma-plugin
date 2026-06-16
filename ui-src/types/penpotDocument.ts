@@ -8,7 +8,8 @@ export type PenpotDocument = {
   name: string;
   children?: PenpotPage[];
   components: Record<string, ComponentRoot>;
-  images: Record<string, Uint8Array<ArrayBuffer>>;
+  // Streamed separately as PENPOT_IMAGE messages and attached by the UI before parsing.
+  images?: Record<string, Uint8Array<ArrayBuffer>>;
   paintStyles: Record<string, FillStyle>;
   textStyles: Record<string, TypographyStyle>;
   tokens?: Tokens;

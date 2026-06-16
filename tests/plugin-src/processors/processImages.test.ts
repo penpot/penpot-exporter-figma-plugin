@@ -33,13 +33,12 @@ describe('processImages', () => {
     images.clear();
   });
 
-  it('streams one PENPOT_IMAGE per image, empties the map and returns an empty record', async () => {
+  it('streams one PENPOT_IMAGE per image and empties the map', async () => {
     images.set('hashA', createImage(new Uint8Array([1, 2, 3])));
     images.set('hashB', createImage(new Uint8Array([4, 5, 6])));
 
-    const result = await processImages(1);
+    await processImages(1);
 
-    expect(result).toEqual({});
     expect(images.size).toBe(0);
     expect(postedImageMessages()).toEqual([
       { type: 'PENPOT_IMAGE', data: { key: 'hashA', bytes: new Uint8Array([1, 2, 3]) } },
@@ -53,9 +52,8 @@ describe('processImages', () => {
     } as unknown as Image);
     images.set('ok', createImage(new Uint8Array([7, 8])));
 
-    const result = await processImages(1);
+    await processImages(1);
 
-    expect(result).toEqual({});
     expect(images.size).toBe(0);
     expect(postedImageMessages()).toEqual([
       { type: 'PENPOT_IMAGE', data: { key: 'ok', bytes: new Uint8Array([7, 8]) } }
@@ -63,9 +61,8 @@ describe('processImages', () => {
   });
 
   it('does nothing when there are no images', async () => {
-    const result = await processImages(1);
+    await processImages(1);
 
-    expect(result).toEqual({});
     expect(postedImageMessages()).toHaveLength(0);
   });
 });

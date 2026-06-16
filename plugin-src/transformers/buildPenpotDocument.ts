@@ -16,12 +16,11 @@ export const buildPenpotDocument = async (
   name: string,
   children: PenpotPage[]
 ): Promise<PenpotDocument> => {
-  const [images, paintStyles, textStyles] = await processAssets();
+  const [paintStyles, textStyles] = await processAssets();
 
   return {
     name,
     children,
-    images,
     paintStyles,
     textStyles,
     tokens: undefined,
