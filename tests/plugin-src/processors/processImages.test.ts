@@ -65,4 +65,39 @@ describe('processImages', () => {
 
     expect(postedImageMessages()).toHaveLength(0);
   });
+
+  it('fetches image bytes concurrently instead of one at a time', async () => {
+    let inFlight = 0;
+    let maxInFlight = 0;
+    const release: Array<() => void> = [];
+
+    const gatedImage = (bytes: Uint8Array): Image =>
+      ({
+        getBytesAsync: vi.fn().mockImplementation(() => {
+          inFlight++;
+          maxInFlight = Math.max(maxInFlight, inFlight);
+
+          return new Promise<Uint8Array>(resolve => {
+            release.push(() => {
+              inFlight--;
+              resolve(bytes);
+            });
+          });
+        })
+      }) as unknown as Image;
+
+    images.set('a', gatedImage(new Uint8Array([1])));
+    images.set('b', gatedImage(new Uint8Array([2])));
+    images.set('c', gatedImage(new Uint8Array([3])));
+
+    const done = processImages(1);
+
+    expect(maxInFlight).toBeGreaterThan(1);
+
+    release.forEach(resolve => resolve());
+    await done;
+
+    expect(images.size).toBe(0);
+    expect(postedImageMessages()).toHaveLength(3);
+  });
 });
