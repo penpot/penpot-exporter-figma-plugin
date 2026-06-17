@@ -57,33 +57,29 @@ async function optimizeImage(bytes: Uint8Array<ArrayBuffer>): Promise<{
   width: number;
   height: number;
 }> {
-  const url = URL.createObjectURL(new Blob([bytes]));
+  // createImageBitmap decodes straight from the bytes (no object URL / <img>
+  // intermediaries), and bitmap.close() lets us free the decoded pixels
+  // deterministically instead of waiting for the GC to collect a detached image.
+  const bitmap = await createImageBitmap(new Blob([bytes]));
 
   try {
-    const image = await new Promise<HTMLImageElement>((resolve, reject) => {
-      const img = new Image();
-      img.onload = (): void => resolve(img);
-      img.onerror = (): void => reject();
-      img.src = url;
-    });
-
-    const canvas = new OffscreenCanvas(image.width, image.height);
+    const canvas = new OffscreenCanvas(bitmap.width, bitmap.height);
     const context = canvas.getContext('2d');
 
     if (!context) {
       throw new Error('Could not create canvas context');
     }
 
-    context.drawImage(image, 0, 0);
+    context.drawImage(bitmap, 0, 0);
 
     const blob = await canvas.convertToBlob({ type: IMAGE_FORMAT, quality: IMAGE_QUALITY });
 
     return {
       blob,
-      width: image.width,
-      height: image.height
+      width: bitmap.width,
+      height: bitmap.height
     };
   } finally {
-    URL.revokeObjectURL(url);
+    bitmap.close();
   }
 }
