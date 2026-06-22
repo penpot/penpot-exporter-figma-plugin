@@ -1,5 +1,42 @@
 # penpot-exporter
 
+## 0.24.0
+
+### Minor Changes
+
+- [#384](https://github.com/penpot/penpot-exporter-figma-plugin/pull/384)
+  [`f956622`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/f956622bdbed6a284652bd9a95224beee08ae604)
+  Thanks [@SpykeRel04D](https://github.com/SpykeRel04D)! - Add support for FigJam files, exporting
+  stickies and connectors as editable Penpot shapes.
+
+### Patch Changes
+
+- [#388](https://github.com/penpot/penpot-exporter-figma-plugin/pull/388)
+  [`1df9c1f`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/1df9c1fe69f47d427b78661bcdf69c2824894a20)
+  Thanks [@SpykeRel04D](https://github.com/SpykeRel04D)! - Fix export crash on grids with non-finite
+  numeric values (e.g. from deleted variables).
+
+- [#392](https://github.com/penpot/penpot-exporter-figma-plugin/pull/392)
+  [`bbf7358`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/bbf7358c658af470ee4cbbf50044d3890386ab90)
+  Thanks [@SpykeRel04D](https://github.com/SpykeRel04D)! - Speed up exports of image-heavy files by
+  fetching image bytes from Figma with a small concurrency pool instead of one at a time.
+
+- [#393](https://github.com/penpot/penpot-exporter-figma-plugin/pull/393)
+  [`fae4773`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/fae4773641070430d845c9050f133b6b0b9e66c7)
+  Thanks [@SpykeRel04D](https://github.com/SpykeRel04D)! - Lower peak memory during export by
+  decoding images with createImageBitmap and releasing the decoded pixels deterministically once
+  each image is re-encoded.
+
+- [#390](https://github.com/penpot/penpot-exporter-figma-plugin/pull/390)
+  [`1df6f72`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/1df6f72cebf63f08c809c0be5f3a3b9fa89db042)
+  Thanks [@SpykeRel04D](https://github.com/SpykeRel04D)! - Fix export crashing (out of memory) on
+  large, image-heavy files.
+
+- [#391](https://github.com/penpot/penpot-exporter-figma-plugin/pull/391)
+  [`49dbacd`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/49dbacd24cf465f7af85a48bdb8c0e46e90e574a)
+  Thanks [@SpykeRel04D](https://github.com/SpykeRel04D)! - Reduce memory usage during export by
+  buffering the output zip as Blobs instead of keeping it on the JS heap.
+
 ## 0.23.0
 
 ### Minor Changes
