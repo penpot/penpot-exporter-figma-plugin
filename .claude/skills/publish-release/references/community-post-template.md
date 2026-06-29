@@ -3,9 +3,9 @@
 Post target: a **reply** in the existing Penpot community thread
 <https://community.penpot.app/t/figma-to-penpot-export-plugin/5554> (do NOT open a new topic).
 
-This is **not** the raw changelog — translate the changesets entries into user benefits. Map
-**Minor changes → Highlights** (lead with these), and fold the user-visible **Patch changes** into
-the relevant Highlight bullet or into "What to expect?". Skip purely internal patches.
+This is **not** the raw changelog — translate the changesets entries into user benefits. Map **Minor
+changes → Highlights** (lead with these), and fold the user-visible **Patch changes** into the
+relevant Highlight bullet or into "What to expect?". Skip purely internal patches.
 
 ## Formatting conventions (verified against the rendered 0.24.0 post)
 
@@ -16,16 +16,17 @@ the relevant Highlight bullet or into "What to expect?". Skip purely internal pa
 - In the intro, bold the product name inline: `**Penpot Exporter X.Y.Z**`.
 - **Highlights header is bold:** `:rocket: **Highlights**`
 - **Each highlight is a markdown bullet** (`*`) with an emoji and a **bold** feature name ending in
-  a colon: `* :emoji: **Feature name:** description.` Pick a fitting emoji per feature (palette below).
+  a colon: `* :emoji: **Feature name:** description.` Pick a fitting emoji per feature (palette
+  below).
 - Use inline code for API/identifier names, e.g. `` `createImageBitmap` ``.
 - **Section labels are bold:** `:stopwatch: **What to expect?**` and
   `:speech_balloon: **We'd love your feedback!**`
-- **Closing link:** end with a bare URL — Discourse oneboxes it as "GitHub · Where software is built":
-  `https://github.com/penpot/penpot-exporter-figma-plugin/issues`
+- **Closing link:** end with a bare URL — Discourse oneboxes it as "GitHub · Where software is
+  built": `https://github.com/penpot/penpot-exporter-figma-plugin/issues`
 
-Per-feature emoji palette (reuse what fits the feature):
-`:milky_way:` `:high_voltage:` `:hammer_and_wrench:` `:triangular_ruler:` `:bar_chart:`
-`:puzzle_piece:` `:film_projector:` `:dart:` `:sparkles:`
+Per-feature emoji palette (reuse what fits the feature): `:milky_way:` `:high_voltage:`
+`:hammer_and_wrench:` `:triangular_ruler:` `:bar_chart:` `:puzzle_piece:` `:film_projector:`
+`:dart:` `:sparkles:`
 
 ## Fill these placeholders
 

@@ -1,12 +1,12 @@
 ---
 name: publish-release
 description: >
-  Assistant to publish a new version of the Penpot Exporter Figma plugin end-to-end:
-  merge the changesets Release PR, title the GitHub release "(Version N)", regenerate the
-  lockfile PR, bootstrap secret env files (Bitwarden Secrets / bws, with fallback), run
-  build:prod, guide the Figma plugin publish, and draft the community-forum announcement.
-  Use when the user says "publish a release", "new plugin version", "release the plugin",
-  "ship the plugin", or invokes "/publish-release".
+  Assistant to publish a new version of the Penpot Exporter Figma plugin end-to-end: merge the
+  changesets Release PR, title the GitHub release "(Version N)", regenerate the lockfile PR,
+  bootstrap secret env files (Bitwarden Secrets / bws, with fallback), run build:prod, guide the
+  Figma plugin publish, and draft the community-forum announcement. Use when the user says "publish
+  a release", "new plugin version", "release the plugin", "ship the plugin", or invokes
+  "/publish-release".
 version: 0.1.0
 user-invocable: true
 ---
@@ -18,15 +18,15 @@ reversible steps; stop at every **🛑 CONFIRM** gate and get an explicit "yes" 
 irreversible thing (merging a PR, publishing to Figma).
 
 > **The 🛑 CONFIRM gates are instructions you follow, not code-enforced locks.** This file only
-> *guides* you — nothing technically prevents a mutating command. So: before any step that writes
-> to GitHub, Figma, Sentry, or the repo, show what you're about to do and wait for an explicit "yes".
+> _guides_ you — nothing technically prevents a mutating command. So: before any step that writes to
+> GitHub, Figma, Sentry, or the repo, show what you're about to do and wait for an explicit "yes".
 
 Create one todo per phase and work them in order. Announce the phase before acting.
 
 ## 🔒 Security — non-negotiable
 
-- Real secret values live ONLY in Bitwarden Secrets and in the gitignored files
-  `ui-src/.env` and `.env.sentry-build-plugin`.
+- Real secret values live ONLY in Bitwarden Secrets and in the gitignored files `ui-src/.env` and
+  `.env.sentry-build-plugin`.
 - NEVER write a secret value into any tracked file, this skill, a commit, a PR body, or chat output.
 - The env scripts print key names + a set/empty status only — keep it that way.
 
@@ -79,7 +79,7 @@ git tag --list "vX.Y.Z"        # should now exist
 
 ## Phase 2 — Title the GitHub release `(Version N)`
 
-**Guard first** — only ever retitle the *freshly created* release, never an older one. This is the
+**Guard first** — only ever retitle the _freshly created_ release, never an older one. This is the
 step most likely to mutate the wrong thing, so check before editing:
 
 ```bash
@@ -172,8 +172,8 @@ Write the draft to `scratchpad`/a temp file and show it inline.
 
 The model cannot drive the Figma app. Present this checklist and the Phase 6 draft, then wait:
 
-1. Open the plugin in Figma **dev mode**. Verify: **no "DEV" badge** and footer shows `vX.Y.Z`.
-   (If the badge shows or the version is wrong, the prod build didn't load — recheck Phase 5.)
+1. Open the plugin in Figma **dev mode**. Verify: **no "DEV" badge** and footer shows `vX.Y.Z`. (If
+   the badge shows or the version is wrong, the prod build didn't load — recheck Phase 5.)
 2. Plugin → **⋯** → **Publish**.
 3. Paste the Figma changelog draft.
 4. Tick **"I agree to the community terms of service"** if it appears.
@@ -192,10 +192,10 @@ user-visible Patch → "What to expect?"). Show the finished reply and the threa
 
 ## Quick reference
 
-| Need | Command |
-| --- | --- |
-| Next `(Version N)` | `.claude/skills/publish-release/scripts/next-version-label.sh` |
-| Ensure secrets | `.claude/skills/publish-release/scripts/ensure-env.sh [project-id]` |
-| Release PR | `gh pr list --head changeset-release/main` |
-| Release notes | `gh release view vX.Y.Z --json body --jq .body` |
-| Node step | `source "$HOME/.nvm/nvm.sh" && nvm use && <cmd>` |
+| Need               | Command                                                             |
+| ------------------ | ------------------------------------------------------------------- |
+| Next `(Version N)` | `.claude/skills/publish-release/scripts/next-version-label.sh`      |
+| Ensure secrets     | `.claude/skills/publish-release/scripts/ensure-env.sh [project-id]` |
+| Release PR         | `gh pr list --head changeset-release/main`                          |
+| Release notes      | `gh release view vX.Y.Z --json body --jq .body`                     |
+| Node step          | `source "$HOME/.nvm/nvm.sh" && nvm use && <cmd>`                    |
