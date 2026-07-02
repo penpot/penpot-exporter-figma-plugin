@@ -191,6 +191,10 @@ describe('functionName', () => {
 
 This project uses [changesets](https://github.com/changesets/changesets) for versioning.
 
+> For the full end-to-end release process — merging the Release PR, titling the GitHub release,
+> setting up secrets, building, and publishing to Figma and the community forum — see
+> [RELEASING.md](RELEASING.md). It is the single source of truth for releasing.
+
 ### Creating a changeset
 
 ```bash
