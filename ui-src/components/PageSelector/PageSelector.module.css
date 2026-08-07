@@ -45,6 +45,37 @@
   border-radius: 0.125rem;
 }
 
+/*
+ * The Checkbox of @create-figma-plugin renders
+ * `<label><input><div box><div label slot>`, and three of its defaults need
+ * correcting for a dense list:
+ *   - the label slot has a `padding-top` that lines the text up with the box
+ *     only under the untouched 16px `line-height` of the library base styles;
+ *     our reset.css sets `line-height: 1.5`, which drops the text below the
+ *     middle of the box. Centring the row is independent of the line height.
+ *   - the label slot is a flex item with the default `min-width: auto`, so a
+ *     long page name widens the row instead of being ellipsised.
+ *   - the input is stretched 8px past the label on every side, which would let
+ *     neighbouring rows swallow each other's clicks.
+ */
+.list label {
+  align-items: center;
+  padding: 0.125rem 0;
+}
+
+.list label > input {
+  inset: 0;
+}
+
+.list label > div:first-of-type {
+  flex: none;
+}
+
+.list label > div:last-of-type {
+  min-width: 0;
+  padding-top: 0;
+}
+
 .name {
   display: block;
   overflow: hidden;
