@@ -84,6 +84,25 @@ describe('handleExportMessage', () => {
     });
   });
 
+  it('forwards the selected page ids to the document transformer', async () => {
+    mockTransformDocumentNode.mockResolvedValue({ name: 'doc' });
+
+    await handleExportMessage('selection', [], ['1:1', '3:3']);
+
+    expect(mockTransformDocumentNode).toHaveBeenCalledWith(expect.anything(), 'selection', [
+      '1:1',
+      '3:3'
+    ]);
+  });
+
+  it('defaults to an empty page id list when none is provided', async () => {
+    mockTransformDocumentNode.mockResolvedValue({ name: 'doc' });
+
+    await handleExportMessage('all', []);
+
+    expect(mockTransformDocumentNode).toHaveBeenCalledWith(expect.anything(), 'all', []);
+  });
+
   it('routes to slides transformer when editor is slides', async () => {
     mockIsSlidesEditor.mockReturnValue(true);
     mockTransformSlidesDocumentNode.mockResolvedValue({ name: 'slides-doc' });

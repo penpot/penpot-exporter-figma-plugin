@@ -2,7 +2,12 @@ import type { PenpotDocument } from '@ui/types';
 
 import type { ErrorPayload } from './errorPayload';
 
-export type ExportScope = 'all' | 'current';
+export type ExportScope = 'all' | 'current' | 'selection';
+
+export type DocumentPage = {
+  id: string;
+  name: string;
+};
 
 export type Steps =
   | 'processing'
@@ -54,6 +59,11 @@ export type ProgressCurrentItemMessage = {
   data: string;
 };
 
+export type ProgressCurrentPageMessage = {
+  type: 'PROGRESS_CURRENT_PAGE';
+  data: string;
+};
+
 export type ProgressExportMessage = {
   type: 'PROGRESS_EXPORT';
   data: {
@@ -88,18 +98,28 @@ export type EditorTypeMessage = {
   data: 'figma' | 'slides' | 'figjam' | 'dev' | 'buzz';
 };
 
+export type DocumentPagesMessage = {
+  type: 'DOCUMENT_PAGES';
+  data: {
+    pages: DocumentPage[];
+    currentPageId: string;
+  };
+};
+
 export type PluginMessage =
   | PenpotDocumentMessage
   | PenpotImageMessage
   | ProgressStepMessage
   | ProgressProcessedItemsMessage
   | ProgressCurrentItemMessage
+  | ProgressCurrentPageMessage
   | ProgressExportMessage
   | ReloadMessage
   | ErrorMessage
   | UserDataMessage
   | ExternalLibrariesMessage
-  | EditorTypeMessage;
+  | EditorTypeMessage
+  | DocumentPagesMessage;
 
 /**
  * Types that should be buffered (only the latest message of each type is kept)

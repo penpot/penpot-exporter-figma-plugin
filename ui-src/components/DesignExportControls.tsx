@@ -4,13 +4,15 @@ import { useEffect } from 'preact/hooks';
 import { useFormContext } from 'react-hook-form';
 
 import { ExternalLibrariesFieldSet } from '@ui/components/ExternalLibrariesFieldSet';
+import { PageSelector } from '@ui/components/PageSelector';
 import { Stack } from '@ui/components/Stack';
 import { type FormValues, useFigmaContext } from '@ui/context';
 import type { ExportScope } from '@ui/types';
 
 const scopeOptions: SegmentedControlOption[] = [
   { value: 'all', children: 'All pages' },
-  { value: 'current', children: 'Current page' }
+  { value: 'current', children: 'Current page' },
+  { value: 'selection', children: 'Choose pages' }
 ];
 
 export const DesignExportControls = (): JSX.Element => {
@@ -41,8 +43,10 @@ export const DesignExportControls = (): JSX.Element => {
           />
         </div>
         <Muted>
-          For large documents, try exporting the current page first to test, then do a full export.
+          For large documents, try exporting a single page first to test, then do a full export.
         </Muted>
+
+        {exportScope === 'selection' && <PageSelector />}
       </Stack>
 
       <ExternalLibrariesFieldSet />

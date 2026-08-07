@@ -7,8 +7,15 @@ import { useFigmaContext } from '@ui/context';
 import { fileSizeInMB, formatExportTime } from '@ui/utils';
 
 export const ExportSummary = (): JSX.Element | null => {
-  const { exportedBlob, exportTime, exportScope, missingFonts, downloadBlob, cancel } =
-    useFigmaContext();
+  const {
+    exportedBlob,
+    exportTime,
+    exportScope,
+    selectedPageIds,
+    missingFonts,
+    downloadBlob,
+    cancel
+  } = useFigmaContext();
 
   if (!exportedBlob) {
     return null;
@@ -16,6 +23,7 @@ export const ExportSummary = (): JSX.Element | null => {
 
   const hasMissingFonts = missingFonts && missingFonts.length > 0;
   const isCurrentPageOnly = exportScope === 'current';
+  const isPartialExport = exportScope === 'selection';
   const exportSizeMB = exportedBlob.blob.size / (1024 * 1024);
   const isLargeExport = exportSizeMB > 200;
 
@@ -49,6 +57,14 @@ export const ExportSummary = (): JSX.Element | null => {
         <Banner icon={<Info size={14} />}>
           This export contains only the current page. Components and other pages are not included.
           To export everything, select &quot;All pages&quot;.
+        </Banner>
+      )}
+
+      {isPartialExport && (
+        <Banner icon={<Info size={14} />}>
+          This export contains only the {selectedPageIds.length} page
+          {selectedPageIds.length > 1 ? 's' : ''} you selected. Components living on other pages are
+          not included. To export everything, select &quot;All pages&quot;.
         </Banner>
       )}
 

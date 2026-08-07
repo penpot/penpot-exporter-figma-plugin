@@ -5,7 +5,14 @@ import { useEffect, useRef, useState } from 'preact/hooks';
 import { type MessageData, createInMemoryWritable, sendMessage } from '@ui/context';
 import { identify, track } from '@ui/metrics/mixpanel';
 import { parse } from '@ui/parser';
-import type { ErrorOrigin, ErrorPayload, ExportScope, ExternalLibrary, Steps } from '@ui/types';
+import type {
+  DocumentPage,
+  ErrorOrigin,
+  ErrorPayload,
+  ExportScope,
+  ExternalLibrary,
+  Steps
+} from '@ui/types';
 import { extractFileIdFromPenpotUrl, fileSizeInMB, formatExportTime } from '@ui/utils';
 
 const buildUiErrorPayload = (reason: unknown, origin: ErrorOrigin): ErrorPayload => ({
@@ -29,6 +36,7 @@ export type UseFigmaHook = {
   editorType: 'figma' | 'slides' | 'figjam' | 'dev' | 'buzz';
   progress: {
     currentItem: string;
+    currentPage: string;
     totalItems: number;
     processedItems: number;
   };
@@ -37,7 +45,10 @@ export type UseFigmaHook = {
   exportTime: number | null;
   exportScope: ExportScope;
   exportLibraries: string[];
+  documentPages: DocumentPage[];
+  selectedPageIds: string[];
   setExportScope: (scope: ExportScope) => void;
+  setSelectedPageIds: (pageIds: string[]) => void;
   retry: () => void;
   cancel: () => void;
   exportPenpot: (data: FormValues) => void;
@@ -53,7 +64,10 @@ export const useFigma = (): UseFigmaHook => {
   const [exportTime, setExportTime] = useState<number | null>(null);
   const [exportScope, setExportScope] = useState<ExportScope>('all');
   const [exportLibraries, setExportLibraries] = useState<string[]>([]);
+  const [documentPages, setDocumentPages] = useState<DocumentPage[]>([]);
+  const [selectedPageIds, setSelectedPageIds] = useState<string[]>([]);
   const [editorType, setEditorType] = useState<UseFigmaHook['editorType']>('figma');
+  const defaultPageIdsRef = useRef<string[]>([]);
   const exportStartTimeRef = useRef<number | null>(null);
   const collectedImagesRef = useRef<Record<string, Uint8Array<ArrayBuffer>>>({});
 
@@ -62,6 +76,7 @@ export const useFigma = (): UseFigmaHook => {
   const [stepName, setStepName] = useState<string | undefined>(undefined);
   const totalItemsRef = useRef<number>(0);
   const [currentItem, setCurrentItem] = useState('');
+  const [currentProcessedPage, setCurrentProcessedPage] = useState('');
   const [processedItems, setProcessedItems] = useState(0);
   const [progressPercentage, setProgressPercentage] = useState(0);
 
@@ -112,6 +127,20 @@ export const useFigma = (): UseFigmaHook => {
         setExportLibraries(pluginMessage.data);
         break;
       }
+      case 'DOCUMENT_PAGES': {
+        const { pages, currentPageId } = pluginMessage.data;
+        // Preselect the page the user is standing on, so switching to the
+        // "Choose pages" scope always starts from a valid selection.
+        const defaultPageIds = pages.some(page => page.id === currentPageId)
+          ? [currentPageId]
+          : pages.slice(0, 1).map(page => page.id);
+
+        defaultPageIdsRef.current = defaultPageIds;
+
+        setDocumentPages(pages);
+        setSelectedPageIds(defaultPageIds);
+        break;
+      }
       case 'EDITOR_TYPE': {
         setEditorType(pluginMessage.data);
         if (pluginMessage.data === 'slides' || pluginMessage.data === 'figjam') {
@@ -133,8 +162,10 @@ export const useFigma = (): UseFigmaHook => {
         setExportedBlob(null);
         setExportTime(null);
         setExportScope('all');
+        setSelectedPageIds(defaultPageIdsRef.current);
         setStep('processing');
         setCurrentItem('');
+        setCurrentProcessedPage('');
 
         totalItemsRef.current = 0;
         exportStartTimeRef.current = null;
@@ -224,6 +255,14 @@ export const useFigma = (): UseFigmaHook => {
 
         break;
       }
+      case 'PROGRESS_CURRENT_PAGE': {
+        setCurrentProcessedPage(pluginMessage.data);
+        // The layer of the previous page would otherwise linger until the new
+        // page reports its first one.
+        setCurrentItem('');
+
+        break;
+      }
       case 'PROGRESS_PROCESSED_ITEMS': {
         setProcessedItems(pluginMessage.data);
         setProgressPercentage(calculatePercentage(pluginMessage.data, totalItemsRef.current));
@@ -279,11 +318,19 @@ export const useFigma = (): UseFigmaHook => {
   };
 
   const exportPenpot = (data: FormValues): void => {
+    const pageIds = exportScope === 'selection' ? selectedPageIds : [];
+
+    // Guarded in the UI too, but never start an export that has nothing to do.
+    if (exportScope === 'selection' && pageIds.length === 0) return;
+
     setExporting(true);
     exportStartTimeRef.current = Date.now();
     collectedImagesRef.current = {};
 
-    track('File Export Started', { scope: exportScope });
+    track('File Export Started', {
+      'scope': exportScope,
+      'Selected Pages': exportScope === 'selection' ? pageIds.length : undefined
+    });
 
     const libraries = data.externalLibraries
       .map(lib => ({
@@ -292,7 +339,7 @@ export const useFigma = (): UseFigmaHook => {
       }))
       .filter((lib): lib is ExternalLibrary => lib.uuid !== undefined);
 
-    postMessage('export', { scope: exportScope, libraries });
+    postMessage('export', { scope: exportScope, libraries, pageIds });
   };
 
   useEffect(() => {
@@ -328,6 +375,7 @@ export const useFigma = (): UseFigmaHook => {
     editorType,
     progress: {
       currentItem,
+      currentPage: currentProcessedPage,
       totalItems: totalItemsRef.current,
       processedItems
     },
@@ -336,7 +384,10 @@ export const useFigma = (): UseFigmaHook => {
     exportTime,
     exportScope,
     exportLibraries,
+    documentPages,
+    selectedPageIds,
     setExportScope,
+    setSelectedPageIds,
     retry,
     cancel,
     exportPenpot,

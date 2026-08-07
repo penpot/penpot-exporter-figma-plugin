@@ -34,6 +34,12 @@ export const reportProgress = (message: PluginMessage): void => {
     currentStep = message.data.step;
   }
 
+  if (message.type === 'PROGRESS_CURRENT_PAGE') {
+    // The UI clears the layer line when a new page starts, so the next layer
+    // must be sent even when it repeats the last one of the previous page.
+    lastSentCurrentItem = undefined;
+  }
+
   if (message.type === 'PROGRESS_CURRENT_ITEM') {
     if (message.data === lastSentCurrentItem) {
       return;
