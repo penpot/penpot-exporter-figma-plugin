@@ -1,5 +1,14 @@
 # penpot-exporter
 
+## 0.24.1
+
+### Patch Changes
+
+- [#405](https://github.com/penpot/penpot-exporter-figma-plugin/pull/405)
+  [`d5f3c3a`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/d5f3c3a4e7c23d7fab64853e2f61a0545d248620)
+  Thanks [@SpykeRel04D](https://github.com/SpykeRel04D)! - Fix a race condition that could prevent
+  the external libraries prompt from appearing when opening the plugin.
+
 ## 0.24.0
 
 ### Minor Changes
