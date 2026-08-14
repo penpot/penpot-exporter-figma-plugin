@@ -2,4 +2,4 @@
 'penpot-exporter': patch
 ---
 
-Fix external library detection: the library list is now sent to the UI after it signals ready, so the prompt to link Penpot libraries no longer disappears when the team library data resolves before the UI has loaded.
+Fix a race condition that could prevent the external libraries prompt from appearing when opening the plugin.
