@@ -1,4 +1,5 @@
 import { applyMatrixToPoint } from '@plugin/utils/applyMatrixToPoint';
+import { clampToSafeNumber } from '@plugin/utils/clampToSafeNumber';
 import { matrixInvert } from '@plugin/utils/matrixInvert';
 
 export const calculateRadialGradient = (t: Transform): { start: number[]; end: number[] } => {
@@ -25,9 +26,11 @@ export const calculateRadialGradient = (t: Transform): { start: number[]; end: n
   const angle =
     Math.atan((rxPoint[1] - centerPoint[1]) / (rxPoint[0] - centerPoint[0])) * (180 / Math.PI);
 
+  const endPoint = calculateRadialGradientEndPoint(angle, centerPoint, [rx, ry]);
+
   return {
-    start: centerPoint,
-    end: calculateRadialGradientEndPoint(angle, centerPoint, [rx, ry])
+    start: centerPoint.map(clampToSafeNumber),
+    end: endPoint.map(clampToSafeNumber)
   };
 };
 

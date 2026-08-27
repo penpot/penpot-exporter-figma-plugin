@@ -85,4 +85,19 @@ describe('calculateRadialGradient', () => {
     expect(result.start[0]).not.toBe(0.5);
     expect(result.start[1]).not.toBe(0.5);
   });
+
+  it('recorta coordenadas gigantes de una matriz casi singular', () => {
+    // Un gradiente degenerado invierte a valores enormes o NaN
+    // que Penpot rechaza ("expected valid color")
+    const nearSingular: Transform = [
+      [1e-15, 0, 0],
+      [0, 1e-15, 0]
+    ];
+    const result = calculateRadialGradient(nearSingular);
+    for (const value of [...result.start, ...result.end]) {
+      expect(Number.isFinite(value)).toBe(true);
+      expect(value).toBeGreaterThanOrEqual(-2147483648);
+      expect(value).toBeLessThanOrEqual(2147483647);
+    }
+  });
 });

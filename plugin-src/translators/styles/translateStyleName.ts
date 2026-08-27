@@ -1,9 +1,10 @@
+// Penpot rejects blank asset names, and Figma style names can end in "/"
+// (e.g. "Primary/"), leaving an empty last segment.
 export const translateStyleName = (figmaStyle: BaseStyle): string => {
-  const splitName = figmaStyle.name.split('/');
+  const lastNonBlankSegment = figmaStyle.name
+    .split('/')
+    .filter(segment => segment.trim().length > 0)
+    .pop();
 
-  if (splitName.length > 0) {
-    return splitName.pop() as string;
-  }
-
-  return figmaStyle.name;
+  return lastNonBlankSegment?.trim() ?? 'Untitled';
 };
