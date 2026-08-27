@@ -6,6 +6,7 @@ import type { ComponentProperty, ComponentRoot } from '@ui/types';
 
 export const identifiers: Map<string, Uuid> = new Map();
 export const missingFonts: Set<string> = new Set();
+export const degradedLayers: Map<string, string> = new Map();
 export const textStyles: Map<string, TextStyle | undefined> = new Map();
 export const paintStyles: Map<string, PaintStyle | undefined> = new Map();
 export const overrides: Map<string, NodeChangeProperty[]> = new Map();
@@ -26,6 +27,7 @@ export const styleTokenNames: Map<string, string> = new Map();
 export const clearAllState = (): void => {
   identifiers.clear();
   missingFonts.clear();
+  degradedLayers.clear();
   textStyles.clear();
   paintStyles.clear();
   overrides.clear();

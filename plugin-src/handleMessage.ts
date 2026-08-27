@@ -2,6 +2,7 @@ import {
   clearAllState,
   componentProperties,
   components,
+  degradedLayers,
   externalLibraries,
   images,
   missingFonts,
@@ -83,6 +84,7 @@ export const handleRetryMessage = async (): Promise<void> => {
   try {
     resetProgress();
     missingFonts.clear();
+    degradedLayers.clear();
     textStyles.clear();
     paintStyles.clear();
     overrides.clear();

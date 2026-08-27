@@ -36,20 +36,16 @@ export const transformChildren = async (node: ChildrenMixin): Promise<Children> 
   // to break the promise chain and allow garbage collection
   const shouldDefer = currentDepth > 5;
 
-  let children: PenpotNode[];
+  try {
+    const getChildren = (): Promise<PenpotNode[]> =>
+      containsMask
+        ? translateMaskChildren(node.children, maskIndex)
+        : translateChildren(node.children);
 
-  const getChildren = (): Promise<PenpotNode[]> =>
-    containsMask
-      ? translateMaskChildren(node.children, maskIndex)
-      : translateChildren(node.children);
+    const children = shouldDefer ? await deferToMacrotask(getChildren) : await getChildren();
 
-  if (shouldDefer) {
-    children = await deferToMacrotask(getChildren);
-  } else {
-    children = await getChildren();
+    return { children };
+  } finally {
+    transformChildrenDepth--;
   }
-
-  transformChildrenDepth--;
-
-  return { children };
 };

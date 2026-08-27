@@ -16,5 +16,6 @@ export type PenpotDocument = {
   componentProperties: Record<string, ComponentProperty>;
   externalLibraries: Record<string, string>;
   missingFonts: string[];
+  degradedLayers: string[];
   isShared: boolean;
 };
