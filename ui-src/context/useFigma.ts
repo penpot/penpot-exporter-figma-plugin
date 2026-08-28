@@ -22,10 +22,15 @@ const buildUiErrorPayload = (reason: unknown, origin: ErrorOrigin): ErrorPayload
   origin
 });
 
+// The library can throw with an empty .message and the text only in .stack.
+const mentionsInvalidColor = (payload: ErrorPayload): boolean => {
+  return `${payload.message}\n${payload.stack ?? ''}`.includes('expected valid color');
+};
+
 const buildDocumentErrorPayload = (reason: unknown, document: PenpotDocument): ErrorPayload => {
   const payload = buildUiErrorPayload(reason, 'ui');
 
-  if (!payload.message.includes('expected valid color')) {
+  if (!mentionsInvalidColor(payload)) {
     return payload;
   }
 
@@ -336,7 +341,7 @@ export const useFigma = (): UseFigmaHook => {
 
   useEffect(() => {
     const withColorDiagnostics = (payload: ErrorPayload, reason: unknown): ErrorPayload => {
-      if (!payload.message.includes('expected valid color') || lastDocumentRef.current === null) {
+      if (!mentionsInvalidColor(payload) || lastDocumentRef.current === null) {
         return payload;
       }
       return {
