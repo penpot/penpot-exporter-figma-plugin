@@ -24,7 +24,8 @@ import {
   isSlidesEditor,
   reportProgress,
   resetFigmaPlatformCorruption,
-  resetProgress
+  resetProgress,
+  setImagePlatformFailureHandler
 } from '@plugin/utils';
 
 import type { ErrorPayload, ExportScope, ExternalLibrary, PenpotDocument } from '@ui/types';
@@ -66,6 +67,9 @@ export const handleExportMessage = async (
     clearAllState();
     resetProgress();
     resetFigmaPlatformCorruption();
+    setImagePlatformFailureHandler(key => {
+      degradedLayers.set(`image:${key}`, `Image "${key}": skipped due to a Figma platform error`);
+    });
 
     initializeExternalLibraries(libraries);
     const document = await buildDocument(scope);

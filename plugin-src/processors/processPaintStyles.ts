@@ -1,8 +1,8 @@
 import { yieldByTime } from '@common/sleep';
 
-import { paintStyles } from '@plugin/libraries';
+import { degradedLayers, paintStyles } from '@plugin/libraries';
 import { translatePaintStyle } from '@plugin/translators/styles';
-import { flushProgress, reportProgress } from '@plugin/utils';
+import { flushProgress, isFigmaPlatformFailure, reportProgress } from '@plugin/utils';
 
 import type { FillStyle } from '@ui/lib/types/utils/fill';
 
@@ -27,9 +27,19 @@ export const processPaintStyles = async (
   let currentStyle = currentAsset;
 
   for (const [styleId, paintStyle] of paintStyles.entries()) {
-    const figmaStyle = paintStyle ?? (await figma.getStyleByIdAsync(styleId));
-    if (figmaStyle && isPaintStyle(figmaStyle)) {
-      styles[styleId] = translatePaintStyle(figmaStyle);
+    try {
+      const figmaStyle = paintStyle ?? (await figma.getStyleByIdAsync(styleId));
+      if (figmaStyle && isPaintStyle(figmaStyle)) {
+        styles[styleId] = translatePaintStyle(figmaStyle);
+      }
+    } catch (error) {
+      if (!isFigmaPlatformFailure(error)) throw error;
+
+      const styleName = paintStyle?.name ?? styleId;
+      console.warn(`Penpot Exporter: skipped style "${styleName}" due to a Figma platform error`);
+      degradedLayers.set(styleId, `${styleName}: style skipped due to a Figma platform error`);
+
+      continue;
     }
 
     reportProgress({

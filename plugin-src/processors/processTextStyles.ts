@@ -1,8 +1,8 @@
 import { yieldByTime } from '@common/sleep';
 
-import { textStyles } from '@plugin/libraries';
+import { degradedLayers, textStyles } from '@plugin/libraries';
 import { translateTextStyle } from '@plugin/translators/styles';
-import { flushProgress, reportProgress } from '@plugin/utils';
+import { flushProgress, isFigmaPlatformFailure, reportProgress } from '@plugin/utils';
 
 import type { TypographyStyle } from '@ui/lib/types/shapes/textShape';
 
@@ -27,9 +27,19 @@ export const processTextStyles = async (
   let currentStyle = currentAsset;
 
   for (const [styleId, style] of textStyles.entries()) {
-    const figmaStyle = style ?? (await figma.getStyleByIdAsync(styleId));
-    if (figmaStyle && isTextStyle(figmaStyle)) {
-      styles[styleId] = translateTextStyle(figmaStyle);
+    try {
+      const figmaStyle = style ?? (await figma.getStyleByIdAsync(styleId));
+      if (figmaStyle && isTextStyle(figmaStyle)) {
+        styles[styleId] = translateTextStyle(figmaStyle);
+      }
+    } catch (error) {
+      if (!isFigmaPlatformFailure(error)) throw error;
+
+      const styleName = style?.name ?? styleId;
+      console.warn(`Penpot Exporter: skipped style "${styleName}" due to a Figma platform error`);
+      degradedLayers.set(styleId, `${styleName}: style skipped due to a Figma platform error`);
+
+      continue;
     }
 
     reportProgress({
