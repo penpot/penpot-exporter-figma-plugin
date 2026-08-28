@@ -15,15 +15,9 @@ import {
   translateLayoutSizing,
   translateLayoutWrapType
 } from '@plugin/translators';
+import { isFigmaPlatformError } from '@plugin/utils';
 
 import type { LayoutAttributes, LayoutChildAttributes } from '@ui/lib/types/shapes/layout';
-
-// Stable Figma platform bug signature for GridTrackSize reads in dynamic Grid APIs; rethrow all other errors.
-const FIGMA_CALLBACK_ERROR_SIGNATURE = 'Attempted to invoke callback with invalid id';
-
-const isFigmaCallbackError = (error: unknown): boolean => {
-  return error instanceof Error && error.message.includes(FIGMA_CALLBACK_ERROR_SIGNATURE);
-};
 
 const registerDegradedGridLayer = (node: BaseFrameMixin, detail: string): void => {
   const sceneNode = node as unknown as SceneNode;
@@ -65,7 +59,7 @@ export const transformAutoLayout = (node: BaseFrameMixin): LayoutAttributes => {
       ...translateGridAttributes(node)
     };
   } catch (error) {
-    if (!isFigmaCallbackError(error)) throw error;
+    if (!isFigmaPlatformError(error)) throw error;
 
     try {
       const fallback = {
@@ -77,7 +71,7 @@ export const transformAutoLayout = (node: BaseFrameMixin): LayoutAttributes => {
 
       return fallback;
     } catch (error) {
-      if (!isFigmaCallbackError(error)) throw error;
+      if (!isFigmaPlatformError(error)) throw error;
 
       registerDegradedGridLayer(node, 'exported without grid layout (Figma API error)');
 

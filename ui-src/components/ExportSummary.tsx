@@ -85,8 +85,8 @@ export const ExportSummary = (): JSX.Element | null => {
         <Stack space="xsmall">
           <Banner icon={<CircleAlert size={14} />}>
             <strong>
-              {degradedLayers.length} grid layer{degradedLayers.length > 1 ? 's' : ''} exported with
-              degraded grid data due to a Figma API error
+              {degradedLayers.length} layer{degradedLayers.length > 1 ? 's' : ''} affected by a
+              Figma API error
             </strong>
             <ul style={{ paddingLeft: '1.25rem', marginTop: '0.25rem' }}>
               {degradedLayers.map((layer, index) => (
@@ -95,8 +95,8 @@ export const ExportSummary = (): JSX.Element | null => {
             </ul>
           </Banner>
           <Muted>
-            Some layers retain their grid with default track sizing; others were exported as regular
-            frames, with children retaining their absolute positions.
+            Some layers retain their grid with default track sizing, others were exported as regular
+            frames, and layers with affected property reads were skipped.
           </Muted>
         </Stack>
       )}
