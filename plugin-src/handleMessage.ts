@@ -21,6 +21,7 @@ import {
   getCurrentItem,
   getCurrentStep,
   isFigJamEditor,
+  isFigmaPlatformFailure,
   isSlidesEditor,
   reportProgress,
   resetFigmaPlatformCorruption,
@@ -43,7 +44,11 @@ const buildDocument = async (scope: ExportScope): Promise<PenpotDocument> => {
 };
 
 const buildErrorPayload = (error: unknown): ErrorPayload => ({
-  message: error instanceof Error ? error.message : String(error),
+  message:
+    (error instanceof Error ? error.message : String(error)) +
+    (isFigmaPlatformFailure(error)
+      ? ' — This file triggers a Figma platform bug on large exports. Exporting page by page usually works.'
+      : ''),
   stack: error instanceof Error ? error.stack : undefined,
   step: getCurrentStep(),
   layer: getCurrentItem(),
