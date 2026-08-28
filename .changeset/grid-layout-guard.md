@@ -2,4 +2,4 @@
 'penpot-exporter': patch
 ---
 
-Export grid frames with default track sizing (or as plain frames when even that fails) when Figma's Grid auto-layout API errors, instead of aborting the whole export.
+Fix a Figma Grid auto-layout API failure aborting the whole export; affected frames are exported with default track sizing instead.
