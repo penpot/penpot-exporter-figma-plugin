@@ -37,7 +37,7 @@ const buildDocumentErrorPayload = (reason: unknown, document: PenpotDocument): E
     message:
       invalidColors.length > 0
         ? `${payload.message}\n\nInvalid color candidates:\n${invalidColors.join('\n')}`
-        : payload.message
+        : `${payload.message}\n\n(color scanner found no invalid candidates in the received document)`
   };
 };
 
@@ -84,6 +84,7 @@ export const useFigma = (): UseFigmaHook => {
   const [exportLibraries, setExportLibraries] = useState<string[]>([]);
   const [editorType, setEditorType] = useState<UseFigmaHook['editorType']>('figma');
   const exportStartTimeRef = useRef<number | null>(null);
+  const lastDocumentRef = useRef<PenpotDocument | null>(null);
   const collectedImagesRef = useRef<Record<string, Uint8Array<ArrayBuffer>>>({});
 
   const [step, setStep] = useState<Steps>('processing');
@@ -191,6 +192,7 @@ export const useFigma = (): UseFigmaHook => {
         // attach the collected bytes so the parser sees the full asset record.
         pluginMessage.data.images = collectedImagesRef.current;
         collectedImagesRef.current = {};
+        lastDocumentRef.current = pluginMessage.data;
 
         try {
           const context = await parse(pluginMessage.data);
@@ -333,12 +335,25 @@ export const useFigma = (): UseFigmaHook => {
   };
 
   useEffect(() => {
+    const withColorDiagnostics = (payload: ErrorPayload, reason: unknown): ErrorPayload => {
+      if (!payload.message.includes('expected valid color') || lastDocumentRef.current === null) {
+        return payload;
+      }
+      return {
+        ...buildDocumentErrorPayload(reason, lastDocumentRef.current),
+        origin: payload.origin
+      };
+    };
+
     const onWindowError = (event: ErrorEvent): void => {
-      handleError(buildUiErrorPayload(event.error ?? event.message, 'ui'));
+      const reason = event.error ?? event.message;
+      handleError(withColorDiagnostics(buildUiErrorPayload(reason, 'ui'), reason));
     };
 
     const onUnhandledRejection = (event: PromiseRejectionEvent): void => {
-      handleError(buildUiErrorPayload(event.reason, 'unhandled-rejection'));
+      handleError(
+        withColorDiagnostics(buildUiErrorPayload(event.reason, 'unhandled-rejection'), event.reason)
+      );
     };
 
     window.addEventListener('message', onMessage);
