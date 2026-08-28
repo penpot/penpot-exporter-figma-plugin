@@ -21,13 +21,11 @@ import {
   getCurrentItem,
   getCurrentStep,
   isFigJamEditor,
-  isFigmaPlatformFailure,
   isSlidesEditor,
   reportProgress,
-  resetFigmaPlatformCorruption,
-  resetProgress,
-  setImagePlatformFailureHandler
+  resetProgress
 } from '@plugin/utils';
+import { isFigmaPlatformError } from '@plugin/utils/figmaPlatformError';
 
 import type { ErrorPayload, ExportScope, ExternalLibrary, PenpotDocument } from '@ui/types';
 
@@ -46,7 +44,7 @@ const buildDocument = async (scope: ExportScope): Promise<PenpotDocument> => {
 const buildErrorPayload = (error: unknown): ErrorPayload => ({
   message:
     (error instanceof Error ? error.message : String(error)) +
-    (isFigmaPlatformFailure(error)
+    (isFigmaPlatformError(error)
       ? ' — This file triggers a Figma platform bug on large exports. Exporting page by page usually works.'
       : ''),
   stack: error instanceof Error ? error.stack : undefined,
@@ -71,10 +69,6 @@ export const handleExportMessage = async (
     // Clear all state maps and caches to prevent memory accumulation
     clearAllState();
     resetProgress();
-    resetFigmaPlatformCorruption();
-    setImagePlatformFailureHandler(key => {
-      degradedLayers.set(`image:${key}`, `Image "${key}": skipped due to a Figma platform error`);
-    });
 
     initializeExternalLibraries(libraries);
     const document = await buildDocument(scope);

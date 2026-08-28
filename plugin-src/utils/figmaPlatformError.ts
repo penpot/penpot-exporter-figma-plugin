@@ -7,34 +7,8 @@ const FIGMA_PLATFORM_ERROR_SIGNATURES = [
   'Property "gridItemsPositioning" failed validation'
 ] as const;
 
-let corruptionDetected = false;
-
 export const isFigmaPlatformError = (error: unknown): boolean => {
-  return (
-    error instanceof Error &&
-    FIGMA_PLATFORM_ERROR_SIGNATURES.some(signature => error.message.includes(signature))
-  );
-};
+  const message = error instanceof Error ? error.message : String(error);
 
-export const markFigmaPlatformCorruption = (): void => {
-  corruptionDetected = true;
-};
-
-export const hasFigmaPlatformCorruption = (): boolean => corruptionDetected;
-
-export const resetFigmaPlatformCorruption = (): void => {
-  corruptionDetected = false;
-};
-
-/**
- * In a healthy export, only known signatures indicate a Figma platform failure.
- * Once detected, subsequent per-layer errors are contained because corruption messages are unreliable.
- */
-export const isFigmaPlatformFailure = (error: unknown): boolean => {
-  if (isFigmaPlatformError(error)) {
-    markFigmaPlatformCorruption();
-    return true;
-  }
-
-  return hasFigmaPlatformCorruption();
+  return FIGMA_PLATFORM_ERROR_SIGNATURES.some(signature => message.includes(signature));
 };

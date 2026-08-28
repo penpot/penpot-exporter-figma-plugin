@@ -1,9 +1,7 @@
 import { yieldByTime } from '@common/sleep';
 
-import { degradedLayers } from '@plugin/libraries';
 import { transformGroupNodeLike, transformSceneNode } from '@plugin/transformers';
 import { transformMaskIds } from '@plugin/transformers/partials';
-import { isFigmaPlatformFailure } from '@plugin/utils';
 
 import type { PenpotNode } from '@ui/types';
 
@@ -53,20 +51,9 @@ export const translateChildren = async (children: readonly SceneNode[]): Promise
   const transformedChildren: PenpotNode[] = [];
 
   for (const child of children) {
-    try {
-      const penpotNode = await transformSceneNode(child);
+    const penpotNode = await transformSceneNode(child);
 
-      if (penpotNode) transformedChildren.push(penpotNode);
-    } catch (error) {
-      if (!isFigmaPlatformFailure(error)) throw error;
-
-      const message = error instanceof Error ? error.message : String(error);
-
-      console.error(
-        `Penpot Exporter: skipped layer "${child.name}" due to a Figma platform error: ${message}`
-      );
-      degradedLayers.set(child.id, `${child.name}: skipped due to a Figma platform error`);
-    }
+    if (penpotNode) transformedChildren.push(penpotNode);
 
     await yieldByTime();
   }

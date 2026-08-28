@@ -1,40 +1,31 @@
-import { afterEach, describe, expect, it } from 'vitest';
+import { describe, expect, it } from 'vitest';
 
-import {
-  hasFigmaPlatformCorruption,
-  isFigmaPlatformFailure,
-  resetFigmaPlatformCorruption
-} from '@plugin/utils';
+import { isFigmaPlatformError } from '@plugin/utils/figmaPlatformError';
 
-afterEach((): void => {
-  resetFigmaPlatformCorruption();
-});
-
-describe('isFigmaPlatformFailure', () => {
-  it('recognizes a known signature and marks corruption', () => {
+describe('isFigmaPlatformError', () => {
+  it('recognizes the callback ID signature', () => {
     expect(
-      isFigmaPlatformFailure(
-        new Error('Property "gridItemsPositioning" failed validation: Required value missing')
+      isFigmaPlatformError(
+        new Error('in <unknown>: Attempted to invoke callback with invalid id -32408')
       )
     ).toBe(true);
-    expect(hasFigmaPlatformCorruption()).toBe(true);
   });
 
-  it('does not treat a generic error as a platform failure before corruption is detected', () => {
-    expect(isFigmaPlatformFailure(new Error('boom'))).toBe(false);
-    expect(hasFigmaPlatformCorruption()).toBe(false);
+  it('recognizes the virtual node property signature', () => {
+    expect(
+      isFigmaPlatformError(
+        new Error(
+          'in get_componentPropertyReferences: Expected node id to be a string, got undefined'
+        )
+      )
+    ).toBe(true);
   });
 
-  it('treats generic errors as platform failures after corruption is detected', () => {
-    isFigmaPlatformFailure(new Error('Attempted to invoke callback with invalid id -32408'));
-
-    expect(isFigmaPlatformFailure(new Error('boom'))).toBe(true);
-  });
-
-  it('resets detected corruption', () => {
-    isFigmaPlatformFailure(new Error('Attempted to invoke callback with invalid id -32408'));
-    resetFigmaPlatformCorruption();
-
-    expect(hasFigmaPlatformCorruption()).toBe(false);
+  it('recognizes the grid item positioning signature from non-Error values', () => {
+    expect(
+      isFigmaPlatformError(
+        'Property "gridItemsPositioning" failed validation: Required value missing'
+      )
+    ).toBe(true);
   });
 });

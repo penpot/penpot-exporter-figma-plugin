@@ -3,7 +3,6 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { clearAllState, degradedLayers } from '@plugin/libraries';
 import { transformAutoLayout } from '@plugin/transformers/partials/transformLayout';
 import type * as PluginTranslators from '@plugin/translators';
-import { resetFigmaPlatformCorruption } from '@plugin/utils';
 
 const { mockTranslateGridCells, mockTranslateGridTracks } = vi.hoisted(() => ({
   mockTranslateGridCells: vi.fn(),
@@ -56,7 +55,6 @@ describe('transformAutoLayout', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     clearAllState();
-    resetFigmaPlatformCorruption();
     mockTranslateGridTracks.mockImplementation(
       (tracks: GridTrackSize[]): GridTrackSize[] => tracks
     );
@@ -65,7 +63,6 @@ describe('transformAutoLayout', () => {
 
   afterEach(() => {
     clearAllState();
-    resetFigmaPlatformCorruption();
   });
 
   it('exports a healthy grid layout', () => {

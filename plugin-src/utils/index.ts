@@ -5,7 +5,6 @@ export * from './calculateLinearGradient';
 export * from './calculateRadialGradient';
 export * from './editorType';
 export * from './finiteOrUndefined';
-export * from './figmaPlatformError';
 export * from './generateUuid';
 export * from './matrixInvert';
 export * from './multiplyMatrix';

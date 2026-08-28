@@ -15,7 +15,7 @@ import {
   translateLayoutSizing,
   translateLayoutWrapType
 } from '@plugin/translators';
-import { isFigmaPlatformFailure } from '@plugin/utils';
+import { isFigmaPlatformError } from '@plugin/utils/figmaPlatformError';
 
 import type { LayoutAttributes, LayoutChildAttributes } from '@ui/lib/types/shapes/layout';
 
@@ -59,7 +59,7 @@ export const transformAutoLayout = (node: BaseFrameMixin): LayoutAttributes => {
       ...translateGridAttributes(node)
     };
   } catch (error) {
-    if (!isFigmaPlatformFailure(error)) throw error;
+    if (!isFigmaPlatformError(error)) throw error;
 
     try {
       const fallback = {
@@ -71,7 +71,7 @@ export const transformAutoLayout = (node: BaseFrameMixin): LayoutAttributes => {
 
       return fallback;
     } catch (error) {
-      if (!isFigmaPlatformFailure(error)) throw error;
+      if (!isFigmaPlatformError(error)) throw error;
 
       registerDegradedGridLayer(node, 'exported without grid layout (Figma API error)');
 
