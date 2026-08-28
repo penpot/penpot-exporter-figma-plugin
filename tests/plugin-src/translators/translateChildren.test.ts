@@ -2,6 +2,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { degradedLayers } from '@plugin/libraries';
 import { translateChildren } from '@plugin/translators/translateChildren';
+import { resetFigmaPlatformCorruption } from '@plugin/utils';
 
 import type { PenpotNode } from '@ui/types';
 
@@ -24,10 +25,12 @@ describe('translateChildren', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     degradedLayers.clear();
+    resetFigmaPlatformCorruption();
   });
 
   afterEach(() => {
     degradedLayers.clear();
+    resetFigmaPlatformCorruption();
   });
 
   it('skips layers affected by a Figma platform error and transforms the remaining children', async () => {
@@ -66,5 +69,39 @@ describe('translateChildren', () => {
 
     await expect(translateChildren([child])).rejects.toThrow('boom');
     expect(degradedLayers).toHaveLength(0);
+  });
+
+  it('contains subsequent errors after a Figma platform failure is detected', async () => {
+    const platformFailedChild = {
+      id: 'platform-failed-id',
+      name: 'Platform failed layer',
+      type: 'INSTANCE'
+    } as SceneNode;
+    const subsequentlyFailedChild = {
+      id: 'subsequently-failed-id',
+      name: 'Subsequently failed layer',
+      type: 'FRAME'
+    } as SceneNode;
+    const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => undefined);
+
+    mockTransformSceneNode.mockRejectedValueOnce(
+      new Error('in <unknown>: Attempted to invoke callback with invalid id -32408')
+    );
+    mockTransformSceneNode.mockRejectedValueOnce(new Error('boom'));
+
+    await expect(
+      translateChildren([platformFailedChild, subsequentlyFailedChild])
+    ).resolves.toEqual([]);
+    expect(degradedLayers).toEqual(
+      new Map([
+        ['platform-failed-id', 'Platform failed layer: skipped due to a Figma platform error'],
+        [
+          'subsequently-failed-id',
+          'Subsequently failed layer: skipped due to a Figma platform error'
+        ]
+      ])
+    );
+
+    consoleErrorSpy.mockRestore();
   });
 });

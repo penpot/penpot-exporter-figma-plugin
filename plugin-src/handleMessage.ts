@@ -23,6 +23,7 @@ import {
   isFigJamEditor,
   isSlidesEditor,
   reportProgress,
+  resetFigmaPlatformCorruption,
   resetProgress
 } from '@plugin/utils';
 
@@ -64,6 +65,7 @@ export const handleExportMessage = async (
     // Clear all state maps and caches to prevent memory accumulation
     clearAllState();
     resetProgress();
+    resetFigmaPlatformCorruption();
 
     initializeExternalLibraries(libraries);
     const document = await buildDocument(scope);

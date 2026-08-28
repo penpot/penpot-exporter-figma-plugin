@@ -3,7 +3,7 @@ import { yieldByTime } from '@common/sleep';
 import { degradedLayers } from '@plugin/libraries';
 import { transformGroupNodeLike, transformSceneNode } from '@plugin/transformers';
 import { transformMaskIds } from '@plugin/transformers/partials';
-import { isFigmaPlatformError } from '@plugin/utils';
+import { isFigmaPlatformFailure } from '@plugin/utils';
 
 import type { PenpotNode } from '@ui/types';
 
@@ -58,7 +58,7 @@ export const translateChildren = async (children: readonly SceneNode[]): Promise
 
       if (penpotNode) transformedChildren.push(penpotNode);
     } catch (error) {
-      if (!isFigmaPlatformError(error)) throw error;
+      if (!isFigmaPlatformFailure(error)) throw error;
 
       const message = error instanceof Error ? error.message : String(error);
 
