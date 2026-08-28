@@ -5,7 +5,15 @@ import { useEffect, useRef, useState } from 'preact/hooks';
 import { type MessageData, createInMemoryWritable, sendMessage } from '@ui/context';
 import { identify, track } from '@ui/metrics/mixpanel';
 import { parse } from '@ui/parser';
-import type { ErrorOrigin, ErrorPayload, ExportScope, ExternalLibrary, Steps } from '@ui/types';
+import { findInvalidColors } from '@ui/parser/findInvalidColors';
+import type {
+  ErrorOrigin,
+  ErrorPayload,
+  ExportScope,
+  ExternalLibrary,
+  PenpotDocument,
+  Steps
+} from '@ui/types';
 import { extractFileIdFromPenpotUrl, fileSizeInMB, formatExportTime } from '@ui/utils';
 
 const buildUiErrorPayload = (reason: unknown, origin: ErrorOrigin): ErrorPayload => ({
@@ -13,6 +21,25 @@ const buildUiErrorPayload = (reason: unknown, origin: ErrorOrigin): ErrorPayload
   stack: reason instanceof Error ? reason.stack : undefined,
   origin
 });
+
+const buildDocumentErrorPayload = (reason: unknown, document: PenpotDocument): ErrorPayload => {
+  const payload = buildUiErrorPayload(reason, 'ui');
+
+  if (!payload.message.includes('expected valid color')) {
+    return payload;
+  }
+
+  const invalidColors = findInvalidColors(document);
+  console.error('Penpot Exporter: invalid color diagnostics', invalidColors);
+
+  return {
+    ...payload,
+    message:
+      invalidColors.length > 0
+        ? `${payload.message}\n\nInvalid color candidates:\n${invalidColors.join('\n')}`
+        : payload.message
+  };
+};
 
 export type FormValues = {
   externalLibraries: ExternalLibrary[];
@@ -165,52 +192,56 @@ export const useFigma = (): UseFigmaHook => {
         pluginMessage.data.images = collectedImagesRef.current;
         collectedImagesRef.current = {};
 
-        const context = await parse(pluginMessage.data);
+        try {
+          const context = await parse(pluginMessage.data);
 
-        sendMessage({
-          type: 'PROGRESS_STEP',
-          data: {
-            step: 'exporting',
-            total: Infinity
+          sendMessage({
+            type: 'PROGRESS_STEP',
+            data: {
+              step: 'exporting',
+              total: Infinity
+            }
+          });
+
+          const { writable, getBlob } = createInMemoryWritable();
+
+          await exportStream(context, writable, {
+            onProgress: ({ item, total }) => {
+              sendMessage({
+                type: 'PROGRESS_EXPORT',
+                data: {
+                  current: item,
+                  total: total
+                }
+              });
+            }
+          });
+
+          const blob = getBlob();
+          const filename = `${pluginMessage.data.name}.penpot`;
+
+          setExportedBlob({ blob, filename });
+
+          let duration: number | undefined = undefined;
+
+          if (exportStartTimeRef.current) {
+            const endTime = Date.now();
+            duration = endTime - exportStartTimeRef.current;
+
+            setExportTime(duration);
           }
-        });
 
-        const { writable, getBlob } = createInMemoryWritable();
+          track('File Exported', {
+            'Exported File Size': fileSizeInMB(blob.size),
+            'Export Time': duration ? formatExportTime(duration) : undefined
+          });
 
-        await exportStream(context, writable, {
-          onProgress: ({ item, total }) => {
-            sendMessage({
-              type: 'PROGRESS_EXPORT',
-              data: {
-                current: item,
-                total: total
-              }
-            });
-          }
-        });
-
-        const blob = getBlob();
-        const filename = `${pluginMessage.data.name}.penpot`;
-
-        setExportedBlob({ blob, filename });
-
-        let duration: number | undefined = undefined;
-
-        if (exportStartTimeRef.current) {
-          const endTime = Date.now();
-          duration = endTime - exportStartTimeRef.current;
-
-          setExportTime(duration);
+          setExporting(false);
+          setSummary(true);
+          setStep('processing');
+        } catch (error) {
+          handleError(buildDocumentErrorPayload(error, pluginMessage.data));
         }
-
-        track('File Exported', {
-          'Exported File Size': fileSizeInMB(blob.size),
-          'Export Time': duration ? formatExportTime(duration) : undefined
-        });
-
-        setExporting(false);
-        setSummary(true);
-        setStep('processing');
 
         break;
       }
