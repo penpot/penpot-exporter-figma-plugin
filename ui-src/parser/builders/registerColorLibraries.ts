@@ -20,11 +20,23 @@ export const registerColorLibraries = async (
       const fill = fillStyle.fills[index];
       const color = fillStyle.colors[index];
 
+      const image = fill.fillImage ? symbolFillImage(context, fill.fillImage) : undefined;
+
+      // A color asset needs at least one of color, gradient or image; an entry can
+      // end up with none (e.g. its image bytes could not be fetched) and would be
+      // rejected by the Penpot library with "expected valid color".
+      if (fill.fillColor === undefined && fill.fillColorGradient === undefined && !image) {
+        console.warn(
+          `Penpot Exporter: skipped color library entry "${color.name}" with no resolvable content`
+        );
+        continue;
+      }
+
       const colorId = context.addLibraryColor({
         ...color,
         color: fill.fillColor,
         opacity: fill.fillOpacity,
-        image: fill.fillImage ? symbolFillImage(context, fill.fillImage) : undefined,
+        image,
         gradient: fill.fillColorGradient
       });
 
