@@ -18,6 +18,13 @@ import {
 
 import type { LayoutAttributes, LayoutChildAttributes } from '@ui/lib/types/shapes/layout';
 
+// Stable Figma platform bug signature for GridTrackSize reads in dynamic Grid APIs; rethrow all other errors.
+const FIGMA_CALLBACK_ERROR_SIGNATURE = 'Attempted to invoke callback with invalid id';
+
+const isFigmaCallbackError = (error: unknown): boolean => {
+  return error instanceof Error && error.message.includes(FIGMA_CALLBACK_ERROR_SIGNATURE);
+};
+
 const registerDegradedGridLayer = (node: BaseFrameMixin, detail: string): void => {
   const sceneNode = node as unknown as SceneNode;
 
@@ -57,7 +64,9 @@ export const transformAutoLayout = (node: BaseFrameMixin): LayoutAttributes => {
       ...commonAttributes,
       ...translateGridAttributes(node)
     };
-  } catch {
+  } catch (error) {
+    if (!isFigmaCallbackError(error)) throw error;
+
     try {
       const fallback = {
         ...commonAttributes,
@@ -67,7 +76,9 @@ export const transformAutoLayout = (node: BaseFrameMixin): LayoutAttributes => {
       registerDegradedGridLayer(node, 'exported with default grid track sizing (Figma API error)');
 
       return fallback;
-    } catch {
+    } catch (error) {
+      if (!isFigmaCallbackError(error)) throw error;
+
       registerDegradedGridLayer(node, 'exported without grid layout (Figma API error)');
 
       return {};

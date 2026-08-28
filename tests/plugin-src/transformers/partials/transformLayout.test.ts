@@ -44,7 +44,7 @@ const createTrackWithFailingTypeRead = (): GridTrackSize => {
 
   Object.defineProperty(track, 'type', {
     get: (): never => {
-      throw new Error('Attempted to invoke callback with invalid id');
+      throw new Error('in <unknown>: Attempted to invoke callback with invalid id -32408');
     }
   });
 
@@ -155,7 +155,7 @@ describe('transformAutoLayout', () => {
 
     Object.defineProperty(node, 'gridRowSizes', {
       get: (): never => {
-        throw new Error('Attempted to invoke callback with invalid id');
+        throw new Error('in <unknown>: Attempted to invoke callback with invalid id -32408');
       }
     });
 
@@ -166,5 +166,20 @@ describe('transformAutoLayout', () => {
     expect(consoleWarnSpy).toHaveBeenCalledWith(expect.stringContaining('without grid layout'));
 
     consoleWarnSpy.mockRestore();
+  });
+
+  it('propagates non-Figma errors from grid track property reads', () => {
+    const node = createGridNode();
+    const track = { value: 100 };
+
+    Object.defineProperty(track, 'type', {
+      get: (): never => {
+        throw new Error('boom genérico');
+      }
+    });
+    Object.defineProperty(node, 'gridRowSizes', { value: [track] });
+
+    expect(() => transformAutoLayout(node)).toThrow('boom genérico');
+    expect(degradedLayers).toHaveLength(0);
   });
 });
