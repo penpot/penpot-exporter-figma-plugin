@@ -1,12 +1,11 @@
 import { degradedLayers } from '@plugin/libraries';
 import {
-  translateGridCells,
-  translateGridTracks,
+  translateGridAttributes,
+  translateGridAttributesWithDefaultTracks,
   translateLayoutAlignContent,
   translateLayoutAlignItems,
   translateLayoutFlexDir,
   translateLayoutGap,
-  translateLayoutGridDir,
   translateLayoutItemAlignSelf,
   translateLayoutJustifyContent,
   translateLayoutJustifyItems,
@@ -18,31 +17,6 @@ import {
 } from '@plugin/translators';
 
 import type { LayoutAttributes, LayoutChildAttributes } from '@ui/lib/types/shapes/layout';
-
-type GridAttributes = Pick<
-  LayoutAttributes,
-  'layoutGridDir' | 'layoutGridRows' | 'layoutGridColumns' | 'layoutGridCells'
->;
-
-const translateGridAttributes = (node: BaseFrameMixin): GridAttributes => ({
-  layoutGridDir: translateLayoutGridDir(node.layoutMode),
-  layoutGridRows: translateGridTracks(node.gridRowSizes),
-  layoutGridColumns: translateGridTracks(node.gridColumnSizes),
-  layoutGridCells: translateGridCells(node)
-});
-
-const translateGridAttributesWithDefaultTracks = (node: BaseFrameMixin): GridAttributes => ({
-  layoutGridDir: translateLayoutGridDir(node.layoutMode),
-  layoutGridRows: Array.from({ length: node.gridRowSizes.length }, () => ({
-    type: 'flex' as const,
-    value: 1
-  })),
-  layoutGridColumns: Array.from({ length: node.gridColumnSizes.length }, () => ({
-    type: 'flex' as const,
-    value: 1
-  })),
-  layoutGridCells: translateGridCells(node)
-});
 
 const registerDegradedGridLayer = (node: BaseFrameMixin, detail: string): void => {
   const sceneNode = node as unknown as SceneNode;

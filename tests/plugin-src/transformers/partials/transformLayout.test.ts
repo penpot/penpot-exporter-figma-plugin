@@ -2,13 +2,15 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { clearAllState, degradedLayers } from '@plugin/libraries';
 import { transformAutoLayout } from '@plugin/transformers/partials/transformLayout';
+import type * as PluginTranslators from '@plugin/translators';
 
 const { mockTranslateGridCells, mockTranslateGridTracks } = vi.hoisted(() => ({
   mockTranslateGridCells: vi.fn(),
   mockTranslateGridTracks: vi.fn()
 }));
 
-vi.mock('@plugin/translators', () => ({
+vi.mock('@plugin/translators', async importOriginal => ({
+  ...(await importOriginal<typeof PluginTranslators>()),
   translateGridCells: mockTranslateGridCells,
   translateGridTracks: mockTranslateGridTracks,
   translateLayoutAlignContent: vi.fn().mockReturnValue('start'),
@@ -31,6 +33,7 @@ const createGridNode = (): BaseFrameMixin => {
     id: 'grid-id',
     name: 'Grid frame',
     layoutMode: 'GRID',
+    children: [],
     gridRowSizes: [{ type: 'FIXED', value: 100 }],
     gridColumnSizes: [{ type: 'FIXED', value: 200 }]
   } as unknown as BaseFrameMixin;
@@ -64,8 +67,9 @@ describe('transformAutoLayout', () => {
 
   it('exports a healthy grid layout', () => {
     const node = createGridNode();
+    const layout = transformAutoLayout(node);
 
-    expect(transformAutoLayout(node)).toEqual({
+    expect(layout).toMatchObject({
       layout: 'grid',
       layoutGap: { rowGap: 8, columnGap: 8 },
       layoutGapType: 'multiple',
@@ -76,10 +80,22 @@ describe('transformAutoLayout', () => {
       layoutAlignContent: 'start',
       layoutAlignItems: 'start',
       layoutGridDir: 'row',
-      layoutGridRows: [{ type: 'FIXED', value: 100 }],
-      layoutGridColumns: [{ type: 'FIXED', value: 200 }],
-      layoutGridCells: { 'cell-id': { row: 1, column: 1 } }
+      layoutGridRows: [{ type: 'fixed', value: 100 }],
+      layoutGridColumns: [{ type: 'fixed', value: 200 }]
     });
+    expect(Object.values(layout.layoutGridCells ?? {})).toEqual([
+      expect.objectContaining({
+        alignSelf: 'auto',
+        column: 1,
+        columnSpan: 1,
+        id: expect.any(String),
+        justifySelf: 'auto',
+        position: 'auto',
+        row: 1,
+        rowSpan: 1,
+        shapes: []
+      })
+    ]);
     expect(degradedLayers).toHaveLength(0);
   });
 
@@ -94,8 +110,9 @@ describe('transformAutoLayout', () => {
     mockTranslateGridTracks.mockImplementation((tracks: GridTrackSize[]): GridTrackSize[] =>
       tracks.map(track => ({ ...track, type: track.type }))
     );
+    const layout = transformAutoLayout(node);
 
-    expect(transformAutoLayout(node)).toEqual({
+    expect(layout).toMatchObject({
       layout: 'grid',
       layoutGap: { rowGap: 8, columnGap: 8 },
       layoutGapType: 'multiple',
@@ -107,9 +124,21 @@ describe('transformAutoLayout', () => {
       layoutAlignItems: 'start',
       layoutGridDir: 'row',
       layoutGridRows: [{ type: 'flex', value: 1 }],
-      layoutGridColumns: [{ type: 'flex', value: 1 }],
-      layoutGridCells: { 'cell-id': { row: 1, column: 1 } }
+      layoutGridColumns: [{ type: 'flex', value: 1 }]
     });
+    expect(Object.values(layout.layoutGridCells ?? {})).toEqual([
+      expect.objectContaining({
+        alignSelf: 'auto',
+        column: 1,
+        columnSpan: 1,
+        id: expect.any(String),
+        justifySelf: 'auto',
+        position: 'auto',
+        row: 1,
+        rowSpan: 1,
+        shapes: []
+      })
+    ]);
     expect(degradedLayers.get('grid-id')).toBe(
       'Grid frame: exported with default grid track sizing (Figma API error)'
     );
