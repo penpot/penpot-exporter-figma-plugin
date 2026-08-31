@@ -72,4 +72,19 @@ describe('calculateLinearGradient', () => {
     // Con escala 2x, el gradiente debería estar escalado
     expect(result.end[0]).toBeGreaterThan(result.start[0]);
   });
+
+  it('recorta coordenadas gigantes de una matriz casi singular', () => {
+    // Un gradiente degenerado (asas casi juntas) invierte a valores enormes
+    // que Penpot rechaza ("expected valid color")
+    const nearSingular: Transform = [
+      [1e-15, 0, 0],
+      [0, 1e-15, 0]
+    ];
+    const result = calculateLinearGradient(nearSingular);
+    for (const value of [...result.start, ...result.end]) {
+      expect(Number.isFinite(value)).toBe(true);
+      expect(value).toBeGreaterThanOrEqual(-2147483648);
+      expect(value).toBeLessThanOrEqual(2147483647);
+    }
+  });
 });

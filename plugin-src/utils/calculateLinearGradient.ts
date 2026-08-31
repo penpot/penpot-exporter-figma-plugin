@@ -1,4 +1,5 @@
 import { applyMatrixToPoint } from '@plugin/utils/applyMatrixToPoint';
+import { clampToSafeNumber } from '@plugin/utils/clampToSafeNumber';
 import { matrixInvert } from '@plugin/utils/matrixInvert';
 
 export const calculateLinearGradient = (t: Transform): { start: number[]; end: number[] } => {
@@ -18,7 +19,7 @@ export const calculateLinearGradient = (t: Transform): { start: number[]; end: n
   ].map(p => applyMatrixToPoint(mxInv, p));
 
   return {
-    start: [startEnd[0][0], startEnd[0][1]],
-    end: [startEnd[1][0], startEnd[1][1]]
+    start: [clampToSafeNumber(startEnd[0][0]), clampToSafeNumber(startEnd[0][1])],
+    end: [clampToSafeNumber(startEnd[1][0]), clampToSafeNumber(startEnd[1][1])]
   };
 };
