@@ -1,4 +1,4 @@
-import { calculateRadialGradient, rgbToHex } from '@plugin/utils';
+import { calculateRadialGradient, clamp, rgbToHex } from '@plugin/utils';
 
 import type { Fill } from '@ui/lib/types/utils/fill';
 
@@ -15,7 +15,7 @@ export const translateGradientRadialFill = (fill: GradientPaint): Fill => {
       width: 1,
       stops: fill.gradientStops.map(stop => ({
         color: rgbToHex(stop.color),
-        offset: stop.position,
+        offset: clamp(stop.position, 0, 1),
         opacity: stop.color.a * (fill.opacity ?? 1)
       }))
     },

@@ -3,6 +3,7 @@ export * from './applyMatrixToPoint';
 export * from './applyRotation';
 export * from './calculateLinearGradient';
 export * from './calculateRadialGradient';
+export * from './clamp';
 export * from './editorType';
 export * from './finiteOrUndefined';
 export * from './generateUuid';
