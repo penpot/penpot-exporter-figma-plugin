@@ -1,5 +1,30 @@
 # penpot-exporter
 
+## 0.24.2
+
+### Patch Changes
+
+- [#417](https://github.com/penpot/penpot-exporter-figma-plugin/pull/417)
+  [`b13cda9`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/b13cda9c4a02b92813ed8cfc2f442fba15a22720)
+  Thanks [@SpykeRel04D](https://github.com/SpykeRel04D)! - Clamp gradient stop offsets to the [0, 1]
+  range to match Figma UI behavior
+
+- [#413](https://github.com/penpot/penpot-exporter-figma-plugin/pull/413)
+  [`e944b59`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/e944b59a5fd76a2eab9b9b3ad67137fc99bb58f9)
+  Thanks [@SpykeRel04D](https://github.com/SpykeRel04D)! - Restore the internal nesting-depth
+  counter with try/finally so an export aborted by an error no longer leaks state into the next
+  export.
+
+- [#408](https://github.com/penpot/penpot-exporter-figma-plugin/pull/408)
+  [`70f0a42`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/70f0a42e52eaad687a427b5ca17aa8f6adb32e72)
+  Thanks [@SpykeRel04D](https://github.com/SpykeRel04D)! - Fix a Figma Grid auto-layout API failure
+  aborting the whole export; affected frames are exported with default track sizing instead.
+
+- [#414](https://github.com/penpot/penpot-exporter-figma-plugin/pull/414)
+  [`5e3e6a9`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/5e3e6a9798b1a834acf5c969ca362fb8dd10dc03)
+  Thanks [@SpykeRel04D](https://github.com/SpykeRel04D)! - Skip color library entries with no
+  resolvable color, gradient or image instead of aborting the export with "expected valid color".
+
 ## 0.24.1
 
 ### Patch Changes
