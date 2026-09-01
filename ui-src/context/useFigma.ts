@@ -27,6 +27,7 @@ export type FormValues = {
 
 export type UseFigmaHook = {
   missingFonts: string[] | undefined;
+  degradedLayers: string[] | undefined;
   exporting: boolean;
   summary: boolean;
   error: ErrorPayload | null;
@@ -57,6 +58,7 @@ export type UseFigmaHook = {
 
 export const useFigma = (): UseFigmaHook => {
   const [missingFonts, setMissingFonts] = useState<string[]>();
+  const [degradedLayers, setDegradedLayers] = useState<string[]>();
   const [exporting, setExporting] = useState(false);
   const [summary, setSummary] = useState(false);
   const [error, setError] = useState<ErrorPayload | null>(null);
@@ -156,6 +158,7 @@ export const useFigma = (): UseFigmaHook => {
       }
       case 'RELOAD': {
         setMissingFonts(undefined);
+        setDegradedLayers(undefined);
         setExporting(false);
         setSummary(false);
         setError(null);
@@ -183,6 +186,9 @@ export const useFigma = (): UseFigmaHook => {
       case 'PENPOT_DOCUMENT': {
         if (pluginMessage.data.missingFonts) {
           setMissingFonts(pluginMessage.data.missingFonts);
+        }
+        if (pluginMessage.data.degradedLayers) {
+          setDegradedLayers(pluginMessage.data.degradedLayers);
         }
 
         // Images arrive streamed as PENPOT_IMAGE messages before this document;
@@ -366,6 +372,7 @@ export const useFigma = (): UseFigmaHook => {
 
   return {
     missingFonts,
+    degradedLayers,
     exporting,
     summary,
     error,

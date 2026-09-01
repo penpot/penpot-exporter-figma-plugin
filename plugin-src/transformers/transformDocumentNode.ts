@@ -3,6 +3,7 @@ import { toObject } from '@common/map';
 import {
   componentProperties,
   components,
+  degradedLayers,
   externalLibraries,
   missingFonts
 } from '@plugin/libraries';
@@ -40,6 +41,7 @@ export const transformDocumentNode = async (
     componentProperties: toObject(componentProperties),
     externalLibraries: toObject(externalLibraries),
     missingFonts: Array.from(missingFonts),
+    degradedLayers: Array.from(degradedLayers.values()),
     isShared: isSharedLibrary
   };
 };

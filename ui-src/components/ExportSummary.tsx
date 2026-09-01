@@ -13,6 +13,7 @@ export const ExportSummary = (): JSX.Element | null => {
     exportScope,
     selectedPageIds,
     missingFonts,
+    degradedLayers,
     downloadBlob,
     cancel
   } = useFigmaContext();
@@ -22,6 +23,7 @@ export const ExportSummary = (): JSX.Element | null => {
   }
 
   const hasMissingFonts = missingFonts && missingFonts.length > 0;
+  const hasDegradedLayers = degradedLayers && degradedLayers.length > 0;
   const isCurrentPageOnly = exportScope === 'current';
   const isPartialExport = exportScope === 'selection';
   const exportSizeMB = exportedBlob.blob.size / (1024 * 1024);
@@ -85,6 +87,26 @@ export const ExportSummary = (): JSX.Element | null => {
             <Link href="https://help.penpot.app/user-guide/custom-fonts/" target="_blank">
               Learn how →
             </Link>
+          </Muted>
+        </Stack>
+      )}
+
+      {hasDegradedLayers && (
+        <Stack space="xsmall">
+          <Banner icon={<CircleAlert size={14} />}>
+            <strong>
+              {degradedLayers.length} layer{degradedLayers.length > 1 ? 's' : ''} affected by a
+              Figma API error
+            </strong>
+            <ul style={{ paddingLeft: '1.25rem', marginTop: '0.25rem' }}>
+              {degradedLayers.map((layer, index) => (
+                <li key={`${layer}-${index}`}>{layer}</li>
+              ))}
+            </ul>
+          </Banner>
+          <Muted>
+            Some layers retain their grid with default track sizing, others were exported as regular
+            frames, and layers with affected property reads were skipped.
           </Muted>
         </Stack>
       )}

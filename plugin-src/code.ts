@@ -24,11 +24,36 @@ const sendEditorType = (): void => {
   });
 };
 
+const sendExternalLibraries = (): void => {
+  if (isSlidesEditor() || isFigJamEditor()) return;
+
+  figma.teamLibrary
+    .getAvailableLibraryVariableCollectionsAsync()
+    .then(collections => {
+      const libraryNames = Array.from(
+        new Set(
+          collections
+            .map(collection => collection.libraryName)
+            .filter((name): name is string => Boolean(name))
+        )
+      );
+
+      figma.ui.postMessage({
+        type: 'EXTERNAL_LIBRARIES',
+        data: libraryNames
+      });
+    })
+    .catch(error => {
+      console.warn('Could not fetch external libraries', error);
+    });
+};
+
 const onMessage: MessageEventHandler = message => {
   try {
     if (message.type === 'ready') {
       getUserData();
       sendEditorType();
+      sendExternalLibraries();
 
       // Page selection only applies to design files; slides and FigJam always
       // export the whole document.
@@ -66,25 +91,3 @@ const onMessage: MessageEventHandler = message => {
 
 figma.showUI(__html__, { themeColors: true, width: BASE_WIDTH, height: BASE_HEIGHT });
 figma.ui.onmessage = onMessage;
-
-if (!isSlidesEditor() && !isFigJamEditor()) {
-  figma.teamLibrary
-    .getAvailableLibraryVariableCollectionsAsync()
-    .then(collections => {
-      const libraryNames = Array.from(
-        new Set(
-          collections
-            .map(collection => collection.libraryName)
-            .filter((name): name is string => Boolean(name))
-        )
-      );
-
-      figma.ui.postMessage({
-        type: 'EXTERNAL_LIBRARIES',
-        data: libraryNames
-      });
-    })
-    .catch(error => {
-      console.warn('Could not fetch external libraries', error);
-    });
-}

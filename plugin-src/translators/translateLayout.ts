@@ -9,6 +9,7 @@ import type {
   JustifyAlignContent,
   JustifyAlignItems,
   LayoutAlignSelf,
+  LayoutAttributes,
   LayoutFlexDir,
   LayoutGap,
   LayoutGridDir,
@@ -366,3 +367,28 @@ export const translateGridCells = (node: BaseFrameMixin): { [uuid: Uuid]: GridCe
 
   return cells;
 };
+
+export type GridAttributes = Pick<
+  LayoutAttributes,
+  'layoutGridDir' | 'layoutGridRows' | 'layoutGridColumns' | 'layoutGridCells'
+>;
+
+export const translateGridAttributes = (node: BaseFrameMixin): GridAttributes => ({
+  layoutGridDir: translateLayoutGridDir(node.layoutMode),
+  layoutGridRows: translateGridTracks(node.gridRowSizes),
+  layoutGridColumns: translateGridTracks(node.gridColumnSizes),
+  layoutGridCells: translateGridCells(node)
+});
+
+export const translateGridAttributesWithDefaultTracks = (node: BaseFrameMixin): GridAttributes => ({
+  layoutGridDir: translateLayoutGridDir(node.layoutMode),
+  layoutGridRows: Array.from({ length: node.gridRowSizes.length }, () => ({
+    type: 'flex' as const,
+    value: 1
+  })),
+  layoutGridColumns: Array.from({ length: node.gridColumnSizes.length }, () => ({
+    type: 'flex' as const,
+    value: 1
+  })),
+  layoutGridCells: translateGridCells(node)
+});

@@ -1,11 +1,11 @@
+import { degradedLayers } from '@plugin/libraries';
 import {
-  translateGridCells,
-  translateGridTracks,
+  translateGridAttributes,
+  translateGridAttributesWithDefaultTracks,
   translateLayoutAlignContent,
   translateLayoutAlignItems,
   translateLayoutFlexDir,
   translateLayoutGap,
-  translateLayoutGridDir,
   translateLayoutItemAlignSelf,
   translateLayoutJustifyContent,
   translateLayoutJustifyItems,
@@ -15,8 +15,16 @@ import {
   translateLayoutSizing,
   translateLayoutWrapType
 } from '@plugin/translators';
+import { isFigmaPlatformError } from '@plugin/utils/figmaPlatformError';
 
 import type { LayoutAttributes, LayoutChildAttributes } from '@ui/lib/types/shapes/layout';
+
+const registerDegradedGridLayer = (node: BaseFrameMixin, detail: string): void => {
+  const sceneNode = node as unknown as SceneNode;
+
+  console.warn(`Penpot Exporter: grid layer "${sceneNode.name}" ${detail}`);
+  degradedLayers.set(sceneNode.id, `${sceneNode.name}: ${detail}`);
+};
 
 export const transformAutoLayout = (node: BaseFrameMixin): LayoutAttributes => {
   const layout = translateLayoutMode(node.layoutMode);
@@ -45,13 +53,31 @@ export const transformAutoLayout = (node: BaseFrameMixin): LayoutAttributes => {
     };
   }
 
-  return {
-    ...commonAttributes,
-    layoutGridDir: translateLayoutGridDir(node.layoutMode),
-    layoutGridRows: translateGridTracks(node.gridRowSizes),
-    layoutGridColumns: translateGridTracks(node.gridColumnSizes),
-    layoutGridCells: translateGridCells(node)
-  };
+  try {
+    return {
+      ...commonAttributes,
+      ...translateGridAttributes(node)
+    };
+  } catch (error) {
+    if (!isFigmaPlatformError(error)) throw error;
+
+    try {
+      const fallback = {
+        ...commonAttributes,
+        ...translateGridAttributesWithDefaultTracks(node)
+      };
+
+      registerDegradedGridLayer(node, 'exported with default grid track sizing (Figma API error)');
+
+      return fallback;
+    } catch (error) {
+      if (!isFigmaPlatformError(error)) throw error;
+
+      registerDegradedGridLayer(node, 'exported without grid layout (Figma API error)');
+
+      return {};
+    }
+  }
 };
 
 export const transformLayoutAttributes = (

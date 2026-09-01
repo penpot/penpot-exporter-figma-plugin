@@ -2,6 +2,7 @@ import {
   clearAllState,
   componentProperties,
   components,
+  degradedLayers,
   externalLibraries,
   images,
   missingFonts,
@@ -24,6 +25,7 @@ import {
   reportProgress,
   resetProgress
 } from '@plugin/utils';
+import { isFigmaPlatformError } from '@plugin/utils/figmaPlatformError';
 
 import type { ErrorPayload, ExportScope, ExternalLibrary, PenpotDocument } from '@ui/types';
 
@@ -40,7 +42,11 @@ const buildDocument = async (scope: ExportScope, pageIds: string[]): Promise<Pen
 };
 
 const buildErrorPayload = (error: unknown): ErrorPayload => ({
-  message: error instanceof Error ? error.message : String(error),
+  message:
+    (error instanceof Error ? error.message : String(error)) +
+    (isFigmaPlatformError(error)
+      ? ' — This file triggers a Figma platform bug on large exports. Exporting page by page usually works.'
+      : ''),
   stack: error instanceof Error ? error.stack : undefined,
   step: getCurrentStep(),
   layer: getCurrentItem(),
@@ -84,6 +90,7 @@ export const handleRetryMessage = async (): Promise<void> => {
   try {
     resetProgress();
     missingFonts.clear();
+    degradedLayers.clear();
     textStyles.clear();
     paintStyles.clear();
     overrides.clear();
