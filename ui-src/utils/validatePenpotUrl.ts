@@ -1,5 +1,4 @@
 const UUID_REGEX = /^$|^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
-const PENPOT_URL_REGEX = /^https?:\/\/[^/]*penpot[^/]*\//i;
 
 type ParseResult = { success: true; fileId: string } | { success: false; error: string };
 
@@ -20,15 +19,17 @@ const parsePenpotUrl = (input: string): ParseResult => {
     return { success: true, fileId: '' };
   }
 
-  if (!PENPOT_URL_REGEX.test(trimmed)) {
-    return {
-      success: false,
-      error: 'Enter a valid Penpot URL (e.g., https://design.penpot.app/#/...)'
-    };
-  }
-
   try {
     const url = new URL(trimmed);
+
+    if (url.protocol !== 'http:' && url.protocol !== 'https:') {
+      return {
+        success: false,
+        error:
+          'Enter a valid Penpot URL (e.g., https://design.penpot.app/#/... or your self-hosted instance URL)'
+      };
+    }
+
     const hashParams = new URLSearchParams(url.hash.split('?')[1] || '');
     const searchParams = url.searchParams;
     const fileId = hashParams.get('file-id') || searchParams.get('file-id');
