@@ -1,3 +1,4 @@
+import { getDocumentPages } from '@plugin/getDocumentPages';
 import { getUserData } from '@plugin/getUserData';
 import { handleExportMessage, handleRetryMessage, postPluginError } from '@plugin/handleMessage';
 import { isFigJamEditor, isSlidesEditor } from '@plugin/utils';
@@ -12,6 +13,7 @@ type ExportMessage = {
   data: {
     scope: ExportScope;
     libraries: ExternalLibrary[];
+    pageIds?: string[];
   };
 };
 
@@ -52,6 +54,12 @@ const onMessage: MessageEventHandler = message => {
       getUserData();
       sendEditorType();
       sendExternalLibraries();
+
+      // Page selection only applies to design files; slides and FigJam always
+      // export the whole document.
+      if (!isSlidesEditor() && !isFigJamEditor()) {
+        getDocumentPages();
+      }
     }
 
     if (message.type === 'retry') {
@@ -62,8 +70,9 @@ const onMessage: MessageEventHandler = message => {
       const exportMessage = message as ExportMessage;
       const scope = exportMessage.data?.scope ?? 'all';
       const libraries = exportMessage.data?.libraries ?? [];
+      const pageIds = exportMessage.data?.pageIds ?? [];
 
-      handleExportMessage(scope, libraries);
+      handleExportMessage(scope, libraries, pageIds);
     }
 
     if (message.type === 'cancel') {

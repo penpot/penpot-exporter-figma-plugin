@@ -35,10 +35,10 @@ const initializeExternalLibraries = (libraries: ExternalLibrary[]): void => {
   }
 };
 
-const buildDocument = async (scope: ExportScope): Promise<PenpotDocument> => {
+const buildDocument = async (scope: ExportScope, pageIds: string[]): Promise<PenpotDocument> => {
   if (isSlidesEditor()) return transformSlidesDocumentNode(figma.root);
   if (isFigJamEditor()) return transformFigJamDocumentNode(figma.root);
-  return transformDocumentNode(figma.root, scope);
+  return transformDocumentNode(figma.root, scope, pageIds);
 };
 
 const buildErrorPayload = (error: unknown): ErrorPayload => ({
@@ -63,7 +63,8 @@ export const postPluginError = (error: unknown): void => {
 
 export const handleExportMessage = async (
   scope: ExportScope,
-  libraries: ExternalLibrary[]
+  libraries: ExternalLibrary[],
+  pageIds: string[] = []
 ): Promise<void> => {
   try {
     // Clear all state maps and caches to prevent memory accumulation
@@ -71,7 +72,7 @@ export const handleExportMessage = async (
     resetProgress();
 
     initializeExternalLibraries(libraries);
-    const document = await buildDocument(scope);
+    const document = await buildDocument(scope, pageIds);
 
     flushProgress();
 

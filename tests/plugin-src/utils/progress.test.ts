@@ -84,6 +84,30 @@ describe('progress', () => {
       expect(mockPostMessage).toHaveBeenCalledTimes(2);
     });
 
+    it('envía PROGRESS_CURRENT_PAGE inmediatamente', () => {
+      const message = {
+        type: 'PROGRESS_CURRENT_PAGE',
+        data: 'Página 1'
+      } as const;
+      reportProgress(message);
+      expect(mockPostMessage).toHaveBeenCalledTimes(1);
+      expect(mockPostMessage).toHaveBeenCalledWith(message);
+    });
+
+    it('reenvía un PROGRESS_CURRENT_ITEM repetido tras cambiar de página', () => {
+      reportProgress({ type: 'PROGRESS_CURRENT_ITEM', data: 'Item 1' });
+      vi.advanceTimersByTime(500);
+      expect(mockPostMessage).toHaveBeenCalledTimes(1);
+
+      reportProgress({ type: 'PROGRESS_CURRENT_PAGE', data: 'Página 2' });
+      expect(mockPostMessage).toHaveBeenCalledTimes(2);
+
+      // El mismo nombre de capa en otra página debe volver a enviarse
+      reportProgress({ type: 'PROGRESS_CURRENT_ITEM', data: 'Item 1' });
+      vi.advanceTimersByTime(500);
+      expect(mockPostMessage).toHaveBeenCalledTimes(3);
+    });
+
     it('bufferiza mensaje PROGRESS_PROCESSED_ITEMS', () => {
       const message = {
         type: 'PROGRESS_PROCESSED_ITEMS',

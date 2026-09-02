@@ -8,8 +8,10 @@ import { TwoColumnLayout } from '@ui/components/TwoColumnLayout';
 import { type FormValues, useFigmaContext } from '@ui/context';
 
 export const ExportForm = (): JSX.Element => {
-  const { cancel, exportPenpot, editorType } = useFigmaContext();
+  const { cancel, exportPenpot, editorType, exportScope, selectedPageIds } = useFigmaContext();
   const hideDesignControls = editorType === 'slides' || editorType === 'figjam';
+  const missingPageSelection =
+    !hideDesignControls && exportScope === 'selection' && selectedPageIds.length === 0;
   const methods = useForm<FormValues>({
     defaultValues: {
       externalLibraries: []
@@ -64,7 +66,7 @@ export const ExportForm = (): JSX.Element => {
               width: '100%'
             }}
           >
-            <Button style={{ flex: '0 1 auto' }}>
+            <Button style={{ flex: '0 1 auto' }} disabled={missingPageSelection}>
               <strong>Start Export</strong>
             </Button>
             <Button secondary onClick={cancel} style={{ flex: '0 1 auto' }}>

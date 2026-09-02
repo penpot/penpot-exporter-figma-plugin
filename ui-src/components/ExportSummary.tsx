@@ -11,6 +11,7 @@ export const ExportSummary = (): JSX.Element | null => {
     exportedBlob,
     exportTime,
     exportScope,
+    selectedPageIds,
     missingFonts,
     degradedLayers,
     downloadBlob,
@@ -24,6 +25,7 @@ export const ExportSummary = (): JSX.Element | null => {
   const hasMissingFonts = missingFonts && missingFonts.length > 0;
   const hasDegradedLayers = degradedLayers && degradedLayers.length > 0;
   const isCurrentPageOnly = exportScope === 'current';
+  const isPartialExport = exportScope === 'selection';
   const exportSizeMB = exportedBlob.blob.size / (1024 * 1024);
   const isLargeExport = exportSizeMB > 200;
 
@@ -57,6 +59,14 @@ export const ExportSummary = (): JSX.Element | null => {
         <Banner icon={<Info size={14} />}>
           This export contains only the current page. Components and other pages are not included.
           To export everything, select &quot;All pages&quot;.
+        </Banner>
+      )}
+
+      {isPartialExport && (
+        <Banner icon={<Info size={14} />}>
+          This export contains only the {selectedPageIds.length} page
+          {selectedPageIds.length > 1 ? 's' : ''} you selected. Components living on other pages are
+          not included. To export everything, select &quot;All pages&quot;.
         </Banner>
       )}
 

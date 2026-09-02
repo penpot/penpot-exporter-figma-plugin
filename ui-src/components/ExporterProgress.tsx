@@ -1,4 +1,4 @@
-import type { JSX } from 'preact';
+import type { CSSProperties, JSX } from 'preact';
 
 import { ProgressBar } from '@ui/components/ProgressBar';
 import { ProgressStepper } from '@ui/components/ProgressStepper';
@@ -13,6 +13,15 @@ const stepMessages: Record<Steps, string> = {
   building: 'Penpot pages assembled 🏗️',
   components: 'Components created 🏗️',
   exporting: 'Packaging Penpot file 🚀'
+};
+
+// Page and layer names are user-defined and can be arbitrarily long.
+const truncatedLine: CSSProperties = {
+  display: 'inline-block',
+  overflow: 'hidden',
+  textOverflow: 'ellipsis',
+  whiteSpace: 'nowrap',
+  maxWidth: '100%'
 };
 
 const StepProgress = (): JSX.Element | null => {
@@ -46,18 +55,14 @@ const StepProgress = (): JSX.Element | null => {
       return (
         <p>
           {`${progress.processedItems} of ${progress.totalItems}`} {message}
+          {progress.currentPage && (
+            <>
+              <br />
+              <span style={truncatedLine}>{`Page: "${progress.currentPage}"`}</span>
+            </>
+          )}
           <br />
-          <span
-            style={{
-              display: 'inline-block',
-              overflow: 'hidden',
-              textOverflow: 'ellipsis',
-              whiteSpace: 'nowrap',
-              maxWidth: '100%'
-            }}
-          >
-            {'Layer: "' + progress.currentItem + '"'}
-          </span>
+          <span style={truncatedLine}>{`Layer: "${progress.currentItem}"`}</span>
         </p>
       );
   }
