@@ -1,5 +1,15 @@
 # penpot-exporter
 
+## 0.24.3
+
+### Patch Changes
+
+- [#420](https://github.com/penpot/penpot-exporter-figma-plugin/pull/420)
+  [`38a46ad`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/38a46ad872c3b74b67fb6a1ca78a6e8b467f3ab1)
+  Thanks [@SpykeRel04D](https://github.com/SpykeRel04D)! - Recognize Figma's grid-corruption
+  validation errors generically and detect corrupted grid track data so affected grid layers degrade
+  gracefully instead of aborting the export.
+
 ## 0.24.2
 
 ### Patch Changes
