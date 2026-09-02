@@ -1,4 +1,5 @@
 import { transformId } from '@plugin/transformers/partials';
+import { FigmaPlatformDataError } from '@plugin/utils/figmaPlatformError';
 import { generateUuid } from '@plugin/utils/generateUuid';
 
 import type {
@@ -237,6 +238,10 @@ export const translateLayoutItemAlignSelf = (align: FigmaLayoutAlign): LayoutAli
 };
 
 const translateGridTrack = (gridTrack: GridTrackSize): GridTrack => {
+  if (gridTrack == null || typeof gridTrack.value !== 'number') {
+    throw new FigmaPlatformDataError('Grid track read returned corrupted data');
+  }
+
   return {
     type: gridTrack.type === 'FLEX' ? 'flex' : 'fixed',
     value: gridTrack.value
