@@ -1,39 +1,35 @@
+// Font families spell their style names differently ("SemiBold", "Semi Bold", "Semibold"),
+// so compare them without case, spaces or the italic suffix.
+const normalizeStyle = (style: string): string =>
+  style
+    .toLowerCase()
+    .replace(/[\s_-]/g, '')
+    .replace(/(italic|oblique)$/, '');
+
 export const translateFontWeight = (fontName: FontName | undefined): string => {
   if (!fontName) return '400';
 
-  switch (fontName.style) {
-    case 'Thin':
-    case 'Thin Italic':
+  switch (normalizeStyle(fontName.style ?? '')) {
+    case 'thin':
+    case 'hairline':
       return '100';
-    case 'Extra Light':
-    case 'ExtraLight':
-    case 'Extra Light Italic':
-    case 'ExtraLight Italic':
+    case 'extralight':
+    case 'ultralight':
       return '200';
-    case 'Light':
-    case 'Light Italic':
+    case 'light':
       return '300';
-    case 'Regular':
-    case 'Italic':
-      return '400';
-    case 'Medium':
-    case 'Medium Italic':
+    case 'medium':
       return '500';
-    case 'Semi Bold':
-    case 'SemiBold':
-    case 'Semi Bold Italic':
-    case 'SemiBold Italic':
+    case 'semibold':
+    case 'demibold':
       return '600';
-    case 'Bold':
-    case 'Bold Italic':
+    case 'bold':
       return '700';
-    case 'ExtraBold':
-    case 'Extra Bold':
-    case 'ExtraBold Italic':
-    case 'Extra Bold Italic':
+    case 'extrabold':
+    case 'ultrabold':
       return '800';
-    case 'Black':
-    case 'Black Italic':
+    case 'black':
+    case 'heavy':
       return '900';
     default:
       return '400';
