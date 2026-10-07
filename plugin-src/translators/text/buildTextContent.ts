@@ -30,5 +30,15 @@ export const buildTextContent = (
           ]
         }
       ]
-    : undefined
+    : [
+        {
+          type: 'paragraph-set',
+          children: [
+            {
+              type: 'paragraph',
+              children: [{ text: '', ...transformFills(node) }]
+            }
+          ]
+        }
+      ]
 });
