@@ -1,4 +1,4 @@
-import { overrides } from '@plugin/libraries';
+import { overrides, swappedInstances } from '@plugin/libraries';
 
 import type { SyncGroups } from '@ui/lib/types/utils/syncGroups';
 
@@ -190,6 +190,12 @@ export const translateTouched = (node: SceneNode): SyncGroups[] => {
     if (isPathNode(node)) {
       syncGroups.add('content-group');
     }
+  }
+
+  const swapSlot = swappedInstances.get(node.id);
+
+  if (swapSlot) {
+    syncGroups.add(`swap-slot-${swapSlot}`);
   }
 
   return Array.from(syncGroups);

@@ -1,3 +1,5 @@
+import type { Uuid } from '@ui/lib/types/utils/uuid';
+
 export type SyncGroups =
   | 'name-group'
   | 'fill-group'
@@ -42,4 +44,5 @@ export type SyncGroups =
   | 'layout-item-align-self'
   | 'text-content-text'
   | 'text-content-attribute'
-  | 'text-content-structure';
+  | 'text-content-structure'
+  | `swap-slot-${Uuid}`;
