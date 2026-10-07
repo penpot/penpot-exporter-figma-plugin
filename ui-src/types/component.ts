@@ -27,7 +27,7 @@ export type ComponentInstance = ShapeBaseAttributes &
   LayoutAttributes &
   LayoutChildAttributes &
   Children & {
-    componentRoot: boolean;
+    componentRoot?: boolean;
     showContent?: boolean;
     hideInViewer?: boolean;
     isOrphan: boolean;
