@@ -46,7 +46,7 @@ export const transformInstanceNode = async (
     showContent: !node.clipsContent,
     hideInViewer: !node.visible,
     isOrphan,
-    ...transformInstanceIds(node, mainComponent),
+    ...(await transformInstanceIds(node, mainComponent)),
     ...transformFills(node),
     ...transformEffects(node),
     ...transformStrokes(node),

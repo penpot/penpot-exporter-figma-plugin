@@ -11,6 +11,8 @@ export const degradedLayers: Map<string, string> = new Map();
 export const textStyles: Map<string, TextStyle | undefined> = new Map();
 export const paintStyles: Map<string, PaintStyle | undefined> = new Map();
 export const overrides: Map<string, NodeChangeProperty[]> = new Map();
+// Figma id of a nested instance whose main component was swapped -> swap slot (id of the replaced main child)
+export const swappedInstances: Map<string, Uuid> = new Map();
 export const images: Map<string, Image | null> = new Map();
 export const components: Map<Uuid, ComponentRoot> = new Map();
 export const componentProperties: Map<string, ComponentProperty> = new Map();
@@ -33,6 +35,7 @@ export const clearAllState = (): void => {
   textStyles.clear();
   paintStyles.clear();
   overrides.clear();
+  swappedInstances.clear();
   images.clear();
   components.clear();
   componentProperties.clear();
