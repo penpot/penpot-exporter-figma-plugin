@@ -42,7 +42,7 @@ export const transformInstanceNode = async (
     componentFile: isRemoteComponent(mainComponent, figmaFile)
       ? externalLibraries.get(figmaFile)
       : undefined,
-    componentRoot: isComponentRoot(node),
+    ...(isComponentRoot(node) ? { componentRoot: true } : {}),
     showContent: !node.clipsContent,
     hideInViewer: !node.visible,
     isOrphan,
