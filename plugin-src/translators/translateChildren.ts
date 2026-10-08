@@ -12,6 +12,9 @@ import type { PenpotNode } from '@ui/types';
  * The masked children will be grouped together in a mask group.
  * The unmasked children will be returned as they are.
  *
+ * As in Figma, a mask only applies to the siblings above it until the next mask,
+ * which starts a mask group of its own.
+ *
  * @maskIndex The index of the mask node in the children array
  */
 export const translateMaskChildren = async (
@@ -34,8 +37,11 @@ export const translateMaskChildren = async (
     return await translateChildren(children);
   }
 
+  const nextMaskIndex = children.findIndex((child, index) => index > maskIndex && isMask(child));
+  const maskEnd = nextMaskIndex === -1 ? children.length : nextMaskIndex;
+
   const unmaskedChildren = await translateChildren(children.slice(0, maskIndex));
-  const maskedChildren = await translateChildren(children.slice(maskIndex));
+  const maskedChildren = await translateChildren(children.slice(maskIndex, maskEnd));
 
   const maskGroup = {
     ...transformMaskIds(maskChild),
@@ -44,8 +50,18 @@ export const translateMaskChildren = async (
     maskedGroup: true
   };
 
-  return [...unmaskedChildren, maskGroup];
+  if (nextMaskIndex === -1) {
+    return [...unmaskedChildren, maskGroup];
+  }
+
+  return [
+    ...unmaskedChildren,
+    maskGroup,
+    ...(await translateMaskChildren(children.slice(nextMaskIndex), 0))
+  ];
 };
+
+const isMask = (node: SceneNode): boolean => 'isMask' in node && node.isMask;
 
 export const translateChildren = async (children: readonly SceneNode[]): Promise<PenpotNode[]> => {
   const transformedChildren: PenpotNode[] = [];
