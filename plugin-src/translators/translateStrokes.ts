@@ -8,6 +8,7 @@ export const translateStrokes = (
 ): Stroke[] => {
   const sharedStrokeProperties: Stroke = {
     strokeWidth: translateStrokeWeight(node),
+    ...translateStrokeSides(node),
     strokeAlignment: translateStrokeAlignment(node.strokeAlign),
     strokeStyle: node.dashPattern.length ? 'dashed' : 'solid'
   };
@@ -101,6 +102,23 @@ const translateStrokeWeight = (
     node.strokeBottomWeight,
     node.strokeLeftWeight
   );
+};
+
+// Penpot keeps `strokeWidth` as the fallback for renderers without per-side support
+const translateStrokeSides = (
+  node: MinimalStrokesMixin | (MinimalStrokesMixin & IndividualStrokesMixin)
+): Stroke => {
+  if (node.strokeWeight !== figma.mixed || !isIndividualStrokes(node)) {
+    return {};
+  }
+
+  return {
+    strokePerSide: true,
+    strokeWidthTop: node.strokeTopWeight,
+    strokeWidthRight: node.strokeRightWeight,
+    strokeWidthBottom: node.strokeBottomWeight,
+    strokeWidthLeft: node.strokeLeftWeight
+  };
 };
 
 const isIndividualStrokes = (

@@ -9,6 +9,11 @@ export type Stroke = {
   strokeOpacity?: number;
   strokeStyle?: 'solid' | 'dotted' | 'dashed' | 'mixed' | 'none' | 'svg';
   strokeWidth?: number;
+  strokePerSide?: boolean;
+  strokeWidthTop?: number;
+  strokeWidthRight?: number;
+  strokeWidthBottom?: number;
+  strokeWidthLeft?: number;
   strokeAlignment?: StrokeAlignment;
   strokeCapStart?: StrokeCaps;
   strokeCapEnd?: StrokeCaps;
