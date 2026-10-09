@@ -1,5 +1,57 @@
 # penpot-exporter
 
+## 0.26.0
+
+### Minor Changes
+
+- [#445](https://github.com/penpot/penpot-exporter-figma-plugin/pull/445)
+  [`e398acd`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/e398acdae197a3f95f7f8d489222820da6633c67)
+  Thanks [@SpykeRel04D](https://github.com/SpykeRel04D)! - Export individual stroke widths per side
+
+### Patch Changes
+
+- [#438](https://github.com/penpot/penpot-exporter-figma-plugin/pull/438)
+  [`9bc583e`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/9bc583e30cd5e0cef59147b722983ab74549c004)
+  Thanks [@SpykeRel04D](https://github.com/SpykeRel04D)! - Keep the Figma boolean group's own fills
+  and strokes in Penpot instead of inheriting them from one of its children.
+
+- [#436](https://github.com/penpot/penpot-exporter-figma-plugin/pull/436)
+  [`cc44936`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/cc449360b7485a11504fd64094f76e205c18e530)
+  Thanks [@SpykeRel04D](https://github.com/SpykeRel04D)! - Export empty text layers with a valid
+  empty paragraph so Penpot no longer relies on an import migration to repair them.
+
+- [#443](https://github.com/penpot/penpot-exporter-figma-plugin/pull/443)
+  [`bb7ab9d`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/bb7ab9df66e1ed41ea2954f53c32be27ecf25b86)
+  Thanks [@SpykeRel04D](https://github.com/SpykeRel04D)! - Fix font weight lost on styles like
+  Display Bold or Condensed Light
+
+- [#432](https://github.com/penpot/penpot-exporter-figma-plugin/pull/432)
+  [`b8ec579`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/b8ec579924b7601ad9f4553d1f5bf86130ae086d)
+  Thanks [@breken-ai](https://github.com/breken-ai)! - Fix multiple masks in the same group
+
+- [#444](https://github.com/penpot/penpot-exporter-figma-plugin/pull/444)
+  [`ee61341`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/ee613413a18d4bfdb489e35bbfaf790d2dd44075)
+  Thanks [@SpykeRel04D](https://github.com/SpykeRel04D)! - Export flattened vectors as a single path
+  instead of a group of paths
+
+- [#437](https://github.com/penpot/penpot-exporter-figma-plugin/pull/437)
+  [`1bd9a3d`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/1bd9a3d058719a5d210f54143f413e9945b32a6a)
+  Thanks [@SpykeRel04D](https://github.com/SpykeRel04D)! - Omit `componentRoot` on nested component
+  copies instead of exporting `false`, matching what Penpot expects.
+
+- [#441](https://github.com/penpot/penpot-exporter-figma-plugin/pull/441)
+  [`c0584d3`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/c0584d3cf2dacbbe5bd2d191f29782d43b0c50e7)
+  Thanks [@SpykeRel04D](https://github.com/SpykeRel04D)! - Keep Figma instance swaps (including
+  variant changes) on nested instances when the main component is updated in Penpot.
+
+- [#442](https://github.com/penpot/penpot-exporter-figma-plugin/pull/442)
+  [`197a5f4`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/197a5f426737f0f60d3491db71327e03ad8b602c)
+  Thanks [@SpykeRel04D](https://github.com/SpykeRel04D)! - Update internal dependencies
+
+- [#439](https://github.com/penpot/penpot-exporter-figma-plugin/pull/439)
+  [`4466303`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/4466303ac8a5fbd0f3959663d61aef94d277ff47)
+  Thanks [@SpykeRel04D](https://github.com/SpykeRel04D)! - Update Penpot SDK to 1.2.0
+
 ## 0.25.0
 
 ### Minor Changes
