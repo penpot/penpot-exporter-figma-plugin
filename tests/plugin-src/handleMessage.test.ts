@@ -142,6 +142,24 @@ describe('handleExportMessage', () => {
     expect(mockTransformDocumentNode).toHaveBeenCalledWith(expect.anything(), 'all', []);
   });
 
+  it('applies the export options for the run', async () => {
+    mockTransformDocumentNode.mockResolvedValue({ name: 'doc' });
+
+    await handleExportMessage('all', [], [], { backgroundBlur: true });
+
+    const { exportsBackgroundBlur } = await import('@plugin/utils');
+    expect(exportsBackgroundBlur()).toBe(true);
+  });
+
+  it('defaults the export options to background blur off', async () => {
+    mockTransformDocumentNode.mockResolvedValue({ name: 'doc' });
+
+    await handleExportMessage('all', []);
+
+    const { exportsBackgroundBlur } = await import('@plugin/utils');
+    expect(exportsBackgroundBlur()).toBe(false);
+  });
+
   it('routes to slides transformer when editor is slides', async () => {
     mockIsSlidesEditor.mockReturnValue(true);
     mockTransformSlidesDocumentNode.mockResolvedValue({ name: 'slides-doc' });

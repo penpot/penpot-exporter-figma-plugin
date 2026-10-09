@@ -143,6 +143,7 @@ Things that are currently included in the import are:
 - **Texts** (you can upload your own fonts too)
 - **All basic shapes properties** (fills, visibility, strokes, corner radius, shadows, rotations,
   effects, etc...)
+- **Background blur** (opt-in, see Limitations)
 - **Components, Components sets and Component instances**
 - **Auto Layouts**
 - **Color and Typography libraries**
@@ -161,6 +162,17 @@ Another obvious limitations are the features that are in Figma but not in Penpot
 in both tools so they can not be easily converted, consequently, some features may not look exactly
 the same. Additionally, **prototyping settings are currently not supported** in the export/import
 process of files.
+
+Two of those differences are worth calling out:
+
+- **Background blur** is only painted by Penpot's WebGL renderer, so it is exported behind an opt-in
+  checkbox and is off by default. Turn it on if your Penpot instance is 2.17 or newer and you have
+  "WebGL rendering (beta)" enabled; the classic renderer ignores the effect.
+- **Boolean groups containing text** arrive complete — the group and its text layers are all there —
+  but they render as a rectangle at first. The path of a boolean is precomputed when the file is
+  written, and text is measured by its bounding box at that point; Penpot stores that path and does
+  not recompute it when opening the file. Switching the boolean operation once in Penpot recomputes
+  it, and with "WebGL rendering (beta)" enabled the letter shapes then appear.
 
 ## Contributing
 

@@ -4,6 +4,11 @@ import type { ErrorPayload } from './errorPayload';
 
 export type ExportScope = 'all' | 'current' | 'selection';
 
+// Opt-in export features that only Penpot's WebGL renderer understands.
+export type ExportOptions = {
+  backgroundBlur: boolean;
+};
+
 export type DocumentPage = {
   id: string;
   name: string;

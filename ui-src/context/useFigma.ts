@@ -9,6 +9,7 @@ import type {
   DocumentPage,
   ErrorOrigin,
   ErrorPayload,
+  ExportOptions,
   ExportScope,
   ExternalLibrary,
   Steps
@@ -46,10 +47,12 @@ export type UseFigmaHook = {
   exportedBlob: { blob: Blob; filename: string } | null;
   exportTime: number | null;
   exportScope: ExportScope;
+  exportBackgroundBlur: boolean;
   exportLibraries: string[];
   documentPages: DocumentPage[];
   selectedPageIds: string[];
   setExportScope: (scope: ExportScope) => void;
+  setExportBackgroundBlur: (enabled: boolean) => void;
   setSelectedPageIds: (pageIds: string[]) => void;
   retry: () => void;
   cancel: () => void;
@@ -67,6 +70,7 @@ export const useFigma = (): UseFigmaHook => {
   const [exportedBlob, setExportedBlob] = useState<{ blob: Blob; filename: string } | null>(null);
   const [exportTime, setExportTime] = useState<number | null>(null);
   const [exportScope, setExportScope] = useState<ExportScope>('all');
+  const [exportBackgroundBlur, setExportBackgroundBlur] = useState<boolean>(false);
   const [exportLibraries, setExportLibraries] = useState<string[]>([]);
   const [documentPages, setDocumentPages] = useState<DocumentPage[]>([]);
   const [selectedPageIds, setSelectedPageIds] = useState<string[]>([]);
@@ -168,6 +172,7 @@ export const useFigma = (): UseFigmaHook => {
         setExportedBlob(null);
         setExportTime(null);
         setExportScope('all');
+        setExportBackgroundBlur(false);
         setSelectedPageIds(defaultPageIdsRef.current);
         setStep('processing');
         setCurrentItem('');
@@ -339,8 +344,11 @@ export const useFigma = (): UseFigmaHook => {
 
     track('File Export Started', {
       'scope': exportScope,
-      'Selected Pages': exportScope === 'selection' ? pageIds.length : undefined
+      'Selected Pages': exportScope === 'selection' ? pageIds.length : undefined,
+      'Background Blur': exportBackgroundBlur
     });
+
+    const options: ExportOptions = { backgroundBlur: exportBackgroundBlur };
 
     const libraries = data.externalLibraries
       .map(lib => ({
@@ -349,7 +357,12 @@ export const useFigma = (): UseFigmaHook => {
       }))
       .filter((lib): lib is ExternalLibrary => lib.uuid !== undefined);
 
-    postMessage('export', { scope: exportScope, libraries, pageIds });
+    postMessage('export', {
+      scope: exportScope,
+      libraries,
+      pageIds,
+      options
+    });
   };
 
   useEffect(() => {
@@ -395,10 +408,12 @@ export const useFigma = (): UseFigmaHook => {
     exportedBlob,
     exportTime,
     exportScope,
+    exportBackgroundBlur,
     exportLibraries,
     documentPages,
     selectedPageIds,
     setExportScope,
+    setExportBackgroundBlur,
     setSelectedPageIds,
     retry,
     cancel,

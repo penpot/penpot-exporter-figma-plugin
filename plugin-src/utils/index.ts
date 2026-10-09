@@ -5,6 +5,7 @@ export * from './calculateLinearGradient';
 export * from './calculateRadialGradient';
 export * from './clamp';
 export * from './editorType';
+export * from './exportOptions';
 export * from './finiteOrUndefined';
 export * from './generateUuid';
 export * from './matrixInvert';
