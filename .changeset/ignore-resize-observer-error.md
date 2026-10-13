@@ -2,4 +2,4 @@
 'penpot-exporter': patch
 ---
 
-Stop aborting exports on harmless ResizeObserver browser warnings
+Stop showing the error screen for harmless ResizeObserver browser warnings
