@@ -1,4 +1,5 @@
 import { getDocumentPages } from '@plugin/getDocumentPages';
+import { sendExternalLibraries } from '@plugin/getExternalLibraries';
 import { getUserData } from '@plugin/getUserData';
 import { handleExportMessage, handleRetryMessage, postPluginError } from '@plugin/handleMessage';
 import { isFigJamEditor, isSlidesEditor } from '@plugin/utils';
@@ -22,30 +23,6 @@ const sendEditorType = (): void => {
     type: 'EDITOR_TYPE',
     data: figma.editorType
   });
-};
-
-const sendExternalLibraries = (): void => {
-  if (isSlidesEditor() || isFigJamEditor()) return;
-
-  figma.teamLibrary
-    .getAvailableLibraryVariableCollectionsAsync()
-    .then(collections => {
-      const libraryNames = Array.from(
-        new Set(
-          collections
-            .map(collection => collection.libraryName)
-            .filter((name): name is string => Boolean(name))
-        )
-      );
-
-      figma.ui.postMessage({
-        type: 'EXTERNAL_LIBRARIES',
-        data: libraryNames
-      });
-    })
-    .catch(error => {
-      console.warn('Could not fetch external libraries', error);
-    });
 };
 
 const onMessage: MessageEventHandler = message => {
