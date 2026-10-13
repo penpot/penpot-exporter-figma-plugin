@@ -4,11 +4,13 @@ import { init } from '@common/map';
 
 import { flushMessageQueue } from '@ui/context';
 import type { PenpotContext } from '@ui/lib/types/penpotContext';
-import { componentProperties, componentRoots } from '@ui/parser';
+import { componentProperties, componentRoots, skippedImages } from '@ui/parser';
 import { buildAssets, buildComponentsLibrary, buildFile } from '@ui/parser/builders';
 import type { PenpotDocument } from '@ui/types';
 
 export const parse = async (document: PenpotDocument): Promise<PenpotContext> => {
+  skippedImages.clear();
+
   const {
     name,
     children = [],

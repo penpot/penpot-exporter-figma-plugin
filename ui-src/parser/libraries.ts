@@ -6,6 +6,7 @@ import type { ComponentProperty, ComponentRoot } from '@ui/types';
 
 export const typographies: Map<string, TypographyStyle> = new Map();
 export const images: Map<string, Uuid> = new Map();
+export const skippedImages: Set<string> = new Set();
 export const components: Map<Uuid, PenpotComponent> = new Map();
 export const componentRoots: Map<Uuid, ComponentRoot> = new Map();
 export const colors: Map<string, FillStyle> = new Map();
