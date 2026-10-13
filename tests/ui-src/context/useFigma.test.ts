@@ -90,7 +90,11 @@ describe('useFigma', () => {
     expect(result.current.exporting).toBe(false);
     expect(track).toHaveBeenCalledWith(
       'Error',
-      expect.objectContaining({ 'Error Message': 'Boom', 'Error Origin': 'ui' })
+      expect.objectContaining({
+        'Error Message': 'Boom',
+        'Error Origin': 'ui',
+        'Error Step': 'idle'
+      })
     );
     expect(captureException).not.toHaveBeenCalled();
     unmount();
@@ -167,6 +171,7 @@ describe('useFigma', () => {
 
   it('finishes document export and records the exported file size', async () => {
     const { result, unmount } = renderHook(() => useFigma());
+    const now = vi.spyOn(Date, 'now').mockReturnValueOnce(100).mockReturnValueOnce(350);
     act(() => result.current.exportPenpot({ externalLibraries: [] }));
 
     await act(async () => {
@@ -183,9 +188,142 @@ describe('useFigma', () => {
     expect(track).toHaveBeenCalledWith(
       'File Exported',
       expect.objectContaining({
-        'Exported File Size': fileSizeInMB(getBlob.mock.results[0].value.size)
+        'Exported File Size': fileSizeInMB(getBlob.mock.results[0].value.size),
+        'Exported File Size (bytes)': getBlob.mock.results[0].value.size,
+        'Export Time (ms)': 250,
+        'Export Time': expect.any(String)
       })
     );
+    now.mockRestore();
+    unmount();
+  });
+
+  it('tracks each new export step once with its index and elapsed time', () => {
+    const { result, unmount } = renderHook(() => useFigma());
+    const now = vi
+      .spyOn(Date, 'now')
+      .mockReturnValueOnce(100)
+      .mockReturnValueOnce(125)
+      .mockReturnValueOnce(180);
+
+    act(() => result.current.exportPenpot({ externalLibraries: [] }));
+    act(() => {
+      dispatchPluginMessage({ type: 'PROGRESS_STEP', data: { step: 'processing', total: 1 } });
+      dispatchPluginMessage({ type: 'PROGRESS_STEP', data: { step: 'processing', total: 1 } });
+      dispatchPluginMessage({ type: 'PROGRESS_STEP', data: { step: 'buildAssets', total: 1 } });
+    });
+
+    expect(track.mock.calls.filter(([event]) => event === 'File Export Step')).toEqual([
+      [
+        'File Export Step',
+        { 'Export Step': 'processing', 'Export Step Index': 1, 'Export Elapsed Time (ms)': 25 }
+      ],
+      [
+        'File Export Step',
+        { 'Export Step': 'buildAssets', 'Export Step Index': 3, 'Export Elapsed Time (ms)': 80 }
+      ]
+    ]);
+    now.mockRestore();
+    unmount();
+  });
+
+  it('does not track progress steps outside an export', () => {
+    const { unmount } = renderHook(() => useFigma());
+    act(() =>
+      dispatchPluginMessage({ type: 'PROGRESS_STEP', data: { step: 'processing', total: 1 } })
+    );
+    expect(track).not.toHaveBeenCalledWith('File Export Step', expect.anything());
+    unmount();
+  });
+
+  it('tracks the same step again after reload and a new export', () => {
+    const { result, unmount } = renderHook(() => useFigma());
+    const now = vi.spyOn(Date, 'now').mockReturnValue(100);
+    act(() => result.current.exportPenpot({ externalLibraries: [] }));
+    act(() =>
+      dispatchPluginMessage({ type: 'PROGRESS_STEP', data: { step: 'processing', total: 1 } })
+    );
+    act(() => dispatchPluginMessage({ type: 'RELOAD' }));
+    act(() => result.current.exportPenpot({ externalLibraries: [] }));
+    act(() =>
+      dispatchPluginMessage({ type: 'PROGRESS_STEP', data: { step: 'processing', total: 1 } })
+    );
+    expect(track.mock.calls.filter(([event]) => event === 'File Export Step')).toHaveLength(2);
+    now.mockRestore();
+    unmount();
+  });
+
+  it('uses the current export step for window errors', () => {
+    const { result, unmount } = renderHook(() => useFigma());
+    act(() => result.current.exportPenpot({ externalLibraries: [] }));
+    act(() =>
+      dispatchPluginMessage({ type: 'PROGRESS_STEP', data: { step: 'buildAssets', total: 1 } })
+    );
+    act(() => {
+      window.dispatchEvent(new ErrorEvent('error', { message: 'Boom' }));
+    });
+    expect(track).toHaveBeenCalledWith(
+      'Error',
+      expect.objectContaining({ 'Error Step': 'buildAssets' })
+    );
+    expect(result.current.error?.step).toBe('buildAssets');
+    unmount();
+  });
+
+  it('continues tracking export steps and duration after a window error', async () => {
+    const { result, unmount } = renderHook(() => useFigma());
+    const now = vi
+      .spyOn(Date, 'now')
+      .mockReturnValueOnce(100)
+      .mockReturnValueOnce(125)
+      .mockReturnValueOnce(150)
+      .mockReturnValueOnce(350);
+
+    act(() => result.current.exportPenpot({ externalLibraries: [] }));
+    act(() =>
+      dispatchPluginMessage({ type: 'PROGRESS_STEP', data: { step: 'processing', total: 1 } })
+    );
+    act(() => {
+      window.dispatchEvent(new ErrorEvent('error', { message: 'Boom' }));
+    });
+    act(() =>
+      dispatchPluginMessage({ type: 'PROGRESS_STEP', data: { step: 'buildAssets', total: 1 } })
+    );
+
+    await act(async () => {
+      dispatchPluginMessage({ type: 'PENPOT_DOCUMENT', data: { name: 'My file' } });
+      await flushAsyncHandlers();
+    });
+
+    expect(track).toHaveBeenCalledWith(
+      'File Export Step',
+      expect.objectContaining({ 'Export Step': 'buildAssets' })
+    );
+    expect(track).toHaveBeenCalledWith(
+      'File Exported',
+      expect.objectContaining({ 'Export Time (ms)': 250 })
+    );
+    now.mockRestore();
+    unmount();
+  });
+
+  it('uses the plugin error step over the current export step', () => {
+    const { result, unmount } = renderHook(() => useFigma());
+    act(() => result.current.exportPenpot({ externalLibraries: [] }));
+    act(() =>
+      dispatchPluginMessage({ type: 'PROGRESS_STEP', data: { step: 'processing', total: 1 } })
+    );
+    act(() =>
+      dispatchPluginMessage({
+        type: 'ERROR',
+        data: { message: 'Plugin boom', origin: 'plugin', step: 'processAssets' }
+      })
+    );
+    expect(track).toHaveBeenCalledWith(
+      'Error',
+      expect.objectContaining({ 'Error Step': 'processAssets' })
+    );
+    expect(result.current.error?.step).toBe('processAssets');
     unmount();
   });
 
