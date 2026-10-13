@@ -1,5 +1,6 @@
 // @vitest-environment happy-dom
-import { act, renderHook, waitFor } from '@testing-library/preact';
+import { h, render } from 'preact';
+import { act } from 'preact/test-utils';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { useFigma } from '@ui/context/useFigma';
@@ -35,6 +36,31 @@ const dispatchPluginMessage = (data: PluginEventData): void => {
   window.dispatchEvent(new MessageEvent('message', { data: { pluginMessage: data } }));
 };
 
+// Lets the async PENPOT_DOCUMENT handler run through its awaited mocks.
+const flushAsyncHandlers = (): Promise<void> => new Promise(resolve => setTimeout(resolve, 0));
+
+const mountedContainers: HTMLElement[] = [];
+
+const unmountContainer = (container: HTMLElement): void => {
+  act(() => render(null, container));
+};
+
+type HookResult<T> = { result: { current: T }; unmount: () => void };
+
+const renderHook = <T>(hook: () => T): HookResult<T> => {
+  const result = { current: undefined as T };
+  const container = document.createElement('div');
+  const HookHost = (): null => {
+    result.current = hook();
+    return null;
+  };
+
+  mountedContainers.push(container);
+  act(() => render(h(HookHost, null), container));
+
+  return { result, unmount: (): void => unmountContainer(container) };
+};
+
 describe('useFigma', () => {
   let postMessage: ReturnType<typeof vi.spyOn>;
 
@@ -47,6 +73,8 @@ describe('useFigma', () => {
   });
 
   afterEach(() => {
+    // Unmount even when an assertion failed, so window listeners never leak between tests.
+    mountedContainers.splice(0).forEach(unmountContainer);
     postMessage.mockRestore();
     vi.restoreAllMocks();
   });
@@ -92,7 +120,9 @@ describe('useFigma', () => {
     const event = new Event('unhandledrejection');
     Object.defineProperty(event, 'reason', { value: new Error('Async boom') });
 
-    act(() => window.dispatchEvent(event));
+    act(() => {
+      window.dispatchEvent(event);
+    });
 
     expect(result.current.error).toMatchObject({
       message: 'Async boom',
@@ -141,9 +171,10 @@ describe('useFigma', () => {
 
     await act(async () => {
       dispatchPluginMessage({ type: 'PENPOT_DOCUMENT', data: { name: 'My file' } });
+      await flushAsyncHandlers();
     });
 
-    await waitFor(() => expect(result.current.summary).toBe(true));
+    expect(result.current.summary).toBe(true);
     expect(result.current.exporting).toBe(false);
     expect(result.current.exportedBlob).toEqual({
       blob: getBlob.mock.results[0].value,
