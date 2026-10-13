@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from 'preact/hooks';
 import { type MessageData, createInMemoryWritable, sendMessage } from '@ui/context';
 import { identify, track } from '@ui/metrics/mixpanel';
 import { parse } from '@ui/parser';
+import { PROGRESS_STEPS } from '@ui/types';
 import type {
   DocumentPage,
   ErrorOrigin,
@@ -78,6 +79,8 @@ export const useFigma = (): UseFigmaHook => {
   const [editorType, setEditorType] = useState<UseFigmaHook['editorType']>('figma');
   const defaultPageIdsRef = useRef<string[]>([]);
   const exportStartTimeRef = useRef<number | null>(null);
+  // Keep the latest step available to the effect's stable error handlers.
+  const currentStepRef = useRef<Steps | undefined>(undefined);
   const collectedImagesRef = useRef<Record<string, Uint8Array<ArrayBuffer>>>({});
 
   const [step, setStep] = useState<Steps>('processing');
@@ -97,12 +100,13 @@ export const useFigma = (): UseFigmaHook => {
   };
 
   const handleError = (payload: ErrorPayload): void => {
-    setError(payload);
+    const step = payload.step ?? currentStepRef.current;
+    setError({ ...payload, step });
     setExporting(false);
     track('Error', {
       'Error Message': payload.message,
       'Error Origin': payload.origin,
-      'Error Step': payload.step,
+      'Error Step': step ?? 'idle',
       'Error Layer': payload.layer
     });
 
@@ -112,7 +116,7 @@ export const useFigma = (): UseFigmaHook => {
       Sentry.captureException(sentryError, {
         tags: {
           errorOrigin: payload.origin,
-          errorStep: payload.step ?? 'unknown'
+          errorStep: step ?? 'unknown'
         },
         extra: {
           layer: payload.layer,
@@ -175,6 +179,7 @@ export const useFigma = (): UseFigmaHook => {
         setExportScope('all');
         setSelectedPageIds(defaultPageIdsRef.current);
         setStep('processing');
+        currentStepRef.current = undefined;
         setCurrentItem('');
         setCurrentProcessedPage('');
 
@@ -236,7 +241,7 @@ export const useFigma = (): UseFigmaHook => {
 
         let duration: number | undefined = undefined;
 
-        if (exportStartTimeRef.current) {
+        if (exportStartTimeRef.current !== null) {
           const endTime = Date.now();
           duration = endTime - exportStartTimeRef.current;
 
@@ -245,8 +250,13 @@ export const useFigma = (): UseFigmaHook => {
 
         track('File Exported', {
           'Exported File Size': fileSizeInMB(blob.size),
-          'Export Time': duration ? formatExportTime(duration) : undefined
+          'Export Time': duration !== undefined ? formatExportTime(duration) : undefined,
+          'Exported File Size (bytes)': blob.size,
+          'Export Time (ms)': duration
         });
+
+        currentStepRef.current = undefined;
+        exportStartTimeRef.current = null;
 
         setExporting(false);
         setSummary(true);
@@ -255,6 +265,15 @@ export const useFigma = (): UseFigmaHook => {
         break;
       }
       case 'PROGRESS_STEP': {
+        const { step } = pluginMessage.data;
+        if (exportStartTimeRef.current !== null && currentStepRef.current !== step) {
+          currentStepRef.current = step;
+          track('File Export Step', {
+            'Export Step': step,
+            'Export Step Index': PROGRESS_STEPS.indexOf(step) + 1,
+            'Export Elapsed Time (ms)': Date.now() - exportStartTimeRef.current
+          });
+        }
         setStep(pluginMessage.data.step);
         setStepLabel(pluginMessage.data.label);
         setStepName(pluginMessage.data.name);
@@ -340,6 +359,7 @@ export const useFigma = (): UseFigmaHook => {
 
     setExporting(true);
     exportStartTimeRef.current = Date.now();
+    currentStepRef.current = undefined;
     collectedImagesRef.current = {};
 
     track('File Export Started', {
