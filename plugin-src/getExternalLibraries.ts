@@ -1,14 +1,6 @@
 import { isFigJamEditor, isSlidesEditor } from '@plugin/utils';
 
-/**
- * Names of the libraries whose components are used in this file.
- *
- * Reads the `figmaFile` plugin data that `transformComponentNode` stamps on
- * every component when its library is exported, which is the same key
- * `transformInstanceNode` uses to link instances, so a detected library can
- * always be linked. Libraries never exported with the plugin carry no stamp
- * and are skipped, since their instances could not be linked anyway.
- */
+// Same `figmaFile` key `transformInstanceNode` links instances with.
 const getComponentLibraryNames = async (): Promise<string[]> => {
   await figma.loadAllPagesAsync();
 
@@ -26,10 +18,6 @@ const getComponentLibraryNames = async (): Promise<string[]> => {
   return Array.from(names);
 };
 
-/**
- * Names of the enabled libraries that publish variables. Libraries that only
- * publish components or styles are not listed here.
- */
 const getVariableLibraryNames = async (): Promise<string[]> => {
   const collections = await figma.teamLibrary.getAvailableLibraryVariableCollectionsAsync();
 
@@ -47,11 +35,7 @@ const settle = async (source: string, fetch: () => Promise<string[]>): Promise<s
   }
 };
 
-/**
- * Sends the external libraries to the UI so the user can link them to their
- * Penpot counterparts. Sent once with both sources merged, because each
- * message resets the library fields in the form.
- */
+// Sent once: each message resets the library fields in the form.
 export const sendExternalLibraries = async (): Promise<void> => {
   if (isSlidesEditor() || isFigJamEditor()) return;
 
