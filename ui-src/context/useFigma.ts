@@ -13,7 +13,12 @@ import type {
   ExternalLibrary,
   Steps
 } from '@ui/types';
-import { extractFileIdFromPenpotUrl, fileSizeInMB, formatExportTime } from '@ui/utils';
+import {
+  extractFileIdFromPenpotUrl,
+  fileSizeInMB,
+  formatExportTime,
+  isBenignWindowError
+} from '@ui/utils';
 
 const buildUiErrorPayload = (reason: unknown, origin: ErrorOrigin): ErrorPayload => ({
   message: reason instanceof Error ? reason.message : String(reason),
@@ -354,6 +359,8 @@ export const useFigma = (): UseFigmaHook => {
 
   useEffect(() => {
     const onWindowError = (event: ErrorEvent): void => {
+      if (isBenignWindowError(event.message)) return;
+
       handleError(buildUiErrorPayload(event.error ?? event.message, 'ui'));
     };
 
