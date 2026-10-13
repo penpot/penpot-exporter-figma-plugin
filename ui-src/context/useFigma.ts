@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from 'preact/hooks';
 
 import { type MessageData, createInMemoryWritable, sendMessage } from '@ui/context';
 import { identify, track } from '@ui/metrics/mixpanel';
-import { parse } from '@ui/parser';
+import { parse, skippedImages } from '@ui/parser';
 import { PROGRESS_STEPS } from '@ui/types';
 import type {
   DocumentPage,
@@ -35,6 +35,7 @@ export type UseFigmaHook = {
   missingFonts: string[] | undefined;
   missingPageIds: string[];
   degradedLayers: string[] | undefined;
+  skippedImages: number;
   exporting: boolean;
   summary: boolean;
   error: ErrorPayload | null;
@@ -67,6 +68,7 @@ export const useFigma = (): UseFigmaHook => {
   const [missingFonts, setMissingFonts] = useState<string[]>();
   const [missingPageIds, setMissingPageIds] = useState<string[]>([]);
   const [degradedLayers, setDegradedLayers] = useState<string[]>();
+  const [skippedImagesCount, setSkippedImagesCount] = useState(0);
   const [exporting, setExporting] = useState(false);
   const [summary, setSummary] = useState(false);
   const [error, setError] = useState<ErrorPayload | null>(null);
@@ -171,6 +173,7 @@ export const useFigma = (): UseFigmaHook => {
         setMissingFonts(undefined);
         setMissingPageIds([]);
         setDegradedLayers(undefined);
+        setSkippedImagesCount(0);
         setExporting(false);
         setSummary(false);
         setError(null);
@@ -211,6 +214,7 @@ export const useFigma = (): UseFigmaHook => {
         collectedImagesRef.current = {};
 
         const context = await parse(pluginMessage.data);
+        setSkippedImagesCount(skippedImages.size);
 
         sendMessage({
           type: 'PROGRESS_STEP',
@@ -252,7 +256,8 @@ export const useFigma = (): UseFigmaHook => {
           'Exported File Size': fileSizeInMB(blob.size),
           'Export Time': duration !== undefined ? formatExportTime(duration) : undefined,
           'Exported File Size (bytes)': blob.size,
-          'Export Time (ms)': duration
+          'Export Time (ms)': duration,
+          'Skipped Images': skippedImages.size
         });
 
         currentStepRef.current = undefined;
@@ -358,6 +363,7 @@ export const useFigma = (): UseFigmaHook => {
     if (exportScope === 'selection' && pageIds.length === 0) return;
 
     setExporting(true);
+    setSkippedImagesCount(0);
     exportStartTimeRef.current = Date.now();
     currentStepRef.current = undefined;
     collectedImagesRef.current = {};
@@ -405,6 +411,7 @@ export const useFigma = (): UseFigmaHook => {
     missingFonts,
     missingPageIds,
     degradedLayers,
+    skippedImages: skippedImagesCount,
     exporting,
     summary,
     error,

@@ -2,8 +2,7 @@ import { yieldByTime } from '@common/sleep';
 
 import { flushMessageQueue, sendMessage } from '@ui/context';
 import type { PenpotContext } from '@ui/lib/types/penpotContext';
-import type { Uuid } from '@ui/lib/types/utils/uuid';
-import { images } from '@ui/parser';
+import { images, skippedImages } from '@ui/parser';
 
 const IMAGE_FORMAT = 'image/webp';
 const IMAGE_QUALITY = 0.8;
@@ -19,7 +18,7 @@ export const optimizeFileMedias = async (
 
   for (const [key, bytes] of imagesToOptimize) {
     if (bytes) {
-      images.set(key, await registerFileMedia(context, key, bytes));
+      await registerFileMedia(context, key, bytes);
     }
 
     sendMessage({
@@ -39,16 +38,20 @@ const registerFileMedia = async (
   context: PenpotContext,
   key: string,
   bytes: Uint8Array<ArrayBuffer>
-): Promise<Uuid> => {
-  const image = await optimizeImage(bytes);
+): Promise<void> => {
+  let image: Awaited<ReturnType<typeof optimizeImage>>;
 
-  return context.addFileMedia(
-    {
-      name: key,
-      width: image.width,
-      height: image.height
-    },
-    image.blob
+  try {
+    image = await optimizeImage(bytes);
+  } catch (error) {
+    console.warn(`Penpot Exporter: could not process image "${key}"`, error);
+    skippedImages.add(key);
+    return;
+  }
+
+  images.set(
+    key,
+    await context.addFileMedia({ name: key, width: image.width, height: image.height }, image.blob)
   );
 };
 

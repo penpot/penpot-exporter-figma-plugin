@@ -1,6 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import type { PenpotContext } from '@ui/lib/types/penpotContext';
+import { images, skippedImages } from '@ui/parser';
 import { optimizeFileMedias } from '@ui/parser/builders/optimizeFileMedias';
 
 vi.mock('@ui/context', () => ({
@@ -9,7 +10,8 @@ vi.mock('@ui/context', () => ({
 }));
 
 vi.mock('@ui/parser', () => ({
-  images: new Map()
+  images: new Map(),
+  skippedImages: new Set()
 }));
 
 // optimizeImage relies on browser-only APIs (createImageBitmap, OffscreenCanvas)
@@ -54,6 +56,9 @@ const fakeContext = {
 
 describe('optimizeFileMedias — decoded pixel release', () => {
   beforeEach(() => {
+    images.clear();
+    skippedImages.clear();
+    vi.mocked(fakeContext.addFileMedia).mockReset().mockReturnValue('uuid-1');
     setupCanvasStubs();
     convertToBlob = (): Promise<Blob> => Promise.resolve(new Blob(['webp']));
   });
@@ -64,13 +69,45 @@ describe('optimizeFileMedias — decoded pixel release', () => {
     expect(closeSpy).toHaveBeenCalledTimes(1);
   });
 
-  it('closes the bitmap even when encoding fails', async () => {
+  it('skips an image when encoding fails and still closes its bitmap', async () => {
     convertToBlob = (): Promise<Blob> => Promise.reject(new Error('encode failed'));
 
     await expect(
       optimizeFileMedias(fakeContext, [['hash', new Uint8Array([1, 2, 3])]], 1)
-    ).rejects.toThrow();
+    ).resolves.toBeUndefined();
 
     expect(closeSpy).toHaveBeenCalledTimes(1);
+    expect(skippedImages.has('hash')).toBe(true);
+    expect(images.has('hash')).toBe(false);
+  });
+
+  it('skips only the image that fails to decode', async () => {
+    vi.mocked(createImageBitmap)
+      .mockRejectedValueOnce(new Error('decode failed'))
+      .mockResolvedValueOnce({ width: 10, height: 20, close: closeSpy } as ImageBitmap);
+
+    await expect(
+      optimizeFileMedias(
+        fakeContext,
+        [
+          ['bad-hash', new Uint8Array([1])],
+          ['good-hash', new Uint8Array([2])]
+        ],
+        1
+      )
+    ).resolves.toBeUndefined();
+
+    expect(images.has('good-hash')).toBe(true);
+    expect(images.has('bad-hash')).toBe(false);
+    expect(skippedImages.has('bad-hash')).toBe(true);
+    expect(fakeContext.addFileMedia).toHaveBeenCalledTimes(1);
+  });
+
+  it('still rejects when adding file media fails', async () => {
+    vi.mocked(fakeContext.addFileMedia).mockRejectedValue(new Error('media failed'));
+
+    await expect(
+      optimizeFileMedias(fakeContext, [['hash', new Uint8Array([1, 2, 3])]], 1)
+    ).rejects.toThrow('media failed');
   });
 });

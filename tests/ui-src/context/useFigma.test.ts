@@ -6,21 +6,31 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { useFigma } from '@ui/context/useFigma';
 import { fileSizeInMB } from '@ui/utils';
 
-const { track, identify, captureException, parse, exportStream, sendMessage, getBlob, writable } =
-  vi.hoisted(() => ({
-    track: vi.fn(),
-    identify: vi.fn(),
-    captureException: vi.fn(),
-    parse: vi.fn(),
-    exportStream: vi.fn(),
-    sendMessage: vi.fn(),
-    getBlob: vi.fn(),
-    writable: {} as WritableStream
-  }));
+const {
+  track,
+  identify,
+  captureException,
+  parse,
+  exportStream,
+  sendMessage,
+  getBlob,
+  writable,
+  skippedImages
+} = vi.hoisted(() => ({
+  track: vi.fn(),
+  identify: vi.fn(),
+  captureException: vi.fn(),
+  parse: vi.fn(),
+  exportStream: vi.fn(),
+  sendMessage: vi.fn(),
+  getBlob: vi.fn(),
+  writable: {} as WritableStream,
+  skippedImages: new Set<string>()
+}));
 
 vi.mock('@ui/metrics/mixpanel', () => ({ track, identify }));
 vi.mock('@sentry/react', () => ({ captureException }));
-vi.mock('@ui/parser', () => ({ parse }));
+vi.mock('@ui/parser', () => ({ parse, skippedImages }));
 vi.mock('@penpot/library', () => ({ exportStream }));
 vi.mock('@ui/context', () => ({
   sendMessage,
@@ -66,6 +76,7 @@ describe('useFigma', () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
+    skippedImages.clear();
     getBlob.mockReturnValue(new Blob(['test data']));
     exportStream.mockResolvedValue(undefined);
     parse.mockResolvedValue({});
@@ -195,6 +206,27 @@ describe('useFigma', () => {
       })
     );
     now.mockRestore();
+    unmount();
+  });
+
+  it('reports skipped images after parsing and resets the count on reload', async () => {
+    const { result, unmount } = renderHook(() => useFigma());
+    act(() => result.current.exportPenpot({ externalLibraries: [] }));
+
+    await act(async () => {
+      dispatchPluginMessage({ type: 'PENPOT_DOCUMENT', data: { name: 'My file' } });
+      skippedImages.add('bad-image');
+      await flushAsyncHandlers();
+    });
+
+    expect(result.current.skippedImages).toBe(1);
+    expect(track).toHaveBeenCalledWith(
+      'File Exported',
+      expect.objectContaining({ 'Skipped Images': 1 })
+    );
+
+    act(() => dispatchPluginMessage({ type: 'RELOAD' }));
+    expect(result.current.skippedImages).toBe(0);
     unmount();
   });
 

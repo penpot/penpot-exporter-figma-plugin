@@ -16,6 +16,7 @@ export const ExportSummary = (): JSX.Element | null => {
     missingFonts,
     missingPageIds,
     degradedLayers,
+    skippedImages,
     downloadBlob,
     cancel
   } = useFigmaContext();
@@ -133,6 +134,20 @@ export const ExportSummary = (): JSX.Element | null => {
           <Muted>
             Some layers retain their grid with default track sizing, others were exported as regular
             frames, and layers with affected property reads were skipped.
+          </Muted>
+        </Stack>
+      )}
+
+      {skippedImages > 0 && (
+        <Stack space="xsmall">
+          <Banner icon={<CircleAlert size={14} />}>
+            <strong>
+              {skippedImages} image{skippedImages > 1 ? 's' : ''} could not be processed
+            </strong>
+          </Banner>
+          <Muted>
+            They were left out of the file, so the layers that used them were exported without that
+            image fill.
           </Muted>
         </Stack>
       )}
