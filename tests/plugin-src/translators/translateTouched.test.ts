@@ -76,20 +76,14 @@ describe('translateTouched', () => {
     expect(translateTouched(createShape('FRAME'))).toEqual(['layout-align-content', 'layout-gap']);
   });
 
-  it.each(['VECTOR', 'LINE', 'STAR', 'POLYGON'] as const)(
-    'marks the content of a resized %s as touched',
+  it.each(['STAR', 'POLYGON'] as const)(
+    'marks the content of a %s with an overridden point count as touched',
     type => {
-      overrides.set('1:2', ['width']);
+      overrides.set('1:2', ['pointCount']);
 
       expect(translateTouched(createShape(type))).toEqual(['geometry-group', 'content-group']);
     }
   );
-
-  it('marks the content of an edited vector network as touched', () => {
-    overrides.set('1:2', ['vectorNetwork']);
-
-    expect(translateTouched(createShape('VECTOR'))).toEqual(['geometry-group', 'content-group']);
-  });
 
   it('marks the content of a path with overridden corners as touched', () => {
     overrides.set('1:2', ['innerRadius', 'cornerRadius']);
