@@ -104,7 +104,15 @@ const syncAttributes: SyncAttributes = {
   paddingTop: ['layout-padding'],
   paddingRight: ['layout-padding'],
   paddingBottom: ['layout-padding'],
-  layoutGrids: ['layout-grid-cells', 'layout-grid-columns', 'layout-grid-dir', 'layout-grid-rows'],
+  // layoutGrids are the guides (grids-group). The grid layout groups were mapped here
+  // before and are kept, as dropping a touched group can make Penpot reset values
+  layoutGrids: [
+    'grids-group',
+    'layout-grid-cells',
+    'layout-grid-columns',
+    'layout-grid-dir',
+    'layout-grid-rows'
+  ],
   layoutWrap: ['layout-wrap-type'],
   overflowDirection: ['layout-item-align-self'],
   counterAxisSizingMode: node => [counterAxisSizing(node)],
@@ -126,14 +134,14 @@ const syncAttributes: SyncAttributes = {
   parent: [],
   componentPropertyDefinitions: [],
   componentPropertyReferences: [],
+  counterAxisSpacing: ['layout-gap'],
+  counterAxisAlignContent: ['layout-align-content', 'layout-gap'],
 
   // @TODO: not supported yet
   hangingList: [],
   hangingPunctuation: [],
   textTruncation: [],
   maxLines: [],
-  counterAxisSpacing: [],
-  counterAxisAlignContent: [],
   openTypeFeatures: [],
   authorVisible: [],
   pluginData: [],
@@ -202,10 +210,12 @@ export const translateTouched = (node: SceneNode): SyncGroups[] => {
     (instanceOverrides.includes('width') || instanceOverrides.includes('height'))
   ) {
     syncGroups.add('geometry-group');
+  }
 
-    if (isPathNode(node)) {
-      syncGroups.add('content-group');
-    }
+  // Path content holds the shape geometry (and its corner rounding), so Penpot
+  // considers it geometric too and would reset it from the main component
+  if (isPathNode(node) && (syncGroups.has('geometry-group') || syncGroups.has('radius-group'))) {
+    syncGroups.add('content-group');
   }
 
   const swapSlot = swappedInstances.get(node.id);
