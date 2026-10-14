@@ -7,6 +7,9 @@ import type { PathShape } from '@ui/lib/types/shapes/pathShape';
  * becomes several paths. When they are filled the same way they can be a single path: with the
  * nonzero fill rule, regions whose outlines are drawn in the same direction fill their union, like
  * the regions do, and the holes inside them, drawn the other way, stay empty.
+ *
+ * Regions drawn the other way are reversed first: with the nonzero fill rule, a path drawn
+ * backwards fills exactly the same area.
  */
 export const mergePathShapes = (paths: PathShape[]): PathShape | undefined => {
   const [first] = paths;
@@ -16,10 +19,17 @@ export const mergePathShapes = (paths: PathShape[]): PathShape | undefined => {
   const style = getStyle(first);
   if (paths.some(path => getStyle(path) !== style)) return;
 
-  const direction = getDirection(first.content);
-  if (direction === 0 || paths.some(path => getDirection(path.content) !== direction)) return;
+  const directions = paths.map(path => getDirection(path.content));
+  if (directions.includes(0)) return;
 
-  return { ...first, content: paths.map(path => path.content).join(' ') };
+  return {
+    ...first,
+    content: paths
+      .map((path, index) =>
+        directions[index] === directions[0] ? path.content : reverseContent(path.content)
+      )
+      .join(' ')
+  };
 };
 
 const getStyle = (path: PathShape): string =>
@@ -61,4 +71,73 @@ const getSignedArea = (points: [number, number][]): number => {
   });
 
   return area;
+};
+
+type Point = { x: number; y: number };
+type Segment = { to: Point; controls?: [Point, Point] };
+type Subpath = { start: Point; segments: Segment[]; closed: boolean };
+
+// Draws the same outline backwards: each subpath starts at its last point and goes through its
+// segments in reverse order, with the control points of the curves swapped
+const reverseContent = (content: string): string => {
+  const subpaths: Subpath[] = [];
+  let current: Subpath | undefined;
+
+  // After a closepath, drawing without a moveto starts a new subpath at the same start point
+  const getCurrent = (): Subpath => {
+    if (!current || current.closed) {
+      current = { start: current?.start ?? { x: 0, y: 0 }, segments: [], closed: false };
+      subpaths.push(current);
+    }
+
+    return current;
+  };
+
+  parseSVG(content).forEach(command => {
+    switch (command.command) {
+      case 'moveto':
+        current = { start: { x: command.x, y: command.y }, segments: [], closed: false };
+        subpaths.push(current);
+        break;
+      case 'lineto':
+        getCurrent().segments.push({ to: { x: command.x, y: command.y } });
+        break;
+      case 'curveto':
+        getCurrent().segments.push({
+          to: { x: command.x, y: command.y },
+          controls: [
+            { x: command.x1, y: command.y1 },
+            { x: command.x2, y: command.y2 }
+          ]
+        });
+        break;
+      case 'closepath':
+        getCurrent().closed = true;
+        break;
+    }
+  });
+
+  return subpaths.map(reverseSubpath).join(' ');
+};
+
+const reverseSubpath = ({ start, segments, closed }: Subpath): string => {
+  const points = [start, ...segments.map(segment => segment.to)];
+  const end = points[points.length - 1];
+
+  const commands = [`M ${end.x} ${end.y}`];
+
+  for (let index = segments.length - 1; index >= 0; index--) {
+    const { controls } = segments[index];
+    const to = points[index];
+
+    commands.push(
+      controls
+        ? `C ${controls[1].x} ${controls[1].y}, ${controls[0].x} ${controls[0].y}, ${to.x} ${to.y}`
+        : `L ${to.x} ${to.y}`
+    );
+  }
+
+  if (closed) commands.push('Z');
+
+  return commands.join(' ');
 };

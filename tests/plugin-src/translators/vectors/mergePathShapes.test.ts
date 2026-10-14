@@ -10,6 +10,8 @@ const black = [{ fillColor: '#000000', fillOpacity: 1 }];
 const square = 'M 0 0 L 10 0 L 10 10 L 0 10 Z';
 const farSquare = 'M 20 20 L 30 20 L 30 30 L 20 30 Z';
 const reversedSquare = 'M 20 20 L 20 30 L 30 30 L 30 20 Z';
+// reversedSquare drawn backwards, which is clockwise again
+const unreversedSquare = 'M 30 20 L 30 30 L 20 30 L 20 20 Z';
 
 const path = (content: string, overrides: Partial<PathShape> = {}): PathShape => ({
   type: 'path',
@@ -37,8 +39,22 @@ describe('mergePathShapes', () => {
     );
   });
 
-  it('keeps paths drawn in opposite directions apart', () => {
-    expect(mergePathShapes([path(square), path(reversedSquare)])).toBeUndefined();
+  it('merges paths drawn in opposite directions by reversing them', () => {
+    expect(mergePathShapes([path(square), path(reversedSquare)])?.content).toBe(
+      `${square} ${unreversedSquare}`
+    );
+  });
+
+  it('reverses curves by swapping their control points', () => {
+    const reversedCurve = 'M 20 20 C 20 25, 25 30, 30 30 L 30 20 Z';
+
+    expect(mergePathShapes([path(square), path(reversedCurve)])?.content).toBe(
+      `${square} M 30 20 L 30 30 C 25 30, 20 25, 20 20 Z`
+    );
+  });
+
+  it('keeps paths without area apart', () => {
+    expect(mergePathShapes([path(square), path('M 20 20 L 30 30 Z')])).toBeUndefined();
   });
 
   it('keeps paths with different fills apart', () => {
@@ -68,10 +84,13 @@ describe('mergePathShapes', () => {
     expect(mergePathShapes([path(frame), path(farSquare)])?.content).toBe(`${frame} ${farSquare}`);
   });
 
-  it('keeps a path with a hole apart from a path drawn in the opposite direction', () => {
-    const frame = `${square} M 2 2 L 2 8 L 8 8 L 8 2 Z`;
+  it('reverses a path with a hole as a whole, keeping its hole drawn the other way', () => {
+    // Counter-clockwise frame with a clockwise hole
+    const reversedFrame = 'M 20 20 L 20 30 L 30 30 L 30 20 Z M 22 22 L 28 22 L 28 28 L 22 28 Z';
 
-    expect(mergePathShapes([path(frame), path(reversedSquare)])).toBeUndefined();
+    expect(mergePathShapes([path(square), path(reversedFrame)])?.content).toBe(
+      `${square} ${unreversedSquare} M 22 28 L 28 28 L 28 22 L 22 22 Z`
+    );
   });
 
   it('merges the regions of a flattened outlined icon', () => {
@@ -83,5 +102,23 @@ describe('mergePathShapes', () => {
       'M 12 11.293 C 11.805 11.098 11.488 11.098 11.293 11.293 C 11.098 11.488 11.098 11.805 11.293 12 L 12.439 13.146 L 11.293 14.293 C 11.098 14.488 11.098 14.805 11.293 15 C 11.488 15.195 11.805 15.195 12 15 L 13.146 13.854 L 14.293 15 C 14.488 15.195 14.805 15.195 15 15 C 15.195 14.805 15.195 14.488 15 14.293 L 13.854 13.146 L 15 12 C 15.195 11.805 15.195 11.488 15 11.293 C 14.805 11.098 14.488 11.098 14.293 11.293 L 13.146 12.439 L 12 11.293 Z';
 
     expect(mergePathShapes([path(funnel), path(cross)])?.content).toBe(`${funnel} ${cross}`);
+  });
+
+  it('merges the regions of a flattened icon with a mirrored region', () => {
+    // Filter icon with a left arrow, flattened in Figma: the union leaves a tiny sliver next to
+    // the arrow, drawn the other way because the icon was mirrored from the right arrow variant
+    const funnel =
+      'M 0.052 0.278 C 0.136 0.108 0.31 0 0.5 0 L 15.5 0 C 15.69 0 15.864 0.108 15.948 0.278 C 16.032 0.448 16.013 0.652 15.898 0.803 L 10 8.552 L 10 15.5 C 10 15.677 9.906 15.841 9.754 15.931 C 9.601 16.021 9.412 16.023 9.257 15.937 L 6.257 14.27 C 6.098 14.182 6 14.015 6 13.833 L 6 8.552 L 0.102 0.803 C -0.013 0.652 -0.032 0.448 0.052 0.278 Z ' +
+      'M 1.509 1 L 6.898 8.081 C 6.964 8.168 7 8.274 7 8.383 L 7 13.539 L 9 14.65 L 9 8.383 C 9 8.274 9.036 8.168 9.102 8.081 L 14.491 1 L 1.509 1 Z';
+    const sliver =
+      'M 11.144332885742188 12.148573875427246 C 11.097444534301758 12.196016311645508, 11.061979293823242 12.250506401062012, 11.037939071655273 12.308609008789062 L 11.144332885742188 12.148573875427246 Z';
+    const arrow =
+      'M 11.038 12.309 L 11.147 12.146 L 13.146 10.146 C 13.342 9.951 13.658 9.951 13.854 10.146 C 14.049 10.342 14.049 10.658 13.854 10.854 L 12.707 12 L 15.5 12 C 15.776 12 16 12.224 16 12.5 C 16 12.776 15.776 13 15.5 13 L 12.707 13 L 13.854 14.146 C 14.049 14.342 14.049 14.658 13.854 14.854 C 13.658 15.049 13.342 15.049 13.146 14.854 L 11.146 12.854 C 11.099 12.806 11.062 12.75 11.038 12.691 C 11.014 12.633 11 12.57 11 12.503 L 11 12.5 L 11 12.497 C 11 12.43 11.014 12.367 11.038 12.309 Z';
+    const reversedSliver =
+      'M 11.144332885742188 12.148573875427246 L 11.037939071655273 12.308609008789062 C 11.061979293823242 12.250506401062012, 11.097444534301758 12.196016311645508, 11.144332885742188 12.148573875427246 Z';
+
+    expect(mergePathShapes([path(funnel), path(sliver), path(arrow)])?.content).toBe(
+      `${funnel} ${reversedSliver} ${arrow}`
+    );
   });
 });
