@@ -1,0 +1,15 @@
+/*
+ * The Checkbox of @create-figma-plugin lines its label slot up with the box
+ * using a `padding-top`, which only centres the text under the untouched 16px
+ * `line-height` of the library base styles; our reset.css sets
+ * `line-height: 1.5`, which drops the text below the middle of the box.
+ * Centring the row is independent of the line height.
+ * PageSelector.module.css carries the same correction for the page list.
+ */
+.option label {
+  align-items: center;
+}
+
+.option label > div:last-of-type {
+  padding-top: 0;
+}
