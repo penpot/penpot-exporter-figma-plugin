@@ -2,9 +2,25 @@ import { overrides, swappedInstances } from '@plugin/libraries';
 
 import type { SyncGroups } from '@ui/lib/types/utils/syncGroups';
 
+type SyncAttribute = SyncGroups[] | ((node: SceneNode) => SyncGroups[]);
+
 type SyncAttributes = {
-  [key in NodeChangeProperty]: SyncGroups[];
+  [key in NodeChangeProperty]: SyncAttribute;
 };
+
+const getLayoutMode = (node: BaseNode | null): AutoLayoutMixin['layoutMode'] | undefined => {
+  if (node && 'layoutMode' in node) {
+    return node.layoutMode;
+  }
+};
+
+// Figma names sizing by axis (primary/counter) and Penpot by direction (h/v): sizing
+// modes depend on the node's own layout, child attributes on the parent's layout
+const primaryAxisSizing = (node: BaseNode | null): SyncGroups =>
+  getLayoutMode(node) === 'VERTICAL' ? 'layout-item-v-sizing' : 'layout-item-h-sizing';
+
+const counterAxisSizing = (node: BaseNode | null): SyncGroups =>
+  getLayoutMode(node) === 'VERTICAL' ? 'layout-item-h-sizing' : 'layout-item-v-sizing';
 
 const syncAttributes: SyncAttributes = {
   name: ['name-group'],
@@ -82,8 +98,7 @@ const syncAttributes: SyncAttributes = {
   exportSettings: ['exports-group'],
   gridStyleId: ['grids-group'],
   layoutMode: ['layout-container', 'layout-flex-dir'],
-  // axis dependent, resolved in translateAxisSyncGroups
-  layoutAlign: [],
+  layoutAlign: node => ['layout-item-align-self', counterAxisSizing(node.parent)],
   itemSpacing: ['layout-gap'],
   paddingLeft: ['layout-padding'],
   paddingTop: ['layout-padding'],
@@ -92,9 +107,8 @@ const syncAttributes: SyncAttributes = {
   layoutGrids: ['layout-grid-cells', 'layout-grid-columns', 'layout-grid-dir', 'layout-grid-rows'],
   layoutWrap: ['layout-wrap-type'],
   overflowDirection: ['layout-item-align-self'],
-  // axis dependent, resolved in translateAxisSyncGroups
-  counterAxisSizingMode: [],
-  primaryAxisSizingMode: [],
+  counterAxisSizingMode: node => [counterAxisSizing(node)],
+  primaryAxisSizingMode: node => [primaryAxisSizing(node)],
   maxHeight: ['layout-item-max-h'],
   minHeight: ['layout-item-min-h'],
   maxWidth: ['layout-item-max-w'],
@@ -106,8 +120,7 @@ const syncAttributes: SyncAttributes = {
     'layout-gap'
   ],
   counterAxisAlignItems: ['layout-item-align-self', 'layout-align-content', 'layout-align-items'],
-  // axis dependent, resolved in translateAxisSyncGroups
-  layoutGrow: [],
+  layoutGrow: node => [primaryAxisSizing(node.parent)],
   layoutPositioning: ['layout-item-absolute'],
   itemReverseZIndex: ['layout-item-z-index'],
   parent: [],
@@ -145,38 +158,6 @@ const syncAttributes: SyncAttributes = {
   code: []
 };
 
-const getLayoutMode = (node: BaseNode | null): AutoLayoutMixin['layoutMode'] | undefined => {
-  if (node && 'layoutMode' in node) {
-    return node.layoutMode;
-  }
-};
-
-const getAxisSizing = (isVertical: boolean, isPrimaryAxis: boolean): SyncGroups =>
-  isVertical === isPrimaryAxis ? 'layout-item-v-sizing' : 'layout-item-h-sizing';
-
-/**
- * Figma names sizing overrides by axis (primary/counter), while Penpot names them
- * by direction (h/v), so the mapping depends on the layout direction: the node's own
- * layout for its sizing modes, and the parent's layout for its child attributes.
- */
-const translateAxisSyncGroups = (node: SceneNode, override: NodeChangeProperty): SyncGroups[] => {
-  switch (override) {
-    case 'primaryAxisSizingMode':
-      return [getAxisSizing(getLayoutMode(node) === 'VERTICAL', true)];
-    case 'counterAxisSizingMode':
-      return [getAxisSizing(getLayoutMode(node) === 'VERTICAL', false)];
-    case 'layoutGrow':
-      return [getAxisSizing(getLayoutMode(node.parent) === 'VERTICAL', true)];
-    case 'layoutAlign':
-      return [
-        'layout-item-align-self',
-        getAxisSizing(getLayoutMode(node.parent) === 'VERTICAL', false)
-      ];
-    default:
-      return [];
-  }
-};
-
 const getInstanceId = (node: SceneNode): string | undefined => {
   const ids = node.id.split(';');
 
@@ -208,12 +189,10 @@ export const translateTouched = (node: SceneNode): SyncGroups[] => {
   const mainOverrides = overrides.get(node.id) ?? [];
 
   mainOverrides.forEach(override => {
-    const syncGroup = [
-      ...(syncAttributes[override] ?? []),
-      ...translateAxisSyncGroups(node, override)
-    ];
+    const syncAttribute = syncAttributes[override];
+    const syncGroup = typeof syncAttribute === 'function' ? syncAttribute(node) : syncAttribute;
 
-    syncGroup.forEach(group => syncGroups.add(group));
+    syncGroup?.forEach(group => syncGroups.add(group));
   });
 
   const instanceOverrides = getInstanceOverrides(node);

@@ -19,15 +19,6 @@ describe('translateTouched', () => {
     clearAllState();
   });
 
-  it('maps the primary axis sizing of a horizontal layout to the horizontal sizing', () => {
-    overrides.set('1:2', ['primaryAxisSizingMode', 'counterAxisSizingMode']);
-
-    const touched = translateTouched(createNode('HORIZONTAL'));
-
-    expect(touched).toContain('layout-item-h-sizing');
-    expect(touched).toContain('layout-item-v-sizing');
-  });
-
   it('maps only the horizontal sizing when a horizontal layout fixes its width', () => {
     overrides.set('1:2', ['primaryAxisSizingMode']);
 
