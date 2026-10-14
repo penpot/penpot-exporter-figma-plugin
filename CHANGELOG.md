@@ -1,5 +1,34 @@
 # penpot-exporter
 
+## 0.26.1
+
+### Patch Changes
+
+- [#449](https://github.com/penpot/penpot-exporter-figma-plugin/pull/449)
+  [`02e2e39`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/02e2e3939dba6fa238d5dfbe832f6e0da407796a)
+  Thanks [@SpykeRel04D](https://github.com/SpykeRel04D)! - Fix external libraries not detected when
+  they only publish components
+
+- [#453](https://github.com/penpot/penpot-exporter-figma-plugin/pull/453)
+  [`acaaddf`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/acaaddfb9d7a0c5eeab4dfd0da5c477507a4e276)
+  Thanks [@SpykeRel04D](https://github.com/SpykeRel04D)! - Track export steps and numeric export
+  time and file size
+
+- [#450](https://github.com/penpot/penpot-exporter-figma-plugin/pull/450)
+  [`d6cac39`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/d6cac396db42ac271d4c52452799eb8476ec0a2c)
+  Thanks [@SpykeRel04D](https://github.com/SpykeRel04D)! - Stop showing the error screen for
+  harmless ResizeObserver browser warnings
+
+- [#455](https://github.com/penpot/penpot-exporter-figma-plugin/pull/455)
+  [`9051282`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/90512828bf83a21a4ff7fa7fac36d84dcc7d910c)
+  Thanks [@SpykeRel04D](https://github.com/SpykeRel04D)! - Merge flattened vector regions that have
+  holes, such as outlined icons, into a single path
+
+- [#454](https://github.com/penpot/penpot-exporter-figma-plugin/pull/454)
+  [`d3fbd9e`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/d3fbd9ec87e653ecb0eb2e5ca18237b119ecb920)
+  Thanks [@SpykeRel04D](https://github.com/SpykeRel04D)! - Skip images that cannot be decoded
+  instead of aborting the export
+
 ## 0.26.0
 
 ### Minor Changes
