@@ -1,12 +1,14 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
+import { clearAllState, overrides } from '@plugin/libraries';
 import {
   clearParsedCache,
   transformVectorPaths
 } from '@plugin/transformers/partials/transformVectorPaths';
 import { transformPathNode } from '@plugin/transformers/transformPathNode';
 
-vi.mock('@plugin/transformers/partials', () => ({
+vi.mock('@plugin/transformers/partials', async () => ({
+  ...(await vi.importActual('@plugin/transformers/partials/transformOverrides')),
   transformBlend: (): Record<string, never> => ({}),
   transformConstraints: (): Record<string, never> => ({}),
   transformEffects: (): Record<string, never> => ({}),
@@ -16,7 +18,6 @@ vi.mock('@plugin/transformers/partials', () => ({
     shapeRef: undefined
   }),
   transformLayoutAttributes: (): Record<string, never> => ({}),
-  transformOverrides: (): Record<string, never> => ({}),
   transformProportion: (): Record<string, never> => ({}),
   transformRotation: (): Record<string, never> => ({}),
   transformSceneNode: (): Record<string, never> => ({}),
@@ -65,6 +66,7 @@ const createPathNode = (overrides: Partial<StarNode> = {}): StarNode => {
 describe('vector geometry regression', () => {
   beforeEach(() => {
     clearParsedCache();
+    clearAllState();
     vi.spyOn(console, 'warn').mockImplementation(() => {});
   });
 
@@ -135,5 +137,21 @@ describe('vector geometry regression', () => {
       result = transformPathNode(node);
     }).not.toThrow();
     expect(result).toBeUndefined();
+  });
+
+  it('marks the overrides of the vector as touched on each of its paths', () => {
+    overrides.set('1:1', ['fills', 'strokeWeight']);
+
+    const node = createVectorNode({
+      vectorPaths: [
+        { data: 'M 0 0 L 10 10 Z', windingRule: 'NONZERO' },
+        { data: 'M 20 20 L 30 30 Z', windingRule: 'NONZERO' }
+      ]
+    });
+
+    const paths = transformVectorPaths(node);
+
+    expect(paths).toHaveLength(2);
+    paths.forEach(path => expect(path.touched).toEqual(['fill-group', 'stroke-group']));
   });
 });

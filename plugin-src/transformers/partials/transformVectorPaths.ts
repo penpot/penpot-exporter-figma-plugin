@@ -4,6 +4,7 @@ import {
   transformBlend,
   transformEffects,
   transformLayoutAttributes,
+  transformOverrides,
   transformProportion,
   transformSceneNode,
   transformStrokesFromVector,
@@ -266,6 +267,7 @@ const transformVectorPath = (
     ...transformSceneNode(node),
     ...transformBlend(node),
     ...transformProportion(node),
-    ...transformLayoutAttributes(node)
+    ...transformLayoutAttributes(node),
+    ...transformOverrides(node)
   };
 };
