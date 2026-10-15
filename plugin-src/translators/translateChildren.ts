@@ -1,7 +1,7 @@
 import { yieldByTime } from '@common/sleep';
 
 import { transformGroupNodeLike, transformSceneNode } from '@plugin/transformers';
-import { transformMaskIds } from '@plugin/transformers/partials';
+import { transformMaskIds, transformMaskOverrides } from '@plugin/transformers/partials';
 
 import type { PenpotNode } from '@ui/types';
 
@@ -46,6 +46,7 @@ export const translateMaskChildren = async (
   const maskGroup = {
     ...transformMaskIds(maskChild),
     ...transformGroupNodeLike(maskChild),
+    ...transformMaskOverrides(maskChild),
     children: maskedChildren,
     maskedGroup: true
   };
