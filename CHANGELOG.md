@@ -1,5 +1,41 @@
 # penpot-exporter
 
+## 0.26.2
+
+### Patch Changes
+
+- [#458](https://github.com/penpot/penpot-exporter-figma-plugin/pull/458)
+  [`f8cb1f4`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/f8cb1f4dc17416b9e32f536865ed827dedb21527)
+  Thanks [@SpykeRel04D](https://github.com/SpykeRel04D)! - Fix instance sizing overrides being
+  applied to the wrong axis, which made fixed-width instances of hug components shrink in Penpot
+
+- [#460](https://github.com/penpot/penpot-exporter-figma-plugin/pull/460)
+  [`7c5da09`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/7c5da09f01af31c448e61b7c21f42a1efd3149bc)
+  Thanks [@SpykeRel04D](https://github.com/SpykeRel04D)! - Keep overridden guides, wrap gaps and
+  path shapes of component instances when importing into Penpot
+
+- [#465](https://github.com/penpot/penpot-exporter-figma-plugin/pull/465)
+  [`5db7bb5`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/5db7bb53c5c6e4c6c7a884c710a05e0e1aa3143f)
+  Thanks [@SpykeRel04D](https://github.com/SpykeRel04D)! - Show the content of hidden masks
+  unmasked, as Figma does, instead of hiding it
+
+- [#463](https://github.com/penpot/penpot-exporter-figma-plugin/pull/463)
+  [`c54b8b0`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/c54b8b049e4ccdcc699936e08a832711493ac431)
+  Thanks [@SpykeRel04D](https://github.com/SpykeRel04D)! - Keep the overrides of masks (name,
+  visibility, lock, size) on their mask group when importing component instances into Penpot
+
+- [#461](https://github.com/penpot/penpot-exporter-figma-plugin/pull/461)
+  [`0ac802e`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/0ac802ed5ec7ab3764485832a63b57416cf5675d)
+  Thanks [@SpykeRel04D](https://github.com/SpykeRel04D)! - Merge flattened vector regions drawn in
+  opposite directions into a single path, so mirrored icons are no longer exported as a group of
+  paths
+
+- [#462](https://github.com/penpot/penpot-exporter-figma-plugin/pull/462)
+  [`c34349b`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/c34349b8cd7ba880bdff200c056ee3b108a02917)
+  Thanks [@SpykeRel04D](https://github.com/SpykeRel04D)! - Keep the overrides of vectors exported as
+  a group of paths (fills, strokes, effects, opacity, size) when importing component instances into
+  Penpot
+
 ## 0.26.1
 
 ### Patch Changes
