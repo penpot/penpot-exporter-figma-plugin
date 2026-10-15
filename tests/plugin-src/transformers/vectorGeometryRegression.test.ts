@@ -1,5 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
+import { clearAllState, overrides } from '@plugin/libraries';
 import {
   clearParsedCache,
   transformVectorPaths
@@ -65,6 +66,7 @@ const createPathNode = (overrides: Partial<StarNode> = {}): StarNode => {
 describe('vector geometry regression', () => {
   beforeEach(() => {
     clearParsedCache();
+    clearAllState();
     vi.spyOn(console, 'warn').mockImplementation(() => {});
   });
 
@@ -135,5 +137,21 @@ describe('vector geometry regression', () => {
       result = transformPathNode(node);
     }).not.toThrow();
     expect(result).toBeUndefined();
+  });
+
+  it('marks the overrides of the vector as touched on each of its paths', () => {
+    overrides.set('1:1', ['fills', 'strokeWeight']);
+
+    const node = createVectorNode({
+      vectorPaths: [
+        { data: 'M 0 0 L 10 10 Z', windingRule: 'NONZERO' },
+        { data: 'M 20 20 L 30 30 Z', windingRule: 'NONZERO' }
+      ]
+    });
+
+    const paths = transformVectorPaths(node);
+
+    expect(paths).toHaveLength(2);
+    paths.forEach(path => expect(path.touched).toEqual(['fill-group', 'stroke-group']));
   });
 });
