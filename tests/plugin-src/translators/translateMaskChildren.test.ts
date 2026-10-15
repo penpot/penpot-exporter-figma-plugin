@@ -17,8 +17,8 @@ vi.mock('@common/sleep', () => ({
   yieldByTime: vi.fn(async () => undefined)
 }));
 
-const layer = (name: string, isMask = false): SceneNode =>
-  ({ name, type: 'RECTANGLE', isMask }) as unknown as SceneNode;
+const layer = (name: string, isMask = false, visible = true): SceneNode =>
+  ({ name, type: 'RECTANGLE', isMask, visible }) as unknown as SceneNode;
 
 describe('translateMaskChildren', () => {
   beforeEach(() => {
@@ -34,6 +34,7 @@ describe('translateMaskChildren', () => {
         id: 'mask-mask',
         type: 'group',
         name: 'mask',
+        hidden: false,
         maskedGroup: true,
         children: [{ name: 'mask' }, { name: 'a' }, { name: 'b' }]
       }
@@ -55,6 +56,7 @@ describe('translateMaskChildren', () => {
         id: 'mask-mask 1',
         type: 'group',
         name: 'mask 1',
+        hidden: false,
         maskedGroup: true,
         children: [{ name: 'mask 1' }, { name: 'a' }]
       },
@@ -62,6 +64,7 @@ describe('translateMaskChildren', () => {
         id: 'mask-mask 2',
         type: 'group',
         name: 'mask 2',
+        hidden: false,
         maskedGroup: true,
         children: [{ name: 'mask 2' }, { name: 'b' }]
       }
@@ -78,5 +81,11 @@ describe('translateMaskChildren', () => {
       maskedGroup: true,
       touched: ['name-group']
     });
+  });
+
+  it('leaves the siblings of a hidden mask unmasked, as Figma does', async () => {
+    const [maskGroup] = await translateMaskChildren([layer('mask', true, false), layer('a')], 0);
+
+    expect(maskGroup).toMatchObject({ hidden: false, maskedGroup: false });
   });
 });

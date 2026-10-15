@@ -13,7 +13,8 @@ import type { PenpotNode } from '@ui/types';
  * The unmasked children will be returned as they are.
  *
  * As in Figma, a mask only applies to the siblings above it until the next mask,
- * which starts a mask group of its own.
+ * which starts a mask group of its own, and only while the mask is visible: a hidden mask
+ * leaves its siblings unmasked. The group itself is never hidden, as it does not exist in Figma.
  *
  * @maskIndex The index of the mask node in the children array
  */
@@ -47,8 +48,9 @@ export const translateMaskChildren = async (
     ...transformMaskIds(maskChild),
     ...transformGroupNodeLike(maskChild),
     ...transformMaskOverrides(maskChild),
+    hidden: false,
     children: maskedChildren,
-    maskedGroup: true
+    maskedGroup: maskChild.visible
   };
 
   if (nextMaskIndex === -1) {
