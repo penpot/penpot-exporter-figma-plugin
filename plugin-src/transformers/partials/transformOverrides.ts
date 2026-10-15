@@ -12,14 +12,21 @@ export const transformOverrides = (
 };
 
 // The mask group takes its attributes from the mask, so it keeps the mask overrides too, but not its
-// swap slot, which belongs to the mask itself
+// swap slot, which belongs to the mask itself. It only masks while the mask is visible, so its mask
+// changes along with the visibility of the mask, overridden or set through a component property.
 export const transformMaskOverrides = (
   node: SceneNode
 ): Pick<ShapeAttributes, 'touched' | 'componentPropertyReferences'> => {
-  const { touched, componentPropertyReferences } = transformOverrides(node);
+  const { touched = [], componentPropertyReferences } = transformOverrides(node);
+
+  const visibilityOverridden =
+    touched.includes('visibility-group') || componentPropertyReferences?.visible !== undefined;
 
   return {
-    touched: touched?.filter(group => !group.startsWith('swap-slot-')),
+    touched: [
+      ...touched.filter(group => !group.startsWith('swap-slot-')),
+      ...(visibilityOverridden ? (['mask-group'] as const) : [])
+    ],
     componentPropertyReferences
   };
 };
