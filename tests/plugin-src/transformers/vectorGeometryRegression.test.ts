@@ -7,7 +7,8 @@ import {
 } from '@plugin/transformers/partials/transformVectorPaths';
 import { transformPathNode } from '@plugin/transformers/transformPathNode';
 
-vi.mock('@plugin/transformers/partials', () => ({
+vi.mock('@plugin/transformers/partials', async () => ({
+  ...(await vi.importActual('@plugin/transformers/partials/transformOverrides')),
   transformBlend: (): Record<string, never> => ({}),
   transformConstraints: (): Record<string, never> => ({}),
   transformEffects: (): Record<string, never> => ({}),
@@ -17,7 +18,6 @@ vi.mock('@plugin/transformers/partials', () => ({
     shapeRef: undefined
   }),
   transformLayoutAttributes: (): Record<string, never> => ({}),
-  transformOverrides: (): Record<string, never> => ({}),
   transformProportion: (): Record<string, never> => ({}),
   transformRotation: (): Record<string, never> => ({}),
   transformSceneNode: (): Record<string, never> => ({}),

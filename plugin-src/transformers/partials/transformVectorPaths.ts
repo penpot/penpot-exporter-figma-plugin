@@ -4,13 +4,13 @@ import {
   transformBlend,
   transformEffects,
   transformLayoutAttributes,
+  transformOverrides,
   transformProportion,
   transformSceneNode,
   transformStrokesFromVector,
   transformVectorFills,
   transformVectorIds
 } from '@plugin/transformers/partials';
-import { translateTouched } from '@plugin/translators';
 import { translateCommands, translateWindingRule } from '@plugin/translators/vectors';
 
 import type { PathShape } from '@ui/lib/types/shapes/pathShape';
@@ -268,7 +268,6 @@ const transformVectorPath = (
     ...transformBlend(node),
     ...transformProportion(node),
     ...transformLayoutAttributes(node),
-    // The paths hold the fills, strokes and effects of the vector, so they keep its overrides too
-    touched: translateTouched(node)
+    ...transformOverrides(node)
   };
 };
