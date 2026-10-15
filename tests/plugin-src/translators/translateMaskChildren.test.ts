@@ -1,5 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
+import { transformMaskOverrides } from '@plugin/transformers/partials';
 import { translateMaskChildren } from '@plugin/translators/translateChildren';
 
 vi.mock('@plugin/transformers', () => ({
@@ -8,7 +9,8 @@ vi.mock('@plugin/transformers', () => ({
 }));
 
 vi.mock('@plugin/transformers/partials', () => ({
-  transformMaskIds: vi.fn((node: SceneNode) => ({ id: `mask-${node.name}` }))
+  transformMaskIds: vi.fn((node: SceneNode) => ({ id: `mask-${node.name}` })),
+  transformMaskOverrides: vi.fn(() => ({}))
 }));
 
 vi.mock('@common/sleep', () => ({
@@ -64,5 +66,17 @@ describe('translateMaskChildren', () => {
         children: [{ name: 'mask 2' }, { name: 'b' }]
       }
     ]);
+  });
+
+  it('keeps the overrides of the mask on the mask group', async () => {
+    vi.mocked(transformMaskOverrides).mockReturnValueOnce({ touched: ['name-group'] });
+
+    const [maskGroup] = await translateMaskChildren([layer('mask', true), layer('a')], 0);
+
+    expect(maskGroup).toMatchObject({
+      id: 'mask-mask',
+      maskedGroup: true,
+      touched: ['name-group']
+    });
   });
 });
