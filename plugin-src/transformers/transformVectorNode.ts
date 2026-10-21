@@ -16,7 +16,8 @@ import type { PathShape } from '@ui/lib/types/shapes/pathShape';
  *
  * If there are no regions on the vector network, we treat it like a normal `PathShape`.
  * If there are regions, we treat the vector node as a `GroupShape` with multiple `PathShape` children,
- * unless they can be merged into a single `PathShape` (see `mergePathShapes`).
+ * unless matching fills without strokes can be merged into a single `PathShape`, including
+ * noncrossing regions with even-odd fills (see `mergePathShapes`).
  */
 export const transformVectorNode = (node: VectorNode): GroupShape | PathShape | undefined => {
   const children = transformVectorPaths(node);
