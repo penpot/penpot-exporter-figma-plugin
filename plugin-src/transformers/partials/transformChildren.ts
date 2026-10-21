@@ -1,10 +1,38 @@
 import { translateChildren, translateMaskChildren } from '@plugin/translators';
 
+import type { LayoutChildAttributes } from '@ui/lib/types/shapes/layout';
 import type { Children } from '@ui/lib/types/utils/children';
 import type { PenpotNode } from '@ui/types/penpotNode';
 
 const nodeActsAsMask = (node: SceneNode): boolean => {
   return 'isMask' in node && node.isMask;
+};
+
+const isAutoLayout = (node: ChildrenMixin): node is ChildrenMixin & AutoLayoutMixin => {
+  return 'layoutMode' in node && 'itemReverseZIndex' in node;
+};
+
+const stacksFirstOnTop = (node: ChildrenMixin): boolean => {
+  return (
+    isAutoLayout(node) &&
+    node.itemReverseZIndex &&
+    (node.layoutMode === 'HORIZONTAL' || node.layoutMode === 'VERTICAL')
+  );
+};
+
+/**
+ * Penpot stacks layout children with the last one on top. When the Figma layout stacks the
+ * first one on top, the z-index is reversed so overlapping children (negative gaps) render the same.
+ * Absolute children are left out, Penpot always draws them above the rest.
+ */
+const reverseLayoutZIndex = (children: PenpotNode[]): void => {
+  children.forEach((child, index) => {
+    const layoutChild = child as LayoutChildAttributes;
+
+    if (layoutChild.layoutItemAbsolute) return;
+
+    layoutChild.layoutItemZIndex = children.length - 1 - index;
+  });
 };
 
 /**
@@ -43,6 +71,8 @@ export const transformChildren = async (node: ChildrenMixin): Promise<Children> 
         : translateChildren(node.children);
 
     const children = shouldDefer ? await deferToMacrotask(getChildren) : await getChildren();
+
+    if (stacksFirstOnTop(node)) reverseLayoutZIndex(children);
 
     return { children };
   } finally {
