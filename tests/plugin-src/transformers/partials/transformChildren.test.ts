@@ -54,4 +54,43 @@ describe('transformChildren', () => {
 
     setTimeoutSpy.mockRestore();
   });
+
+  it('stacks the first child on top when the auto layout reverses the z-index', async () => {
+    const node = {
+      children: [{}, {}, {}],
+      layoutMode: 'HORIZONTAL',
+      itemReverseZIndex: true
+    } as unknown as ChildrenMixin;
+
+    mockTranslateChildren.mockResolvedValue([
+      { name: 'first' },
+      { name: 'absolute', layoutItemAbsolute: true },
+      { name: 'last' }
+    ]);
+
+    const { children } = await transformChildren(node);
+
+    expect(children).toEqual([
+      { name: 'first', layoutItemZIndex: 2 },
+      { name: 'absolute', layoutItemAbsolute: true },
+      { name: 'last', layoutItemZIndex: 0 }
+    ]);
+  });
+
+  it.each([
+    { layoutMode: 'HORIZONTAL', itemReverseZIndex: false },
+    { layoutMode: 'NONE', itemReverseZIndex: true },
+    { layoutMode: 'GRID', itemReverseZIndex: true }
+  ])(
+    'keeps the default stacking for $layoutMode layouts with reverse z-index $itemReverseZIndex',
+    async layout => {
+      const node = { children: [{}, {}], ...layout } as unknown as ChildrenMixin;
+
+      mockTranslateChildren.mockResolvedValue([{ name: 'first' }, { name: 'last' }]);
+
+      const { children } = await transformChildren(node);
+
+      expect(children).toEqual([{ name: 'first' }, { name: 'last' }]);
+    }
+  );
 });
