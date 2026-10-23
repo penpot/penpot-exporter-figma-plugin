@@ -1,3 +1,4 @@
+import { parseSVG } from 'svg-path-parser';
 import { describe, expect, it } from 'vitest';
 
 import { mergePathShapes } from '@plugin/translators/vectors/mergePathShapes';
@@ -23,6 +24,36 @@ const path = (content: string, overrides: Partial<PathShape> = {}): PathShape =>
   strokes: [],
   ...overrides
 });
+
+const isFilled = (content: string, x: number, y: number): boolean => {
+  let winding = 0;
+  let start = { x: 0, y: 0 };
+  let previous = start;
+  const addEdge = (next: { x: number; y: number }): void => {
+    const cross =
+      (next.x - previous.x) * (y - previous.y) - (next.y - previous.y) * (x - previous.x);
+    if (previous.y <= y && next.y > y && cross > 0) winding++;
+    if (previous.y > y && next.y <= y && cross < 0) winding--;
+    previous = next;
+  };
+  parseSVG(content).forEach(command => {
+    switch (command.command) {
+      case 'moveto':
+        if (previous !== start) addEdge(start);
+        start = { x: command.x, y: command.y };
+        previous = start;
+        break;
+      case 'lineto':
+        addEdge({ x: command.x, y: command.y });
+        break;
+      case 'closepath':
+        addEdge(start);
+        break;
+    }
+  });
+  if (previous !== start) addEdge(start);
+  return winding !== 0;
+};
 
 describe('mergePathShapes', () => {
   it('merges paths with the same fill drawn in the same direction', () => {
@@ -61,6 +92,12 @@ describe('mergePathShapes', () => {
     const red = [{ fillColor: '#ff0000', fillOpacity: 1 }];
 
     expect(mergePathShapes([path(square), path(farSquare, { fills: red })])).toBeUndefined();
+    expect(
+      mergePathShapes([
+        path(square, { svgAttrs: { fillRule: 'evenodd' } }),
+        path(farSquare, { fills: red })
+      ])
+    ).toBeUndefined();
   });
 
   it('keeps paths with strokes apart', () => {
@@ -69,12 +106,43 @@ describe('mergePathShapes', () => {
     expect(
       mergePathShapes([path(square, { strokes }), path(farSquare, { strokes })])
     ).toBeUndefined();
+    expect(
+      mergePathShapes([
+        path(square, { svgAttrs: { fillRule: 'evenodd' }, strokes }),
+        path(farSquare, { strokes })
+      ])
+    ).toBeUndefined();
   });
 
-  it('keeps evenodd paths apart', () => {
+  it('merges evenodd regions while preserving a ring, its hole, and a dot in the hole', () => {
     const evenodd = { svgAttrs: { fillRule: 'evenodd' as const } };
+    const ring = `${square} M 2 2 L 8 2 L 8 8 L 2 8 Z`;
+    const dot = 'M 4 4 L 6 4 L 6 6 L 4 6 Z';
+    const merged = mergePathShapes([path(ring, evenodd), path(dot, evenodd)]);
 
-    expect(mergePathShapes([path(square, evenodd), path(farSquare, evenodd)])).toBeUndefined();
+    expect(merged?.svgAttrs?.fillRule).toBe('nonzero');
+    expect(isFilled(merged!.content, 1, 1)).toBe(true);
+    expect(isFilled(merged!.content, 3, 3)).toBe(false);
+    expect(isFilled(merged!.content, 5, 5)).toBe(true);
+  });
+
+  it('merges mixed nonzero and evenodd regions', () => {
+    const merged = mergePathShapes([
+      path(square),
+      path(farSquare, { svgAttrs: { fillRule: 'evenodd' } })
+    ]);
+
+    expect(merged?.svgAttrs?.fillRule).toBe('nonzero');
+    expect(isFilled(merged!.content, 5, 5)).toBe(true);
+    expect(isFilled(merged!.content, 25, 25)).toBe(true);
+  });
+
+  it('keeps an evenodd self-crossing region apart', () => {
+    const figureEight = 'M 0 0 L 10 10 L 0 10 L 10 0 Z';
+
+    expect(
+      mergePathShapes([path(figureEight, { svgAttrs: { fillRule: 'evenodd' } }), path(farSquare)])
+    ).toBeUndefined();
   });
 
   it('merges a path with a hole into a path drawn in the same direction as its outline', () => {
