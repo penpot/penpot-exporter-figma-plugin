@@ -25,12 +25,19 @@ import {
   isFigJamEditor,
   isSlidesEditor,
   reportProgress,
-  resetProgress
+  resetProgress,
+  setExportOptions
 } from '@plugin/utils';
 import { ExpectedUserError } from '@plugin/utils/expectedUserError';
 import { isFigmaPlatformError } from '@plugin/utils/figmaPlatformError';
 
-import type { ErrorPayload, ExportScope, ExternalLibrary, PenpotDocument } from '@ui/types';
+import type {
+  ErrorPayload,
+  ExportOptions,
+  ExportScope,
+  ExternalLibrary,
+  PenpotDocument
+} from '@ui/types';
 
 const initializeExternalLibraries = (libraries: ExternalLibrary[]): void => {
   for (const library of libraries) {
@@ -68,12 +75,14 @@ export const postPluginError = (error: unknown): void => {
 export const handleExportMessage = async (
   scope: ExportScope,
   libraries: ExternalLibrary[],
-  pageIds: string[] = []
+  pageIds: string[] = [],
+  options: ExportOptions = { backgroundBlur: false }
 ): Promise<void> => {
   try {
     // Clear all state maps and caches to prevent memory accumulation
     clearAllState();
     resetProgress();
+    setExportOptions(options);
 
     initializeExternalLibraries(libraries);
     const document = await buildDocument(scope, pageIds);
