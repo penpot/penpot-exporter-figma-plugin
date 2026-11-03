@@ -1,5 +1,24 @@
 # penpot-exporter
 
+## 0.26.3
+
+### Patch Changes
+
+- [#471](https://github.com/penpot/penpot-exporter-figma-plugin/pull/471)
+  [`b105af5`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/b105af5e7a44c44cba7943503e59b790d7996d5d)
+  Thanks [@SpykeRel04D](https://github.com/SpykeRel04D)! - Fix export failing with "cannot read
+  property 'horizontal' of undefined" on component sets placed inside auto layouts
+
+- [#468](https://github.com/penpot/penpot-exporter-figma-plugin/pull/468)
+  [`03a1343`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/03a13437a91ce835fe831e524bd68b37b06cb887)
+  Thanks [@SpykeRel04D](https://github.com/SpykeRel04D)! - Keep the stacking order of auto layouts
+  set to show the first item on top, so overlapping items render as in Figma
+
+- [#470](https://github.com/penpot/penpot-exporter-figma-plugin/pull/470)
+  [`f6b3580`](https://github.com/penpot/penpot-exporter-figma-plugin/commit/f6b3580cc030eabe84db85198e62ff6c9a7708c1)
+  Thanks [@SpykeRel04D](https://github.com/SpykeRel04D)! - Merge the regions of flattened vectors
+  that use the even-odd fill rule into a single path, reducing the number of layers in Penpot.
+
 ## 0.26.2
 
 ### Patch Changes
