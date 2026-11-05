@@ -1,4 +1,5 @@
 import type { TokenProperties } from '@ui/lib/types/shapes/tokens';
+import type { BackgroundBlur } from '@ui/lib/types/utils/backgroundBlur';
 import type { BlendMode } from '@ui/lib/types/utils/blendModes';
 import type { Blur } from '@ui/lib/types/utils/blur';
 import type { Export } from '@ui/lib/types/utils/export';
@@ -70,6 +71,7 @@ export type ShapeAttributes = {
   interactions?: Interaction[];
   shadow?: Shadow[];
   blur?: Blur;
+  backgroundBlur?: BackgroundBlur;
   growType?: GrowType;
   appliedTokens?: { [key in TokenProperties]?: string };
 

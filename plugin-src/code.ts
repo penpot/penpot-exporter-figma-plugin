@@ -4,7 +4,7 @@ import { getUserData } from '@plugin/getUserData';
 import { handleExportMessage, handleRetryMessage, postPluginError } from '@plugin/handleMessage';
 import { isFigJamEditor, isSlidesEditor } from '@plugin/utils';
 
-import type { ExportScope, ExternalLibrary } from '@ui/types';
+import type { ExportOptions, ExportScope, ExternalLibrary } from '@ui/types';
 
 const BASE_HEIGHT = 500;
 const BASE_WIDTH = 560;
@@ -15,6 +15,7 @@ type ExportMessage = {
     scope: ExportScope;
     libraries: ExternalLibrary[];
     pageIds?: string[];
+    options?: ExportOptions;
   };
 };
 
@@ -48,8 +49,9 @@ const onMessage: MessageEventHandler = message => {
       const scope = exportMessage.data?.scope ?? 'all';
       const libraries = exportMessage.data?.libraries ?? [];
       const pageIds = exportMessage.data?.pageIds ?? [];
+      const options = exportMessage.data?.options ?? { backgroundBlur: false };
 
-      handleExportMessage(scope, libraries, pageIds);
+      handleExportMessage(scope, libraries, pageIds, options);
     }
 
     if (message.type === 'cancel') {
