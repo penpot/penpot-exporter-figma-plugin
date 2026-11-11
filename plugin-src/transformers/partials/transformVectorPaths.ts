@@ -8,6 +8,7 @@ import {
   transformProportion,
   transformSceneNode,
   transformStrokesFromVector,
+  transformVariableConsumptionMap,
   transformVectorFills,
   transformVectorIds
 } from '@plugin/transformers/partials';
@@ -268,6 +269,7 @@ const transformVectorPath = (
     ...transformBlend(node),
     ...transformProportion(node),
     ...transformLayoutAttributes(node),
+    ...transformVariableConsumptionMap(node),
     ...transformOverrides(node)
   };
 };
