@@ -1,0 +1,64 @@
+import { beforeEach, describe, expect, it } from 'vitest';
+
+import { variables } from '@plugin/libraries';
+import { translateAppliedTokens } from '@plugin/translators/translateAppliedTokens';
+
+const createNode = (type: SceneNode['type'] = 'VECTOR'): SceneNode =>
+  ({ type }) as unknown as SceneNode;
+
+describe('translateAppliedTokens', () => {
+  beforeEach(() => {
+    variables.clear();
+  });
+
+  it('maps a uniform stroke weight token to strokeWidth', () => {
+    variables.set('var-1.borderWidth', 'Border.width');
+
+    const result = translateAppliedTokens({ strokeWeight: { id: 'var-1' } }, createNode());
+
+    expect(result).toEqual({ strokeWidth: 'Border.width' });
+  });
+
+  it.each([
+    ['strokeTopWeight', 'strokeWidthTop'],
+    ['strokeRightWeight', 'strokeWidthRight'],
+    ['strokeBottomWeight', 'strokeWidthBottom'],
+    ['strokeLeftWeight', 'strokeWidthLeft']
+  ])('maps %s to %s', (figmaProp, penpotProp) => {
+    variables.set('var-1.borderWidth', 'Border.width');
+
+    const result = translateAppliedTokens({ [figmaProp]: { id: 'var-1' } }, createNode());
+
+    expect(result).toEqual({ [penpotProp]: 'Border.width' });
+  });
+
+  it('maps all per-side stroke weights when bound individually', () => {
+    variables.set('var-t.borderWidth', 'Border.top');
+    variables.set('var-r.borderWidth', 'Border.right');
+    variables.set('var-b.borderWidth', 'Border.bottom');
+    variables.set('var-l.borderWidth', 'Border.left');
+
+    const result = translateAppliedTokens(
+      {
+        strokeTopWeight: { id: 'var-t' },
+        strokeRightWeight: { id: 'var-r' },
+        strokeBottomWeight: { id: 'var-b' },
+        strokeLeftWeight: { id: 'var-l' }
+      },
+      createNode()
+    );
+
+    expect(result).toEqual({
+      strokeWidthTop: 'Border.top',
+      strokeWidthRight: 'Border.right',
+      strokeWidthBottom: 'Border.bottom',
+      strokeWidthLeft: 'Border.left'
+    });
+  });
+
+  it('ignores a bound variable not registered in the variables map', () => {
+    const result = translateAppliedTokens({ strokeWeight: { id: 'var-unknown' } }, createNode());
+
+    expect(result).toEqual({});
+  });
+});
