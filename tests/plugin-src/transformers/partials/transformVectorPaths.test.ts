@@ -30,16 +30,8 @@ vi.mock('@plugin/translators/vectors', () => ({
 const createVectorNode = (overrides: Partial<VectorNode> = {}): VectorNode => {
   return {
     id: '1:1',
-    name: 'Vector',
     type: 'VECTOR',
     strokes: [],
-    fills: [],
-    fillGeometry: [],
-    vectorPaths: [],
-    vectorNetwork: {
-      regions: [],
-      vertices: []
-    },
     ...overrides
   } as unknown as VectorNode;
 };
