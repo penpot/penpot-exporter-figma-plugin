@@ -23,7 +23,11 @@ const EQUIVALENCIES = [
   { figma: 'paddingLeft', penpot: 'p4', tokenType: 'spacing' },
   { figma: 'letterSpacing', penpot: 'letterSpacing', tokenType: 'letterSpacing' },
   { figma: 'fontSize', penpot: 'fontSize', tokenType: 'fontSizes' },
-  { figma: 'strokeTopWeight', penpot: 'strokeWidth', tokenType: 'borderWidth' },
+  { figma: 'strokeWeight', penpot: 'strokeWidth', tokenType: 'borderWidth' },
+  { figma: 'strokeTopWeight', penpot: 'strokeWidthTop', tokenType: 'borderWidth' },
+  { figma: 'strokeRightWeight', penpot: 'strokeWidthRight', tokenType: 'borderWidth' },
+  { figma: 'strokeBottomWeight', penpot: 'strokeWidthBottom', tokenType: 'borderWidth' },
+  { figma: 'strokeLeftWeight', penpot: 'strokeWidthLeft', tokenType: 'borderWidth' },
 
   // Text
   { figma: 'fontFamily', penpot: 'fontFamily', tokenType: 'fontFamilies' },
@@ -31,6 +35,14 @@ const EQUIVALENCIES = [
   // Number & Text
   { figma: 'fontWeight', penpot: 'fontWeight', tokenType: 'fontWeights' }
 ] as const;
+
+const STROKE_WEIGHT_TYPES = new Set([
+  'strokeWeight',
+  'strokeTopWeight',
+  'strokeRightWeight',
+  'strokeBottomWeight',
+  'strokeLeftWeight'
+]);
 
 const getBoundVariableIdForPaint = (paints: readonly Paint[]): string | null => {
   if (paints.length === 0) {
@@ -56,17 +68,9 @@ const getBoundVariableId = (
   node: SceneNode
 ): string | null => {
   if (!Array.isArray(boundVariable)) {
-    // Figma exposes strokeTopWeight, strokeRightWeight,
-    // strokeBottomWeight, and strokeLeftWeight but Penpot only supports strokeWidth.
-    // If the strokeWeight is mixed, we will not assign an applied token.
-    if (
-      variableType === 'strokeTopWeight' &&
-      'strokeWeight' in node &&
-      figma.mixed === node.strokeWeight
-    ) {
-      return null;
+    if (STROKE_WEIGHT_TYPES.has(variableType)) {
+      return 'strokes' in node && node.strokes.length > 0 ? boundVariable.id : null;
     }
-
     return boundVariable.id;
   }
 
