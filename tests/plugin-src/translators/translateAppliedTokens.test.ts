@@ -3,8 +3,12 @@ import { beforeEach, describe, expect, it } from 'vitest';
 import { variables } from '@plugin/libraries';
 import { translateAppliedTokens } from '@plugin/translators/translateAppliedTokens';
 
-const createNode = (type: SceneNode['type'] = 'VECTOR'): SceneNode =>
-  ({ type }) as unknown as SceneNode;
+const createNode = (overrides: Partial<SceneNode> = {}): SceneNode =>
+  ({
+    type: 'VECTOR',
+    strokes: [{ type: 'SOLID', color: { r: 0, g: 0, b: 0 }, opacity: 1, visible: true }],
+    ...overrides
+  }) as unknown as SceneNode;
 
 describe('translateAppliedTokens', () => {
   beforeEach(() => {
@@ -58,6 +62,15 @@ describe('translateAppliedTokens', () => {
 
   it('ignores a bound variable not registered in the variables map', () => {
     const result = translateAppliedTokens({ strokeWeight: { id: 'var-unknown' } }, createNode());
+
+    expect(result).toEqual({});
+  });
+
+  it('ignores stroke weight token when node has no strokes', () => {
+    variables.set('var-1.borderWidth', 'Border.width');
+
+    const node = createNode({ strokes: [] });
+    const result = translateAppliedTokens({ strokeWeight: { id: 'var-1' } }, node);
 
     expect(result).toEqual({});
   });

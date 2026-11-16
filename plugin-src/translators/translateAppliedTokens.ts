@@ -36,6 +36,14 @@ const EQUIVALENCIES = [
   { figma: 'fontWeight', penpot: 'fontWeight', tokenType: 'fontWeights' }
 ] as const;
 
+const STROKE_WEIGHT_TYPES = new Set([
+  'strokeWeight',
+  'strokeTopWeight',
+  'strokeRightWeight',
+  'strokeBottomWeight',
+  'strokeLeftWeight'
+]);
+
 const getBoundVariableIdForPaint = (paints: readonly Paint[]): string | null => {
   if (paints.length === 0) {
     return null;
@@ -60,6 +68,9 @@ const getBoundVariableId = (
   node: SceneNode
 ): string | null => {
   if (!Array.isArray(boundVariable)) {
+    if (STROKE_WEIGHT_TYPES.has(variableType)) {
+      return 'strokes' in node && node.strokes.length > 0 ? boundVariable.id : null;
+    }
     return boundVariable.id;
   }
 
